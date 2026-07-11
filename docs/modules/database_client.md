@@ -22,3 +22,5 @@ This module handles connections to Supabase, client initialization, and global q
   * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
 - **2026-07-11 23:16:36** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Implement client-side useEffect redirect with userAgent fallback to prevent hydration mismatch'
+- **2026-07-11 23:17:40** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Commit final safe index route client redirect logic with hydration mismatch prevention'

@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { StoryLayout } from "@/components/marketing/story/StoryLayout";
 import { CMSChapter } from "@/components/marketing/story/CMSChapter";
 import { getPublishedChapterBySlug } from "@/lib/marketing/story.functions";
@@ -15,30 +16,35 @@ const chapterQuery = () => ({
 
 const SPLASH_SHOWN_KEY = "mindrop.splash.shown.v1";
 
-export const Route = createFileRoute("/")({
-  // Intercept native mobile startup during early route resolution
-  beforeLoad: async () => {
-    if (typeof window !== "undefined") {
-      // WebView scheme or device agent detection
-      const isLikelyWebView =
-        (window.location.protocol === "https:" && window.location.hostname === "localhost") ||
-        /capacitor|android|iphone|ipad|ipod/i.test(navigator.userAgent);
-        
-      if (isLikelyWebView) {
-        // Wait 50ms for native Capacitor injection to complete
-        await new Promise((resolve) => setTimeout(resolve, 50));
-      }
-    }
+function IndexComponent() {
+  const navigate = useNavigate();
 
-    if (!isNativeApp()) return;
-    let seen = false;
-    try {
-      seen = typeof window !== "undefined" && window.localStorage.getItem(SPLASH_SHOWN_KEY) === "1";
-    } catch {}
-    
-    console.log("[INDEX beforeLoad] seen =", seen, "redirecting to:", seen ? "/dashboard" : "/splash");
-    throw redirect({ to: seen ? "/dashboard" : "/splash" });
-  },
+  useEffect(() => {
+    // Synchronously check if this client is running in a WebView or Native environment
+    const isMobileNative =
+      typeof window !== "undefined" &&
+      ((window.location.protocol === "https:" && window.location.hostname === "localhost") ||
+        /capacitor|android|iphone|ipad|ipod/i.test(navigator.userAgent) ||
+        isNativeApp());
+
+    if (isMobileNative) {
+      let seen = false;
+      try {
+        seen = window.localStorage.getItem(SPLASH_SHOWN_KEY) === "1";
+      } catch {}
+      console.log("[NATIVE REDIRECT] seen =", seen, "Navigating to:", seen ? "/dashboard" : "/splash");
+      navigate({ to: seen ? "/dashboard" : "/splash", replace: true });
+    }
+  }, [navigate]);
+
+  return (
+    <StoryLayout>
+      <CMSChapter slug={SLUG} />
+    </StoryLayout>
+  );
+}
+
+export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
     try {
       return await context.queryClient.ensureQueryData(chapterQuery());
@@ -66,9 +72,5 @@ export const Route = createFileRoute("/")({
       links: [{ rel: "canonical", href: SITE + "/" }],
     };
   },
-  component: () => (
-    <StoryLayout>
-      <CMSChapter slug={SLUG} />
-    </StoryLayout>
-  ),
+  component: IndexComponent,
 });
