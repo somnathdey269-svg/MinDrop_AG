@@ -110,14 +110,13 @@ def perform_impact_analysis(prompt):
         if any(kw in prompt_lower for kw in keywords):
             direct_impacts.add(doc)
             
-    # Match based on file name tokens (e.g. database_client -> 'database', 'client')
+    # Match based on file name tokens
     if os.path.exists(MODULES_DIR):
         for doc in os.listdir(MODULES_DIR):
             if not doc.endswith(".md"):
                 continue
             base_name = doc.replace(".md", "")
             tokens = [t for t in base_name.split("_") if len(t) > 3]
-            # Match singular/plural forms (e.g. payment -> payments)
             if any(t in prompt_lower or t[:-1] in prompt_lower for t in tokens):
                 direct_impacts.add(doc)
 
@@ -127,7 +126,7 @@ def perform_impact_analysis(prompt):
         if os.path.exists(doc_path):
             with open(doc_path, "r") as f:
                 lines = f.readlines()
-                for line in lines[:5]: # Dependencies are declared in the first few lines
+                for line in lines[:5]:
                     if line.startswith("Depends On:"):
                         dep_doc = line.split(":", 1)[1].strip()
                         if dep_doc not in direct_impacts:
@@ -192,6 +191,37 @@ def update_module_ledgers(direct_impacts, change_summary):
                 with open(doc_path, "w") as f:
                     f.write(content)
                 print(f" -> Automatically updated ledger inside {doc}!")
+
+def push_changes_to_git(prompt_desc):
+    """Stages, commits, and pushes modified files automatically to GitHub."""
+    print("\n -> Checking Git status for changes...")
+    try:
+        # Check if git is initialized
+        if not os.path.exists(".git"):
+            print(" -> Git not initialized. Bypassing Git push.")
+            return
+
+        status = os.popen("git status --porcelain").read().strip()
+        if not status:
+            print(" -> Git status: Clean. No files to commit or push.")
+            return
+
+        # Stage files
+        os.system("git add .")
+        
+        # Commit changes
+        commit_msg = f"Auto-commit: {prompt_desc[:80]}"
+        print(f" -> Committing: '{commit_msg}'...")
+        os.system(f'git commit -m "{commit_msg}"')
+        
+        # Push changes
+        branch = os.popen("git rev-parse --abbrev-ref HEAD").read().strip()
+        branch = branch if branch else "main"
+        print(f" -> Pushing changes to origin '{branch}'...")
+        os.system(f"git push origin {branch}")
+        print(" -> Git commit and push completed successfully!")
+    except Exception as e:
+        print(f" -> Git operations failed: {str(e)}")
 
 async def run_agent(agent_name, prompt, discipline_content, docs_context):
     """Executes agent with strict disciplines AND module documentation context."""
@@ -304,6 +334,9 @@ async def execute_pipeline(user_prompt):
             print(f"   Reason: {log['output']}")
     print("==================================================")
     print("Pipeline run saved successfully to ledger.json!")
+
+    # 8. Post-Execution Auto-Push Hook
+    push_changes_to_git(user_prompt)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
