@@ -1,0 +1,25 @@
+{
+  "$comment": "SINGLE SOURCE OF TRUTH for the MinDrop Android toolchain. Read by scripts/validate-android.mjs and mirrored by docs/ANDROID_TOOLCHAIN.md. When you bump anything here, update the doc in the same commit.",
+  "java":              { "min": "17", "max": "21", "recommended": "21" },
+  "gradle":            { "min": "8.11.0", "max": "8.14.99", "recommended": "8.14.3" },
+  "androidGradlePlugin": { "min": "8.7.0", "max": "8.13.99", "recommended": "8.13.0" },
+  "kotlin":            { "min": "2.2.20", "max": "2.2.99", "recommended": "2.2.20" },
+  "compileSdk":        { "min": 35, "max": 36, "recommended": 36 },
+  "minSdk":            { "min": 24, "max": 26, "recommended": 24 },
+  "capacitor": {
+    "@capacitor/core":                     "^8.4.0",
+    "@capacitor/android":                  "^8.4.0",
+    "@capacitor/cli":                      "^8.4.0",
+    "@capacitor/ios":                      "^8.4.0",
+    "@capacitor/app":                      "^8.1.0",
+    "@capacitor/geolocation":              "^8.2.0",
+    "@capacitor/local-notifications":      "^8.2.0",
+    "@capacitor-firebase/messaging":       "^8.3.0",
+    "capacitor-voice-recorder":            "^7.0.0"
+  },
+  "notes": [
+    "Kotlin MUST be >= the highest kotlin_version any installed @capacitor/* plugin defaults to (checked dynamically).",
+    "All @capacitor/* packages must share the same MAJOR version (currently 8).",
+    "Gradle wrapper distributionUrl and AGP classpath are compared to the ranges above."
+  ]
+}

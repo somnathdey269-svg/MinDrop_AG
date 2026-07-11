@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /ctrl-vx9k2m7fq3z
+Disallow: /ctrl-vx9k2m7fq3z/

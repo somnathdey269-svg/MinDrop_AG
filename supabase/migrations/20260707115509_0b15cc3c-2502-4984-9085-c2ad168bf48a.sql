@@ -1,0 +1,1 @@
+ALTER TABLE public.user_settings ADD COLUMN IF NOT EXISTS local_snapshot jsonb NOT NULL DEFAULT '{}'::jsonb;

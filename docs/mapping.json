@@ -1,0 +1,17 @@
+{
+  "src/integrations/supabase/": "database_client.md",
+  "src/lib/payments.functions.ts": "payments_limits.md",
+  "src/lib/limits.functions.ts": "payments_limits.md",
+  "src/components/voice/": "voice_recording.md",
+  "android/": "native_build.md",
+  "src/components/memory/": "memory_service.md",
+  "src/lib/memoryos/": "memory_service.md",
+  "src/components/places/": "places_location.md",
+  "src/lib/places/": "places_location.md",
+  "src/components/notify/": "push_notifications.md",
+  "src/lib/notify/": "push_notifications.md",
+  "src/components/permissions/": "permissions_manager.md",
+  "src/lib/permissions/": "permissions_manager.md",
+  "src/components/admin/": "admin_controls.md",
+  "src/lib/admin/": "admin_controls.md"
+}
