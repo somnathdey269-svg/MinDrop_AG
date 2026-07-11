@@ -26,9 +26,13 @@ function detectNative(): boolean {
 }
 
 export function isNative(): boolean {
-  if (cachedNative !== null) return cachedNative;
-  cachedNative = detectNative();
-  return cachedNative;
+  if (cachedNative) return true;
+  const detected = detectNative();
+  if (detected) {
+    cachedNative = true;
+    return true;
+  }
+  return false;
 }
 
 export function isWeb(): boolean {

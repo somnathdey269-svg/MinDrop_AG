@@ -8,6 +8,7 @@ Coordinates platform compiles, package manifests, podfiles, and build automation
 * Android Studio tools / Xcode tools
 
 ## 3. Rules & Gotchas
+* Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
 * Ensure gradle configurations map correctly to the active Capacitor version target.
 * Ensure code packages are optimized.
 
@@ -16,3 +17,7 @@ Coordinates platform compiles, package manifests, podfiles, and build automation
   * **Change**: Initial documentation setup.
 - **2026-07-11 23:01:34** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Fix isNative App detection race condition to ensure splash screen shows first on mobile launch'
+- **2026-07-11 23:02:54** | Self-Healed Learning Loop
+  * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
+- **2026-07-11 23:03:04** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Commit isNative fix to ensure correct splash screen load on native platform launch'
