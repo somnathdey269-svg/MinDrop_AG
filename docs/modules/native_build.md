@@ -21,3 +21,5 @@ Coordinates platform compiles, package manifests, podfiles, and build automation
   * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
 - **2026-07-11 23:03:04** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Commit isNative fix to ensure correct splash screen load on native platform launch'
+- **2026-07-11 23:09:41** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Implement useEffect-based native app splash redirect on index page to resolve native bridge race condition'

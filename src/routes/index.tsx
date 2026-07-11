@@ -19,9 +19,11 @@ export const Route = createFileRoute("/")({
   // Native (installed) app should never see the marketing site.
   // First launch → splash. After that → dashboard (center tab).
   beforeLoad: () => {
+    console.log("[DEBUG] INDEX beforeLoad: isNativeApp =", isNativeApp());
     if (!isNativeApp()) return;
     let seen = false;
     try { seen = typeof window !== "undefined" && window.localStorage.getItem(SPLASH_SHOWN_KEY) === "1"; } catch {}
+    console.log("[DEBUG] INDEX beforeLoad: seen =", seen, "redirecting to:", seen ? "/dashboard" : "/splash");
     throw redirect({ to: seen ? "/dashboard" : "/splash" });
   },
   loader: ({ context }) => context.queryClient.ensureQueryData(chapterQuery()),

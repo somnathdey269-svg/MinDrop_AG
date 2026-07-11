@@ -95,18 +95,6 @@ class PlacesBridgePlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod
-    fun startDwellService(call: PluginCall) {
-        try { GeofenceDwellService.start(context) } catch (_: Throwable) {}
-        call.resolve()
-    }
-
-    @PluginMethod
-    fun stopDwellService(call: PluginCall) {
-        try { GeofenceDwellService.stop(context) } catch (_: Throwable) {}
-        call.resolve()
-    }
-
     private fun pendingIntent(): PendingIntent {
         val i = Intent(context, GeofenceReceiver::class.java)
             .setAction("app.getmindrop.places.TRANSITION")
