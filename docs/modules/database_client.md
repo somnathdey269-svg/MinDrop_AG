@@ -20,3 +20,5 @@ This module handles connections to Supabase, client initialization, and global q
   * **Change**: Executed requirements: 'Configure the database connection keys and check the payment subscriptions'
 - **2026-07-11 22:20:41** | Self-Healed Learning Loop
   * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
+- **2026-07-11 23:16:36** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Implement client-side useEffect redirect with userAgent fallback to prevent hydration mismatch'
