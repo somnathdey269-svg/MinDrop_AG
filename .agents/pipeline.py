@@ -138,6 +138,8 @@ def determine_applicability(prompt, direct_impacts, secondary_impacts):
     """
     Decides active agents based on prompt and active document modules.
     Always triggers database/security agents if database modules are impacted.
+    Automatically triggers the full stack (database, RLS, backend, frontend, security, testing)
+    for any new requirements or features.
     """
     applicability = {}
     prompt_lower = prompt.lower()
@@ -150,6 +152,10 @@ def determine_applicability(prompt, direct_impacts, secondary_impacts):
     # Check if database module is impacted
     db_impacted = any("database" in d.lower() for d in (direct_impacts + secondary_impacts))
 
+    # Check if this is a new feature or requirement
+    new_req_keywords = ["new", "feature", "add", "create", "implement", "develop", "integrate", "setup", "build", "introduce"]
+    is_new_requirement = any(kw in prompt_lower for kw in new_req_keywords)
+
     for agent in AGENT_LIST:
         if agent in applicability:
             continue
@@ -157,6 +163,18 @@ def determine_applicability(prompt, direct_impacts, secondary_impacts):
         # Trigger DB/security checks automatically on DB impact
         if db_impacted and agent in ["03_database_schema", "04_rls_auditor", "14_security_auditor"]:
             applicability[agent] = (True, "Activated because a database client module is impacted.")
+            continue
+
+        # Automatically activate full architecture stack for new features/requirements
+        if is_new_requirement and agent in [
+            "03_database_schema",
+            "04_rls_auditor",
+            "05_backend_logic",
+            "06_frontend_component",
+            "14_security_auditor",
+            "17_testing_qa"
+        ]:
+            applicability[agent] = (True, "Automatically activated stack agent for new requirement / feature.")
             continue
 
         keywords = KEYWORD_MAPPINGS.get(agent, [])
