@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { StoryLayout } from "@/components/marketing/story/StoryLayout";
 import { CMSChapter } from "@/components/marketing/story/CMSChapter";
 import { getPublishedChapterBySlug } from "@/lib/marketing/story.functions";
@@ -15,17 +16,28 @@ const chapterQuery = () => ({
 
 const SPLASH_SHOWN_KEY = "mindrop.splash.shown.v1";
 
+function IndexComponent() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isNativeApp()) {
+      let seen = false;
+      try {
+        seen = typeof window !== "undefined" && window.localStorage.getItem(SPLASH_SHOWN_KEY) === "1";
+      } catch {}
+      console.log("[NATIVE REDIRECT] seen =", seen, "Navigating to:", seen ? "/dashboard" : "/splash");
+      navigate({ to: seen ? "/dashboard" : "/splash", replace: true });
+    }
+  }, [navigate]);
+
+  return (
+    <StoryLayout>
+      <CMSChapter slug={SLUG} />
+    </StoryLayout>
+  );
+}
+
 export const Route = createFileRoute("/")({
-  // Native (installed) app should never see the marketing site.
-  // First launch → splash. After that → dashboard (center tab).
-  beforeLoad: () => {
-    console.log("[DEBUG] INDEX beforeLoad: isNativeApp =", isNativeApp());
-    if (!isNativeApp()) return;
-    let seen = false;
-    try { seen = typeof window !== "undefined" && window.localStorage.getItem(SPLASH_SHOWN_KEY) === "1"; } catch {}
-    console.log("[DEBUG] INDEX beforeLoad: seen =", seen, "redirecting to:", seen ? "/dashboard" : "/splash");
-    throw redirect({ to: seen ? "/dashboard" : "/splash" });
-  },
   loader: ({ context }) => context.queryClient.ensureQueryData(chapterQuery()),
   head: ({ loaderData }) => {
     const c = loaderData;
@@ -46,9 +58,5 @@ export const Route = createFileRoute("/")({
       links: [{ rel: "canonical", href: SITE + "/" }],
     };
   },
-  component: () => (
-    <StoryLayout>
-      <CMSChapter slug={SLUG} />
-    </StoryLayout>
-  ),
+  component: IndexComponent,
 });
