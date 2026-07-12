@@ -8,9 +8,10 @@ import { normalizeColors, type CountryTheme } from "./palette";
  * Uses a server-side publishable client (anon SELECT policy).
  */
 export const listCountryThemes = createServerFn({ method: "GET" }).handler(async () => {
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   const supabase = createClient(
     process.env.SUPABASE_URL!,
-    process.env.SUPABASE_PUBLISHABLE_KEY!,
+    key!,
     {
       auth: {
         storage: undefined,

@@ -18,8 +18,8 @@ async function ensureSuperadmin(supabase: any, userId: string) {
 
 function publicClient() {
   const url = process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-  return createClient<Database>(url, key, {
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  return createClient<Database>(url, key!, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });
 }

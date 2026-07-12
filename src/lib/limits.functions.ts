@@ -18,8 +18,7 @@ export type PlanLimitRow = {
 
 /** Public read — anyone (anon or signed-in) can fetch the current caps. */
 export const getPlanLimits = createServerFn({ method: "GET" }).handler(async () => {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return { limits: [] as PlanLimitRow[] };
   const supabase = createClient<Database>(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },

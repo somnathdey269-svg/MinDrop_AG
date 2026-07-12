@@ -115,7 +115,7 @@ export const Route = createFileRoute("/api/public/hooks/fire-reminders")({
     handlers: {
       POST: async ({ request }) => {
         const apiKey = request.headers.get("apikey");
-        const expected = process.env.SUPABASE_PUBLISHABLE_KEY;
+        const expected = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
         if (!apiKey || !expected || apiKey !== expected) {
           return new Response("Unauthorized", { status: 401 });
         }
