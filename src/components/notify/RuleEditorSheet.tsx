@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, Bell, BellRing, Check, Clock, Infinity as InfinityIcon, Search, UserRound, X, Zap, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Bell, BellRing, Check, Clock, Infinity as InfinityIcon, Search, UserRound, X, Zap, Plus, Trash2, Sparkles } from "lucide-react";
 import type { CapturedNotification, FrequencyMode, KnownApp, MatchMode, NotifyRule, PresetId, RemindMode, RuleDelivery, RuleCondition, ConditionField, ConditionOperator } from "@/lib/notify/types";
 import { NotifyBridge } from "@/lib/notify/bridge";
 import { PRESETS, getPreset } from "@/lib/notify/presets";
