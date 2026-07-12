@@ -92,12 +92,54 @@ export function ensureCountryDetected() {
 
 const THEMES_CACHE_KEY = "mindrop.countryThemes.v1";
 
+const OFFLINE_FALLBACK_THEMES: CountryTheme[] = [
+  { code: 'IN', name: 'India',          colors: ["#FF671F","#046A38","#06038D"] },
+  { code: 'US', name: 'United States',  colors: ["#B31942","#0A3161"] },
+  { code: 'GB', name: 'United Kingdom', colors: ["#012169","#C8102E"] },
+  { code: 'JP', name: 'Japan',          colors: ["#BC002D"] },
+  { code: 'FR', name: 'France',         colors: ["#002395","#ED2939"] },
+  { code: 'DE', name: 'Germany',        colors: ["#000000","#DD0000","#FFCE00"] },
+  { code: 'BR', name: 'Brazil',         colors: ["#009C3B","#FFDF00","#002776"] },
+  { code: 'CA', name: 'Canada',         colors: ["#FF0000"] },
+  { code: 'AU', name: 'Australia',      colors: ["#012169","#E4002B"] },
+  { code: 'NZ', name: 'New Zealand',    colors: ["#012169","#C8102E"] },
+  { code: 'ZA', name: 'South Africa',   colors: ["#007A4D","#FFB612","#DE3831"] },
+  { code: 'MX', name: 'Mexico',         colors: ["#006847","#CE1126"] },
+  { code: 'AR', name: 'Argentina',      colors: ["#74ACDF","#F6B40E"] },
+  { code: 'IT', name: 'Italy',          colors: ["#008C45","#CD212A"] },
+  { code: 'ES', name: 'Spain',          colors: ["#AA151B","#F1BF00"] },
+  { code: 'NL', name: 'Netherlands',    colors: ["#AE1C28","#21468B"] },
+  { code: 'SE', name: 'Sweden',         colors: ["#006AA7","#FECC00"] },
+  { code: 'NO', name: 'Norway',         colors: ["#EF2B2D","#002868"] },
+  { code: 'FI', name: 'Finland',        colors: ["#003580"] },
+  { code: 'DK', name: 'Denmark',        colors: ["#C60C30"] },
+  { code: 'IE', name: 'Ireland',        colors: ["#169B62","#FF883E"] },
+  { code: 'PT', name: 'Portugal',       colors: ["#046A38","#DA291C","#FFE900"] },
+  { code: 'GR', name: 'Greece',         colors: ["#0D5EAF"] },
+  { code: 'TR', name: 'Turkey',         colors: ["#E30A17"] },
+  { code: 'RU', name: 'Russia',         colors: ["#0033A0","#D52B1E"] },
+  { code: 'UA', name: 'Ukraine',        colors: ["#0057B7","#FFDD00"] },
+  { code: 'PL', name: 'Poland',         colors: ["#DC143C"] },
+  { code: 'CN', name: 'China',          colors: ["#EE1C25","#FFFF00"] },
+  { code: 'KR', name: 'South Korea',    colors: ["#003478","#C60C30"] },
+  { code: 'SG', name: 'Singapore',      colors: ["#EF3340"] },
+  { code: 'MY', name: 'Malaysia',       colors: ["#010066","#CC0001","#FFCC00"] },
+  { code: 'TH', name: 'Thailand',       colors: ["#A51931","#F4F5F8","#2D2A4A"] },
+  { code: 'VN', name: 'Vietnam',        colors: ["#DA251D","#FFFF00"] },
+  { code: 'ID', name: 'Indonesia',      colors: ["#FF0000"] },
+  { code: 'PH', name: 'Philippines',    colors: ["#0038A8","#CE1126","#FCD116"] },
+  { code: 'PK', name: 'Pakistan',       colors: ["#01411C","#FFFFFF"] },
+  { code: 'BD', name: 'Bangladesh',     colors: ["#006A4E","#F42A41"] },
+  { code: 'LK', name: 'Sri Lanka',      colors: ["#8D153A","#FFBE29","#00534E"] },
+  { code: 'NP', name: 'Nepal',          colors: ["#DC143C","#003893"] },
+];
+
 function readThemesCache(): CountryTheme[] | undefined {
   const raw = readLS(THEMES_CACHE_KEY);
   if (!raw) return undefined;
   try {
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as CountryTheme[]) : undefined;
+    return Array.isArray(parsed) && parsed.length > 0 ? (parsed as CountryTheme[]) : undefined;
   } catch { return undefined; }
 }
 
@@ -105,15 +147,25 @@ export function useCountryThemes() {
   return useQuery<CountryTheme[]>({
     queryKey: ["country-themes"],
     queryFn: async () => {
-      const data = (await listCountryThemes()) as CountryTheme[];
-      try { writeLS(THEMES_CACHE_KEY, JSON.stringify(data)); } catch {}
-      return data;
+      try {
+        const data = (await listCountryThemes()) as CountryTheme[];
+        if (data && data.length > 0) {
+          try { writeLS(THEMES_CACHE_KEY, JSON.stringify(data)); } catch {}
+          return data;
+        }
+      } catch (e) {
+        console.warn("Failed to fetch themes from server, using local fallback:", e);
+      }
+      return OFFLINE_FALLBACK_THEMES;
     },
-    initialData: readThemesCache,
+    initialData: () => {
+      const cached = readThemesCache();
+      return cached && cached.length > 0 ? cached : OFFLINE_FALLBACK_THEMES;
+    },
     staleTime: 60 * 60 * 1000, // 1h — palette rarely changes
     gcTime: 24 * 60 * 60 * 1000,
-    retry: 3,
-    retryDelay: (i) => Math.min(1000 * 2 ** i, 15_000),
+    retry: 2,
+    retryDelay: (i) => Math.min(1000 * 2 ** i, 5_000),
   });
 }
 
