@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, useSearch, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
-import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Mail, Lock, ArrowRight, Check, KeyRound } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Sparkles, Mail, Lock, ArrowRight, Check, KeyRound, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
@@ -241,25 +241,22 @@ function AuthPage() {
           style={{ background: "radial-gradient(closest-side, #F3D9B1, transparent 70%)" }} />
       </div>
 
-      <div className="relative z-10 min-h-[100svh] flex flex-col">
+      <div className="relative z-10 min-h-[100svh] flex flex-col items-center justify-center px-4 py-8 sm:py-12">
         {/* Header */}
-        <header className="px-6 pt-8 pb-2 flex items-center justify-center">
+        <header className="mb-6 flex items-center justify-center shrink-0">
           <Link to="/" className="inline-flex items-center gap-2 group">
-            <span className="size-9 rounded-2xl grid place-items-center bg-ink text-canvas shadow-sm group-hover:scale-105 transition">
-              <Sparkles className="size-4" aria-hidden="true" />
-            </span>
-            <span className="t-title text-[20px]">MinDrop</span>
+            <AnimatedMWordmark />
           </Link>
         </header>
 
         {/* Card */}
-        <main className="flex-1 flex items-center justify-center px-5 py-6">
+        <main className="w-full max-w-[420px] shrink-0">
           <motion.div
             layout
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full max-w-[420px]"
+            className="w-full"
           >
             <div className="rounded-[28px] bg-white/85 backdrop-blur-xl border border-hairline shadow-[0_8px_40px_-12px_rgba(26,26,26,0.15)] p-6 sm:p-8">
               <AnimatePresence mode="wait">
@@ -473,5 +470,60 @@ function GoogleGlyph() {
       <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
       <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
     </svg>
+  );
+}
+
+function AnimatedMWordmark() {
+  const reduce = useReducedMotion();
+  const words = ["My", "MinDrop"] as const;
+  const [i, setI] = useState(1);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = window.setInterval(() => {
+      setI((v) => (v + 1) % words.length);
+    }, 2600);
+    return () => window.clearInterval(id);
+  }, [reduce]);
+
+  const word = words[i];
+
+  return (
+    <span className="flex items-center gap-2.5 min-w-0">
+      <span
+        aria-hidden="true"
+        className="inline-grid place-items-center size-9 rounded-2xl border border-ink/10 text-canvas font-bold text-lg bg-ink shadow-sm shrink-0"
+      >
+        M
+      </span>
+      <span
+        aria-hidden="true"
+        className="flex items-baseline gap-1.5 text-ink min-w-0"
+        style={{ fontWeight: 700, letterSpacing: "-0.015em" }}
+      >
+        <span className="text-ink/40" style={{ fontSize: "0.9rem", fontWeight: 400 }}>
+          for
+        </span>
+        <span className="relative inline-block h-[1.5em] overflow-hidden shrink-0 min-w-max">
+          <AnimatePresence initial={false} mode="wait">
+            <motion.span
+              key={word}
+              initial={reduce ? false : { y: "70%", opacity: 0 }}
+              animate={reduce ? {} : { y: 0, opacity: 1 }}
+              exit={reduce ? {} : { y: "-70%", opacity: 0 }}
+              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-block whitespace-nowrap text-xl"
+              style={{ fontWeight: 700 }}
+            >
+              {word}
+              <span
+                className="ml-0.5 align-middle inline-block rounded-full bg-brand"
+                style={{ width: 4.5, height: 4.5 }}
+              />
+            </motion.span>
+          </AnimatePresence>
+        </span>
+      </span>
+    </span>
   );
 }
