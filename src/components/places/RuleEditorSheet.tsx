@@ -111,7 +111,7 @@ export function PlaceRuleEditorSheet({ open, accent, places, rule, onClose, onSa
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-ink/50 z-40"
+            className="fixed inset-0 bg-ink/50 z-40 backdrop-blur-sm"
           />
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}

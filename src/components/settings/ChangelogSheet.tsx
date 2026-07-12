@@ -15,7 +15,7 @@ export function ChangelogSheet({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-ink/40 z-40"
+        className="absolute inset-0 bg-ink/40 z-40 backdrop-blur-sm"
       />
       <motion.div
         initial={{ y: "100%" }}

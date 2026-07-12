@@ -460,7 +460,7 @@ function InfoSheet({ kind, isPremium, onClose }: { kind: "privacy" | "export"; i
 
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40 backdrop-blur-sm" />
       <motion.div
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 28, stiffness: 280 }}
@@ -473,11 +473,15 @@ function InfoSheet({ kind, isPremium, onClose }: { kind: "privacy" | "export"; i
 
         {kind === "privacy" ? (
           <div className="px-6 py-6">
-            <div className="size-14 rounded-2xl bg-gradient-to-br from-[#DDEBFF] to-[#BFD9FF] grid place-items-center mb-4">
-              <ShieldCheck className="size-7 text-[#1E508F]" />
+            <div className="flex items-start gap-4 mb-5">
+              <div className="size-12 rounded-2xl bg-gradient-to-br from-[#DDEBFF] to-[#BFD9FF] grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                <ShieldCheck className="size-6 text-[#1E508F]" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="t-display text-ink leading-tight">Your memories never leave you.</h2>
+                <p className="t-body-sm text-ink/65 mt-1 leading-normal">Whether you're on Free or Premium — we never store, read, or sell your data. Ever.</p>
+              </div>
             </div>
-            <h2 className="t-display mb-2">Your memories never leave you.</h2>
-            <p className="t-body-sm text-ink/65 mb-5">Whether you're on Free or Premium — we never store, read, or sell your data. Ever.</p>
 
             <ul className="space-y-3">
               <Bullet emoji="📱" title="On-device storage" body="Everything lives on this phone. Nothing is sent to a MinDrop server." />
@@ -490,11 +494,15 @@ function InfoSheet({ kind, isPremium, onClose }: { kind: "privacy" | "export"; i
           </div>
         ) : (
           <div className="px-6 py-6">
-            <div className="size-14 rounded-2xl bg-gradient-to-br from-[#FFE3EE] to-[#FFC9DC] grid place-items-center mb-4">
-              <Download className="size-7 text-[#A33361]" />
+            <div className="flex items-start gap-4 mb-5">
+              <div className="size-12 rounded-2xl bg-gradient-to-br from-[#FFE3EE] to-[#FFC9DC] grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                <Download className="size-6 text-[#A33361]" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h1 className="t-display text-ink leading-tight">Backup & restore.</h1>
+                <p className="t-meta text-ink/75 mt-1 leading-relaxed">Export your data as JSON or CSV, or restore from a previous backup file.</p>
+              </div>
             </div>
-            <h1 className="t-display mb-1">Backup & restore.</h1>
-            <p className="t-meta text-ink/75 mb-4 leading-relaxed">Export your data as JSON or CSV, or restore from a previous backup file.</p>
 
             <ul className="space-y-3 mb-6">
               <Bullet emoji="📦" title="What's inside" body="Your captures, categories, installed packs, personality, app preferences." />
@@ -803,7 +811,7 @@ function DriveBackupSheet({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40 backdrop-blur-sm" />
       <motion.div
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 28, stiffness: 280 }}
@@ -817,11 +825,15 @@ function DriveBackupSheet({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="px-6 py-6">
-          <div className="size-14 rounded-2xl bg-gradient-to-br from-[#E0F2FE] to-[#BAE6FD] grid place-items-center mb-4">
-            <Cloud className="size-7 text-[#0369A1]" />
+          <div className="flex items-start gap-4 mb-5">
+            <div className="size-12 rounded-2xl bg-gradient-to-br from-[#E0F2FE] to-[#BAE6FD] grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+              <Cloud className="size-6 text-[#0369A1]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="t-display text-ink leading-tight">Your personal cloud.</h1>
+              <p className="t-meta text-ink/75 mt-1 leading-relaxed">Securely sync your memory catalog straight to your private Google Drive. You hold the keys. We never see your files.</p>
+            </div>
           </div>
-          <h1 className="t-display mb-1">Your personal cloud.</h1>
-          <p className="t-meta text-ink/75 mb-4 leading-relaxed">Securely sync your memory catalog straight to your private Google Drive. You hold the keys. We never see your files.</p>
 
           <ul className="space-y-3 mb-6">
             <Bullet emoji="🛡️" title="100% Private & Secure" body="Your data stays on your Google Drive under your encryption keys. Complete custody." />
@@ -1209,7 +1221,7 @@ function DeleteAccountWizardSheet({
 
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40 backdrop-blur-sm" />
       <motion.div
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 28, stiffness: 280 }}
@@ -1258,13 +1270,17 @@ function DeleteAccountWizardSheet({
           {/* STEP 1: Reason Selection */}
           {step === 1 && (
             <div className="space-y-5">
-              <div className="size-14 rounded-2xl bg-red-50 grid place-items-center mb-1">
-                <Trash2 className="size-7 text-red-600" />
+              <div className="flex items-start gap-4 mb-5 animate-in fade-in duration-300">
+                <div className="size-12 rounded-2xl bg-red-50 grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                  <Trash2 className="size-6 text-red-600" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="t-display mb-1 text-red-600 leading-tight">Why delete your account?</h1>
+                  <p className="t-meta text-ink/75 leading-relaxed">
+                    We're sorry to see you go. Please tell us why you are requesting account deletion.
+                  </p>
+                </div>
               </div>
-              <h1 className="t-display mb-1 text-red-600">Why delete your account?</h1>
-              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
-                We're sorry to see you go. Please tell us why you are requesting account deletion.
-              </p>
               
               <div className="space-y-2">
                 {reasons.map((r) => (
@@ -1299,13 +1315,17 @@ function DeleteAccountWizardSheet({
           {/* STEP 2: Data Impact Warning */}
           {step === 2 && (
             <div className="space-y-5">
-              <div className="size-14 rounded-2xl bg-red-50 grid place-items-center mb-1">
-                <ShieldCheck className="size-7 text-red-600" />
+              <div className="flex items-start gap-4 mb-5 animate-in fade-in duration-300">
+                <div className="size-12 rounded-2xl bg-red-50 grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                  <ShieldCheck className="size-6 text-red-600" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="t-display mb-1 text-red-600 leading-tight">What will be deleted.</h1>
+                  <p className="t-meta text-ink/75 leading-relaxed">
+                    Confirming deletion will erase all user data permanently. This cannot be undone.
+                  </p>
+                </div>
               </div>
-              <h1 className="t-display mb-1 text-red-600">What will be deleted.</h1>
-              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
-                Confirming deletion will erase all user data permanently. This cannot be undone.
-              </p>
 
               <div className="p-5 rounded-2xl bg-red-50/20 border border-red-100 text-red-800 space-y-3.5 t-body-sm">
                 <div className="flex items-start gap-2.5">
@@ -1340,13 +1360,17 @@ function DeleteAccountWizardSheet({
           {/* STEP 3: Backup Proposal (Free Users Only) */}
           {step === 3 && !isPremium && (
             <div className="space-y-5">
-              <div className="size-14 rounded-2xl bg-[#FFF9E6] grid place-items-center mb-1">
-                <Cloud className="size-7 text-[#FFB000]" />
+              <div className="flex items-start gap-4 mb-5 animate-in fade-in duration-300">
+                <div className="size-12 rounded-2xl bg-[#FFF9E6] grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                  <Cloud className="size-6 text-[#FFB000]" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="t-display mb-1 text-ink leading-tight">Keep your memories safe.</h1>
+                  <p className="t-meta text-ink/75 leading-relaxed">
+                    Before erasing everything, consider backing up your data first so you can restore it if you change devices.
+                  </p>
+                </div>
               </div>
-              <h1 className="t-display mb-1 text-ink">Keep your memories safe.</h1>
-              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
-                Before erasing everything, consider backing up your data first so you can restore it if you change devices.
-              </p>
 
               <div className="p-5 rounded-2xl bg-[#FFF9E6]/30 border border-[#FFEBAA] space-y-3 t-body-sm text-ink/80 leading-relaxed">
                 <p>
@@ -1379,13 +1403,17 @@ function DeleteAccountWizardSheet({
           {/* STEP 4: Final Confirmation */}
           {step === 4 && (
             <div className="space-y-5">
-              <div className="size-14 rounded-2xl bg-red-100 grid place-items-center mb-1">
-                <Trash2 className="size-7 text-red-700" />
+              <div className="flex items-start gap-4 mb-5 animate-in fade-in duration-300">
+                <div className="size-12 rounded-2xl bg-red-100 grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                  <Trash2 className="size-6 text-red-700" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="t-display mb-1 text-red-700 font-extrabold leading-tight">Final confirmation.</h1>
+                  <p className="t-meta text-ink/75 leading-relaxed">
+                    To confirm deletion, please type <span className="font-bold text-red-600">DELETE</span> in the input field below.
+                  </p>
+                </div>
               </div>
-              <h1 className="t-display mb-1 text-red-700 font-extrabold">Final confirmation.</h1>
-              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
-                To confirm deletion, please type <span className="font-bold text-red-600">DELETE</span> in the input field below.
-              </p>
 
               <div className="space-y-3">
                 <input
@@ -1544,7 +1572,7 @@ function AISettingsSheet({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40 backdrop-blur-sm" />
       <motion.div
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 28, stiffness: 280 }}
@@ -1591,13 +1619,17 @@ function AISettingsSheet({ onClose }: { onClose: () => void }) {
         <div className="px-6 py-6">
           {step === "provider" && (
             <div className="space-y-4">
-              <div className="size-14 rounded-2xl bg-gradient-to-br from-[#F5F3FF] to-[#DDD6FE] grid place-items-center mb-4">
-                <Sparkles className="size-7 text-[#7C3AED]" />
+              <div className="flex items-start gap-4 mb-5 animate-in fade-in duration-300">
+                <div className="size-12 rounded-2xl bg-gradient-to-br from-[#F5F3FF] to-[#DDD6FE] grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                  <Sparkles className="size-6 text-[#7C3AED]" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="t-display text-ink leading-tight">AI models & keys.</h1>
+                  <p className="t-meta text-ink/75 mt-1 leading-relaxed">
+                    Connect your own API key to power digest summaries. All keys are encrypted and stored locally on your device.
+                  </p>
+                </div>
               </div>
-              <h1 className="t-display mb-1">AI models & keys.</h1>
-              <p className="t-meta text-ink/75 mb-6 leading-relaxed">
-                Connect your own API key to power digest summaries. All keys are encrypted and stored locally on your device.
-              </p>
 
               <div className="space-y-3">
                 {([
@@ -1828,7 +1860,7 @@ function DigestAutomationSheet({ onClose, onLinkApi }: { onClose: () => void; on
 
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40 backdrop-blur-sm" />
       <motion.div
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 28, stiffness: 280 }}
@@ -1877,13 +1909,17 @@ function DigestAutomationSheet({ onClose, onLinkApi }: { onClose: () => void; on
           {/* STEP 1: AI Model size Selection */}
           {step === "model" && (
             <div className="space-y-5">
-              <div className="size-14 rounded-2xl bg-gradient-to-br from-[#E0F2FE] to-[#CCFBF1] grid place-items-center mb-1">
-                <Clock className="size-7 text-[#0D9488]" />
+              <div className="flex items-start gap-4 mb-5 animate-in fade-in duration-300">
+                <div className="size-12 rounded-2xl bg-gradient-to-br from-[#E0F2FE] to-[#CCFBF1] grid place-items-center shrink-0 mt-0.5 animate-in zoom-in duration-300">
+                  <Clock className="size-6 text-[#0D9488]" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="t-display mb-1 text-ink leading-tight">AI Model for Digest.</h1>
+                  <p className="t-meta text-ink/75 leading-relaxed">
+                    Choose which integrated AI provider and model size compiles your automated daily/weekly notification summaries.
+                  </p>
+                </div>
               </div>
-              <h1 className="t-display mb-1">AI Model for Digest.</h1>
-              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
-                Choose which integrated AI provider and model size compiles your automated daily/weekly notification summaries.
-              </p>
 
               {!hasAnyApi ? (
                 <div className="p-5 rounded-2xl bg-red-50/50 border border-red-100/80 text-center space-y-3">
@@ -2161,7 +2197,7 @@ function LegalPageSheet({ kind, onClose }: { kind: "terms" | "privacy" | "refund
 
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40 backdrop-blur-sm" />
       <motion.div
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 28, stiffness: 280 }}
