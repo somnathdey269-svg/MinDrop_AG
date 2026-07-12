@@ -144,23 +144,9 @@ function Settings() {
               </div>
             </Link>
           )}
-          {/* Region / country theme */}
-          <div data-tour="settings-region">
-            <RegionCard />
-          </div>
-
-          {/* Appearance — font + size */}
-          <div data-tour="settings-appearance">
-            <AppearanceCard />
-          </div>
-
-
-          {/* Push notifications moved into the Permissions tab so all system-level
-              controls live under one roof — see /permissions. */}
-
           {/* Tiles grid - responsive */}
           <p className="t-eyebrow text-ink/70 mb-3">App</p>
-          <div data-tour="settings-menu" className="grid grid-cols-2 gap-3">
+          <div data-tour="settings-menu" className="grid grid-cols-2 gap-3 mb-6">
             <div data-tour="settings-caps" className="contents">
 
             {tiles.map((t) => {
@@ -184,6 +170,16 @@ function Settings() {
               return <button key={t.label} onClick={t.onClick} className="text-left">{inner}</button>;
             })}
             </div>
+          </div>
+
+          {/* Region / country theme */}
+          <div data-tour="settings-region">
+            <RegionCard />
+          </div>
+
+          {/* Appearance — font + size */}
+          <div data-tour="settings-appearance">
+            <AppearanceCard />
           </div>
 
           {/* Sign-in hook for free users */}
