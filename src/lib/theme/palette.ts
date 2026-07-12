@@ -89,7 +89,21 @@ export function flagEmoji(code: string): string {
   }
 }
 
+export function isLightColor(hexColor: string | undefined): boolean {
+  if (!hexColor || !hexColor.startsWith("#")) return false;
+  const cleaned = hexColor.trim();
+  if (cleaned.length !== 7) return false;
+  const r = parseInt(cleaned.slice(1, 3), 16);
+  const g = parseInt(cleaned.slice(3, 5), 16);
+  const b = parseInt(cleaned.slice(5, 7), 16);
+  if (isNaN(r) || isNaN(g) || isNaN(b)) return false;
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 170; // Threshold where white text or white icon becomes hard to read
+}
+
 // localStorage key for the resolved country code (client-cached)
-export const COUNTRY_STORAGE_KEY = "mindrop.theme.country.v1";
+const COUNTRY_STORAGE_KEY = "mindrop.theme.country.v1";
 // localStorage key for a user manual override (wins over auto-detected)
-export const COUNTRY_OVERRIDE_KEY = "mindrop.theme.country.override.v1";
+const COUNTRY_OVERRIDE_KEY = "mindrop.theme.country.override.v1";
+
+export { COUNTRY_STORAGE_KEY, COUNTRY_OVERRIDE_KEY };

@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Bell, LayoutDashboard, MapPin, Settings, Clock, Grid, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
+import { isLightColor } from "@/lib/theme/palette";
 import { useState, useEffect } from "react";
 
 /**
@@ -124,7 +125,7 @@ export function BottomTabs() {
                     className="grid place-items-center size-8 rounded-lg text-canvas shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
                     style={{
                       background: active ? color : "color-mix(in oklab, var(--ink) 10%, transparent)",
-                      color: active ? "var(--canvas)" : "var(--ink)",
+                      color: active ? (isLightColor(color) ? "var(--ink)" : "var(--canvas)") : "var(--ink)",
                     }}
                   >
                     <Icon className="size-4" strokeWidth={active ? 2.2 : 1.6} />
@@ -132,7 +133,7 @@ export function BottomTabs() {
                   <span
                     className="t-body transition-colors text-sm font-medium"
                     style={{
-                      color: active ? color : "var(--ink)",
+                      color: active ? (isLightColor(color) ? "var(--ink)" : color) : "var(--ink)",
                       fontWeight: active ? 600 : 500,
                     }}
                   >
@@ -163,9 +164,10 @@ export function BottomTabs() {
           boxShadow: { repeat: Infinity, repeatType: "reverse", duration: 3.5, ease: "easeInOut" },
           scale: { type: "spring", stiffness: 400, damping: 25 }
         }}
-        className="fixed md:absolute bottom-6 right-6 z-40 grid place-items-center size-14 rounded-full text-canvas border border-white/10 press"
+        className="fixed md:absolute bottom-6 right-6 z-40 grid place-items-center size-14 rounded-full border border-white/10 press"
         style={{
           background: `linear-gradient(135deg, ${activeColor} 0%, color-mix(in oklab, ${activeColor} 75%, ${endColor}) 100%)`,
+          color: isLightColor(activeColor) ? "var(--ink)" : "var(--canvas)",
         }}
         aria-label={isOpen ? "Close Menu" : "Open Menu"}
       >
