@@ -36,7 +36,7 @@ export function CaptureBar({ plan, onCapture, onUpgrade }: Props) {
         whileHover={{ y: -1 }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
         aria-label="Capture a thought"
-        className="t-button fixed bottom-24 left-1/2 -translate-x-1/2 z-30 group inline-flex items-center gap-2.5 pl-4 pr-5 py-3.5 rounded-full bg-ink text-canvas"
+        className="t-button fixed bottom-8 left-1/2 -translate-x-1/2 z-30 group inline-flex items-center gap-2.5 pl-4 pr-5 py-3.5 rounded-full bg-ink text-canvas"
         style={{
           boxShadow: "0 10px 30px -8px rgba(26,26,26,0.4), 0 2px 6px rgba(26,26,26,0.2), inset 0 1px 0 rgba(255,255,255,0.08)",
         }}
