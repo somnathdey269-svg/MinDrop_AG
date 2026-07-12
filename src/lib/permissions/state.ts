@@ -94,8 +94,36 @@ export async function readPermissions(): Promise<PermissionSnapshot> {
 
 /** Compact summary used by the Settings tile ("3 of 4 granted"). */
 export function summarizePermissions(s: PermissionSnapshot): string {
-  const applicable = [s.notifications, s.mic, s.locationFg];
-  if (isAndroid()) applicable.push(s.notificationAccess);
+  const applicable: PermStatus[] = [];
+
+  // Notifications (all platforms)
+  applicable.push(s.notifications);
+
+  // Exact alarms (Android only)
+  if (isAndroid()) {
+    applicable.push(s.exactAlarm);
+  }
+
+  // Ignore battery optimization (Android only)
+  if (isAndroid()) {
+    applicable.push(s.battery);
+  }
+
+  // Location (all platforms)
+  if (isAndroid()) {
+    applicable.push(s.locationFg === "granted" && s.locationBg === "granted" ? "granted" : "prompt");
+  } else {
+    applicable.push(s.locationFg);
+  }
+
+  // Notification Access (Android only)
+  if (isAndroid()) {
+    applicable.push(s.notificationAccess);
+  }
+
+  // Microphone (all platforms)
+  applicable.push(s.mic);
+
   const granted = applicable.filter((v) => v === "granted").length;
   if (granted === 0) return "Setup needed";
   if (granted === applicable.length) return "All granted";
