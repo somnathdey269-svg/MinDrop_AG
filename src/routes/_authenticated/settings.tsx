@@ -446,7 +446,6 @@ function InfoSheet({ kind, isPremium, onClose }: { kind: "privacy" | "export"; i
             )}
 
             {msg && <p className="mt-3 t-body-sm text-ink/70 text-center">{msg}</p>}
-            <button onClick={onClose} className="w-full mt-4 py-3 t-button text-ink/70">Close</button>
           </div>
         )}
       </motion.div>
@@ -644,7 +643,6 @@ function DriveBackupSheet({ onClose }: { onClose: () => void }) {
           )}
 
           {msg && <p className="mt-3 t-body-sm text-ink/70 text-center">{msg}</p>}
-          <button onClick={onClose} className="w-full mt-2 py-3 t-button text-ink/70">Close</button>
         </div>
       </motion.div>
     </>
