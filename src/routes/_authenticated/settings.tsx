@@ -288,17 +288,19 @@ function Settings() {
               </div>
             </div>
           ) : (
-            <div className="mt-6 rounded-3xl p-4 bg-white border border-dashed border-ink/15 flex items-start gap-3 justify-between">
-              <div className="flex items-start gap-3 min-w-0">
-                <Lock className="size-4 text-ink/40 mt-0.5 shrink-0" />
+            <div className="mt-6 rounded-3xl p-5 bg-gradient-to-br from-brand/10 via-brand/[0.03] to-white border border-brand/15 flex items-center gap-4 justify-between shadow-sm shadow-brand/5">
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="size-10 rounded-2xl bg-brand/10 border border-brand/20 grid place-items-center shrink-0">
+                  <Lock className="size-4.5 text-brand" />
+                </div>
                 <div className="min-w-0">
-                  <p className="t-title text-ink/75">Sign up to sync data</p>
-                  <p className="t-body-sm text-ink/50 mt-0.5">Back up your memories & rules securely.</p>
+                  <p className="t-title text-ink font-bold leading-tight">Sign up to sync data</p>
+                  <p className="t-body-sm text-ink/65 mt-0.5">Back up your memories & rules securely.</p>
                 </div>
               </div>
               <Link
                 to="/auth"
-                className="px-4 py-2 bg-brand/10 hover:bg-brand/20 text-brand rounded-xl t-button text-xs font-bold shrink-0 self-center transition-colors"
+                className="px-4.5 py-2.5 bg-brand text-white rounded-2xl t-button text-xs font-bold shrink-0 self-center shadow-sm shadow-brand/20 hover:opacity-95 active:scale-95 transition-all"
               >
                 Sign Up / In
               </Link>
