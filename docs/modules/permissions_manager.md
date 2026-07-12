@@ -39,3 +39,5 @@ Can you check the existing rules and rectify the same and at the end of summary 
 Also ensure all my 20 agent should work properly and the MD created for existing work is checked and ensure its updated after the changes (if any) and at th summary you include this also'
 - **2026-07-12 09:49:24** | Self-Healed Learning Loop
   * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
+- **2026-07-12 09:57:23** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'In setting permission it shows 2 out of 4 why? it should be always out of 6 and keep this dynamci if in future i remove or add any new permission it should count the real number'
