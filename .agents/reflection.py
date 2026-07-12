@@ -3,6 +3,16 @@ import json
 import asyncio
 from datetime import datetime
 
+# Load GEMINI_API_KEY from root .env file if it exists
+env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+if os.path.exists(env_path):
+    with open(env_path, "r") as f:
+        for line in f:
+            if line.strip().startswith("GEMINI_API_KEY="):
+                key = line.strip().split("=", 1)[1].strip()
+                if key:
+                    os.environ["GEMINI_API_KEY"] = key
+
 # Import Google Antigravity SDK
 try:
     from google.antigravity import Agent, LocalAgentConfig

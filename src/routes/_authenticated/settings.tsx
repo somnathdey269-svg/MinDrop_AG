@@ -217,9 +217,86 @@ function Settings() {
   );
 }
 
-function InfoSheet({ kind, onClose }: { kind: "privacy" | "export"; isPremium: boolean; onClose: () => void }) {
+function InfoSheet({ kind, isPremium, onClose }: { kind: "privacy" | "export"; isPremium: boolean; onClose: () => void }) {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+
+  // Google Drive state
+  const getAuthUrl = useServerFn(getDriveAuthUrl);
+  const disconnect = useServerFn(disconnectDrive);
+  const getStatus = useServerFn(getDriveStatus);
+  const backup = useServerFn(backupToDrive);
+  const restore = useServerFn(restoreFromDrive);
+
+  const [driveStatus, setDriveStatus] = useState<{ connected: boolean; connectedAt: string | null; updatedAt: string | null } | null>(null);
+  const [driveBusy, setDriveBusy] = useState<null | "connect" | "backup" | "restore" | "disconnect">(null);
+
+  useEffect(() => {
+    if (kind === "export" && isPremium) {
+      let mounted = true;
+      getStatus()
+        .then((s) => { if (mounted) setDriveStatus(s); })
+        .catch((err) => { if (mounted) setMsg(err?.message || "Could not load Drive status"); });
+      return () => { mounted = false; };
+    }
+  }, [kind, isPremium, getStatus]);
+
+  async function connect() {
+    setDriveBusy("connect");
+    setMsg(null);
+    try {
+      const { url } = await getAuthUrl();
+      window.location.href = url;
+    } catch (err: any) {
+      setMsg(err?.message || "Could not start Google Drive connection");
+      setDriveBusy(null);
+    }
+  }
+
+  async function doBackup() {
+    setDriveBusy("backup");
+    setMsg(null);
+    try {
+      const payload = JSON.stringify(buildBackup());
+      const { filename } = await backup({ data: { payload, format: "json" } });
+      setMsg(`Backed up to ${filename}`);
+      const s = await getStatus();
+      setDriveStatus(s);
+    } catch (err: any) {
+      setMsg(err?.message || "Backup failed");
+    } finally {
+      setDriveBusy(null);
+    }
+  }
+
+  async function doRestore() {
+    setDriveBusy("restore");
+    setMsg(null);
+    try {
+      const { content, filename } = await restore();
+      const { imported } = importBackupFromText(content);
+      setMsg(`Restored ${imported} item${imported === 1 ? "" : "s"} from ${filename}. Reopen tabs to refresh.`);
+    } catch (err: any) {
+      setMsg(err?.message || "Restore failed");
+    } finally {
+      setDriveBusy(null);
+    }
+  }
+
+  async function doDisconnect() {
+    if (!confirm("Disconnect Google Drive? Backups already in your Drive will stay there.")) return;
+    setDriveBusy("disconnect");
+    setMsg(null);
+    try {
+      await disconnect();
+      setDriveStatus({ connected: false, connectedAt: null, updatedAt: null });
+      setMsg("Google Drive disconnected");
+    } catch (err: any) {
+      setMsg(err?.message || "Disconnect failed");
+    } finally {
+      setDriveBusy(null);
+    }
+  }
 
   const handleImport = async (f: File) => {
     setMsg(null);
@@ -236,6 +313,8 @@ function InfoSheet({ kind, onClose }: { kind: "privacy" | "export"; isPremium: b
       setMsg(e?.message || "Couldn't read that file.");
     }
   };
+
+  const isDriveConnected = driveStatus?.connected ?? false;
 
   return (
     <>
@@ -281,7 +360,7 @@ function InfoSheet({ kind, onClose }: { kind: "privacy" | "export"; isPremium: b
               <Bullet emoji="🔄" title="Switching device" body="Export from the old device, install on the new one, then Import here." />
             </ul>
 
-            <p className="t-eyebrow text-ink/50 mb-2">Export</p>
+            <p className="t-eyebrow text-ink/50 mb-2">Local Export</p>
             <div className="grid grid-cols-2 gap-2 mb-3">
               <button onClick={downloadBackup} className="bg-ink text-canvas py-3.5 rounded-2xl t-button flex items-center justify-center gap-2">
                 <Download className="size-4" /> JSON
@@ -291,7 +370,7 @@ function InfoSheet({ kind, onClose }: { kind: "privacy" | "export"; isPremium: b
               </button>
             </div>
 
-            <p className="t-eyebrow text-ink/50 mb-2 mt-4">Import</p>
+            <p className="t-eyebrow text-ink/50 mb-2 mt-4">Local Import</p>
             <input
               ref={fileRef}
               type="file"
@@ -305,8 +384,69 @@ function InfoSheet({ kind, onClose }: { kind: "privacy" | "export"; isPremium: b
             >
               <Upload className="size-4" /> Import from backup (JSON or CSV)
             </button>
+
+            {/* Google Drive Integration for Premium Users */}
+            {isPremium && (
+              <>
+                <div className="my-6 border-t border-ink/10" />
+                <p className="t-eyebrow text-ink/50 mb-2 flex items-center gap-1.5">
+                  <Cloud className="size-3.5" /> Google Drive Cloud Backup
+                </p>
+                {driveStatus === null ? (
+                  <p className="t-body-sm text-ink/60 text-center py-4">Loading Drive settings…</p>
+                ) : isDriveConnected ? (
+                  <div className="space-y-3">
+                    <div className="p-4 bg-white rounded-2xl border border-ink/5">
+                      <p className="t-title">Google Drive Connected</p>
+                      {driveStatus.connectedAt && (
+                        <p className="t-body-sm text-ink/60 mt-0.5">
+                          Linked since {new Date(driveStatus.connectedAt).toLocaleDateString()}
+                        </p>
+                      )}
+                      {driveStatus.updatedAt && driveStatus.updatedAt !== driveStatus.connectedAt && (
+                        <p className="t-body-sm text-ink/60 mt-0.5">
+                          Last auto-sync: {new Date(driveStatus.updatedAt).toLocaleString()}
+                        </p>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={doBackup}
+                        disabled={!!driveBusy}
+                        className="bg-ink text-canvas py-3.5 rounded-2xl t-button flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
+                        {driveBusy === "backup" ? "Syncing…" : "Sync to Drive"}
+                      </button>
+                      <button
+                        onClick={doRestore}
+                        disabled={!!driveBusy}
+                        className="bg-white border border-ink/15 py-3.5 rounded-2xl t-button flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
+                        {driveBusy === "restore" ? "Restoring…" : "Restore from Drive"}
+                      </button>
+                    </div>
+                    <button
+                      onClick={doDisconnect}
+                      disabled={!!driveBusy}
+                      className="w-full mt-1 py-3 t-button text-red-600 hover:bg-red-50 rounded-2xl transition-all disabled:opacity-50"
+                    >
+                      {driveBusy === "disconnect" ? "Disconnecting…" : "Disconnect Google Drive"}
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={connect}
+                    disabled={!!driveBusy}
+                    className="w-full bg-ink text-canvas py-4 rounded-2xl t-button flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {driveBusy === "connect" ? "Connecting…" : "Link Google Drive"}
+                  </button>
+                )}
+              </>
+            )}
+
             {msg && <p className="mt-3 t-body-sm text-ink/70 text-center">{msg}</p>}
-            <button onClick={onClose} className="w-full mt-2 py-3 t-button text-ink/70">Close</button>
+            <button onClick={onClose} className="w-full mt-4 py-3 t-button text-ink/70">Close</button>
           </div>
         )}
       </motion.div>

@@ -2,10 +2,10 @@
  * On-device backup / restore for MinDrop — v2 sectioned payload.
  *
  * The export walks a curated allowlist of localStorage prefixes so we capture
- * user data (memories, packs, personality, appearance, notify rules & inbox,
- * places, saved preferences) without dragging along one-shot UI flags such as
- * the splash-seen bit, permission-ack timestamps or perm cache — those belong
- * to the *device*, not the user's data.
+ * ALL user data — memories, packs, personality, appearance, notify rules,
+ * inbox, places, alarms, theme, cloud sync meta, summary config, custom packs,
+ * and preferences. Only truly device-specific ephemeral flags (splash-seen,
+ * permission-ack timestamps, permission cache) are excluded.
  *
  * Backwards-compatible with the v1 format (flat `data: {key: value}`) so old
  * exports still restore.
@@ -15,25 +15,38 @@ const V2 = 2 as const;
 
 // Keys we DO include (prefix match).
 const INCLUDE_PREFIXES = [
-  "memoryos",             // core (memories, packs, personality, appearance, rules, categories, quiz, greetings, recall)
-  "mindrop.notify.",      // rules + inbox + capture buffer
-  "mindrop.places.",      // saved places + events + runtime
+  "memoryos",               // core: memories, packs, personality, rules, quiz, greetings, recall, appearance, scheduler IDs, changelog, tour
+  "mindrop.notify.",         // rules + inbox + capture buffer
+  "mindrop.places.",         // saved places + events + rules + migration flag
+  "gmd:",                    // packs definitions, pack installs, custom packs
+  "mindrop.alarm.",          // default tone, vibration preference
+  "mindrop.theme.",          // country theme auto-detected + manual override
+  "mindrop.appearance.",     // font + size preferences
+  "mindrop.book.",           // CMS chapters read state
+  "mindrop.dashboard.",      // dashboard welcome flag
+  "mindrop.cloud.",          // cloud sync metadata (userId, timestamps)
+  "mindrop.install_country", // install country + synced flag
+  "mindrop.tier.",           // cached plan tier
+  "mindrop.countryThemes.",  // country themes cache
+  "mindrop.admin.",          // admin sidebar preferences
+  "mindrop.localMigration",  // migration-ran flag
+  "mindrop.snooze.",         // paywall snooze daily counts
+  "mindrop.drive.",          // auto-backup last-ran timestamp
+  "mindrop.summary.",        // BYOK keys, presets, active preset, category overrides, scheduler, profile, history, last report, used suggestions
 ] as const;
 
 // Keys we EXPLICITLY exclude even if they match a prefix above.
 const EXCLUDE_KEYS = new Set<string>([
   "mindrop.notify.web.granted",   // per-device mock permission flag
-  "mindrop.places.runtime.v1",    // ephemeral runtime state
+  "mindrop.places.runtime.v1",    // ephemeral geofence runtime state
 ]);
 
 // Additional single keys (or prefixes) we exclude because they represent
 // per-device UI/onboarding state, not user content.
 const EXCLUDE_PREFIXES = [
-  "mindrop.splash.",
-  "mindrop.disclosure.",
-  "mindrop.perm.",
-  "mindrop.tour.",
-  "mindrop.summary.",   // BYOK keys, presets, history metadata — device-local
+  "mindrop.splash.",        // splash-screen shown flag — device-only
+  "mindrop.disclosure.",     // Play Store disclosure acks — device-only
+  "mindrop.perm.",           // permission ask timestamps — device-only
 ] as const;
 
 function shouldInclude(key: string): boolean {
@@ -108,14 +121,38 @@ export function buildBackup(): BackupPayloadV2 {
   };
 }
 
-export function downloadBackup() {
-  const payload = buildBackup();
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+async function saveOrShareFile(content: string, filename: string, mimeType: string) {
+  if (typeof window === "undefined") return;
+
+  try {
+    const file = new File([content], filename, { type: mimeType });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: filename,
+        text: `MinDrop backup: ${filename}`
+      });
+      return;
+    }
+  } catch (e) {
+    console.warn("Share failed, falling back to download", e);
+  }
+
+  // Fallback to classic browser download
+  const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.href = url;
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+export async function downloadBackup() {
+  const payload = buildBackup();
+  const text = JSON.stringify(payload, null, 2);
+  const filename = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  await saveOrShareFile(text, filename, "application/json");
 }
 
 // New: Build CSV backup (simple two‑column key/value)
@@ -125,53 +162,104 @@ export function buildCsvBackup(): string {
   rows.push("key,value");
   for (const [k, v] of Object.entries(backup.data)) {
     // Escape double quotes and commas in value
-    const safeValue = JSON.stringify(v).replace(/"/g, '""');
+    const jsonStr = typeof v === "string" ? v : JSON.stringify(v);
+    const safeValue = jsonStr.replace(/"/g, '""');
     rows.push(`${k},"${safeValue}"`);
   }
   return rows.join("\n");
 }
 
 // Download CSV version
-export function downloadCsvBackup() {
+export async function downloadCsvBackup() {
   const csv = buildCsvBackup();
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
+  const filename = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.csv`;
+  await saveOrShareFile(csv, filename, "text/csv");
+}
+
+// RFC 4180 compliant CSV parser
+export function parseCsv(text: string): [string, string][] {
+  const result: [string, string][] = [];
+  let row: string[] = [];
+  let field = "";
+  let inQuotes = false;
+  
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    const next = text[i + 1];
+    
+    if (inQuotes) {
+      if (c === '"') {
+        if (next === '"') {
+          field += '"';
+          i++; // skip next quote
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field += c;
+      }
+    } else {
+      if (c === '"') {
+        inQuotes = true;
+      } else if (c === ',') {
+        row.push(field);
+        field = "";
+      } else if (c === '\r' || c === '\n') {
+        row.push(field);
+        field = "";
+        if (row.length > 0 && (row.length > 1 || row[0] !== "")) {
+          result.push([row[0], row[1] || ""]);
+        }
+        row = [];
+        if (c === '\r' && next === '\n') {
+          i++;
+        }
+      } else {
+        field += c;
+      }
+    }
+  }
+  
+  if (field !== "" || row.length > 0) {
+    row.push(field);
+    if (row.length > 0) {
+      result.push([row[0], row[1] || ""]);
+    }
+  }
+  
+  return result;
 }
 
 // Import CSV backup (expects same two‑column format)
 export async function importBackupFromCsvFile(file: File): Promise<RestoreResult> {
   const text = await file.text();
-  const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+  const parsed = parseCsv(text);
   const result: RestoreResult = { imported: 0, skipped: 0, errors: [] };
+  
   // Skip header if present
   let start = 0;
-  if (lines[0].startsWith("key,")) start = 1;
-  for (let i = start; i < lines.length; i++) {
-    const line = lines[i];
-    const sep = line.indexOf(",");
-    if (sep === -1) { result.skipped++; continue; }
-    const key = line.slice(0, sep);
-    let value = line.slice(sep + 1);
-    // Remove surrounding quotes if present
-    if (value.startsWith('"') && value.endsWith('"')) {
-      value = value.slice(1, -1).replace(/""/g, '"');
-    }
+  if (parsed.length > 0 && parsed[0][0] === "key") start = 1;
+  
+  for (let i = start; i < parsed.length; i++) {
+    const [key, value] = parsed[i];
+    if (!key) { result.skipped++; continue; }
+    
+    // Accept v1's raw memoryos-only dump, and v2's expanded allowlist.
+    if (!shouldInclude(key) && !key.startsWith("memoryos")) { result.skipped++; continue; }
+    
     try {
-      // Store raw string (JSON) so restoration logic can parse later
       window.localStorage.setItem(key, value);
       result.imported++;
     } catch (e) {
       result.errors.push(`${key}: ${(e as Error).message}`);
     }
   }
+  
   // Notify listeners similar to JSON import
   try { window.dispatchEvent(new StorageEvent("storage", { key: "memoryos.memories.v1" })); } catch {}
   try { window.dispatchEvent(new StorageEvent("storage", { key: "mindrop.notify.rules.v1" })); } catch {}
   try { window.dispatchEvent(new StorageEvent("storage", { key: "mindrop.places.v1" })); } catch {}
+  try { window.dispatchEvent(new StorageEvent("storage", { key: "mindrop.places.rules.v1" })); } catch {}
   return result;
 }
 
