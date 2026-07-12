@@ -113,10 +113,85 @@ export function downloadBackup() {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.href = url; a.download = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+// New: Build CSV backup (simple two‑column key/value)
+export function buildCsvBackup(): string {
+  const backup = buildBackup();
+  const rows: string[] = [];
+  rows.push("key,value");
+  for (const [k, v] of Object.entries(backup.data)) {
+    // Escape double quotes and commas in value
+    const safeValue = JSON.stringify(v).replace(/"/g, '""');
+    rows.push(`${k},"${safeValue}"`);
+  }
+  return rows.join("\n");
+}
+
+// Download CSV version
+export function downloadCsvBackup() {
+  const csv = buildCsvBackup();
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Import CSV backup (expects same two‑column format)
+export async function importBackupFromCsvFile(file: File): Promise<RestoreResult> {
+  const text = await file.text();
+  const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+  const result: RestoreResult = { imported: 0, skipped: 0, errors: [] };
+  // Skip header if present
+  let start = 0;
+  if (lines[0].startsWith("key,")) start = 1;
+  for (let i = start; i < lines.length; i++) {
+    const line = lines[i];
+    const sep = line.indexOf(",");
+    if (sep === -1) { result.skipped++; continue; }
+    const key = line.slice(0, sep);
+    let value = line.slice(sep + 1);
+    // Remove surrounding quotes if present
+    if (value.startsWith('"') && value.endsWith('"')) {
+      value = value.slice(1, -1).replace(/""/g, '"');
+    }
+    try {
+      // Store raw string (JSON) so restoration logic can parse later
+      window.localStorage.setItem(key, value);
+      result.imported++;
+    } catch (e) {
+      result.errors.push(`${key}: ${(e as Error).message}`);
+    }
+  }
+  // Notify listeners similar to JSON import
+  try { window.dispatchEvent(new StorageEvent("storage", { key: "memoryos.memories.v1" })); } catch {}
+  try { window.dispatchEvent(new StorageEvent("storage", { key: "mindrop.notify.rules.v1" })); } catch {}
+  try { window.dispatchEvent(new StorageEvent("storage", { key: "mindrop.places.v1" })); } catch {}
+  return result;
+}
+
+// Schedule daily backup reminder for free users
+import { LocalNotifications } from "@capacitor/local-notifications";
+export async function scheduleDailyBackupNotification() {
+  // Cancel any existing scheduled notifications with same tag
+  await LocalNotifications.cancel({ notifications: [{ id: 9999 }] }).catch(() => {});
+  await LocalNotifications.schedule({
+    notifications: [{
+      id: 9999,
+      title: "Backup Reminder",
+      body: "Export your MinDrop data to keep it safe.",
+      schedule: { at: new Date(Date.now() + 1000 * 60 * 5) }, // first in 5 min, then repeat daily via repeat
+      sound: null,
+      actionTypeId: "backup_reminder",
+      // repeat daily
+      every: "day",
+    }]
+  });
 }
 
 export interface RestoreResult {
