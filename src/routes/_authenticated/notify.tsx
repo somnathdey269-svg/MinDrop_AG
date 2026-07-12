@@ -168,7 +168,6 @@ function NotifyPage() {
        const needed: PromptKind[] = [];
        if (snap.battery !== "granted") needed.push("battery");
        if (snap.notificationAccess !== "granted" && NotifyBridge.isNative()) needed.push("notification-access");
-       if (snap.mic !== "granted") needed.push("mic");
 
        if (needed.length > 0) {
          setPendingPrefill(pf);

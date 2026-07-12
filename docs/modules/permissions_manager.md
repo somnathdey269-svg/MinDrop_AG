@@ -43,3 +43,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'In setting permission it shows 2 out of 4 why? it should be always out of 6 and keep this dynamci if in future i remove or add any new permission it should count the real number'
 - **2026-07-12 11:09:08** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Now in setting bring teh app permission first then country selection and then appearance selection. No change in header 2 boxes (Friendof MinDrop and go premium)'
+- **2026-07-13 01:20:53** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Removed microphone permission JIT check from notification rule setup flow.'
