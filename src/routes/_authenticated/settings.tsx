@@ -31,7 +31,7 @@ import { useCountryTheme, useCountryThemes, setCountryOverride, getCountryOverri
 import { padPalette, INDIA_SAFFRON, INDIA_GREEN, INDIA_BLUE, getReadableAccent } from "@/lib/theme/palette";
 import { CHANGELOG, hasUnseenChangelog } from "@/lib/changelog";
 import { toast } from "sonner";
-import { LegalFooter } from "@/components/legal/LegalFooter";
+import { getPublicSettings } from "@/lib/platformSettings.functions";
 
 // AI and digest configurations imports
 import { getActiveProvider, getKey, saveKey, deleteKey, setActiveProvider } from "@/lib/notify/summary/keyring";
@@ -69,7 +69,7 @@ function Settings() {
   const search = useSearch({ from: "/_authenticated/settings" }) as { drive?: string; message?: string };
   const isPremium = state.plan === "premium";
   const [user, setUser] = useState<any>(null);
-  const [sheet, setSheet] = useState<null | "privacy" | "export" | "changelog" | "drive" | "ai-keys" | "digest-sched" | "delete-wizard">(null);
+  const [sheet, setSheet] = useState<null | "privacy" | "export" | "changelog" | "drive" | "ai-keys" | "digest-sched" | "delete-wizard" | "legal-terms" | "legal-privacy" | "legal-refunds" | "legal-contact">(null);
 
   async function handleAccountDeletion() {
     await deleteFn();
@@ -307,14 +307,22 @@ function Settings() {
 
           <AccountActions user={user} onOpenDeleteWizard={() => setSheet("delete-wizard")} />
 
-          <div className="mt-6 flex items-center justify-center gap-1.5 t-meta text-ink/30 mb-4 font-semibold">
+          <div className="mt-6 flex items-center justify-center gap-1.5 t-meta text-ink/30 mb-3 font-semibold">
             <BookOpen className="size-3" />
             MinDrop · v1.0
           </div>
 
-          <LegalFooter className="text-ink/40" />
+          <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 t-meta text-ink/40 mb-2">
+            <button onClick={() => setSheet("legal-terms")} className="hover:text-ink/80 underline-offset-2 hover:underline">Terms</button>
+            <span aria-hidden="true">·</span>
+            <button onClick={() => setSheet("legal-privacy")} className="hover:text-ink/80 underline-offset-2 hover:underline">Privacy</button>
+            <span aria-hidden="true">·</span>
+            <button onClick={() => setSheet("legal-refunds")} className="hover:text-ink/80 underline-offset-2 hover:underline">Refunds</button>
+            <span aria-hidden="true">·</span>
+            <button onClick={() => setSheet("legal-contact")} className="hover:text-ink/80 underline-offset-2 hover:underline">Contact</button>
+          </nav>
         </div>
-        <div aria-hidden="true" className="h-28 shrink-0" />
+        <div aria-hidden="true" className="h-14 shrink-0" />
         <BottomTabs />
       </div>
 
@@ -337,6 +345,9 @@ function Settings() {
             onClose={() => setSheet(null)}
             onDeleted={handleAccountDeletion}
           />
+        )}
+        {(sheet === "legal-terms" || sheet === "legal-privacy" || sheet === "legal-refunds" || sheet === "legal-contact") && (
+          <LegalPageSheet kind={sheet.replace("legal-", "") as "terms" | "privacy" | "refunds" | "contact"} onClose={() => setSheet(null)} />
         )}
       </AnimatePresence>
     </PhoneFrame>
@@ -2117,3 +2128,269 @@ function DigestAutomationSheet({ onClose, onLinkApi }: { onClose: () => void; on
   );
 }
 
+
+/* ── Legal Page Sheet ────────────────────────────────────── */
+
+const LEGAL_TITLES: Record<string, string> = {
+  terms: "Terms & Conditions",
+  privacy: "Privacy Policy",
+  refunds: "Refund & Cancellation Policy",
+  contact: "Contact",
+};
+
+function LegalPageSheet({ kind, onClose }: { kind: "terms" | "privacy" | "refunds" | "contact"; onClose: () => void }) {
+  const fetchSettings = useServerFn(getPublicSettings);
+  const [s, setS] = useState<any>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetchSettings().then((d) => { if (alive) setS(d); }).catch(() => {});
+    return () => { alive = false; };
+  }, [fetchSettings]);
+
+  const company = s?.companyLegalName ?? "MinDrop";
+  const jur = s?.companyJurisdiction ?? "";
+
+  return (
+    <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div
+        initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+        transition={{ type: "spring", damping: 28, stiffness: 280 }}
+        className="absolute inset-x-0 bottom-0 z-50 rounded-t-[2rem] bg-canvas border-t border-ink/10 flex flex-col"
+        style={{ height: "80%" }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-3 border-b border-ink/5 shrink-0">
+          <span className="t-eyebrow text-ink/70">{LEGAL_TITLES[kind]}</span>
+          <button onClick={onClose} className="size-8 rounded-full grid place-items-center hover:bg-ink/5" aria-label="Close">
+            <X className="size-4" />
+          </button>
+        </div>
+
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto px-5 py-5">
+          {!s ? (
+            <div className="flex items-center justify-center py-12">
+              <span className="t-meta text-ink/40 animate-pulse">Loading…</span>
+            </div>
+          ) : (
+            <div className="space-y-5 t-body-sm text-ink/85 leading-relaxed">
+              {kind === "terms" && <TermsContent company={company} jur={jur} email={s.supportEmail} />}
+              {kind === "privacy" && <PrivacyContent s={s} />}
+              {kind === "refunds" && <RefundsContent s={s} company={company} jur={jur} />}
+              {kind === "contact" && <ContactContent s={s} />}
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
+/* ── Legal content sub-components ──────────────────────── */
+
+function TermsContent({ company, jur, email }: { company: string; jur: string; email: string }) {
+  return (
+    <>
+      <p className="t-meta text-ink/55">Last updated: November 2025</p>
+      <p>These Terms & Conditions ("Terms") constitute a legally binding agreement between you ("User", "you", "your") and {company} ("MinDrop", "we", "us", "our"), operator of the MinDrop mobile and web application and any related services (collectively, the "Service"). By accessing, downloading, installing, registering for, or using the Service in any manner, you unconditionally accept these Terms in their entirety. If you do not agree, you must immediately discontinue all use of the Service.</p>
+
+      <div><h3 className="t-title text-sm mb-1">1. Eligibility</h3><p>You represent and warrant that you are at least eighteen (18) years of age and have the legal capacity to enter into a binding contract, or that you are using the Service under the supervision and with the express consent of a parent or legal guardian who accepts these Terms on your behalf.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">2. Account & security</h3><p>You are solely and exclusively responsible for maintaining the confidentiality of your login credentials and for every activity that occurs under your account. You agree to immediately notify us of any unauthorised access.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">3. Licence to use the Service</h3><p>Subject to your continuing compliance with these Terms, we grant you a personal, limited, revocable, non-exclusive, non-transferable, non-sublicensable licence to install and use the Service on devices you own or control, solely for your personal, non-commercial use.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">4. Acceptable use</h3><p>You agree that you will not: (a) copy, modify, reverse engineer, or create derivative works based on the Service; (b) rent, lease, sell, or commercially exploit the Service; (c) use automated systems to access the Service; (d) attempt to gain unauthorised access to any portion of the Service; (e) use the Service to store unlawful or defamatory content; (f) use the Service in any manner that violates applicable law; or (g) interfere with or disrupt the Service.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">5. User content & licence</h3><p>You retain ownership of your content. By submitting content, you grant MinDrop a worldwide, royalty-free licence to host, store, reproduce, process, and use such content solely for providing and improving the Service.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">6. Third-party services</h3><p>The Service may integrate with third-party services including Google Sign-in, Google Drive backup, Firebase Cloud Messaging, and Cashfree Payments. Your use of any third-party service is governed by that third party's own terms.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">7. Paid plans</h3><p>MinDrop offers a paid "Premium" plan for a term of one (1) year from the date of successful payment. Pricing may be changed at any time on a prospective basis.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">8. Payments</h3><p>All payments are processed by Cashfree Payments or another designated processor. MinDrop does not store your card, UPI, or bank account credentials. All applicable taxes are your responsibility.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">9. No auto-renewal</h3><p>The Premium plan does <strong>not</strong> auto-renew. On expiry, your account will automatically revert to the free tier.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">10. Notifications</h3><p>By using the Service, you expressly consent to receive service-related and transactional communications from MinDrop, including push notifications, reminder notifications, and email.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">11. Reminder accuracy</h3><p>The Service is a best-effort personal reminder utility. Reminders may be delayed, delivered out of order, or fail to deliver entirely. <strong>MinDrop expressly disclaims all liability for any missed, late, or non-delivered notification.</strong></p></div>
+
+      <div><h3 className="t-title text-sm mb-1">12. Disclaimers</h3><p>THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTY OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, MINDROP DISCLAIMS ALL WARRANTIES.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">13. Limitation of liability</h3><p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, MINDROP'S AGGREGATE LIABILITY SHALL NOT EXCEED THE LOWER OF (A) THE AMOUNT PAID BY YOU IN THE PRIOR 12 MONTHS, OR (B) INR 1,000.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">14. Indemnity</h3><p>You agree to defend, indemnify, and hold harmless MinDrop from any claims arising out of your use of the Service, your content, or your violation of these Terms.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">15. Suspension & termination</h3><p>MinDrop may at its sole discretion suspend or terminate your account. On termination, no refund shall be owed.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">16. Modification of Terms</h3><p>MinDrop may modify these Terms at any time. Your continued use constitutes acceptance.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">17. Governing law</h3><p>These Terms are governed by the laws of India. The courts at {jur} shall have exclusive jurisdiction.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">18. Dispute resolution</h3><p>Disputes shall be settled by arbitration under the Arbitration and Conciliation Act, 1996. The seat of arbitration shall be {jur}.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">19. Force majeure</h3><p>MinDrop shall not be liable for any failure caused by circumstances beyond its reasonable control.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">20. General</h3><p>These Terms, together with our Privacy Policy and Refund & Cancellation Policy, constitute the entire agreement between you and MinDrop.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">21. Contact</h3><p>Questions about these Terms may be sent to <a href={`mailto:${email}`} className="underline">{email}</a>.</p></div>
+    </>
+  );
+}
+
+function PrivacyContent({ s }: { s: any }) {
+  return (
+    <>
+      <p className="t-meta text-ink/55">Last updated: November 2025</p>
+      <p>This Privacy Policy describes how MinDrop ("MinDrop", "we", "us", "our") collects, uses, discloses, retains, and protects personal data when you access or use the MinDrop mobile and web application and related services (the "Service").</p>
+
+      <div><h3 className="t-title text-sm mb-1">1. Scope</h3><p>This Policy applies to the MinDrop application and website and to all personal data we process as data fiduciary in the course of providing the Service.</p></div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">2. Personal data we collect</h3>
+        <ul className="list-disc pl-5 space-y-1 mt-1">
+          <li><strong>Account data:</strong> name, email address, avatar.</li>
+          <li><strong>User content:</strong> memories, notes, tags, reminders, notification rules, saved places.</li>
+          <li><strong>Device & technical data:</strong> device identifier, OS, app version, timezone, push notification token.</li>
+          <li><strong>Usage data:</strong> feature interactions, session info, crash reports.</li>
+          <li><strong>Payment data:</strong> we do <em>not</em> store your card, UPI, or bank details. We store only the payment gateway's transaction reference.</li>
+          <li><strong>Location data:</strong> only if you grant permission, for place-based reminders.</li>
+          <li><strong>Communications:</strong> support correspondence.</li>
+        </ul>
+      </div>
+
+      <div><h3 className="t-title text-sm mb-1">3. Purposes of processing</h3><p>We process your data to: provide, operate, and secure the Service; authenticate you; deliver notifications; process payments; back up your data; detect fraud; provide support; improve the Service; comply with law; and enforce our rights.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">4. Legal basis</h3><p>We process your data on the basis of your consent and legitimate uses permitted under the DPDP Act.</p></div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">5. How we share your data</h3>
+        <p>We do not sell your personal data. We share data only with:</p>
+        <ul className="list-disc pl-5 space-y-1 mt-1">
+          <li><strong>Cashfree Payments</strong> — for processing payments.</li>
+          <li><strong>Google</strong> — for authentication and optional backup.</li>
+          <li><strong>Firebase Cloud Messaging</strong> — to deliver push notifications.</li>
+          <li><strong>Cloud infrastructure providers</strong> — for hosting and compute.</li>
+          <li><strong>Analytics providers</strong> — in de-identified form.</li>
+          <li><strong>Law enforcement</strong> — where required by law.</li>
+        </ul>
+      </div>
+
+      <div><h3 className="t-title text-sm mb-1">6. International transfers</h3><p>Our processors may store data outside India in jurisdictions permitted under the DPDP Act.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">7. Retention</h3><p>We retain data for as long as your account is active and up to three (3) years thereafter. Backups are purged on a rolling 90-day cycle.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">8. Security</h3><p>We employ commercially reasonable safeguards including encryption in transit (TLS), row-level access controls, and least-privilege access.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">9. Your rights</h3><p>You have the right to: access, correct, or erase your data; withdraw consent; nominate another person in case of incapacity; and grievance redress.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">10. Children</h3><p>The Service is not directed at persons under 18. We do not knowingly collect data from children.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">11. Cookies & local storage</h3><p>We use cookies and local storage to keep you signed in, remember preferences, and gather anonymous usage statistics.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">12. Third-party links</h3><p>The Service may contain links to third-party websites. We are not responsible for their privacy practices.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">13. Changes to this Policy</h3><p>We may amend this Policy from time to time. Your continued use constitutes acceptance.</p></div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">14. Grievance Officer</h3>
+        <ul className="mt-1 space-y-1">
+          <li><strong>Name:</strong> {s.grievanceOfficerName}</li>
+          <li><strong>Email:</strong> <a href={`mailto:${s.grievanceOfficerEmail}`} className="underline">{s.grievanceOfficerEmail}</a></li>
+          <li><strong>Address:</strong> {s.companyAddress}</li>
+        </ul>
+        <p className="t-meta text-ink/60 mt-1">Complaints acknowledged within 48 hours and resolved within 15 days.</p>
+      </div>
+    </>
+  );
+}
+
+function RefundsContent({ s, company, jur }: { s: any; company: string; jur: string }) {
+  return (
+    <>
+      <p className="t-meta text-ink/55">Last updated: November 2025</p>
+      <p>This Refund & Cancellation Policy applies to all payments made for the MinDrop Premium plan. By making a payment, you accept this Policy in its entirety.</p>
+
+      <div><h3 className="t-title text-sm mb-1">1. Digital service — non-refundable</h3><p>MinDrop Premium is delivered immediately upon payment. <strong>All sales are final and no refunds shall be granted</strong>, save as expressly provided in Section 5.</p></div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">2. No refunds — illustrative list</h3>
+        <p>Refunds shall NOT be granted for:</p>
+        <ul className="list-disc pl-5 space-y-1 mt-1">
+          <li>change of mind or non-use of the plan;</li>
+          <li>dissatisfaction with features;</li>
+          <li>missed or delayed notifications;</li>
+          <li>third-party service changes;</li>
+          <li>device incompatibility or loss;</li>
+          <li>accidental or duplicate purchase;</li>
+          <li>account suspension for Terms breach;</li>
+          <li>pricing or feature changes after payment.</li>
+        </ul>
+      </div>
+
+      <div><h3 className="t-title text-sm mb-1">3. No mid-term cancellation</h3><p>The Premium plan is a fixed one-year term. Mid-term cancellation will not entitle you to any refund.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">4. No auto-renewal</h3><p>The plan does <strong>not</strong> auto-renew. On expiry, your account reverts to the free tier automatically.</p></div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">5. Sole exception</h3>
+        <p>Refunds may be considered only for:</p>
+        <ol className="list-decimal pl-5 space-y-1 mt-1">
+          <li><strong>Duplicate payment.</strong> Same order charged twice.</li>
+          <li><strong>Non-activation.</strong> Payment debited but Premium not activated within 24 hours.</li>
+        </ol>
+        <p className="mt-1">To request consideration, email <a href={`mailto:${s.supportEmail}`} className="underline">{s.supportEmail}</a> within 7 days of the transaction.</p>
+      </div>
+
+      <div><h3 className="t-title text-sm mb-1">6. Chargebacks & disputes</h3><p>You agree to contact us first before initiating any chargeback. Chargebacks filed without contacting us may result in account suspension.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">7. Service discontinuation</h3><p>If {company} discontinues the Service, a prorated refund may be offered at {company}'s discretion.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">8. Taxes</h3><p>Any refund will be net of taxes already remitted to tax authorities.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">9. Governing law</h3><p>This Policy is governed by the laws of India. Courts at {jur} shall have exclusive jurisdiction.</p></div>
+
+      <div><h3 className="t-title text-sm mb-1">10. Contact for refund queries</h3><p>All queries must be directed to <a href={`mailto:${s.supportEmail}`} className="underline">{s.supportEmail}</a>.</p></div>
+    </>
+  );
+}
+
+function ContactContent({ s }: { s: any }) {
+  return (
+    <>
+      <div>
+        <h3 className="t-title text-sm mb-1">Registered office</h3>
+        <address className="not-italic whitespace-pre-line">
+          {s.companyLegalName}
+          {"\n"}
+          {s.companyAddress}
+        </address>
+      </div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">Support</h3>
+        <p>Email: <a href={`mailto:${s.supportEmail}`} className="underline">{s.supportEmail}</a></p>
+        <p className="t-meta text-ink/60 mt-0.5">Response time: within 3 business days.</p>
+      </div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">Grievance Officer</h3>
+        <p>Under the IT Rules 2021 and the DPDP Act 2023:</p>
+        <ul className="mt-1 space-y-1">
+          <li><strong>Name:</strong> {s.grievanceOfficerName}</li>
+          <li><strong>Email:</strong> <a href={`mailto:${s.grievanceOfficerEmail}`} className="underline">{s.grievanceOfficerEmail}</a></li>
+          <li><strong>Address:</strong> {s.companyAddress}</li>
+        </ul>
+        <p className="t-meta text-ink/60 mt-1">Complaints acknowledged within 48 hours, resolved within 15 days.</p>
+      </div>
+
+      <div>
+        <h3 className="t-title text-sm mb-1">Business & legal</h3>
+        <p>For legal notices, write to <a href={`mailto:${s.supportEmail}`} className="underline">{s.supportEmail}</a> with subject "Legal — [subject]".</p>
+      </div>
+    </>
+  );
+}
