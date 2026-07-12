@@ -136,7 +136,7 @@ function Settings() {
   return (
     <PhoneFrame>
       <div className="flex flex-col min-h-screen md:min-h-[calc(100vh-3rem)]">
-        <div className="flex-1 px-5 sm:px-6 pt-8 pb-36">
+        <div className="flex-1 px-5 sm:px-6 pt-8 pb-12">
           <p className="t-eyebrow text-ink/70 mb-1">Account</p>
           <h1 className="t-display mb-5">Settings.</h1>
 
@@ -322,7 +322,6 @@ function Settings() {
             <button onClick={() => setSheet("legal-contact")} className="hover:text-ink/80 underline-offset-2 hover:underline">Contact</button>
           </nav>
         </div>
-        <div aria-hidden="true" className="h-14 shrink-0" />
         <BottomTabs />
       </div>
 
@@ -2140,16 +2139,23 @@ const LEGAL_TITLES: Record<string, string> = {
 
 function LegalPageSheet({ kind, onClose }: { kind: "terms" | "privacy" | "refunds" | "contact"; onClose: () => void }) {
   const fetchSettings = useServerFn(getPublicSettings);
-  const [s, setS] = useState<any>(null);
+  const [s, setS] = useState<any>({
+    companyLegalName: "MinDrop",
+    companyJurisdiction: "Kolkata, West Bengal",
+    companyAddress: "",
+    supportEmail: "support@getmindrop.com",
+    grievanceOfficerName: "",
+    grievanceOfficerEmail: "",
+  });
 
   useEffect(() => {
     let alive = true;
-    fetchSettings().then((d) => { if (alive) setS(d); }).catch(() => {});
+    fetchSettings().then((d) => { if (alive && d) setS(d); }).catch(() => {});
     return () => { alive = false; };
   }, [fetchSettings]);
 
-  const company = s?.companyLegalName ?? "MinDrop";
-  const jur = s?.companyJurisdiction ?? "";
+  const company = s.companyLegalName || "MinDrop";
+  const jur = s.companyJurisdiction || "";
 
   return (
     <>
@@ -2170,18 +2176,12 @@ function LegalPageSheet({ kind, onClose }: { kind: "terms" | "privacy" | "refund
 
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto px-5 py-5">
-          {!s ? (
-            <div className="flex items-center justify-center py-12">
-              <span className="t-meta text-ink/40 animate-pulse">Loading…</span>
-            </div>
-          ) : (
-            <div className="space-y-5 t-body-sm text-ink/85 leading-relaxed">
-              {kind === "terms" && <TermsContent company={company} jur={jur} email={s.supportEmail} />}
-              {kind === "privacy" && <PrivacyContent s={s} />}
-              {kind === "refunds" && <RefundsContent s={s} company={company} jur={jur} />}
-              {kind === "contact" && <ContactContent s={s} />}
-            </div>
-          )}
+          <div className="space-y-5 t-body-sm text-ink/85 leading-relaxed">
+            {kind === "terms" && <TermsContent company={company} jur={jur} email={s.supportEmail} />}
+            {kind === "privacy" && <PrivacyContent s={s} />}
+            {kind === "refunds" && <RefundsContent s={s} company={company} jur={jur} />}
+            {kind === "contact" && <ContactContent s={s} />}
+          </div>
         </div>
       </motion.div>
     </>
