@@ -24,6 +24,7 @@ import { NotifyBridge } from "@/lib/notify/bridge";
 import type { CapturedNotification, NotifyRule } from "@/lib/notify/types";
 import { useOnboarding } from "@/lib/memoryos/store";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
+import { getReadableAccent } from "@/lib/theme/palette";
 import { openPaywall, useTier } from "@/lib/tier";
 import { SmartPermissionPrompt, type PromptKind } from "@/components/permissions/SmartPermissionPrompt";
 import { shouldPrompt, readPermissions } from "@/lib/permissions/state";
@@ -301,7 +302,7 @@ function NotifyPage() {
  <div className="relative flex items-center justify-between gap-3 px-4 py-3">
  <div className="flex items-center gap-3 min-w-0">
  <span className="shrink-0 grid place-items-center size-9 rounded-xl" style={{ background: `color-mix(in oklab, ${accent2} 35%, var(--canvas))` }}>
- <Bell className="size-4" style={{ color: accent2 }} aria-hidden="true" />
+ <Bell className="size-4" style={{ color: getReadableAccent(accent2) }} aria-hidden="true" />
  </span>
  <div className="min-w-0">
  <p className="t-body-sm text-ink">
@@ -312,7 +313,7 @@ function NotifyPage() {
  </p>
  </div>
  </div>
- <span className="t-eyebrow shrink-0 px-3 py-1.5 rounded-full text-canvas" style={{ background: accent2 }}>
+ <span className="t-eyebrow shrink-0 px-3 py-1.5 rounded-full text-canvas" style={{ background: getReadableAccent(accent2) }}>
  {full ? "Upgrade" : "Go Pro"}
  </span>
  </div>
@@ -352,7 +353,7 @@ function NotifyPage() {
  }}
  >
  <div className="flex items-center gap-2 min-w-0">
- <Sparkles className="size-3.5 shrink-0" style={{ color: accent2 }} />
+ <Sparkles className="size-3.5 shrink-0" style={{ color: getReadableAccent(accent2) }} />
  <span className="t-meta text-ink/70 truncate">
  Preview mode — inject a mock notification to test.
  </span>
@@ -360,7 +361,7 @@ function NotifyPage() {
  <button
  onClick={() => NotifyBridge.mockPost()}
  className="t-eyebrow shrink-0 px-2 py-1 rounded"
- style={{ color: accent2 }}
+ style={{ color: getReadableAccent(accent2) }}
  >
  + Ping
  </button>

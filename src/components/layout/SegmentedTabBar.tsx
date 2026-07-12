@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import type { ComponentType, SVGProps } from "react";
+import { getReadableAccent } from "@/lib/theme/palette";
 
 /**
  * Shared segmented tab bar.
@@ -73,7 +74,7 @@ export function SegmentedTabBar({
                 layoutId={`${layoutId}-underline`}
                 aria-hidden="true"
                 className="absolute bottom-[6px] h-[2px] w-6 rounded-full"
-                style={{ background: accent }}
+                style={{ background: getReadableAccent(accent) }}
                 transition={{ type: "spring", stiffness: 500, damping: 38 }}
               />
             )}
@@ -94,14 +95,14 @@ export function SegmentedTabBar({
                       className="size-[18px]"
                       strokeWidth={active ? 2.2 : 1.75}
                       aria-hidden="true"
-                      style={{ color: active ? accent : "var(--ink)" }}
+                      style={{ color: active ? getReadableAccent(accent) : "var(--ink)" }}
                     />
                   </motion.span>
                   {typeof t.count === "number" && t.count > 0 && (
                     <span
                       className="t-meta absolute -top-1.5 -right-2.5 min-w-[15px] h-[15px] px-1 rounded-full text-white flex items-center justify-center"
                       style={{
-                        background: accent,
+                        background: getReadableAccent(accent),
                         border: `2px solid var(--paper-recessed)`,
                         lineHeight: 1,
                       }}

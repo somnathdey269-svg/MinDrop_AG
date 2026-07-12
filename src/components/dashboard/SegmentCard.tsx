@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import type { SegmentUsage } from "@/lib/dashboard/usage";
 import { relTime } from "@/lib/dashboard/usage";
+import { getReadableAccent } from "@/lib/theme/palette";
 
 /**
  * Dashboard card primitives.
@@ -68,13 +69,14 @@ export function GroupCard({
   const border = `color-mix(in oklab, ${accent} 25%, transparent)`;
   const iconBg = `color-mix(in oklab, ${accent} 14%, var(--canvas))`;
 
+  const readable = getReadableAccent(accent);
   const HeaderInner = (
     <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
       <div
         className="grid place-items-center size-11 rounded-2xl shrink-0 border"
         style={{ background: iconBg, borderColor: border }}
       >
-        <Icon className="size-[18px]" strokeWidth={1.7} style={{ color: accent }} aria-hidden="true" />
+        <Icon className="size-[18px]" strokeWidth={1.7} style={{ color: readable }} aria-hidden="true" />
       </div>
       <div className="min-w-0">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
@@ -82,7 +84,7 @@ export function GroupCard({
           {eyebrow && (
             <span
               className="t-eyebrow rounded-full border px-2 py-0.5"
-              style={{ color: accent, borderColor: border, background: iconBg }}
+              style={{ color: readable, borderColor: border, background: iconBg }}
             >
               {eyebrow}
             </span>
@@ -93,7 +95,7 @@ export function GroupCard({
       {action && !disabled && (
         <span
           className="t-eyebrow shrink-0 inline-flex items-center gap-1 rounded-full border px-2.5 py-1.5"
-          style={{ color: accent, borderColor: border, background: iconBg }}
+          style={{ color: readable, borderColor: border, background: iconBg }}
         >
           {action} <ArrowUpRight className="size-3" aria-hidden="true" />
         </span>
@@ -150,6 +152,7 @@ export function SubTile({ to, icon: Icon, label, hint, accent, stat, disabled }:
   const border = `color-mix(in oklab, ${accent} 28%, transparent)`;
   const iconBg = `color-mix(in oklab, ${accent} 18%, var(--card))`;
 
+  const readable = getReadableAccent(accent);
   const body = (
     <motion.div
       whileTap={{ scale: 0.97 }}
@@ -163,12 +166,12 @@ export function SubTile({ to, icon: Icon, label, hint, accent, stat, disabled }:
           className="grid size-9 place-items-center rounded-xl border shrink-0"
           style={{ background: iconBg, borderColor: border }}
         >
-          <Icon className="size-[16px]" strokeWidth={1.8} style={{ color: accent }} aria-hidden="true" />
+          <Icon className="size-[16px]" strokeWidth={1.8} style={{ color: readable }} aria-hidden="true" />
         </div>
         {stat && (
           <span
             className="t-eyebrow rounded-full px-1.5 py-0.5"
-            style={{ color: accent, background: iconBg }}
+            style={{ color: readable, background: iconBg }}
           >
             {stat}
           </span>
@@ -177,7 +180,7 @@ export function SubTile({ to, icon: Icon, label, hint, accent, stat, disabled }:
       <div className="min-w-0">
         <p className="t-title text-ink">{label}</p>
         <p className="t-meta text-ink/60 mt-1.5 line-clamp-2">{hint}</p>
-        <div className="mt-2 flex items-center gap-1 t-eyebrow" style={{ color: accent }}>
+        <div className="mt-2 flex items-center gap-1 t-eyebrow" style={{ color: readable }}>
           Open <ChevronRight className="size-3" aria-hidden="true" />
         </div>
       </div>
@@ -245,6 +248,7 @@ export function Pitch({
   points?: string[];
   to?: string;
 }) {
+  const readable = getReadableAccent(accent);
   const inner = (
     <div
       className="rounded-2xl border px-3.5 py-3 transition hover:-translate-y-[1px]"
@@ -254,13 +258,13 @@ export function Pitch({
       }}
     >
       <p className="t-body-sm text-ink/70">
-        <span className="t-title" style={{ color: accent }}>Why it helps:</span> {benefit}
+        <span className="t-title" style={{ color: readable }}>Why it helps:</span> {benefit}
       </p>
       {points.length > 0 && (
         <div className="mt-2 grid grid-cols-1 gap-1.5 min-[380px]:grid-cols-2">
           {points.slice(0, 2).map((point) => (
             <span key={point} className="t-meta text-ink/55">
-              <span style={{ color: accent }}>•</span> {point}
+              <span style={{ color: readable }}>•</span> {point}
             </span>
           ))}
         </div>
@@ -270,7 +274,7 @@ export function Pitch({
         <span className="t-eyebrow text-ink/40">Takes ~30s</span>
         <span
           className="t-eyebrow inline-flex items-center gap-1 shrink-0"
-          style={{ color: accent }}
+          style={{ color: readable }}
         >
           {cta} <ArrowUpRight className="size-3" aria-hidden="true" />
         </span>
@@ -311,6 +315,7 @@ export function GridTile({ to, search, icon: Icon, label, hint, accent, stat, sp
   const border = `color-mix(in oklab, ${accent} 34%, transparent)`;
   const iconBg = `color-mix(in oklab, ${accent} 22%, var(--canvas))`;
 
+  const readable = getReadableAccent(accent);
   const body = (
     <motion.div
       whileTap={{ scale: 0.97 }}
@@ -332,20 +337,20 @@ export function GridTile({ to, search, icon: Icon, label, hint, accent, stat, sp
           className="grid size-8 place-items-center rounded-xl border shrink-0"
           style={{ background: iconBg, borderColor: border }}
         >
-          <Icon className="size-[15px]" strokeWidth={1.8} style={{ color: accent }} aria-hidden="true" />
+          <Icon className="size-[15px]" strokeWidth={1.8} style={{ color: readable }} aria-hidden="true" />
         </div>
         <p className="t-title text-ink truncate">{label}</p>
         {stat && (
           <span
             className="t-eyebrow rounded-full px-1.5 py-0.5 shrink-0"
-            style={{ color: accent, background: iconBg }}
+            style={{ color: readable, background: iconBg }}
           >
             {stat}
           </span>
         )}
       </div>
       <p className="t-meta text-ink/60 mt-2 line-clamp-2">{hint}</p>
-      <div className="mt-2 flex items-center gap-1 t-eyebrow" style={{ color: accent }}>
+      <div className="mt-2 flex items-center gap-1 t-eyebrow" style={{ color: readable }}>
         Open <ChevronRight className="size-3" aria-hidden="true" />
       </div>
     </motion.div>
@@ -372,6 +377,7 @@ export function PlacesStrip({ places, accent, totalCount, lastLabel }: PlacesStr
   const chipBg = `color-mix(in oklab, ${accent} 10%, var(--canvas))`;
   const iconBg = `color-mix(in oklab, ${accent} 18%, var(--card))`;
 
+  const readable = getReadableAccent(accent);
   return (
     <div
       className="relative rounded-2xl border px-3 py-3"
@@ -389,7 +395,7 @@ export function PlacesStrip({ places, accent, totalCount, lastLabel }: PlacesStr
         <Link
           to="/places"
           className="t-eyebrow inline-flex items-center gap-0.5 shrink-0"
-          style={{ color: accent }}
+          style={{ color: readable }}
         >
           See all <ChevronRight className="size-3" aria-hidden="true" />
         </Link>
@@ -401,7 +407,7 @@ export function PlacesStrip({ places, accent, totalCount, lastLabel }: PlacesStr
           viewBox="0 0 100 2" preserveAspectRatio="none" aria-hidden="true"
         >
           <line x1="0" y1="1" x2="100" y2="1"
-            stroke={accent} strokeWidth="0.6" strokeDasharray="1.5 1.5" opacity="0.45" />
+            stroke={readable} strokeWidth="0.6" strokeDasharray="1.5 1.5" opacity="0.45" />
         </svg>
         <div className="relative flex flex-wrap gap-2">
           {places.map((p) => (
@@ -414,7 +420,7 @@ export function PlacesStrip({ places, accent, totalCount, lastLabel }: PlacesStr
             >
               <span
                 className="grid size-5 place-items-center rounded-full text-[10px]"
-                style={{ background: iconBg, color: accent }}
+                style={{ background: iconBg, color: readable }}
                 aria-hidden="true"
               >
                 {p.emoji || "📍"}

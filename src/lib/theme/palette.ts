@@ -101,6 +101,15 @@ export function isLightColor(hexColor: string | undefined): boolean {
   return yiq >= 170; // Threshold where white text or white icon becomes hard to read
 }
 
+export function getReadableAccent(hexColor: string | undefined): string {
+  if (!hexColor) return "var(--ink)";
+  if (isLightColor(hexColor)) {
+    // Return a color-mix with dark ink to make it highly readable on light backgrounds
+    return `color-mix(in oklab, ${hexColor} 55%, var(--ink) 45%)`;
+  }
+  return hexColor;
+}
+
 // localStorage key for the resolved country code (client-cached)
 const COUNTRY_STORAGE_KEY = "mindrop.theme.country.v1";
 // localStorage key for a user manual override (wins over auto-detected)

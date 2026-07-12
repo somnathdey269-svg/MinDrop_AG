@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
+import { getReadableAccent } from "@/lib/theme/palette";
 
 interface Props {
   eyebrow?: string;
@@ -29,13 +30,13 @@ export function PageHeader({ eyebrow, title, lede, accent, action, className = "
         {eyebrow && (
           <p
             className="eyebrow inline-flex items-center gap-1.5"
-            style={accent ? { color: accent } : undefined}
+            style={accent ? { color: getReadableAccent(accent) } : undefined}
           >
             {accent && (
               <span
                 aria-hidden="true"
                 className="inline-block size-1.5 rounded-full"
-                style={{ background: accent }}
+                style={{ background: getReadableAccent(accent) }}
               />
             )}
             {eyebrow}

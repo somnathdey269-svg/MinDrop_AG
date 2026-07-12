@@ -21,6 +21,7 @@ import { haversineMeters } from "@/lib/places/engine";
 import type { PlaceRule } from "@/lib/places/types";
 import { useOnboarding } from "@/lib/memoryos/store";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
+import { getReadableAccent } from "@/lib/theme/palette";
 import { openPaywall, useTier } from "@/lib/tier";
 
 export const Route = createFileRoute("/_authenticated/places/")({
@@ -199,7 +200,7 @@ function PlacesIndex() {
                   <div className="relative flex items-center justify-between gap-3 px-4 py-3">
                     <div className="flex items-center gap-3 min-w-0">
                       <span className="shrink-0 grid place-items-center size-9 rounded-xl" style={{ background: `color-mix(in oklab, ${accent3} 35%, var(--canvas))` }}>
-                        <MapPin className="size-4" style={{ color: accent3 }} aria-hidden="true" />
+                        <MapPin className="size-4" style={{ color: getReadableAccent(accent3) }} aria-hidden="true" />
                       </span>
                       <div className="min-w-0">
                         <p className="t-body-sm text-ink">
@@ -210,7 +211,7 @@ function PlacesIndex() {
                         </p>
                       </div>
                     </div>
-                    <span className="t-eyebrow shrink-0 px-3 py-1.5 rounded-full text-canvas" style={{ background: accent3 }}>
+                    <span className="t-eyebrow shrink-0 px-3 py-1.5 rounded-full text-canvas" style={{ background: getReadableAccent(accent3) }}>
                       {full ? "Upgrade" : "Go Pro"}
                     </span>
                   </div>

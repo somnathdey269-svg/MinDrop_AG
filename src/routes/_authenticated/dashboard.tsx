@@ -30,6 +30,7 @@ import { readSegmentUsage, readPinnedPlaces, readReminderCounts, readNotifyDashb
 import { useOnboarding } from "@/lib/memoryos/store";
 import { useRecallSuggestions } from "@/lib/memoryos/recall";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
+import { getReadableAccent } from "@/lib/theme/palette";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({ component: Dashboard });
 
@@ -290,13 +291,13 @@ function Dashboard() {
                   borderColor: `color-mix(in oklab, ${accent1} 20%, transparent)`,
                 }}
               >
-                <Archive className="size-3.5" style={{ color: accent1 }} aria-hidden="true" />
+                <Archive className="size-3.5" style={{ color: getReadableAccent(accent1) }} aria-hidden="true" />
                 <span className="t-meta text-ink/65">
                   {reminderCounts.archived > 0
                     ? `${reminderCounts.archived} reminder${reminderCounts.archived === 1 ? "" : "s"} fired — view history`
                     : "Completed reminders gather here for reference"}
                 </span>
-                <ArrowRight className="size-3" style={{ color: accent1 }} aria-hidden="true" />
+                <ArrowRight className="size-3" style={{ color: getReadableAccent(accent1) }} aria-hidden="true" />
               </Link>
             </GroupCard>
 
