@@ -19,14 +19,14 @@ const SPLASH_SHOWN_KEY = "mindrop.splash.shown.v1";
 function IndexComponent() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Synchronously check if this client is running in a WebView or Native environment
-    const isMobileNative =
-      typeof window !== "undefined" &&
-      ((window.location.protocol === "https:" && window.location.hostname === "localhost") ||
-        /capacitor|android|iphone|ipad|ipod/i.test(navigator.userAgent) ||
-        isNativeApp());
+  // Synchronously check if this client is running in a WebView or Native environment
+  const isMobileNative =
+    typeof window !== "undefined" &&
+    ((window.location.protocol === "https:" && window.location.hostname === "localhost") ||
+      /capacitor|android|iphone|ipad|ipod/i.test(navigator.userAgent) ||
+      isNativeApp());
 
+  useEffect(() => {
     if (isMobileNative) {
       let seen = false;
       try {
@@ -35,7 +35,12 @@ function IndexComponent() {
       console.log("[NATIVE REDIRECT] seen =", seen, "Navigating to:", seen ? "/dashboard" : "/splash");
       navigate({ to: seen ? "/dashboard" : "/splash", replace: true });
     }
-  }, [navigate]);
+  }, [isMobileNative, navigate]);
+
+  if (isMobileNative) {
+    // Render a clean background matching the canvas color to prevent flashing of the marketing site
+    return <div className="min-h-screen w-full bg-[#f9f7f2]" />;
+  }
 
   return (
     <StoryLayout>
