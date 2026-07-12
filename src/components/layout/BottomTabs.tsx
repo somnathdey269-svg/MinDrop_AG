@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 
 /**
  * Bottom navigation — Space-saving floating radial action menu.
- * Tapping the trigger rotates the icon and expands an elegant glassmorphism dock.
+ * Positioned on the bottom-right side of the screen with a pulsing micro-animation.
+ * Auto-hides when a native dialog / sheet popup is open to prevent collisions.
  */
 
 type SideTab = { to: string; label: string; icon: any; accent?: string };
@@ -27,6 +28,27 @@ export function BottomTabs() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { accent1, accent3 } = useCountryTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [hasOpenDialog, setHasOpenDialog] = useState(false);
+
+  // Monitor for modal dialogs / sheet popups in the DOM to prevent collisions
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const checkDialogs = () => {
+      const dialogs = document.querySelectorAll(
+        '[role="dialog"], [role="alertdialog"], [data-radix-portal], .radix-dialog-content'
+      );
+      setHasOpenDialog(dialogs.length > 0);
+    };
+
+    const observer = new MutationObserver(checkDialogs);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Initial check
+    checkDialogs();
+
+    return () => observer.disconnect();
+  }, []);
 
   // Close navigation overlay automatically when navigating away
   useEffect(() => {
@@ -34,12 +56,17 @@ export function BottomTabs() {
   }, [pathname]);
 
   const allTabs: SideTab[] = [
+    { to: "/dashboard",  label: "Home",     icon: LayoutDashboard, accent: "var(--brand)" },
     { to: "/home",       label: "Later",    icon: Clock, accent: accent1 },
     { to: "/notify",     label: "Notify",   icon: Bell },
-    { to: "/dashboard",  label: "Home",     icon: LayoutDashboard, accent: "var(--brand)" },
     { to: "/places",     label: "Places",   icon: MapPin, accent: accent3 },
     { to: "/settings",   label: "Settings", icon: Settings },
   ];
+
+  // If a modal or sheet is open in the app, hide the floating menu completely
+  if (hasOpenDialog) {
+    return null;
+  }
 
   return (
     <div data-tour="bottom-tabs" className="relative">
@@ -56,11 +83,11 @@ export function BottomTabs() {
 
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 15, x: "-50%" }}
-            animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
-            exit={{ opacity: 0, scale: 0.9, y: 15, x: "-50%" }}
-            transition={{ type: "spring", damping: 26, stiffness: 220 }}
-            className="fixed md:absolute bottom-24 left-1/2 z-40 flex items-center justify-around gap-2 px-4 py-3 rounded-[2rem] border border-ink/10 bg-canvas/80 backdrop-blur-xl shadow-2xl w-[90%] max-w-[380px]"
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            transition={{ type: "spring", damping: 25, stiffness: 220 }}
+            className="fixed md:absolute bottom-24 right-6 z-40 flex flex-col gap-1 p-2 rounded-2xl border border-ink/10 bg-canvas/80 backdrop-blur-xl shadow-2xl w-[185px] max-w-[calc(100vw-3rem)]"
           >
             {allTabs.map((t) => {
               const active = isActive(pathname, t.to);
@@ -71,20 +98,29 @@ export function BottomTabs() {
                   key={t.to}
                   to={t.to as any}
                   onClick={() => { try { sessionStorage.removeItem("gmd:from"); } catch {} }}
-                  className="flex flex-col items-center gap-1.5 p-2 press flex-1 min-w-0"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl press select-none transition-colors"
+                  style={{
+                    background: active
+                      ? "color-mix(in oklab, var(--ink) 6%, transparent)"
+                      : "transparent",
+                  }}
                   aria-label={t.label}
                 >
-                  <motion.span
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="grid place-items-center size-10 rounded-full text-canvas shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
-                    style={{ background: active ? color : "color-mix(in oklab, var(--ink) 12%, transparent)", color: active ? "var(--canvas)" : "var(--ink)" }}
-                  >
-                    <Icon className="size-[18px]" strokeWidth={active ? 2.2 : 1.6} />
-                  </motion.span>
                   <span
-                    className="t-eyebrow transition-colors truncate max-w-full text-[10px]"
-                    style={{ color: active ? color : "color-mix(in oklab, var(--ink) 60%, transparent)", fontWeight: active ? 600 : 400 }}
+                    className="grid place-items-center size-8 rounded-lg text-canvas shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+                    style={{
+                      background: active ? color : "color-mix(in oklab, var(--ink) 10%, transparent)",
+                      color: active ? "var(--canvas)" : "var(--ink)",
+                    }}
+                  >
+                    <Icon className="size-4" strokeWidth={active ? 2.2 : 1.6} />
+                  </span>
+                  <span
+                    className="t-body transition-colors text-sm font-medium"
+                    style={{
+                      color: active ? color : "var(--ink)",
+                      fontWeight: active ? 600 : 500,
+                    }}
                   >
                     {t.label}
                   </span>
@@ -98,16 +134,37 @@ export function BottomTabs() {
       <motion.button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        whileTap={{ scale: 0.92 }}
+        whileTap={{ scale: 0.94 }}
         whileHover={{ scale: 1.05 }}
-        className="fixed md:absolute bottom-6 left-1/2 -translate-x-1/2 z-40 grid place-items-center size-14 rounded-full bg-ink text-canvas shadow-[0_8px_24px_rgba(0,0,0,0.22)] border border-white/10 press"
+        animate={{
+          y: [0, -5, 0],
+          boxShadow: [
+            "0 8px 24px rgba(74, 93, 78, 0.35)",
+            "0 14px 32px rgba(74, 93, 78, 0.55)",
+            "0 8px 24px rgba(74, 93, 78, 0.35)"
+          ]
+        }}
+        transition={{
+          y: { repeat: Infinity, repeatType: "reverse", duration: 3.5, ease: "easeInOut" },
+          boxShadow: { repeat: Infinity, repeatType: "reverse", duration: 3.5, ease: "easeInOut" },
+          scale: { type: "spring", stiffness: 400, damping: 25 }
+        }}
+        className="fixed md:absolute bottom-6 right-6 z-40 grid place-items-center size-14 rounded-full text-canvas border border-white/10 press"
+        style={{
+          background: "linear-gradient(135deg, var(--brand) 0%, color-mix(in oklab, var(--brand) 75%, #ff7655) 100%)",
+        }}
         aria-label={isOpen ? "Close Menu" : "Open Menu"}
       >
         <motion.span
           animate={{ rotate: isOpen ? 90 : 0 }}
           transition={{ type: "spring", stiffness: 450, damping: 22 }}
+          className="flex items-center justify-center"
         >
-          {isOpen ? <X className="size-[22px]" strokeWidth={2.2} /> : <Grid className="size-[22px]" strokeWidth={1.8} />}
+          {isOpen ? (
+            <X className="size-[22px]" strokeWidth={2.4} />
+          ) : (
+            <Grid className="size-[22px]" strokeWidth={1.8} />
+          )}
         </motion.span>
       </motion.button>
     </div>
