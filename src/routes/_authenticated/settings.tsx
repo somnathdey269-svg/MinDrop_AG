@@ -103,6 +103,11 @@ function Settings() {
   ];
 
 
+  const { raw } = useCountryTheme();
+  const c1 = raw[0] || "#FF671F";
+  const c2 = raw[1] || raw[0] || "#046A38";
+  const c3 = raw[2] || raw[1] || raw[0] || "#06038D";
+
   return (
     <PhoneFrame>
       <div className="flex flex-col min-h-screen md:min-h-[calc(100vh-3rem)]">
@@ -111,16 +116,39 @@ function Settings() {
           <h1 className="t-display mb-5">Settings.</h1>
 
           {/* Profile card */}
-          <div className="relative overflow-hidden rounded-3xl p-5 mb-6 bg-gradient-to-br from-ink to-[#1f1f1f] text-canvas shadow-lg shadow-ink/10">
-            <div className="absolute -top-10 -right-10 size-40 rounded-full bg-brand/20 blur-2xl" />
+          <div
+            className={`relative overflow-hidden rounded-3xl p-5 mb-6 shadow-lg shadow-ink/10 ${
+              isPremium
+                ? "text-ink border border-ink/10"
+                : "bg-gradient-to-br from-ink to-[#1f1f1f] text-canvas"
+            }`}
+            style={
+              isPremium
+                ? {
+                    background: `linear-gradient(to right, color-mix(in oklab, ${c1} 8%, var(--canvas)) 0% 33.33%, color-mix(in oklab, ${c2} 8%, var(--canvas)) 33.33% 66.66%, color-mix(in oklab, ${c3} 8%, var(--canvas)) 66.66% 100%)`,
+                  }
+                : undefined
+            }
+          >
+            {!isPremium && <div className="absolute -top-10 -right-10 size-40 rounded-full bg-brand/20 blur-2xl" />}
             <div className="relative flex items-center gap-4">
-              <div className="size-14 rounded-2xl bg-brand/30 text-canvas grid place-items-center text-[24px] leading-none">
+              <div
+                className={`size-14 rounded-2xl grid place-items-center text-[24px] leading-none ${
+                  isPremium ? "bg-brand/10 text-brand border border-brand/20" : "bg-brand/30 text-canvas"
+                }`}
+              >
                 {(state.name || state.email || "Y")[0].toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="t-title truncate">{state.name || "Friend of MinDrop"}</p>
-                <p className="t-eyebrow text-canvas/60 mt-0.5 flex items-center gap-1.5">
-                  {isPremium ? <><Crown className="size-3 text-brand" /> Premium plan</> : <>Free plan</>}
+                <p className="t-title truncate">{state.name || (isPremium ? "Family of MinDrop" : "Friend of MinDrop")}</p>
+                <p className={`t-eyebrow mt-0.5 flex items-center gap-1.5 ${isPremium ? "text-ink/60" : "text-canvas/60"}`}>
+                  {isPremium ? (
+                    <>
+                      <Crown className="size-3 text-brand" /> PAID PLAN
+                    </>
+                  ) : (
+                    <>FREE PLAN</>
+                  )}
                 </p>
               </div>
             </div>
