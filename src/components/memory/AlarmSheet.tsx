@@ -72,6 +72,8 @@ function useAlarmTone(active: boolean, isAlarm: boolean) {
   }, [active, isAlarm]);
 }
 
+import { AlarmsBridge } from "@/lib/alarms/bridge";
+
 export function AlarmSheet() {
   const [queue, setQueue] = useState<Memory[]>([]);
   const [snoozeOpen, setSnoozeOpen] = useState(false);
@@ -81,16 +83,63 @@ export function AlarmSheet() {
   const { tier, limits } = useTier();
 
   useEffect(() => {
+    // 1. Listen for active alarms fired during runtime
     const onFire = (e: Event) => {
       const detail = (e as CustomEvent<AlarmDetail>).detail;
       if (!detail?.memory) return;
       setQueue((q) => (q.some((m) => m.id === detail.memory.id) ? q : [...q, detail.memory]));
     };
     window.addEventListener(ALARM_EVENT, onFire as EventListener);
+
+    // 2. Check if an alarm is already ringing on app launch/resume
+    AlarmsBridge.getActiveAlarm()
+      .then((active) => {
+        if (active && active.id) {
+          let mem: Memory | undefined;
+          try {
+            const raw = window.localStorage.getItem("memoryos.memories.v1");
+            const list: Memory[] = raw ? JSON.parse(raw) : [];
+            mem = list.find((x) => x.id === active.id);
+          } catch {}
+          
+          const targetMem: Memory = mem || {
+            id: active.id,
+            text: active.title || "Alarm",
+            date: active.body || "",
+            notify: "alarm",
+          } as any;
+          
+          setQueue((q) => (q.some((m) => m.id === targetMem.id) ? q : [...q, targetMem]));
+        }
+      })
+      .catch(() => {});
+
     return () => window.removeEventListener(ALARM_EVENT, onFire as EventListener);
   }, []);
 
   const dismiss = () => { setSnoozeOpen(false); setQueue((q) => q.slice(1)); };
+
+  const handleStop = () => {
+    if (!current) return;
+    
+    // Archive memory locally
+    try {
+      const raw = window.localStorage.getItem("memoryos.memories.v1");
+      const list: Memory[] = raw ? JSON.parse(raw) : [];
+      const updated = list.map((m) =>
+        m.id === current.id ? { ...m, archivedAt: new Date().toISOString() } : m
+      );
+      window.localStorage.setItem("memoryos.memories.v1", JSON.stringify(updated));
+      window.dispatchEvent(new CustomEvent("memoryos:memories-changed"));
+    } catch (e) {
+      console.warn("Failed to archive memory on Stop", e);
+    }
+    
+    // Stop native ringing/cancel the alarm
+    AlarmsBridge.cancelAlarm(current.id).catch(() => {});
+    
+    dismiss();
+  };
 
   function handleSnoozePick(_targetMs: number, minutes: number) {
     if (!current) return;
@@ -148,7 +197,7 @@ export function AlarmSheet() {
                   <Clock className="size-4" /> Snooze
                 </button>
                 <button
-                  onClick={dismiss}
+                  onClick={handleStop}
                   className="t-button bg-ink text-canvas py-3.5 rounded-2xl inline-flex items-center justify-center gap-2"
                   aria-label="Stop alarm"
                 >

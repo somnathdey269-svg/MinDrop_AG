@@ -58,6 +58,10 @@ interface AlarmsBridgePlugin {
   previewTone(opts: { toneId: ToneId }): Promise<void>;
   stopPreview(): Promise<void>;
   snoozeAlarm(opts: { id: string; minutes: number }): Promise<void>;
+  getActiveAlarm(): Promise<{ id?: string; title?: string; body?: string }>;
+  getStoppedAlarms(): Promise<{ stoppedIds: string[] }>;
+  clearStoppedAlarms(): Promise<void>;
+  setSnoozeIntervals(opts: { intervals: string[] }): Promise<void>;
   addListener(
     event: "alarmFired",
     cb: (ev: { id: string; extra?: string }) => void,
@@ -141,6 +145,24 @@ export const AlarmsBridge = {
 
   async snoozeAlarm(id: string, minutes: number) {
     if (hasPlugin()) { try { await native.snoozeAlarm({ id, minutes }); } catch {} }
+  },
+
+  async getActiveAlarm(): Promise<{ id?: string; title?: string; body?: string } | null> {
+    if (!hasPlugin()) return null;
+    try { return await native.getActiveAlarm(); } catch { return null; }
+  },
+
+  async getStoppedAlarms(): Promise<string[]> {
+    if (!hasPlugin()) return [];
+    try { return (await native.getStoppedAlarms()).stoppedIds ?? []; } catch { return []; }
+  },
+
+  async clearStoppedAlarms() {
+    if (hasPlugin()) { try { await native.clearStoppedAlarms(); } catch {} }
+  },
+
+  async setSnoozeIntervals(intervals: string[]) {
+    if (hasPlugin()) { try { await native.setSnoozeIntervals({ intervals }); } catch {} }
   },
 
   onFired(cb: (ev: { id: string; extra?: string }) => void): () => void {

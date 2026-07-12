@@ -6,6 +6,7 @@
  */
 
 import { AlarmsBridge } from "@/lib/alarms/bridge";
+import type { ProviderId } from "./types";
 
 const KEY = "mindrop.summary.scheduler.v1";
 const NATIVE_ID = "mindrop-summary-digest";
@@ -16,9 +17,24 @@ export interface ScheduleState {
   presetId: string;
   rangeDays: number;
   lastRunDate?: string; // YYYY-MM-DD
+  interval?: "daily" | "weekly";
+  weeklyDay?: number; // 0..6 (0 is Sunday, 1 is Monday, etc.)
+  thresholdEnabled?: boolean;
+  thresholdCount?: number; // e.g. 3
+  providerId?: ProviderId;
+  modelId?: string;
 }
 
-const DEFAULT: ScheduleState = { enabled: false, hhmm: "22:00", presetId: "p_all", rangeDays: 1 };
+const DEFAULT: ScheduleState = {
+  enabled: false,
+  hhmm: "22:00",
+  presetId: "p_all",
+  rangeDays: 1,
+  interval: "daily",
+  weeklyDay: 0,
+  thresholdEnabled: true,
+  thresholdCount: 3,
+};
 
 export function readSchedule(): ScheduleState {
   try {
@@ -30,12 +46,23 @@ export function writeSchedule(s: ScheduleState) {
   try { window.localStorage.setItem(KEY, JSON.stringify(s)); } catch {}
 }
 
-export function nextFireMs(hhmm: string): number {
-  const [hh, mm] = hhmm.split(":").map(Number);
+export function nextFireMs(s: ScheduleState): number {
+  const [hh, mm] = s.hhmm.split(":").map(Number);
   const now = new Date();
   const next = new Date();
   next.setHours(hh, mm, 0, 0);
-  if (next.getTime() <= now.getTime()) next.setDate(next.getDate() + 1);
+
+  if (s.interval === "weekly") {
+    const targetDay = s.weeklyDay ?? 0;
+    const currentDay = now.getDay();
+    let daysToAdd = (targetDay - currentDay + 7) % 7;
+    if (daysToAdd === 0 && next.getTime() <= now.getTime()) {
+      daysToAdd = 7;
+    }
+    next.setDate(next.getDate() + daysToAdd);
+  } else {
+    if (next.getTime() <= now.getTime()) next.setDate(next.getDate() + 1);
+  }
   return next.getTime();
 }
 
@@ -45,7 +72,7 @@ export function armScheduler(onFire: () => void) {
   disarmScheduler();
   const s = readSchedule();
   if (!s.enabled) return;
-  const at = nextFireMs(s.hhmm);
+  const at = nextFireMs(s);
   timerId = setTimeout(() => {
     try { onFire(); } finally { armScheduler(onFire); }
   }, at - Date.now());

@@ -297,6 +297,25 @@ export function snoozeMemory(id: string, minutes = 5) {
   rescan();
 }
 
+async function reconcileStoppedAlarms() {
+  if (!isNative()) return;
+  try {
+    const stoppedIds = await AlarmsBridge.getStoppedAlarms();
+    if (stoppedIds && stoppedIds.length > 0) {
+      const list = readMemories();
+      const now = new Date().toISOString();
+      const updated = list.map((m) =>
+        stoppedIds.includes(m.id) ? { ...m, archivedAt: now } : m
+      );
+      persist(updated);
+      await AlarmsBridge.clearStoppedAlarms();
+      rescan();
+    }
+  } catch (e) {
+    console.warn("[scheduler] reconcileStoppedAlarms failed", e);
+  }
+}
+
 export function startScheduler() {
   if (started || typeof window === "undefined") return;
   started = true;
@@ -305,6 +324,8 @@ export function startScheduler() {
     // Do NOT request notification permission on boot — user grants via /permissions
     // or the JIT prompt shown at capture time.
     rescan();
+    reconcileStoppedAlarms();
+
     LocalNotifications.addListener("localNotificationReceived", (n) => {
       const memId = (n.extra as any)?.memoryId as string | undefined;
       if (!memId) return;
@@ -334,7 +355,10 @@ export function startScheduler() {
   window.addEventListener("storage", (e) => { if (e.key === MEM_KEY) rescan(); });
   window.addEventListener(MEM_CHANGED_EVENT, rescan);
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") rescan();
+    if (document.visibilityState === "visible") {
+      rescan();
+      reconcileStoppedAlarms();
+    }
   });
   window.setInterval(rescan, 30_000);
 }

@@ -23,7 +23,7 @@ export function SummaryEmpty({ accent, onStart }: { accent: string; onStart: () 
       </p>
       <p className="t-display text-ink mb-2">One PDF. Your whole day.</p>
       <p className="t-meta text-ink/75 mb-5">
-        Bring your own AI key. Your notifications never leave this device — only your provider sees the request.
+        Securely summarize your notifications on-device using your own Gemini, OpenAI or Claude keys. Set up your integrations in settings to get started.
       </p>
       <motion.button
         whileTap={{ scale: 0.97 }}
@@ -31,7 +31,7 @@ export function SummaryEmpty({ accent, onStart }: { accent: string; onStart: () 
         className="t-button inline-flex items-center gap-2 px-5 py-3 rounded-full text-canvas"
         style={{ background: accent }}
       >
-        Get started <ArrowRight className="size-4" aria-hidden="true" />
+        Configure AI Keys <ArrowRight className="size-4" aria-hidden="true" />
       </motion.button>
     </div>
   );

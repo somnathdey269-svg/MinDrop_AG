@@ -43,7 +43,11 @@ function Row({
       className="w-full text-left p-4 bg-white rounded-2xl border border-ink/10 active:bg-ink/[0.02] transition-colors"
     >
       <div className="flex items-center gap-3">
-        <div className="size-9 rounded-xl bg-brand/10 text-brand grid place-items-center shrink-0" aria-hidden="true">
+        <div 
+          style={{ backgroundColor: "rgba(255, 103, 31, 0.1)", color: "#FF671F" }}
+          className="size-9 rounded-xl grid place-items-center shrink-0" 
+          aria-hidden="true"
+        >
           <Icon className="size-4" />
         </div>
         <div className="min-w-0 flex-1">
@@ -51,7 +55,7 @@ function Row({
           <p className="t-meta text-ink/70 mt-0.5">{body}</p>
         </div>
         <div className="shrink-0 pointer-events-none">
-          <Switch checked={granted} />
+          <Switch checked={granted} style={{ "--switch-accent": "color-mix(in oklab, #FF671F 70%, #fff)" } as React.CSSProperties} />
         </div>
       </div>
     </button>
@@ -187,7 +191,9 @@ function Permissions() {
         <BackHeader />
         <p className="t-eyebrow text-ink/70 mb-1">Permissions</p>
         <h1 className="t-display mb-1">Ring on time. Every time.</h1>
-        <p className="t-meta text-ink/75 mb-4">Grant what you want — change anytime in system settings.</p>
+        <p className="t-meta text-ink/75 mb-4 leading-relaxed">
+          🔒 <strong className="font-semibold text-[#FF671F]">100% Data Privacy</strong> — Your data stays securely on your own mobile or private Google Drive. We never collect or see it.
+        </p>
 
         <div data-tour="perm-list" className="space-y-2.5">
           <Row
@@ -265,7 +271,12 @@ function Permissions() {
         <button
           onClick={() => navigate({ to: "/home" })}
           data-tour="perm-cta"
-          className="t-button w-full bg-ink text-canvas py-3.5 rounded-2xl mt-4"
+          style={{
+            backgroundColor: "color-mix(in oklab, #FF671F 10%, #fff)",
+            color: "#FF671F",
+            borderColor: "rgba(255, 103, 31, 0.2)"
+          }}
+          className="t-button w-full border py-3.5 rounded-2xl mt-4 active:bg-ink/[0.04] transition-colors"
         >
           Continue
         </button>

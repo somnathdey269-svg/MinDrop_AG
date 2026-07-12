@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useInbox } from "@/lib/notify/store";
-import { getActiveProvider, getKey } from "@/lib/notify/summary/keyring";
+import { getActiveProvider, getKey, listSaved, setActiveProvider } from "@/lib/notify/summary/keyring";
 import { getProvider } from "@/lib/notify/summary/providers";
 import { preprocess } from "@/lib/notify/summary/preprocess";
 import { systemPrompt } from "@/lib/notify/summary/prompt";
@@ -27,18 +27,22 @@ export function SummaryTab({ accent }: { accent: string }) {
   const { list: inbox } = useInbox();
   const { list: presets, activeId } = usePresets();
 
-  const [wizard, setWizard] = useState<{ open: boolean; step: WizardStep; mode: "create" | "edit" }>(
-    { open: false, step: "provider", mode: "create" },
-  );
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState("");
   const [err, setErr] = useState<FriendlyError | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
-  const providerId = getActiveProvider();
-  const ready = !!providerId && !!getKey(providerId);
+  const savedProviders = listSaved();
+  const ready = savedProviders.length > 0;
 
-  const generate = useCallback(async () => {
+  // Set fallback active provider if active provider key is missing
+  let providerId = getActiveProvider();
+  if (ready && (!providerId || !savedProviders.includes(providerId))) {
+    providerId = savedProviders[0];
+    setActiveProvider(providerId);
+  }
+
+  const generate = useCallback(async (customModel?: string) => {
     const pid = getActiveProvider();
     if (!pid) return;
     const stored = getKey(pid);
@@ -62,18 +66,19 @@ export function SummaryTab({ accent }: { accent: string }) {
       const profile = readProfile();
       setProgress("Asking your AI provider…");
       const provider = getProvider(pid);
+      const runModel = customModel || stored.model;
       const raw = await provider.generate({
-        key: stored.key, model: stored.model,
+        key: stored.key, model: runModel,
         system: systemPrompt(),
         user: { notifications: payload, reminders, userProfile: profile },
       });
       const reconciled = reconcileRecap(raw, reminders);
       setProgress("Building your PDF…");
       const blob = renderSummaryPdf(reconciled, {
-        date, provider: pid, model: stored.model, presetName: active?.name,
+        date, provider: pid, model: runModel, presetName: active?.name,
       });
       const filename = `MinDrop-Digest-${date}.pdf`;
-      await saveReport({ date, provider: pid, model: stored.model, filename }, blob);
+      await saveReport({ date, provider: pid, model: runModel, filename }, blob);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url; a.download = filename; a.click();
@@ -84,24 +89,11 @@ export function SummaryTab({ accent }: { accent: string }) {
       setProgress("");
     } catch (e) {
       const pv = getProvider(pid);
-      setErr(classify(e, { provider: pv.label, model: getKey(pid)?.model }));
+      setErr(classify(e, { provider: pv.label, model: customModel || getKey(pid)?.model }));
     } finally {
       setBusy(false); setProgress("");
     }
   }, [inbox, presets, activeId]);
-
-  function openWizard(step: WizardStep = "provider", mode: "create" | "edit" = "create") {
-    setWizard({ open: true, step, mode });
-  }
-
-  function finishWizard({ generateNow }: { generateNow: boolean }) {
-    setWizard((w) => ({ ...w, open: false }));
-    setReloadKey((k) => k + 1);
-    // Arm the daily scheduler if enabled
-    const s = readSchedule();
-    if (s.enabled) armScheduler(() => { void generate(); });
-    if (generateNow) void generate();
-  }
 
   return (
     <div>
@@ -118,22 +110,11 @@ export function SummaryTab({ accent }: { accent: string }) {
           accent={accent}
           busy={busy}
           progress={progress}
-          onGenerate={() => { void generate(); }}
-          onEdit={(step) => openWizard(step, "edit")}
+          onGenerate={(customModel) => { void generate(customModel); }}
           reloadKey={reloadKey}
         />
       ) : (
-        <SummaryEmpty accent={accent} onStart={() => openWizard("provider", "create")} />
-      )}
-
-      {wizard.open && (
-        <SummaryWizard
-          accent={accent}
-          initialStep={wizard.step}
-          mode={wizard.mode}
-          onClose={() => setWizard((w) => ({ ...w, open: false }))}
-          onFinish={finishWizard}
-        />
+        <SummaryEmpty accent={accent} onStart={() => navigate({ to: "/settings" })} />
       )}
     </div>
   );

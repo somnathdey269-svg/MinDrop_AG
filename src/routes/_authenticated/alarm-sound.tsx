@@ -8,6 +8,7 @@ import { getDefaultTone, getVibrationEnabled, setDefaultTone, setVibrationEnable
 import { toneById, type ToneId } from "@/lib/alarms/tones";
 import { useTier } from "@/lib/tier";
 import { AlarmsBridge } from "@/lib/alarms/bridge";
+import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/_authenticated/alarm-sound")({
   head: () => ({
@@ -23,12 +24,18 @@ export const Route = createFileRoute("/_authenticated/alarm-sound")({
 function AlarmSoundSettings() {
   const [tone, setTone] = useState<ToneId>("classic");
   const [vibrate, setVibrate] = useState(true);
+  const [snoozeIntervals, setSnoozeIntervals] = useState<string[]>(["5", "15", "30"]);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const { limits } = useTier();
 
   useEffect(() => {
     setTone(getDefaultTone());
     setVibrate(getVibrationEnabled());
+    try {
+      const saved = window.localStorage.getItem("mindrop.alarm.snoozeIntervals");
+      if (saved) {
+        setSnoozeIntervals(JSON.parse(saved));
+      }
+    } catch {}
   }, []);
 
   function onPick(id: ToneId) {
@@ -39,6 +46,22 @@ function AlarmSoundSettings() {
     const next = !vibrate;
     setVibrate(next);
     setVibrationEnabled(next);
+  }
+
+  function handleToggleInterval(id: string) {
+    let next: string[];
+    if (snoozeIntervals.includes(id)) {
+      if (snoozeIntervals.length <= 1) {
+        toast.error("At least one snooze option must remain active.");
+        return;
+      }
+      next = snoozeIntervals.filter((x) => x !== id);
+    } else {
+      next = [...snoozeIntervals, id];
+    }
+    setSnoozeIntervals(next);
+    window.localStorage.setItem("mindrop.alarm.snoozeIntervals", JSON.stringify(next));
+    AlarmsBridge.setSnoozeIntervals(next).catch(() => {});
   }
 
   const current = toneById(tone);
@@ -86,29 +109,48 @@ function AlarmSoundSettings() {
                 <span className="block t-body text-ink">Vibration</span>
                 <span className="block t-meta text-ink/55">Buzz along with the ringtone</span>
               </span>
-              <button
-                onClick={onToggleVibrate}
-                role="switch"
-                aria-checked={vibrate}
-                aria-label="Toggle vibration"
-                className={`relative h-6 w-11 rounded-full transition-colors ${vibrate ? "bg-ink" : "bg-ink/20"}`}
-              >
-                <span className={`absolute top-0.5 size-5 rounded-full bg-canvas transition-transform ${vibrate ? "translate-x-5" : "translate-x-0.5"}`} />
-              </button>
+              <Switch checked={vibrate} onCheckedChange={onToggleVibrate} style={{ "--switch-accent": "color-mix(in oklab, #06038D 65%, #fff)" } as React.CSSProperties} />
             </div>
 
             <div className="h-px bg-ink/8 mx-4" />
 
-            <div className="flex items-center gap-3 px-4 py-4">
-              <span className="size-10 rounded-full bg-canvas grid place-items-center text-ink/70">
-                <AlarmClock className="size-4" />
-              </span>
-              <span className="flex-1 min-w-0">
-                <span className="block t-body text-ink">Snooze quota</span>
-                <span className="block t-meta text-ink/55">
-                  {limits.snoozePerDay === Infinity ? "Unlimited" : `${limits.snoozePerDay} snoozes / day`}
+            <div className="flex flex-col gap-3 px-4 py-4 bg-canvas/30">
+              <div className="flex items-center gap-3">
+                <span className="size-10 rounded-full bg-canvas grid place-items-center text-ink/70">
+                  <AlarmClock className="size-4" />
                 </span>
-              </span>
+                <div className="flex-1 min-w-0">
+                  <span className="block t-body text-ink font-semibold">Active Snooze Options</span>
+                  <span className="block t-meta text-ink/55">Select options to show when your alarm rings</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 mt-2">
+                {[
+                  { id: "5", label: "5 Min" },
+                  { id: "15", label: "15 Min" },
+                  { id: "30", label: "30 Min" },
+                  { id: "60", label: "1 Hour" },
+                  { id: "180", label: "3 Hours" },
+                  { id: "custom", label: "Custom…" },
+                ].map((opt) => {
+                  const isActive = snoozeIntervals.includes(opt.id);
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => handleToggleInterval(opt.id)}
+                      style={{
+                        backgroundColor: isActive ? "color-mix(in oklab, #06038D 12%, #fff)" : "rgba(0,0,0,0.03)",
+                        color: isActive ? "#06038D" : "var(--ink)",
+                        borderColor: isActive ? "rgba(6, 3, 141, 0.15)" : "rgba(0,0,0,0.08)"
+                      }}
+                      className="px-2 py-3.5 rounded-2xl border text-center t-meta font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-sm"
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </section>
 
@@ -116,38 +158,7 @@ function AlarmSoundSettings() {
             Snooze options — 5 min, 30 min, 1 hour or a custom time — appear when an alarm rings. Alarms use the phone's alarm volume, not notification volume.
           </p>
 
-          <button
-            onClick={async () => {
-              const at = Date.now() + 30_000;
-              const res = await AlarmsBridge.scheduleAlarm({
-                id: `selftest-${Date.now()}`,
-                at,
-                title: "MinDrop self-test",
-                body: "This is a test alarm — it should ring in 30 seconds.",
-                delivery: "alarm",
-                toneId: tone,
-                extra: { kind: "selftest" },
-              });
-              if (res.reason && res.reason !== "ok") {
-                toast.error("Test blocked", {
-                  description:
-                    res.reason === "no_notif_permission" ? "Notifications are off." :
-                    res.reason === "no_exact_permission" ? "Exact alarms are disabled." :
-                    "Battery optimisation is on. Alarm may be delayed.",
-                });
-              } else {
-                toast.success("Test scheduled", {
-                  description: "Lock your phone. It should ring in 30 seconds.",
-                });
-              }
-            }}
-            className="mt-6 w-full inline-flex items-center justify-center gap-2 t-button bg-ink text-canvas py-3 rounded-2xl"
-          >
-            <Zap className="size-4" /> Test alarm in 30 seconds
-          </button>
-          <p className="t-meta text-ink/45 mt-2 text-center">
-            Use this after changing sound or permission settings.
-          </p>
+
         </div>
       </div>
 

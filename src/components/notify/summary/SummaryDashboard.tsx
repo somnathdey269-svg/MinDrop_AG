@@ -4,8 +4,11 @@ import {
   Sparkles, Loader2, Download, Trash2, Clock, FileText, KeyRound,
   Filter, Pencil, ShieldCheck, Check,
 } from "lucide-react";
-import { getActiveProvider, getKey } from "@/lib/notify/summary/keyring";
+import { Link } from "@tanstack/react-router";
+import { getActiveProvider, getKey, listSaved, setActiveProvider } from "@/lib/notify/summary/keyring";
 import { getProvider } from "@/lib/notify/summary/providers";
+import type { ProviderId } from "@/lib/notify/summary/types";
+import { getEnabledModelsForProvider } from "@/lib/notify/summary/adminConfig";
 import { usePresets } from "@/lib/notify/summary/sources";
 import { readSchedule } from "@/lib/notify/summary/scheduler";
 import { GUIDES } from "@/lib/notify/summary/onboarding";
@@ -21,29 +24,38 @@ export function SummaryDashboard({
   busy,
   progress,
   onGenerate,
-  onEdit,
   reloadKey,
 }: {
   accent: string;
   busy: boolean;
   progress: string;
-  onGenerate: () => void;
-  onEdit: (step: WizardStep) => void;
-  /** Bumped when the underlying reports/settings change so we refetch. */
+  onGenerate: (customModel?: string) => void;
   reloadKey: number;
 }) {
-  const providerId = getActiveProvider();
-  const stored = providerId ? getKey(providerId) : null;
-  const provider = providerId ? getProvider(providerId) : null;
-  const model = provider?.models.find((m) => m.id === stored?.model) ?? provider?.models[0];
-  const { list: presets, activeId } = usePresets();
-  const preset = presets.find((p) => p.id === activeId);
-  const sched = readSchedule();
+  const [selectedProvider, setSelectedProvider] = useState<ProviderId>(getActiveProvider() || "gemini");
+
+  const stored = getKey(selectedProvider);
+  const providerInfo = getProvider(selectedProvider);
+
+  const [selectedModel, setSelectedModel] = useState("");
+
+  useEffect(() => {
+    const sched = readSchedule();
+    const enabledModels = getEnabledModelsForProvider(selectedProvider);
+    if (sched.providerId === selectedProvider && sched.modelId && enabledModels.some((m) => m.id === sched.modelId)) {
+      setSelectedModel(sched.modelId);
+    } else if (stored && enabledModels.some((m) => m.id === stored.model)) {
+      setSelectedModel(stored.model);
+    } else {
+      setSelectedModel(enabledModels[0]?.id || "");
+    }
+  }, [selectedProvider, stored]);
 
   const [reports, setReports] = useState<ReportRecord[]>([]);
-  const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => { setReports(listReports()); }, [reloadKey]);
+  useEffect(() => {
+    setReports(listReports());
+  }, [reloadKey]);
 
   const hasToday = useMemo(() => reports.some((r) => r.date === today()), [reports]);
 
@@ -64,68 +76,91 @@ export function SummaryDashboard({
 
   return (
     <div>
-      {/* Status strip */}
-      <section
-        className="rounded-2xl border p-4 mb-4"
-        style={{
-          borderColor: `color-mix(in oklab, ${accent} 30%, transparent)`,
-          background: `color-mix(in oklab, ${accent} 5%, var(--canvas))`,
-        }}
-      >
-        <div className="flex items-start gap-3">
-          <div
-            className="size-10 rounded-full grid place-items-center shrink-0"
-            style={{ background: `color-mix(in oklab, ${accent} 15%, var(--canvas))` }}
-          >
-            <Check className="size-5" style={{ color: accent }} aria-hidden="true" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="t-body font-semibold text-ink">You're set up</p>
-            <p className="t-body-sm text-ink/70 truncate">
-              {providerId ? GUIDES[providerId].label : ""} · {model?.label ?? ""}
-            </p>
-            <p className="t-meta text-ink/60 mt-0.5 truncate">
-              {preset?.name ?? "All apps"} · {sched.enabled ? `Daily at ${sched.hhmm}` : "Manual"}
-            </p>
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Edit settings"
-              className="p-2 rounded-full hover:bg-ink/5"
-            >
-              <Pencil className="size-4 text-ink/60" aria-hidden="true" />
-            </button>
-            {menuOpen && (
-              <div
-                className="absolute right-0 top-10 z-10 w-48 rounded-2xl border border-ink/10 bg-canvas shadow-lg p-1"
-                onMouseLeave={() => setMenuOpen(false)}
-              >
-                <MenuItem icon={<KeyRound className="size-3.5" />} label="Change API key" onClick={() => { setMenuOpen(false); onEdit("key"); }} />
-                <MenuItem icon={<Filter className="size-3.5" />} label="Change sources" onClick={() => { setMenuOpen(false); onEdit("sources"); }} />
-                <MenuItem icon={<Clock className="size-3.5" />} label="Change schedule" onClick={() => { setMenuOpen(false); onEdit("schedule"); }} />
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+      {/* Informative info banner */}
+      <div className="p-3 mb-4 rounded-xl bg-ink/5 border border-ink/5 flex items-start gap-2.5">
+        <Clock className="size-4 text-ink/60 mt-0.5 shrink-0" />
+        <p className="t-meta text-ink/70 leading-normal">
+          <strong>Instant reports</strong> summarize your notifications right now. Daily or weekly scheduled automation triggers can be managed under <strong>Settings</strong>.
+        </p>
+      </div>
 
-      {/* Generate today */}
-      <motion.button
-        whileTap={{ scale: 0.98 }}
-        disabled={busy}
-        onClick={onGenerate}
-        className="w-full t-button py-3 rounded-full text-canvas inline-flex items-center justify-center gap-2 disabled:opacity-40 mb-4"
-        style={{ background: accent }}
-      >
-        {busy ? (
-          <><Loader2 className="size-4 animate-spin" /> {progress || "Working…"}</>
-        ) : hasToday ? (
-          <><Sparkles className="size-4" /> Regenerate today's report</>
-        ) : (
-          <><Sparkles className="size-4" /> Generate today's report</>
-        )}
-      </motion.button>
+      {/* Provider Selector Tabs */}
+      <div className="flex rounded-xl p-1 bg-ink/5 mb-4">
+        {(["gemini", "openai", "anthropic"] as ProviderId[]).map((tab) => {
+          const isSel = selectedProvider === tab;
+          const hasKey = !!getKey(tab);
+          return (
+            <button
+              key={tab}
+              onClick={() => {
+                setSelectedProvider(tab);
+                if (hasKey) setActiveProvider(tab);
+              }}
+              className="flex-1 py-2 text-center rounded-lg t-meta font-semibold transition-all relative"
+              style={{
+                color: isSel ? accent : "var(--color-ink-70)",
+                background: isSel ? "var(--canvas)" : "transparent",
+                boxShadow: isSel ? "0 1px 3px rgba(0,0,0,0.05)" : "none"
+              }}
+            >
+              <span className="capitalize">{tab}</span>
+              {hasKey && (
+                <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full" style={{ backgroundColor: accent }} />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Main configuration run area */}
+      {!stored ? (
+        <div className="p-5 rounded-2xl bg-ink/[0.02] border border-dashed border-ink/15 text-center mb-6">
+          <KeyRound className="size-8 mx-auto text-ink/40 mb-2" />
+          <p className="t-body font-semibold text-ink">API Key Required</p>
+          <p className="t-meta text-ink/70 mt-1 mb-4">
+            Configure your {selectedProvider === "gemini" ? "Gemini" : selectedProvider === "openai" ? "OpenAI" : "Anthropic"} key in settings to unlock summary reports.
+          </p>
+          <Link
+            to="/settings"
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-ink/10 rounded-xl t-meta font-semibold hover:shadow-sm active:bg-ink/[0.02] text-ink"
+          >
+            Link Key in Settings ↗
+          </Link>
+        </div>
+      ) : (
+        <div className="mb-5 space-y-4">
+          <div>
+            <label className="block t-meta font-semibold text-ink/70 mb-2">Model</label>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-ink/10 bg-canvas text-ink t-body-sm focus:outline-none focus:border-ink/30"
+            >
+              {getEnabledModelsForProvider(selectedProvider).map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            disabled={busy}
+            onClick={() => onGenerate(selectedModel)}
+            className="w-full t-button py-3.5 rounded-2xl text-canvas inline-flex items-center justify-center gap-2 disabled:opacity-40 font-bold"
+            style={{ background: accent }}
+          >
+            {busy ? (
+              <><Loader2 className="size-4 animate-spin" /> {progress || "Working…"}</>
+            ) : hasToday ? (
+              <><Sparkles className="size-4" /> Regenerate Today's Report</>
+            ) : (
+              <><Sparkles className="size-4" /> Get Instant Report</>
+            )}
+          </motion.button>
+        </div>
+      )}
 
       {/* Reports list */}
       <section className="rounded-2xl border border-ink/10 bg-canvas p-4 mb-4">
