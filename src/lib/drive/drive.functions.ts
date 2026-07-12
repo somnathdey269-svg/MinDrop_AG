@@ -53,7 +53,10 @@ export const getDriveStatus = createServerFn({ method: "GET" })
     return { connected: !!data, connectedAt: data?.connected_at ?? null, updatedAt: data?.updated_at ?? null };
   });
 
-const backupInputSchema = z.object({ payload: z.string().max(10_000_000) });
+const backupInputSchema = z.object({
+  payload: z.string().max(10_000_000),
+  format: z.enum(["json", "csv"]).default("json"),
+});
 
 export const backupToDrive = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -77,8 +80,10 @@ export const backupToDrive = createServerFn({ method: "POST" })
       await supabase.from("user_drive_tokens").update({ folder_id: folderId, updated_at: new Date().toISOString() }).eq("user_id", userId);
     }
 
-    const filename = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.json`;
-    const { id } = await uploadBackup(accessToken, folderId, filename, data.payload);
+    const ext = data.format === "csv" ? "csv" : "json";
+    const mimeType = data.format === "csv" ? "text/csv" : "application/json";
+    const filename = `mindrop-backup-${new Date().toISOString().slice(0, 10)}.${ext}`;
+    const { id } = await uploadBackup(accessToken, folderId, filename, data.payload, mimeType);
 
     await supabase.from("user_drive_tokens").update({ updated_at: new Date().toISOString() }).eq("user_id", userId);
 

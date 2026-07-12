@@ -3,14 +3,14 @@
  *
  * Watches localStorage for `memoryos.*`, `mindrop.*` changes and, after a
  * quiet period, pushes a fresh backup up to Drive. Runs client-side only.
- * Cadence: max once per hour, min 30 s after the last write.
+ * Cadence: near real-time — min 5 s between syncs, 10 s idle debounce.
  */
-import { buildBackup } from "@/lib/memoryos/backup";
+import { buildBackup, buildCsvBackup } from "@/lib/memoryos/backup";
 import { backupToDrive, getDriveStatus } from "@/lib/drive/drive.functions";
 
 const LAST_KEY = "mindrop.drive.autoBackup.lastAt";
-const MIN_INTERVAL_MS = 60 * 60 * 1000;   // 1 h
-const DEBOUNCE_MS = 30_000;               // 30 s idle
+const MIN_INTERVAL_MS = 5_000;     // 5 s — near real-time for premium
+const DEBOUNCE_MS = 10_000;        // 10 s idle
 
 let installed = false;
 let idleTimer: number | undefined;
@@ -34,8 +34,15 @@ async function runBackup() {
   try {
     const status = await getDriveStatus();
     if (!status?.connected) return;
-    const payload = JSON.stringify(buildBackup());
-    await backupToDrive({ data: { payload } });
+
+    // Upload cumulative JSON backup
+    const jsonPayload = JSON.stringify(buildBackup());
+    await backupToDrive({ data: { payload: jsonPayload, format: "json" } });
+
+    // Upload cumulative CSV backup
+    const csvPayload = buildCsvBackup();
+    await backupToDrive({ data: { payload: csvPayload, format: "csv" } });
+
     markRan();
   } catch {
     /* silent — user will retry on next window */
@@ -66,3 +73,4 @@ export function installDriveAutoBackup() {
   // Kick a check on mount so a device that missed the window still catches up.
   schedule();
 }
+

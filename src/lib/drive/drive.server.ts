@@ -157,11 +157,12 @@ export async function uploadBackup(
   folderId: string,
   filename: string,
   content: string,
+  mimeType: string = "application/json",
 ): Promise<{ id: string }> {
   const metadata = {
     name: filename,
     parents: [folderId],
-    mimeType: "application/json",
+    mimeType,
   };
 
   const boundary = "-----------mindrop_drive_upload";
@@ -173,7 +174,7 @@ export async function uploadBackup(
     "Content-Type: application/json; charset=UTF-8\r\n\r\n" +
     JSON.stringify(metadata) +
     delimiter +
-    "Content-Type: application/json\r\n\r\n" +
+    `Content-Type: ${mimeType}\r\n\r\n` +
     content +
     closeDelim;
 

@@ -16,7 +16,7 @@ import {
   type FontChoice,
   type SizeChoice,
 } from "@/lib/memoryos/appearance";
-import { buildBackup, downloadBackup, importBackupFromFile, importBackupFromText } from "@/lib/memoryos/backup";
+import { buildBackup, downloadBackup, downloadCsvBackup, importBackupFromFile, importBackupFromCsvFile, importBackupFromText } from "@/lib/memoryos/backup";
 import {
   getDriveAuthUrl,
   disconnectDrive,
@@ -224,8 +224,14 @@ function InfoSheet({ kind, onClose }: { kind: "privacy" | "export"; isPremium: b
   const handleImport = async (f: File) => {
     setMsg(null);
     try {
-      const { imported } = await importBackupFromFile(f);
-      setMsg(`Restored ${imported} item${imported === 1 ? "" : "s"}. Reopen tabs to refresh.`);
+      const isCsv = f.name.toLowerCase().endsWith(".csv");
+      if (isCsv) {
+        const { imported } = await importBackupFromCsvFile(f);
+        setMsg(`Restored ${imported} item${imported === 1 ? "" : "s"} from CSV. Reopen tabs to refresh.`);
+      } else {
+        const { imported } = await importBackupFromFile(f);
+        setMsg(`Restored ${imported} item${imported === 1 ? "" : "s"}. Reopen tabs to refresh.`);
+      }
     } catch (e: any) {
       setMsg(e?.message || "Couldn't read that file.");
     }
@@ -267,29 +273,37 @@ function InfoSheet({ kind, onClose }: { kind: "privacy" | "export"; isPremium: b
               <Download className="size-7 text-[#A33361]" />
             </div>
             <h2 className="t-display mb-2">Backup & restore.</h2>
-            <p className="t-body-sm text-ink/65 mb-5">Save everything to a single JSON file, or bring it back on a new install.</p>
+            <p className="t-body-sm text-ink/65 mb-5">Export your data as JSON or CSV, or restore from a previous backup file.</p>
 
             <ul className="space-y-3 mb-6">
               <Bullet emoji="📦" title="What's inside" body="Your captures, categories, installed packs, personality, app preferences." />
               <Bullet emoji="🔐" title="Where it goes" body="Straight to your downloads folder. No upload step — we never see it." />
-              <Bullet emoji="🔄" title="Switching APK" body="Export from the old build, install the new APK, then Import here." />
+              <Bullet emoji="🔄" title="Switching device" body="Export from the old device, install on the new one, then Import here." />
             </ul>
 
-            <button onClick={downloadBackup} className="w-full bg-ink text-canvas py-4 rounded-2xl t-button flex items-center justify-center gap-2">
-              <Download className="size-4" /> Export my data
-            </button>
+            <p className="t-eyebrow text-ink/50 mb-2">Export</p>
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              <button onClick={downloadBackup} className="bg-ink text-canvas py-3.5 rounded-2xl t-button flex items-center justify-center gap-2">
+                <Download className="size-4" /> JSON
+              </button>
+              <button onClick={downloadCsvBackup} className="bg-ink text-canvas py-3.5 rounded-2xl t-button flex items-center justify-center gap-2">
+                <Download className="size-4" /> CSV
+              </button>
+            </div>
+
+            <p className="t-eyebrow text-ink/50 mb-2 mt-4">Import</p>
             <input
               ref={fileRef}
               type="file"
-              accept="application/json,.json"
+              accept="application/json,.json,.csv,text/csv"
               className="hidden"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImport(f); e.target.value = ""; }}
             />
             <button
               onClick={() => fileRef.current?.click()}
-              className="w-full mt-2 bg-white border border-ink/15 py-4 rounded-2xl t-button flex items-center justify-center gap-2"
+              className="w-full bg-white border border-ink/15 py-4 rounded-2xl t-button flex items-center justify-center gap-2"
             >
-              <Upload className="size-4" /> Import from backup
+              <Upload className="size-4" /> Import from backup (JSON or CSV)
             </button>
             {msg && <p className="mt-3 t-body-sm text-ink/70 text-center">{msg}</p>}
             <button onClick={onClose} className="w-full mt-2 py-3 t-button text-ink/70">Close</button>
