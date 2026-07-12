@@ -4,7 +4,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { PhoneFrame } from "@/components/layout/PhoneFrame";
 import { BottomTabs } from "@/components/layout/BottomTabs";
-import { GlobalCaptureBar } from "@/components/memory/GlobalCaptureBar";
 import { ChangelogSheet } from "@/components/settings/ChangelogSheet";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -205,7 +204,6 @@ function Settings() {
             MinDrop · v1.0
           </div>
         </div>
-        <GlobalCaptureBar />
         <div className="px-6 pt-6 pb-3">
           <LegalFooter />
         </div>
