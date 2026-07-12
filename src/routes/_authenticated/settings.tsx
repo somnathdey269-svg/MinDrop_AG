@@ -28,7 +28,7 @@ import { getMyPlan } from "@/lib/plan.functions";
 import { Activity, AlarmClock, Bell, BookOpen, ChevronRight, Cloud, Crown, Download, Globe, Layers, Lock, LogOut, ShieldCheck, Sparkles, Trash2, Type, Upload, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCountryTheme, useCountryThemes, setCountryOverride, getCountryOverride } from "@/lib/theme/useCountryTheme";
-import { padPalette } from "@/lib/theme/palette";
+import { padPalette, INDIA_SAFFRON, INDIA_GREEN, INDIA_BLUE, getReadableAccent } from "@/lib/theme/palette";
 import { CHANGELOG, hasUnseenChangelog } from "@/lib/changelog";
 import { toast } from "sonner";
 import { LegalFooter } from "@/components/legal/LegalFooter";
@@ -51,9 +51,7 @@ type Tile = {
   icon: typeof Bell;
   to?: string;
   onClick?: () => void;
-  gradient: string;
-  iconBg: string;
-  iconColor: string;
+  color: string;
 };
 
 function Settings() {
@@ -91,15 +89,11 @@ function Settings() {
   }, []);
 
   const tiles: Tile[] = [
-    { label: "Permission", hint: permHint, icon: Bell, to: "/permissions", gradient: "from-[#FFE9D6] to-[#FFD2B0]", iconBg: "bg-white/70", iconColor: "text-[#B8521B]" },
-    { label: "Alarm & sound", hint: "Ringtone, vibration, snooze", icon: AlarmClock, to: "/alarm-sound", gradient: "from-[#FFE0E0] to-[#FFC5C5]", iconBg: "bg-white/70", iconColor: "text-[#A32A2A]" },
-    { label: "Memory Packs", hint: `${state.packs.length} installed`, icon: Layers, to: "/packs", gradient: "from-[#D6F0E8] to-[#B8E4D4]", iconBg: "bg-white/70", iconColor: "text-[#1F7A5A]" },
-    { label: "Privacy", hint: "On-device · zero servers", icon: ShieldCheck, onClick: () => setSheet("privacy"), gradient: "from-[#DDEBFF] to-[#BFD9FF]", iconBg: "bg-white/70", iconColor: "text-[#1E508F]" },
-    { label: "Backup & restore", hint: "Export or import JSON", icon: Download, onClick: () => setSheet("export"), gradient: "from-[#FFE3EE] to-[#FFC9DC]", iconBg: "bg-white/70", iconColor: "text-[#A33361]" },
-    { label: "Google Drive", hint: "Back up to your Drive", icon: Cloud, onClick: () => setSheet("drive"), gradient: "from-[#E0F2FE] to-[#BAE6FD]", iconBg: "bg-white/70", iconColor: "text-[#0369A1]" },
-    // History moved back into each section (Later, Notify, Places) as Archived + Erased tabs
-    { label: "Diagnostics", hint: "Check permissions & storage", icon: Activity, to: "/diagnostics", gradient: "from-[#E8E0FF] to-[#D6CBFF]", iconBg: "bg-white/70", iconColor: "text-[#5A3FBF]" },
-    { label: "What's new", hint: `v${CHANGELOG[0]?.version ?? "0.4"}`, icon: Sparkles, onClick: () => setSheet("changelog"), gradient: "from-[#FFF3D6] to-[#FFE7A6]", iconBg: "bg-white/70", iconColor: "text-[#8A6A12]" },
+    { label: "Permission", hint: permHint, icon: Bell, to: "/permissions", color: INDIA_SAFFRON },
+    { label: "Alarm & sound", hint: "Ringtone, vibration, snooze", icon: AlarmClock, to: "/alarm-sound", color: INDIA_BLUE },
+    { label: "Backup & restore", hint: "Export or import JSON", icon: Download, onClick: () => setSheet("export"), color: INDIA_GREEN },
+    { label: "Google Drive", hint: "Back up to your Drive", icon: Cloud, onClick: () => setSheet("drive"), color: INDIA_SAFFRON },
+    { label: "Diagnostics", hint: "Check permissions & storage", icon: Activity, to: "/diagnostics", color: INDIA_GREEN },
   ];
 
 
@@ -171,10 +165,16 @@ function Settings() {
 
             {tiles.map((t) => {
               const Icon = t.icon;
+              const accent = t.color;
+              const bg = `linear-gradient(145deg, color-mix(in oklab, ${accent} 8%, var(--canvas)) 0%, color-mix(in oklab, ${accent} 20%, var(--canvas)) 100%)`;
+              const border = `color-mix(in oklab, ${accent} 22%, transparent)`;
+              const iconBg = `color-mix(in oklab, ${accent} 12%, var(--canvas))`;
+              const readable = getReadableAccent(accent);
+
               const inner = (
-                <div className={`group relative h-full rounded-3xl p-4 bg-gradient-to-br ${t.gradient} border border-ink/5 hover:shadow-md hover:-translate-y-0.5 transition-all`}>
-                  <div className={`size-10 rounded-xl ${t.iconBg} grid place-items-center mb-3 backdrop-blur`}>
-                    <Icon className={`size-5 ${t.iconColor}`} />
+                <div className="group relative h-full rounded-3xl p-4 border hover:shadow-md hover:-translate-y-0.5 transition-all" style={{ background: bg, borderColor: border }}>
+                  <div className="size-10 rounded-xl grid place-items-center mb-3 backdrop-blur border" style={{ background: iconBg, borderColor: border }}>
+                    <Icon className="size-5" style={{ color: readable }} />
                   </div>
                   <p className="t-title text-ink">{t.label}</p>
                   {t.hint && <p className="t-meta text-ink/75 mt-0.5">{t.hint}</p>}
