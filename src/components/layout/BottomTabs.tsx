@@ -89,9 +89,9 @@ export function BottomTabs() {
         {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.25 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed md:absolute inset-0 bg-ink z-30"
+            className="fixed md:absolute inset-0 bg-ink/40 backdrop-blur-sm z-30"
             onClick={() => setIsOpen(false)}
           />
         )}
