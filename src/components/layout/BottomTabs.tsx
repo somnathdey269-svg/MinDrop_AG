@@ -26,7 +26,7 @@ function isActive(pathname: string, to: string): boolean {
 
 export function BottomTabs() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { accent1, accent3 } = useCountryTheme();
+  const { accent1, accent2, accent3 } = useCountryTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
 
@@ -58,7 +58,7 @@ export function BottomTabs() {
   const allTabs: SideTab[] = [
     { to: "/dashboard",  label: "Home",     icon: LayoutDashboard, accent: "var(--brand)" },
     { to: "/home",       label: "Later",    icon: Clock, accent: accent1 },
-    { to: "/notify",     label: "Notify",   icon: Bell },
+    { to: "/notify",     label: "Notify",   icon: Bell, accent: accent2 },
     { to: "/places",     label: "Places",   icon: MapPin, accent: accent3 },
     { to: "/settings",   label: "Settings", icon: Settings },
   ];
