@@ -191,6 +191,21 @@ export function useCountryTheme(): UseCountryTheme {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  const themes: CountryTheme[] = data ?? [];
+  const match = themes.find((t) => t.code === code);
+  const fallback = themes.find((t) => t.code === "IN");
+  const chosen = match ?? fallback;
+  const raw = chosen?.colors ?? ["#FF671F", "#046A38", "#06038D"];
+  const palette = padPalette(raw);
+
+  // Apply colors to document root dynamically to theme all pages reactively
+  useEffect(() => {
+    if (!mounted || typeof document === "undefined") return;
+    const root = document.documentElement;
+    root.style.setProperty("--brand", palette.accent1);
+    root.style.setProperty("--accent-warm", palette.accent2);
+  }, [mounted, palette.accent1, palette.accent2]);
+
   // Before client mount → India (avoids hydration mismatch on SSR).
   if (!mounted) {
     return {
@@ -202,13 +217,6 @@ export function useCountryTheme(): UseCountryTheme {
       isFallback: true,
     };
   }
-
-  const themes: CountryTheme[] = data ?? [];
-  const match = themes.find((t) => t.code === code);
-  const fallback = themes.find((t) => t.code === "IN");
-  const chosen = match ?? fallback;
-  const raw = chosen?.colors ?? ["#FF671F", "#046A38", "#06038D"];
-  const palette = padPalette(raw);
 
   return {
     ...palette,
