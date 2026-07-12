@@ -27,8 +27,20 @@ function isActive(pathname: string, to: string): boolean {
 export function BottomTabs() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { accent1, accent2, accent3 } = useCountryTheme();
-  const [isOpen, setIsOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
+
+  const activeColor = pathname.startsWith("/notify") || pathname.startsWith("/rules") || pathname.startsWith("/alarm-sound")
+    ? accent2
+    : pathname.startsWith("/places")
+      ? accent3
+      : accent1;
+
+  let endColor = "#ff7655";
+  if (activeColor === accent2) {
+    endColor = "#34d399";
+  } else if (activeColor === accent3) {
+    endColor = "#60a5fa";
+  }
 
   // Monitor for modal dialogs / sheet popups in the DOM to prevent collisions
   useEffect(() => {
@@ -49,6 +61,8 @@ export function BottomTabs() {
 
     return () => observer.disconnect();
   }, []);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   // Close navigation overlay automatically when navigating away
   useEffect(() => {
@@ -139,9 +153,9 @@ export function BottomTabs() {
         animate={{
           y: [0, -5, 0],
           boxShadow: [
-            "0 8px 24px rgba(74, 93, 78, 0.35)",
-            "0 14px 32px rgba(74, 93, 78, 0.55)",
-            "0 8px 24px rgba(74, 93, 78, 0.35)"
+            `0 8px 24px color-mix(in srgb, ${activeColor} 35%, transparent)`,
+            `0 14px 32px color-mix(in srgb, ${activeColor} 55%, transparent)`,
+            `0 8px 24px color-mix(in srgb, ${activeColor} 35%, transparent)`
           ]
         }}
         transition={{
@@ -151,7 +165,7 @@ export function BottomTabs() {
         }}
         className="fixed md:absolute bottom-6 right-6 z-40 grid place-items-center size-14 rounded-full text-canvas border border-white/10 press"
         style={{
-          background: "linear-gradient(135deg, var(--brand) 0%, color-mix(in oklab, var(--brand) 75%, #ff7655) 100%)",
+          background: `linear-gradient(135deg, ${activeColor} 0%, color-mix(in oklab, ${activeColor} 75%, ${endColor}) 100%)`,
         }}
         aria-label={isOpen ? "Close Menu" : "Open Menu"}
       >
