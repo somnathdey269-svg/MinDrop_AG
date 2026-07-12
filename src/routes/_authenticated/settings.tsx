@@ -64,9 +64,34 @@ type Tile = {
 function Settings() {
   const { state, reset } = useOnboarding();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const deleteFn = useServerFn(deleteMyAccount);
   const search = useSearch({ from: "/_authenticated/settings" }) as { drive?: string; message?: string };
   const isPremium = state.plan === "premium";
-  const [sheet, setSheet] = useState<null | "privacy" | "export" | "changelog" | "drive" | "ai-keys" | "digest-sched">(null);
+  const [user, setUser] = useState<any>(null);
+  const [sheet, setSheet] = useState<null | "privacy" | "export" | "changelog" | "drive" | "ai-keys" | "digest-sched" | "delete-wizard">(null);
+
+  async function handleAccountDeletion() {
+    await deleteFn();
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/", replace: true });
+  }
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user || null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     if (search.drive === "connected") {
@@ -251,28 +276,45 @@ function Settings() {
             <AppearanceCard />
           </div>
 
-          {/* Sign-in hook for free users */}
-          {!isPremium && (
+          {/* Sign-in banner / sign-up card */}
+          {user !== null ? (
             <div className="mt-6 rounded-3xl p-4 bg-white border border-dashed border-ink/15 flex items-start gap-3">
-              <Lock className="size-4 text-ink/70 mt-0.5 shrink-0" />
+              <ShieldCheck className="size-4 text-[#0d9488] mt-0.5 shrink-0" />
               <div className="min-w-0">
                 <p className="t-title">Your account is synced.</p>
-                <p className="t-body-sm text-ink/75 mt-0.5">Signed in and syncing across devices.</p>
+                <p className="t-body-sm text-ink/75 mt-0.5">
+                  Signed in as <span className="font-semibold">{user.email}</span>
+                </p>
               </div>
+            </div>
+          ) : (
+            <div className="mt-6 rounded-3xl p-4 bg-white border border-dashed border-ink/15 flex items-start gap-3 justify-between">
+              <div className="flex items-start gap-3 min-w-0">
+                <Lock className="size-4 text-ink/40 mt-0.5 shrink-0" />
+                <div className="min-w-0">
+                  <p className="t-title text-ink/75">Sign up to sync data</p>
+                  <p className="t-body-sm text-ink/50 mt-0.5">Back up your memories & rules securely.</p>
+                </div>
+              </div>
+              <Link
+                to="/auth"
+                className="px-4 py-2 bg-brand/10 hover:bg-brand/20 text-brand rounded-xl t-button text-xs font-bold shrink-0 self-center transition-colors"
+              >
+                Sign Up / In
+              </Link>
             </div>
           )}
 
-          <AccountActions />
+          <AccountActions user={user} onOpenDeleteWizard={() => setSheet("delete-wizard")} />
 
-          <div className="mt-6 flex items-center justify-center gap-1.5 t-meta text-ink/30">
+          <div className="mt-6 flex items-center justify-center gap-1.5 t-meta text-ink/30 mb-4 font-semibold">
             <BookOpen className="size-3" />
             MinDrop · v1.0
           </div>
+
+          <LegalFooter className="text-ink/40" />
         </div>
-        <div className="px-6 pt-6 pb-3">
-          <LegalFooter />
-        </div>
-        <div aria-hidden="true" className="h-40 shrink-0" />
+        <div aria-hidden="true" className="h-28 shrink-0" />
         <BottomTabs />
       </div>
 
@@ -287,6 +329,13 @@ function Settings() {
           <DigestAutomationSheet
             onClose={() => setSheet(null)}
             onLinkApi={() => setSheet("ai-keys")}
+          />
+        )}
+        {sheet === "delete-wizard" && (
+          <DeleteAccountWizardSheet
+            isPremium={isPremium}
+            onClose={() => setSheet(null)}
+            onDeleted={handleAccountDeletion}
           />
         )}
       </AnimatePresence>
@@ -1060,16 +1109,15 @@ function RegionCard() {
   );
 }
 
-function AccountActions() {
+function AccountActions({ user, onOpenDeleteWizard }: { user: any; onOpenDeleteWizard: () => void }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const deleteFn = useServerFn(deleteMyAccount);
-  const [busy, setBusy] = useState<null | "signout" | "delete">(null);
+  const [busy, setBusy] = useState<boolean>(false);
 
   async function signOut() {
     if (busy) return;
     if (!confirm("Sign out of this device?")) return;
-    setBusy("signout");
+    setBusy(true);
     try {
       await queryClient.cancelQueries();
       queryClient.clear();
@@ -1079,48 +1127,286 @@ function AccountActions() {
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Sign out failed");
     } finally {
-      setBusy(null);
-    }
-  }
-
-  async function deleteAccount() {
-    if (busy) return;
-    const confirm1 = confirm("Delete your account? Every memory, place, rule and setting will be permanently erased. This cannot be undone.");
-    if (!confirm1) return;
-    const confirm2 = prompt('Type DELETE (in capitals) to confirm.');
-    if (confirm2 !== "DELETE") { toast.error("Cancelled"); return; }
-    setBusy("delete");
-    try {
-      await deleteFn();
-      await queryClient.cancelQueries();
-      queryClient.clear();
-      await supabase.auth.signOut();
-      toast.success("Account deleted");
-      navigate({ to: "/", replace: true });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not delete account");
-    } finally {
-      setBusy(null);
+      setBusy(false);
     }
   }
 
   return (
     <div className="mt-6 space-y-2">
+      {user !== null && (
+        <button
+          onClick={signOut}
+          disabled={busy}
+          className="w-full flex items-center justify-center gap-2 t-button text-ink/70 hover:text-ink py-3 rounded-xl border border-ink/10 disabled:opacity-50"
+        >
+          <LogOut className="size-4" /> Sign out
+        </button>
+      )}
       <button
-        onClick={signOut}
-        disabled={!!busy}
-        className="w-full flex items-center justify-center gap-2 t-button text-ink/70 hover:text-ink py-3 rounded-xl border border-ink/10 disabled:opacity-50"
-      >
-        <LogOut className="size-4" /> Sign out
-      </button>
-      <button
-        onClick={deleteAccount}
-        disabled={!!busy}
+        onClick={onOpenDeleteWizard}
+        disabled={busy}
         className="w-full flex items-center justify-center gap-2 t-button text-red-600 hover:bg-red-50 py-3 rounded-xl disabled:opacity-50"
       >
         <Trash2 className="size-4" /> Delete account
       </button>
     </div>
+  );
+}
+
+function DeleteAccountWizardSheet({
+  isPremium,
+  onClose,
+  onDeleted
+}: {
+  isPremium: boolean;
+  onClose: () => void;
+  onDeleted: () => Promise<void>;
+}) {
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [reason, setReason] = useState<string>("");
+  const [deleteConfirm, setDeleteConfirm] = useState<string>("");
+  const [busy, setBusy] = useState(false);
+
+  // If premium, we bypass step 3 (backup offer)
+  const totalSteps = isPremium ? 3 : 4;
+  const currentDisplayStep = step === 4 ? (isPremium ? 3 : 4) : step;
+
+  const reasons = [
+    "Changing my mobile device",
+    "Not using the app anymore",
+    "Privacy concerns / data removal",
+    "Other reason"
+  ];
+
+  async function handleFinalDelete() {
+    if (deleteConfirm !== "DELETE") {
+      toast.error("Type DELETE in capitals to confirm");
+      return;
+    }
+    setBusy(true);
+    try {
+      await onDeleted();
+      toast.success("Account deleted successfully");
+      onClose();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Deletion failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-ink/40 z-40" />
+      <motion.div
+        initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+        transition={{ type: "spring", damping: 28, stiffness: 280 }}
+        className="absolute inset-x-0 bottom-0 z-50 rounded-t-[2rem] bg-canvas border-t border-ink/10 max-h-[88%] overflow-y-auto flex flex-col text-ink"
+      >
+        {/* Header */}
+        <div className="sticky top-0 flex items-center justify-between px-5 py-3 bg-canvas border-b border-ink/5 z-10">
+          <div className="flex items-center">
+            {step > 1 && (
+              <button
+                onClick={() => {
+                  if (step === 4 && isPremium) setStep(2);
+                  else setStep((prev) => (prev - 1) as any);
+                }}
+                className="size-8 rounded-full grid place-items-center hover:bg-ink/5 mr-2"
+                aria-label="Back"
+              >
+                <ChevronLeft className="size-4 text-ink/70" />
+              </button>
+            )}
+            <span className="t-eyebrow text-ink/70">Delete Account</span>
+          </div>
+          <button onClick={onClose} className="size-8 rounded-full grid place-items-center hover:bg-ink/5" aria-label="Close">
+            <X className="size-4" />
+          </button>
+        </div>
+
+        {/* Stepper progress indicator */}
+        <div className="flex gap-1.5 px-6 pt-5">
+          {Array.from({ length: totalSteps }).map((_, i) => {
+            const num = i + 1;
+            const isFilled = num <= currentDisplayStep;
+            return (
+              <div
+                key={num}
+                className="h-1 flex-1 rounded-full transition-all duration-300"
+                style={{
+                  backgroundColor: isFilled ? "#DC2626" : "color-mix(in oklab, var(--color-ink) 10%, transparent)"
+                }}
+              />
+            );
+          })}
+        </div>
+
+        <div className="px-6 py-6 overflow-y-auto flex-1">
+          {/* STEP 1: Reason Selection */}
+          {step === 1 && (
+            <div className="space-y-5">
+              <div className="size-14 rounded-2xl bg-red-50 grid place-items-center mb-1">
+                <Trash2 className="size-7 text-red-600" />
+              </div>
+              <h1 className="t-display mb-1 text-red-600">Why delete your account?</h1>
+              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
+                We're sorry to see you go. Please tell us why you are requesting account deletion.
+              </p>
+              
+              <div className="space-y-2">
+                {reasons.map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setReason(r)}
+                    className={`w-full p-4 rounded-2xl border text-left transition-all t-body-sm font-medium ${
+                      reason === r
+                        ? "border-red-600 bg-red-50/30 text-ink shadow-sm"
+                        : "border-ink/10 bg-white text-ink/75 hover:bg-ink/[0.02]"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+
+              <div className="pt-4">
+                <button
+                  type="button"
+                  disabled={!reason}
+                  onClick={() => setStep(2)}
+                  className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-2xl t-button text-center font-bold disabled:opacity-50 transition-all shadow-sm"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2: Data Impact Warning */}
+          {step === 2 && (
+            <div className="space-y-5">
+              <div className="size-14 rounded-2xl bg-red-50 grid place-items-center mb-1">
+                <ShieldCheck className="size-7 text-red-600" />
+              </div>
+              <h1 className="t-display mb-1 text-red-600">What will be deleted.</h1>
+              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
+                Confirming deletion will erase all user data permanently. This cannot be undone.
+              </p>
+
+              <div className="p-5 rounded-2xl bg-red-50/20 border border-red-100 text-red-800 space-y-3.5 t-body-sm">
+                <div className="flex items-start gap-2.5">
+                  <span className="font-bold text-red-600">✕</span>
+                  <span>All your local memories, dates, & uploaded photos.</span>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <span className="font-bold text-red-600">✕</span>
+                  <span>AI digest configuration, keyring setup, & notification schedules.</span>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <span className="font-bold text-red-600">✕</span>
+                  <span>All synced settings & backup histories from our cloud servers.</span>
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isPremium) setStep(4); // Skip backup offer for premium
+                    else setStep(3);
+                  }}
+                  className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-2xl t-button text-center font-bold transition-all shadow-sm"
+                >
+                  Understand & Continue
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3: Backup Proposal (Free Users Only) */}
+          {step === 3 && !isPremium && (
+            <div className="space-y-5">
+              <div className="size-14 rounded-2xl bg-[#FFF9E6] grid place-items-center mb-1">
+                <Cloud className="size-7 text-[#FFB000]" />
+              </div>
+              <h1 className="t-display mb-1 text-ink">Keep your memories safe.</h1>
+              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
+                Before erasing everything, consider backing up your data first so you can restore it if you change devices.
+              </p>
+
+              <div className="p-5 rounded-2xl bg-[#FFF9E6]/30 border border-[#FFEBAA] space-y-3 t-body-sm text-ink/80 leading-relaxed">
+                <p>
+                  Automatic backups to Google Drive are a premium feature. By upgrading, you can easily save your entire database safely.
+                </p>
+                <p className="font-semibold text-brand">
+                  Would you like to upgrade to Premium to secure your backup first?
+                </p>
+              </div>
+
+              <div className="pt-4 flex flex-col gap-3">
+                <Link
+                  to="/paywall"
+                  onClick={onClose}
+                  className="w-full py-3.5 bg-brand text-white rounded-2xl t-button text-center font-bold hover:bg-brand/90 transition-all shadow-sm"
+                >
+                  Become Paid User & Back Up ↗
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setStep(4)}
+                  className="w-full py-3 t-button text-ink/50 hover:text-ink/80 text-center transition-colors"
+                >
+                  Skip & Continue Deleting
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4: Final Confirmation */}
+          {step === 4 && (
+            <div className="space-y-5">
+              <div className="size-14 rounded-2xl bg-red-100 grid place-items-center mb-1">
+                <Trash2 className="size-7 text-red-700" />
+              </div>
+              <h1 className="t-display mb-1 text-red-700 font-extrabold">Final confirmation.</h1>
+              <p className="t-meta text-ink/75 mb-4 leading-relaxed">
+                To confirm deletion, please type <span className="font-bold text-red-600">DELETE</span> in the input field below.
+              </p>
+
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Type DELETE to confirm"
+                  value={deleteConfirm}
+                  onChange={(e) => setDeleteConfirm(e.target.value)}
+                  className="w-full px-4 py-3.5 rounded-xl border border-red-200 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 bg-canvas text-ink t-body font-bold transition-all"
+                />
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-3.5 rounded-2xl t-button border border-ink/10 text-ink/70 hover:bg-ink/[0.02] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={deleteConfirm !== "DELETE" || busy}
+                  onClick={handleFinalDelete}
+                  className="flex-1 py-3.5 bg-red-600 hover:bg-red-700 disabled:bg-red-600/50 text-white rounded-2xl t-button text-center font-bold transition-all shadow-sm"
+                >
+                  {busy ? "Deleting..." : "Permanently Delete Everything"}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </>
   );
 }
 
