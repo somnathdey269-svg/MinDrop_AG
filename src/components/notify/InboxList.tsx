@@ -118,25 +118,23 @@ export function InboxList({
                   </p>
                 </button>
 
-                <div className="flex flex-col items-stretch gap-1.5 shrink-0 self-center">
-                  <button
-                    onClick={() => onCreateRule(n)}
-                    aria-label="Create rule from this"
-                    className="t-button text-[10px] font-bold h-8 pl-3 pr-3.5 rounded-xl border transition-all flex items-center justify-center gap-1.5"
-                    style={{ background: tint(8), borderColor: tint(22), color: accent }}
-                    title="Create rule from this"
-                  >
-                    <Sparkles className="size-3" />
-                    Rule
-                  </button>
+                <div className="flex items-center gap-2 shrink-0 self-center">
                   <button
                     onClick={() => onOpen(n)}
                     aria-label="View notification"
-                    className="t-button text-[10px] font-bold h-8 pl-3 pr-3.5 rounded-xl border border-ink/10 bg-canvas text-ink/70 hover:bg-ink/5 transition-all flex items-center justify-center gap-1.5"
+                    className="size-8 rounded-xl border border-ink/10 bg-canvas text-ink/70 hover:bg-ink/5 transition-all flex items-center justify-center shrink-0"
                     title="View notification"
                   >
-                    <Eye className="size-3" />
-                    View
+                    <Eye className="size-4" />
+                  </button>
+                  <button
+                    onClick={() => onCreateRule(n)}
+                    aria-label="Create rule from this"
+                    className="size-8 rounded-xl border transition-all flex items-center justify-center shrink-0"
+                    style={{ background: tint(8), borderColor: tint(22), color: accent }}
+                    title="Create rule from this"
+                  >
+                    <Sparkles className="size-4" />
                   </button>
                 </div>
               </div>
