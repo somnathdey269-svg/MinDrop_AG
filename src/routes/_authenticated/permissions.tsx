@@ -10,6 +10,7 @@ import { isNative as isNativeRec } from "@/lib/memoryos/recorder";
 import { AlarmsBridge } from "@/lib/alarms/bridge";
 import { PlacesBridge } from "@/lib/places/bridge";
 import { NotifyBridge } from "@/lib/notify/bridge";
+import { Switch } from "@/components/ui/switch";
 
 
 export const Route = createFileRoute("/_authenticated/permissions")({
@@ -29,22 +30,12 @@ const isNative = () => Capacitor?.isNativePlatform?.() === true;
 const isAndroid = () => Capacitor?.getPlatform?.() === "android";
 
 function Row({
-  icon: Icon, title, body, granted, status, onAction, actionOverride,
+  icon: Icon, title, body, granted, onAction,
 }: {
   icon: typeof Bell; title: string; body: string;
-  granted: boolean; status: Status;
+  granted: boolean;
   onAction: () => void | Promise<void>;
-  actionOverride?: string;
 }) {
-  const blocked = status === "denied";
-  const label = actionOverride ?? (granted ? "Granted" : blocked ? "Fix" : "Grant");
-  const tone = actionOverride
-    ? "bg-ink text-canvas"
-    : granted
-      ? "bg-brand/15 text-brand"
-      : blocked
-        ? "bg-[#B8521B]/10 text-[#B8521B]"
-        : "bg-ink text-canvas";
   return (
     <button
       type="button"
@@ -59,9 +50,9 @@ function Row({
           <p className="t-body-sm">{title}</p>
           <p className="t-meta text-ink/70 mt-0.5">{body}</p>
         </div>
-        <span className={`shrink-0 t-button px-2.5 py-1.5 rounded-lg ${tone}`}>
-          {label}
-        </span>
+        <div className="shrink-0 pointer-events-none">
+          <Switch checked={granted} />
+        </div>
       </div>
     </button>
   );
@@ -204,7 +195,6 @@ function Permissions() {
             title="Notifications"
             body="So MinDrop can post reminders and alarms."
             granted={p.notifications}
-            status={notifStatus}
             onAction={grantNotif}
           />
 
@@ -215,8 +205,6 @@ function Permissions() {
               title="Exact alarms"
               body="Fire at the exact minute — even in Doze."
               granted={exactAlarm}
-              status={exactAlarm ? "granted" : "denied"}
-              actionOverride={exactAlarm ? "Granted" : "Open"}
               onAction={async () => { await AlarmsBridge.openExactAlarmSettings(); }}
             />
           )}
@@ -227,8 +215,6 @@ function Permissions() {
               title="Ignore battery optimization"
               body="Prevents Android from silencing reminders."
               granted={battOk}
-              status={battOk ? "granted" : "denied"}
-              actionOverride={battOk ? "Granted" : "Open"}
               onAction={async () => { await AlarmsBridge.openBatteryOptimizationSettings(); }}
             />
           )}
@@ -239,8 +225,6 @@ function Permissions() {
               title="Location (Allow all the time)"
               body="Needed for place-based reminders while MinDrop is closed."
               granted={locFg && locBg}
-              status={locFg && locBg ? "granted" : locFg ? "prompt" : "unknown"}
-              actionOverride={locFg && locBg ? "Granted" : "Grant"}
               onAction={grantLocation}
             />
           ) : (
@@ -249,7 +233,6 @@ function Permissions() {
               title="Location"
               body="Fire reminders when you arrive at a saved place."
               granted={locFg}
-              status={locFg ? "granted" : "prompt"}
               onAction={grantLocation}
             />
           )}
@@ -260,8 +243,6 @@ function Permissions() {
               title="Notification access"
               body="So MinDrop can read notifications from other apps and act on them."
               granted={notifAccess}
-              status={notifAccess ? "granted" : "unknown"}
-              actionOverride={notifAccess ? "Granted" : "Open"}
               onAction={async () => { await NotifyBridge.openPermissionSettings(); }}
             />
           )}
@@ -271,7 +252,6 @@ function Permissions() {
             title="Microphone"
             body="Capture a thought hands-free with a voice note."
             granted={p.mic}
-            status={micStatus}
             onAction={grantMic}
           />
         </div>

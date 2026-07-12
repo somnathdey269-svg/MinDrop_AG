@@ -12,8 +12,8 @@ import { reverseGeocode } from "@/lib/places/geocode";
 import type { Place } from "@/lib/places/types";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
 import { openPaywall, useTier } from "@/lib/tier";
-import { SmartPermissionPrompt } from "@/components/permissions/SmartPermissionPrompt";
-import { readPermissions, shouldPrompt } from "@/lib/permissions/state";
+import { SmartPermissionPrompt, type PromptKind } from "@/components/permissions/SmartPermissionPrompt";
+import { readPermissions, shouldPrompt, isAndroid } from "@/lib/permissions/state";
 
 export const Route = createFileRoute("/_authenticated/places/new")({
   head: () => ({
@@ -42,16 +42,12 @@ function NewPlace() {
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState("📍");
   const [error, setError] = useState<string | null>(null);
-  const [permPrompt, setPermPrompt] = useState(false);
+  const [pendingPerms, setPendingPerms] = useState<PromptKind[]>([]);
+  const [pendingPlace, setPendingPlace] = useState<Place | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      try {
-        const snap = await readPermissions();
-        const need = snap.locationFg !== "granted";
-        if (need && shouldPrompt("location")) { if (!cancelled) setPermPrompt(true); return; }
-      } catch {}
       if (!("geolocation" in navigator)) { setLocating(false); return; }
       navigator.geolocation.getCurrentPosition(
         (p) => { if (!cancelled) { setLat(p.coords.latitude); setLng(p.coords.longitude); setLocating(false); } },
@@ -74,10 +70,16 @@ function NewPlace() {
   const canSave = useMemo(() => nameSchema.safeParse(name).success, [name]);
   const { tier, limits } = useTier();
 
-  const save = () => {
+  const finalizeSave = (p: Place) => {
+    upsert(p);
+    navigate({ to: "/places", search: { tab: "saved" } as any });
+  };
+
+  const save = async () => {
     const nameRes = nameSchema.safeParse(name);
     if (!nameRes.success) { setError(nameRes.error.issues[0]?.message ?? "Invalid name"); return; }
-    if (readPlaces().length >= limits.places) {
+    const currentPlaces = readPlaces();
+    if (currentPlaces.length >= limits.places) {
       openPaywall({ reason: "places", tier, limit: limits.places });
       return;
     }
@@ -95,8 +97,35 @@ function NewPlace() {
       trigger: "enter",
       frequency: "always",
     };
-    upsert(place);
-    navigate({ to: "/places", search: { tab: "saved" } as any });
+
+    // Permission checks JIT on first place save
+    const needed: PromptKind[] = [];
+    try {
+      const snap = await readPermissions();
+      const isFirstPlace = currentPlaces.length === 0;
+
+      // 4. Location permission check
+      if (isFirstPlace && (snap.locationFg !== "granted" || (isAndroid() && snap.locationBg !== "granted"))) {
+        needed.push("location");
+      }
+
+      // 3, 5, 6. First place checks: battery, notification-access, mic
+      if (isFirstPlace) {
+        if (snap.battery !== "granted") needed.push("battery");
+        if (snap.notificationAccess !== "granted" && isAndroid()) needed.push("notification-access");
+        if (snap.mic !== "granted") needed.push("mic");
+      }
+    } catch (e) {
+      console.warn("Failed to check JIT permissions on place save:", e);
+    }
+
+    if (needed.length > 0) {
+      setPendingPlace(place);
+      setPendingPerms(needed);
+      return;
+    }
+
+    finalizeSave(place);
   };
 
   const useMyLocation = () => {
@@ -112,19 +141,19 @@ function NewPlace() {
   return (
     <PhoneFrame>
       <SmartPermissionPrompt
-        kind="location"
-        open={permPrompt}
-        onResolved={(ok) => {
-          setPermPrompt(false);
-          if (ok && "geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-              (p) => { setLat(p.coords.latitude); setLng(p.coords.longitude); setLocating(false); },
-              () => setLocating(false),
-              { enableHighAccuracy: true, timeout: 8_000 },
-            );
-          } else {
-            setLocating(false);
-          }
+        kind={pendingPerms[0] ?? "location"}
+        open={pendingPerms.length > 0}
+        onResolved={() => {
+          setPendingPerms((prev) => {
+            const nextList = prev.slice(1);
+            if (nextList.length === 0) {
+              if (pendingPlace) {
+                finalizeSave(pendingPlace);
+                setPendingPlace(null);
+              }
+            }
+            return nextList;
+          });
         }}
       />
       <div className="flex flex-col min-h-screen md:min-h-[calc(100vh-3rem)]">

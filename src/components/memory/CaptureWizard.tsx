@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Bell, AlarmClock, ChevronLeft, ArrowRight, Check, X, ImagePlus, Trash2, Mic, Square, Play, Pause, PencilLine, Repeat, CalendarRange } from "lucide-react";
-import { useCategories, type Category } from "@/lib/memoryos/store";
+import { useCategories, type Category, useMemories } from "@/lib/memoryos/store";
 import { usePersonalityDefaults } from "@/lib/memoryos/personality";
 import type { Pack } from "@/lib/memoryos/packs";
 import { useKeyboardInset } from "@/hooks/useKeyboardInset";
 import { VoicePlayer } from "./VoicePlayer";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
-import { SmartPermissionPrompt } from "@/components/permissions/SmartPermissionPrompt";
+import { SmartPermissionPrompt, type PromptKind } from "@/components/permissions/SmartPermissionPrompt";
 import { isNative as isNativePerm, readPermissions, shouldPrompt } from "@/lib/permissions/state";
 import { AlarmsBridge, type AlarmsStatus } from "@/lib/alarms/bridge";
 
@@ -82,11 +82,12 @@ export function CaptureWizard({ open, onClose, plan, onUpgrade, onSubmit, initia
  const pDef = usePersonalityDefaults();
  const kb = useKeyboardInset();
 
- const [captureMode, setCaptureMode] = useState<"note" | "recording">("note");
- const [step, setStep] = useState(0);
- const [upgradePrompt, setUpgradePrompt] = useState<{ label: string; emoji: string } | null>(null);
- const [permPromptOpen, setPermPromptOpen] = useState(false);
- const pendingPayloadRef = useRef<CaptureSubmit | null>(null);
+  const [captureMode, setCaptureMode] = useState<"note" | "recording">("note");
+  const [step, setStep] = useState(0);
+  const [upgradePrompt, setUpgradePrompt] = useState<{ label: string; emoji: string } | null>(null);
+  const { list: memoriesAll } = useMemories();
+  const [pendingPerms, setPendingPerms] = useState<PromptKind[]>([]);
+  const [pendingPayload, setPendingPayload] = useState<CaptureSubmit | null>(null);
 
  // Steps for the current mode
  const activeSteps: StepKey[] = useMemo(() => {
@@ -238,26 +239,42 @@ export function CaptureWizard({ open, onClose, plan, onUpgrade, onSubmit, initia
  };
 
  const next = async () => {
- if (!canNext()) return;
- if (step === LAST) {
- const payload = buildPayload();
- // JIT: if scheduled reminder needs notifications and we don't have them,
- // prompt once before saving. Non-blocking on decision — we still save.
- if (payload.dueAt && isNativePerm() && shouldPrompt("notifications")) {
- try {
- const snap = await readPermissions();
- if (snap.notifications !== "granted") {
- pendingPayloadRef.current = payload;
- setPermPromptOpen(true);
- return;
- }
- } catch { /* ignore — fall through and save */ }
- }
- finalizeSubmit(payload);
- return;
- }
- setStep((s) => Math.min(LAST, s + 1));
- };
+    if (!canNext()) return;
+    if (step === LAST) {
+      const payload = buildPayload();
+      const needed: PromptKind[] = [];
+      try {
+        const snap = await readPermissions();
+        // 1 & 2. Notification / Exact Alarm based on notify setting
+        if (payload.dueAt) {
+          if (notify === "notification" && snap.notifications !== "granted") {
+            needed.push("notifications");
+          } else if (notify === "alarm" && snap.exactAlarm !== "granted") {
+            needed.push("exact-alarm");
+          }
+        }
+        // 3, 5, 6. First reminder checks: battery, notification-access, mic
+        const isFirstReminder = memoriesAll.length === 0;
+        if (isFirstReminder) {
+          if (snap.battery !== "granted") needed.push("battery");
+          if (snap.notificationAccess !== "granted") needed.push("notification-access");
+          if (snap.mic !== "granted") needed.push("mic");
+        }
+      } catch (e) {
+        console.warn("Failed to check JIT permissions on save:", e);
+      }
+
+      if (needed.length > 0) {
+        setPendingPayload(payload);
+        setPendingPerms(needed);
+        return;
+      }
+
+      finalizeSubmit(payload);
+      return;
+    }
+    setStep((s) => Math.min(LAST, s + 1));
+  };
  const back = () => setStep((s) => Math.max(0, s - 1));
 
  const advanceIf = (currentKey: StepKey) => {
@@ -780,14 +797,20 @@ export function CaptureWizard({ open, onClose, plan, onUpgrade, onSubmit, initia
  )}
   </AnimatePresence>
   <SmartPermissionPrompt
-   kind="notifications"
-   open={permPromptOpen}
-   onResolved={() => {
-    setPermPromptOpen(false);
-    const p = pendingPayloadRef.current;
-    pendingPayloadRef.current = null;
-    if (p) finalizeSubmit(p);
-   }}
+    kind={pendingPerms[0] ?? "notifications"}
+    open={pendingPerms.length > 0}
+    onResolved={() => {
+      setPendingPerms((prev) => {
+        const nextList = prev.slice(1);
+        if (nextList.length === 0) {
+          if (pendingPayload) {
+            finalizeSubmit(pendingPayload);
+            setPendingPayload(null);
+          }
+        }
+        return nextList;
+      });
+    }}
   />
  </>
  );

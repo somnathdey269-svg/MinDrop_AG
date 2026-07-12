@@ -8,7 +8,14 @@ Coordinates Android/iOS system level permission checks and alerts (mic, location
 * `src/lib/permissions/`
 
 ## 3. Rules & Gotchas
+* Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
 * Request permission dialogs dynamically; never perform operations without active authorization checks.
+* The Settings Permissions screen uses visual `Switch` toggles for all permissions. Clicking a row triggers the request sequence if denied/not granted, or opens native settings if already granted (since permissions cannot be programmatically revoked).
+* Just-In-Time (JIT) permission prompts queue up sequentially and block actions:
+  - **Notification**: Prompted when saving a reminder in Later or rules in Notify/Places if "notification" is chosen as the delivery channel.
+  - **Exact Alarms**: Prompted when saving a reminder in Later or rules in Notify/Places if "alarm" is chosen as the delivery channel.
+  - **Location**: Prompted when saving the user's first place.
+  - **Ignore Battery Optimisation**, **Notification Access**, and **Microphone**: Prompted when the user performs their first configuration action (first reminder, first rule, first linked notification, or first place).
 
 ## 4. Version & Modification Ledger
 - **2026-07-11 22:30:00** | System Initializer
@@ -30,3 +37,5 @@ User can always directly go to setting-permission and set the same anytime irres
 Can you check the existing rules and rectify the same and at the end of summary give me tabel of how if worked earlier and after changes
 
 Also ensure all my 20 agent should work properly and the MD created for existing work is checked and ensure its updated after the changes (if any) and at th summary you include this also'
+- **2026-07-12 09:49:24** | Self-Healed Learning Loop
+  * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.

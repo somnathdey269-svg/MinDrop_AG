@@ -8,6 +8,7 @@ Coordinates local alarm configurations, push notifications, and task triggers in
 * Android AlarmManager bridges
 
 ## 3. Rules & Gotchas
+* Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
 * Ensure alarm notifications have unique channel IDs.
 * Check that system alarms check permissions before firing intents.
 
@@ -31,3 +32,5 @@ User can always directly go to setting-permission and set the same anytime irres
 Can you check the existing rules and rectify the same and at the end of summary give me tabel of how if worked earlier and after changes
 
 Also ensure all my 20 agent should work properly and the MD created for existing work is checked and ensure its updated after the changes (if any) and at th summary you include this also'
+- **2026-07-12 09:49:24** | Self-Healed Learning Loop
+  * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.

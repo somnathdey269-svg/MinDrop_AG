@@ -25,8 +25,8 @@ import type { CapturedNotification, NotifyRule } from "@/lib/notify/types";
 import { useOnboarding } from "@/lib/memoryos/store";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
 import { openPaywall, useTier } from "@/lib/tier";
-import { SmartPermissionPrompt } from "@/components/permissions/SmartPermissionPrompt";
-import { shouldPrompt } from "@/lib/permissions/state";
+import { SmartPermissionPrompt, type PromptKind } from "@/components/permissions/SmartPermissionPrompt";
+import { shouldPrompt, readPermissions } from "@/lib/permissions/state";
 
 export const Route = createFileRoute("/_authenticated/notify")({
  validateSearch: (s: Record<string, unknown>) => ({
@@ -59,13 +59,44 @@ function NotifyPage() {
  const { list: inbox } = useInbox();
  const { list: rules, upsert: upsertRuleRaw, remove: removeRule, setStatus: setRuleStatus, purge, toggle } = useRules();
  const { tier, limits } = useTier();
- const upsertRule = (rule: NotifyRule) => {
+ const [pendingPerms, setPendingPerms] = useState<PromptKind[]>([]);
+ const [pendingRule, setPendingRule] = useState<NotifyRule | null>(null);
+
+ const upsertRule = async (rule: NotifyRule) => {
    const isNew = !rules.some((r) => r.id === rule.id);
    const activeCount = rules.filter((r) => (r.status ?? "active") === "active").length;
    if (isNew && activeCount >= limits.notifyRules) {
      openPaywall({ reason: "notify", tier, limit: limits.notifyRules });
      return;
    }
+
+   const needed: PromptKind[] = [];
+   try {
+     const snap = await readPermissions();
+     // 1 & 2. Rule delivery JIT
+     if (rule.delivery === "alarm") {
+       if (snap.exactAlarm !== "granted") needed.push("exact-alarm");
+     } else {
+       if (snap.notifications !== "granted") needed.push("notifications");
+     }
+
+     // 3, 5, 6. First rule JIT checks
+     const isFirstRule = rules.length === 0;
+     if (isFirstRule) {
+       if (snap.battery !== "granted") needed.push("battery");
+       if (snap.notificationAccess !== "granted" && NotifyBridge.isNative()) needed.push("notification-access");
+       if (snap.mic !== "granted") needed.push("mic");
+     }
+   } catch (e) {
+     console.warn("Failed to check JIT permissions on rule save:", e);
+   }
+
+   if (needed.length > 0) {
+     setPendingRule(rule);
+     setPendingPerms(needed);
+     return;
+   }
+
    upsertRuleRaw(rule);
  };
 
@@ -121,23 +152,42 @@ function NotifyPage() {
 
  const knownApps = useMemo(() => knownAppsFromInbox(inbox), [inbox]);
 
- const [permPrompt, setPermPrompt] = useState(false);
  const [pendingPrefill, setPendingPrefill] = useState<Partial<CapturedNotification> | undefined>(undefined);
  const navigate = useNavigate();
- const openNew = (pf?: Partial<CapturedNotification>) => {
- if (state.plan === "free" && activeRules.length >= 3) {
- navigate({ to: "/paywall" });
- return;
- }
- // JIT: ask for notification-access before the first rule can do anything.
- if (NotifyBridge.isNative() && granted === false && shouldPrompt("notification-access")) {
-   setPendingPrefill(pf);
-   setPermPrompt(true);
-   return;
- }
- setEditingRule(null);
- setPrefill(pf);
- setEditorOpen(true);
+ const openNew = async (pf?: Partial<CapturedNotification>) => {
+   if (state.plan === "free" && activeRules.length >= 3) {
+     navigate({ to: "/paywall" });
+     return;
+   }
+   // JIT: ask for first rule setup permissions
+   const isFirstRule = rules.length === 0;
+   if (isFirstRule) {
+     try {
+       const snap = await readPermissions();
+       const needed: PromptKind[] = [];
+       if (snap.battery !== "granted") needed.push("battery");
+       if (snap.notificationAccess !== "granted" && NotifyBridge.isNative()) needed.push("notification-access");
+       if (snap.mic !== "granted") needed.push("mic");
+
+       if (needed.length > 0) {
+         setPendingPrefill(pf);
+         setPendingPerms(needed);
+         return;
+       }
+     } catch (e) {
+       console.warn("Failed to check first-rule JIT permissions:", e);
+     }
+   } else {
+     // JIT check fallback for single linked notification access if not first rule
+     if (NotifyBridge.isNative() && granted === false && shouldPrompt("notification-access")) {
+       setPendingPrefill(pf);
+       setPendingPerms(["notification-access"]);
+       return;
+     }
+   }
+   setEditingRule(null);
+   setPrefill(pf);
+   setEditorOpen(true);
  };
  const openEdit = (r: NotifyRule) => {
  setEditingRule(r);
@@ -175,17 +225,25 @@ function NotifyPage() {
  return (
  <PhoneFrame>
  <SmartPermissionPrompt
-   kind="notification-access"
-   open={permPrompt}
-   onResolved={(ok) => {
-     setPermPrompt(false);
-     NotifyBridge.hasPermission().then(setGranted).catch(() => {});
-     if (ok) {
-       setEditingRule(null);
-       setPrefill(pendingPrefill);
-       setEditorOpen(true);
-     }
-     setPendingPrefill(undefined);
+   kind={pendingPerms[0] ?? "notification-access"}
+   open={pendingPerms.length > 0}
+   onResolved={() => {
+     setPendingPerms((prev) => {
+       const nextList = prev.slice(1);
+       if (nextList.length === 0) {
+         NotifyBridge.hasPermission().then(setGranted).catch(() => {});
+         if (pendingRule) {
+           upsertRuleRaw(pendingRule);
+           setPendingRule(null);
+         } else {
+           setEditingRule(null);
+           setPrefill(pendingPrefill);
+           setEditorOpen(true);
+           setPendingPrefill(undefined);
+         }
+       }
+       return nextList;
+     });
    }}
  />
  <div

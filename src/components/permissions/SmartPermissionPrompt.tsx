@@ -13,7 +13,7 @@ import { AlarmsBridge } from "@/lib/alarms/bridge";
 import { isAndroid, isNative, markPrompted, readPermissions } from "@/lib/permissions/state";
 import { useOnboarding } from "@/lib/memoryos/store";
 
-export type PromptKind = "notifications" | "location" | "notification-access";
+export type PromptKind = "notifications" | "location" | "notification-access" | "exact-alarm" | "battery" | "mic";
 
 const COPY: Record<PromptKind, { title: string; body: string; cta: string }> = {
   notifications: {
@@ -30,6 +30,21 @@ const COPY: Record<PromptKind, { title: string; body: string; cta: string }> = {
     title: "Filter what matters.",
     body: "Notify rules match the notifications on your phone. Matching happens on-device; nothing is uploaded.",
     cta: "Open Settings",
+  },
+  "exact-alarm": {
+    title: "Precise timing.",
+    body: "MinDrop needs exact alarm permission to ring at the exact minute you set, even when your phone is in sleep mode.",
+    cta: "Allow alarms",
+  },
+  battery: {
+    title: "Ignore battery limits.",
+    body: "MinDrop needs to run in the background without battery restrictions so reminders don't get delayed.",
+    cta: "Allow background",
+  },
+  mic: {
+    title: "Microphone access.",
+    body: "Allow microphone access to record voice notes and capture your thoughts hands-free.",
+    cta: "Allow microphone",
   },
 };
 
@@ -79,6 +94,36 @@ export function SmartPermissionPrompt({
         // Notification-listener has no runtime request API — deep-link only.
         await NotifyBridge.openPermissionSettings();
         granted = await NotifyBridge.hasPermission();
+      } else if (kind === "exact-alarm") {
+        if (isAndroid()) {
+          await AlarmsBridge.openExactAlarmSettings();
+          const snap = await readPermissions();
+          granted = snap.exactAlarm === "granted";
+        } else {
+          granted = true;
+        }
+      } else if (kind === "battery") {
+        if (isAndroid()) {
+          await AlarmsBridge.openBatteryOptimizationSettings();
+          const snap = await readPermissions();
+          granted = snap.battery === "granted";
+        } else {
+          granted = true;
+        }
+      } else if (kind === "mic") {
+        try {
+          if (isNative()) {
+            const mod = await import("capacitor-voice-recorder");
+            const has = await mod.VoiceRecorder.hasAudioRecordingPermission();
+            granted = has.value || (await mod.VoiceRecorder.requestAudioRecordingPermission()).value;
+          } else {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach((t) => t.stop());
+            granted = true;
+          }
+        } catch {
+          granted = false;
+        }
       }
     } catch { /* swallow — treat as not granted */ }
 

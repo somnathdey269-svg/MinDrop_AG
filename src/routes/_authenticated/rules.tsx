@@ -9,6 +9,9 @@ import { GlobalCaptureBar } from "@/components/memory/GlobalCaptureBar";
 import { BackHeader } from "@/components/layout/BackHeader";
 import { Switch } from "@/components/ui/switch";
 import { useRulesCatalog, useUserRules, useSuggestedRules, type RuleDef } from "@/lib/memoryos/rules";
+import { SmartPermissionPrompt, type PromptKind } from "@/components/permissions/SmartPermissionPrompt";
+import { readPermissions, isAndroid } from "@/lib/permissions/state";
+import { NotifyBridge } from "@/lib/notify/bridge";
 
 export const Route = createFileRoute("/_authenticated/rules")({ component: () => <FeatureGate slug="rules"><RulesPage /></FeatureGate> });
 
@@ -20,10 +23,38 @@ const CATEGORY_TINT: Record<string, string> = {
 };
 
 function RulesPage() {
- const { catalog, hydrated } = useRulesCatalog();
- const { isOn, toggle, resetRule, state } = useUserRules();
- const suggested = useSuggestedRules();
- const [showAdvanced, setShowAdvanced] = useState(false);
+  const { catalog, hydrated } = useRulesCatalog();
+  const { isOn, toggle, resetRule, state } = useUserRules();
+  const suggested = useSuggestedRules();
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [pendingPerms, setPendingPerms] = useState<PromptKind[]>([]);
+  const [pendingRuleToggle, setPendingRuleToggle] = useState<RuleDef | null>(null);
+
+  const handleToggle = async (r: RuleDef) => {
+    const turningOn = !isOn(r);
+    if (turningOn) {
+      const activeCount = Object.values(state.enabled).filter(Boolean).length;
+      const isFirstRule = activeCount === 0;
+      if (isFirstRule) {
+        const needed: PromptKind[] = [];
+        try {
+          const snap = await readPermissions();
+          if (snap.battery !== "granted") needed.push("battery");
+          if (snap.notificationAccess !== "granted" && NotifyBridge.isNative()) needed.push("notification-access");
+          if (snap.mic !== "granted") needed.push("mic");
+        } catch (e) {
+          console.warn("Failed to check JIT permissions on rule toggle:", e);
+        }
+
+        if (needed.length > 0) {
+          setPendingRuleToggle(r);
+          setPendingPerms(needed);
+          return;
+        }
+      }
+    }
+    toggle(r);
+  };
 
  const groups = useMemo(() => {
  const by: Record<string, RuleDef[]> = {};
@@ -63,7 +94,7 @@ function RulesPage() {
  {suggested.map((r) => (
  <div key={r.id} className="bg-white rounded-xl p-3 flex items-start gap-3 border border-ink/5">
  <p className="t-body flex-1 text-ink">{r.sentence}</p>
- <button onClick={() => toggle(r)}
+ <button onClick={() => handleToggle(r)}
  className="t-eyebrow shrink-0 inline-flex items-center gap-1.5 bg-ink text-canvas px-3 py-1.5 rounded-full">
  <Plus className="size-3" /> Add
  </button>
@@ -94,7 +125,7 @@ function RulesPage() {
  >
  <div className="flex items-start gap-3">
  <p className="t-body flex-1 text-ink">{r.sentence}</p>
- <Switch checked={on} onCheckedChange={() => toggle(r)} aria-label={on ? "Turn off" : "Turn on"} />
+ <Switch checked={on} onCheckedChange={() => handleToggle(r)} aria-label={on ? "Turn off" : "Turn on"} />
  </div>
  <div className="mt-2 flex items-center justify-between">
  <span className="t-eyebrow text-ink/70">
@@ -149,6 +180,22 @@ function RulesPage() {
  <GlobalCaptureBar />
  <BottomTabs />
  </div>
+ <SmartPermissionPrompt
+    kind={pendingPerms[0] ?? "notification-access"}
+    open={pendingPerms.length > 0}
+    onResolved={() => {
+      setPendingPerms((prev) => {
+        const nextList = prev.slice(1);
+        if (nextList.length === 0) {
+          if (pendingRuleToggle) {
+            toggle(pendingRuleToggle);
+            setPendingRuleToggle(null);
+          }
+        }
+        return nextList;
+      });
+    }}
+  />
  </PhoneFrame>
  );
 }
