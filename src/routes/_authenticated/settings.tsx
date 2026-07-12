@@ -93,7 +93,6 @@ function Settings() {
     { label: "Alarm & sound", hint: "Ringtone, vibration, snooze", icon: AlarmClock, to: "/alarm-sound", color: INDIA_BLUE },
     { label: "Backup & restore", hint: "Export or import JSON", icon: Download, onClick: () => setSheet("export"), color: INDIA_GREEN },
     { label: "Google Drive", hint: "Back up to your Drive", icon: Cloud, onClick: () => setSheet("drive"), color: INDIA_SAFFRON },
-    { label: "Diagnostics", hint: "Check permissions & storage", icon: Activity, to: "/diagnostics", color: INDIA_GREEN },
   ];
 
 
