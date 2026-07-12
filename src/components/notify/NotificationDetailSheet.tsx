@@ -76,13 +76,22 @@ export function NotificationDetailSheet({
               </div>
             </div>
 
-            <div className="px-5 pt-2 pb-4 overflow-y-auto flex-1">
-              <h2 className="t-display text-ink mb-2 break-words">
-                {n.title || "—"}
-              </h2>
-              <p className="t-body text-ink/85 whitespace-pre-wrap break-words">
-                {body || <span className="t-display text-ink/40">No message body</span>}
-              </p>
+            <div className="px-5 py-4 overflow-y-auto flex-1">
+              <div className="bg-white border border-ink/[0.06] rounded-[24px] p-5 shadow-sm space-y-4">
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-wider text-ink/40 font-bold mb-1">Subject / Header</p>
+                  <h3 className="text-base font-bold text-ink leading-snug break-words">
+                    {n.title || "—"}
+                  </h3>
+                </div>
+                <div className="h-px bg-ink/[0.06]" />
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-wider text-ink/40 font-bold mb-2">Message Content</p>
+                  <p className="text-ink/80 text-sm leading-relaxed whitespace-pre-wrap break-words select-text">
+                    {body || <span className="text-ink/30 italic">No message body</span>}
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="px-5 pt-3 pb-5 grid grid-cols-2 gap-3 border-t border-ink/5 bg-canvas">

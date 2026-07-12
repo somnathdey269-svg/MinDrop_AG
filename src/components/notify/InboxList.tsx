@@ -98,51 +98,32 @@ export function InboxList({
                   onPointerUp={() => endPress(n)}
                   onPointerCancel={cancelPress}
                   onContextMenu={(e) => e.preventDefault()}
-                  className="flex gap-3 flex-1 text-left min-w-0 select-none touch-manipulation"
+                  className="flex-1 text-left min-w-0 select-none touch-manipulation py-0.5"
                   aria-label={`Open notification from ${n.appName} — ${n.title}. Long-press to jump to app.`}
                 >
-                  {/* Avatar: monogram over the section accent only */}
-                  <span className="relative shrink-0">
-                    <span
-                      className="t-display size-11 rounded-2xl text-canvas grid place-items-center shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_2px_8px_-2px_rgba(0,0,0,0.25)] ring-1"
-                      style={{ background: `linear-gradient(135deg, ${accent}, ${tint(70, "var(--ink)")})`, borderColor: tint(30) }}
-                    >
-                      {initial}
-                    </span>
-                    <span
-                      className="t-meta absolute -bottom-1 -right-1 size-5 rounded-full grid place-items-center shadow ring-2 ring-card"
-                      style={{ background: tint(18, "var(--canvas)"), color: accent }}
-                      aria-hidden="true"
-                    >
-                      <Bell className="size-3" />
-                    </span>
-                  </span>
-
-                  <div className="min-w-0 flex-1 py-0.5">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <p className="t-eyebrow truncate" style={{ color: accent }}>
-                        {n.appName}
-                      </p>
-                      <span className="size-1 rounded-full bg-ink/25" aria-hidden="true" />
-                      <span className="t-meta text-ink/40 shrink-0 tabular-nums">
-                        {formatDistanceToNow(n.timestamp, { addSuffix: false })}
-                      </span>
-                    </div>
-                    <p className="t-body text-ink truncate">
-                      {n.title || "—"}
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <p className="t-eyebrow truncate" style={{ color: accent }}>
+                      {n.appName}
                     </p>
-                    <p className="t-body-sm text-ink/60 line-clamp-2 mt-1">
-                      {n.text}
-                    </p>
+                    <span className="size-1 rounded-full bg-ink/25" aria-hidden="true" />
+                    <span className="t-meta text-ink/40 shrink-0 tabular-nums">
+                      {formatDistanceToNow(n.timestamp, { addSuffix: false })}
+                    </span>
                   </div>
+                  <p className="t-body text-ink font-semibold truncate">
+                    {n.title || "—"}
+                  </p>
+                  <p className="t-body-sm text-ink/60 line-clamp-2 mt-1 leading-normal">
+                    {n.text}
+                  </p>
                 </button>
 
                 <div className="flex flex-col items-stretch gap-1.5 shrink-0 self-center">
                   <button
                     onClick={() => onCreateRule(n)}
                     aria-label="Create rule from this"
-                    className="t-eyebrow h-8 pl-2.5 pr-3 rounded-full text-canvas inline-flex items-center gap-1.5 shadow-sm transition-colors"
-                    style={{ background: accent }}
+                    className="t-button text-[10px] font-bold h-8 pl-3 pr-3.5 rounded-xl border transition-all flex items-center justify-center gap-1.5"
+                    style={{ background: tint(8), borderColor: tint(22), color: accent }}
                     title="Create rule from this"
                   >
                     <Sparkles className="size-3" />
@@ -151,7 +132,7 @@ export function InboxList({
                   <button
                     onClick={() => onOpen(n)}
                     aria-label="View notification"
-                    className="t-eyebrow h-8 pl-2.5 pr-3 rounded-full bg-ink/[0.05] text-ink/70 hover:bg-ink/[0.09] inline-flex items-center gap-1.5 transition-colors"
+                    className="t-button text-[10px] font-bold h-8 pl-3 pr-3.5 rounded-xl border border-ink/10 bg-canvas text-ink/70 hover:bg-ink/5 transition-all flex items-center justify-center gap-1.5"
                     title="View notification"
                   >
                     <Eye className="size-3" />
