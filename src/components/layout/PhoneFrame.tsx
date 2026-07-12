@@ -50,18 +50,18 @@ function BrandMark() {
 
   return (
     <Link
-      to="/home"
+      to="/dashboard"
       aria-label={`MinDrop — ${TAGLINES[index]}`}
-      className="sticky top-0 z-30 flex items-center justify-center gap-2 bg-ink text-canvas px-4 py-2.5"
+      className="sticky top-0 z-30 flex items-center justify-center gap-2.5 bg-ink text-canvas px-4 py-2.5"
     >
       {/* logo pip with concentric ring */}
-      <span className="relative grid place-items-center size-[18px] rounded-full" style={{ background: "var(--brand)" }}>
+      <span className="relative grid place-items-center size-[18px] rounded-full shrink-0" style={{ background: "var(--brand)" }}>
         <span className="absolute inset-0 rounded-full ring-1 ring-white/15" />
         <span className="size-1.5 rounded-full bg-ink" />
       </span>
-      <span className="t-body">MinDrop</span>
-      <span className="text-canvas/25 leading-none">·</span>
-      <span className="relative h-[1.2em] overflow-hidden min-w-0 flex items-center t-eyebrow">
+      <span className="t-body leading-none flex items-center">MinDrop</span>
+      <span className="size-1 rounded-full bg-canvas/30 shrink-0 self-center" aria-hidden="true" />
+      <span className="relative h-4 overflow-hidden min-w-0 flex items-center t-eyebrow leading-none">
         <AnimatePresence mode="wait">
           <motion.span
             key={index}
@@ -69,7 +69,7 @@ function BrandMark() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "-100%", opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="text-canvas/65 whitespace-nowrap"
+            className="text-canvas/65 whitespace-nowrap leading-none flex items-center"
           >
             {TAGLINES[index]}
           </motion.span>
