@@ -15,6 +15,15 @@ type Draft = {
  logicalOperator: "AND" | "OR";
  conditions: RuleCondition[];
 
+ // State fields for the unified condition form
+ senderVal: string;
+ includeVal: string;
+ excludeVal: string;
+ hasOtp: boolean;
+ hasTx: boolean;
+ hasLink: boolean;
+ hasPriority: boolean;
+
  // Legacies
  matchMode: MatchMode;
  senderMatch: string;
@@ -50,12 +59,47 @@ function draftFromRule(r: NotifyRule | null, prefill?: Partial<CapturedNotificat
     }
   }
 
+  let senderVal = "";
+  let includeVal = "";
+  let excludeVal = "";
+  let hasOtp = false;
+  let hasTx = false;
+  let hasLink = false;
+  let hasPriority = false;
+
+  if (r && r.conditions) {
+    r.conditions.forEach((c) => {
+      if (c.field === "sender") senderVal = c.value;
+      else if (c.field === "text" && c.operator === "contains") includeVal = c.value;
+      else if (c.field === "text" && c.operator === "doesNotContain") excludeVal = c.value;
+      else if (c.field === "otp" && c.operator === "isTrue") hasOtp = true;
+      else if (c.field === "transaction" && c.operator === "isTrue") hasTx = true;
+      else if (c.field === "link" && c.operator === "isTrue") hasLink = true;
+      else if (c.field === "priority" && c.operator === "isTrue") hasPriority = true;
+    });
+  } else if (!r && prefill) {
+    senderVal = prefill.title ?? "";
+  } else if (r) {
+    senderVal = r.senderMatch ?? "";
+    includeVal = (r.includeAny ?? []).join(", ");
+    excludeVal = (r.excludeAny ?? []).join(", ");
+    hasPriority = !!r.priorityOnly;
+  }
+
   return {
     id: r?.id ?? `nr-${Date.now()}`,
     pkg: r?.pkg ?? prefill?.pkg ?? "",
     appName: r?.appName ?? prefill?.appName ?? "",
     logicalOperator: r?.logicalOperator ?? "AND",
     conditions: initialConditions,
+
+    senderVal,
+    includeVal,
+    excludeVal,
+    hasOtp,
+    hasTx,
+    hasLink,
+    hasPriority,
 
     // Legacies
     matchMode: r?.matchMode ?? "sender",
@@ -77,7 +121,7 @@ function draftFromRule(r: NotifyRule | null, prefill?: Partial<CapturedNotificat
 }
 
 function parseCsv(s: string): string[] {
- return s.split(",").map((x) => x.trim()).filter(Boolean);
+  return s.split(",").map((x) => x.trim()).filter(Boolean);
 }
 
 type StepId = "source" | "match" | "when" | "timing" | "delivery" | "frequency" | "note" | "review";
@@ -108,50 +152,30 @@ export function RuleEditorSheet({
  const NEUTRAL_SEL = { background: "color-mix(in oklab, var(--ink) 6%, var(--canvas))", color: "var(--ink)", borderColor: "color-mix(in oklab, var(--ink) 22%, transparent)" } as const;
  const NEUTRAL_UNSEL = { background: "var(--card)", color: "var(--ink)", borderColor: "color-mix(in oklab, var(--ink) 12%, transparent)" } as const;
 
-  const addCondition = (field: ConditionField) => {
-    const id = `cond-${field}-${Date.now()}`;
-    let operator: ConditionOperator = "contains";
-    let value = "";
-    if (field === "otp" || field === "transaction" || field === "link" || field === "priority") {
-      operator = "isTrue";
-    }
-    const newCond: RuleCondition = { id, field, operator, value };
-    setDraft(d => ({ ...d, conditions: [...d.conditions, newCond] }));
-  };
+  const getRuleSummaryText = (
+    senderVal: string,
+    includeVal: string,
+    excludeVal: string,
+    hasOtp: boolean,
+    hasTx: boolean,
+    hasLink: boolean,
+    hasPriority: boolean,
+    operator: "AND" | "OR",
+    appName: string
+  ): string => {
+    const parts: string[] = [];
+    if (senderVal.trim()) parts.push(`sender contains "${senderVal.trim()}"`);
+    if (includeVal.trim()) parts.push(`body text contains "${includeVal.trim()}"`);
+    if (excludeVal.trim()) parts.push(`body text does not contain "${excludeVal.trim()}"`);
+    if (hasOtp) parts.push("matches OTP/codes");
+    if (hasTx) parts.push("matches money transactions");
+    if (hasLink) parts.push("contains web links");
+    if (hasPriority) parts.push("priority is High");
 
-  const updateCondition = (id: string, updates: Partial<RuleCondition>) => {
-    setDraft(d => ({
-      ...d,
-      conditions: d.conditions.map(c => c.id === id ? { ...c, ...updates } : c)
-    }));
-  };
-
-  const removeCondition = (id: string) => {
-    setDraft(d => ({
-      ...d,
-      conditions: d.conditions.filter(c => c.id !== id)
-    }));
-  };
-
-  const getRuleSummaryText = (conditions: RuleCondition[], operator: "AND" | "OR", appName: string): string => {
-    if (!conditions || conditions.length === 0) {
+    if (parts.length === 0) {
       return `Will trigger for every notification from ${appName || "selected app"}.`;
     }
     
-    const parts = conditions.map(c => {
-      const isNot = c.operator === "doesNotContain";
-      const opText = isNot ? "does not contain" : "contains";
-      const opEqText = isNot ? "is not" : "is";
-      
-      if (c.field === "sender") return `sender ${opText} "${c.value || "..."}"`;
-      if (c.field === "text") return `body text ${opText} "${c.value || "..."}"`;
-      if (c.field === "otp") return `message ${isNot ? "does not look like" : "looks like"} an OTP / code`;
-      if (c.field === "transaction") return `message ${isNot ? "does not look like" : "looks like"} a transaction alert`;
-      if (c.field === "link") return `message ${isNot ? "does not contain" : "contains"} web links`;
-      if (c.field === "priority") return `priority ${opEqText} High`;
-      return "";
-    }).filter(Boolean);
-
     const joiner = operator === "AND" ? " AND " : " OR ";
     return `Will trigger if ${parts.join(joiner)}.`;
   };
@@ -175,10 +199,67 @@ export function RuleEditorSheet({
  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [open, rule?.id, prefill?.id]);
 
- const canSave = !!(draft.pkg && draft.appName);
-
- const handleSave = () => {
+ const canSave = !!(draft.pkg && draft.appName);  const handleSave = () => {
     if (!canSave) return;
+
+    const conditions: RuleCondition[] = [];
+    if (draft.senderVal.trim()) {
+      conditions.push({
+        id: `cond-sender-${Date.now()}`,
+        field: "sender",
+        operator: "contains",
+        value: draft.senderVal.trim(),
+      });
+    }
+    if (draft.includeVal.trim()) {
+      conditions.push({
+        id: `cond-include-${Date.now()}`,
+        field: "text",
+        operator: "contains",
+        value: draft.includeVal.trim(),
+      });
+    }
+    if (draft.excludeVal.trim()) {
+      conditions.push({
+        id: `cond-exclude-${Date.now()}`,
+        field: "text",
+        operator: "doesNotContain",
+        value: draft.excludeVal.trim(),
+      });
+    }
+    if (draft.hasOtp) {
+      conditions.push({
+        id: `cond-otp-${Date.now()}`,
+        field: "otp",
+        operator: "isTrue",
+        value: "",
+      });
+    }
+    if (draft.hasTx) {
+      conditions.push({
+        id: `cond-tx-${Date.now()}`,
+        field: "transaction",
+        operator: "isTrue",
+        value: "",
+      });
+    }
+    if (draft.hasLink) {
+      conditions.push({
+        id: `cond-link-${Date.now()}`,
+        field: "link",
+        operator: "isTrue",
+        value: "",
+      });
+    }
+    if (draft.hasPriority) {
+      conditions.push({
+        id: `cond-priority-${Date.now()}`,
+        field: "priority",
+        operator: "isTrue",
+        value: "",
+      });
+    }
+
     const remindMode: RemindMode = draft.remindMode ?? "immediate";
     const frequency: FrequencyMode = draft.frequency ?? "once";
     const built: NotifyRule = {
@@ -186,12 +267,12 @@ export function RuleEditorSheet({
       pkg: draft.pkg,
       appName: draft.appName,
       logicalOperator: draft.logicalOperator,
-      conditions: draft.conditions,
-      matchMode: draft.conditions.length > 0 ? undefined : draft.matchMode,
-      senderMatch: draft.senderMatch.trim(),
-      includeAny: parseCsv(draft.includeAny),
-      excludeAny: parseCsv(draft.excludeAny),
-      priorityOnly: draft.priorityOnly || undefined,
+      conditions,
+      matchMode: conditions.length > 0 ? undefined : draft.matchMode,
+      senderMatch: draft.senderVal.trim() || draft.senderMatch.trim(),
+      includeAny: parseCsv(draft.includeVal || draft.includeAny),
+      excludeAny: parseCsv(draft.excludeVal || draft.excludeAny),
+      priorityOnly: draft.hasPriority || draft.priorityOnly || undefined,
       presetId: draft.presetId,
       remindMode,
       afterHours: remindMode === "after" ? Math.max(0, draft.afterHours) : undefined,
@@ -211,25 +292,11 @@ export function RuleEditorSheet({
   const pickContact = async () => {
     const c = await NotifyBridge.openContactsPicker();
     if (c.name) {
-      setDraft((d) => {
-        const idx = d.conditions.findIndex((cond) => cond.field === "sender");
-        let newConditions = [...d.conditions];
-        if (idx >= 0) {
-          newConditions[idx] = { ...newConditions[idx], value: c.name! };
-        } else {
-          newConditions.push({
-            id: `cond-sender-${Date.now()}`,
-            field: "sender",
-            operator: "contains",
-            value: c.name!,
-          });
-        }
-        return {
-          ...d,
-          senderMatch: c.name!,
-          conditions: newConditions,
-        };
-      });
+      setDraft((d) => ({
+        ...d,
+        senderVal: c.name!,
+        senderMatch: c.name!,
+      }));
     }
   };
 
@@ -448,12 +515,12 @@ export function RuleEditorSheet({
     <>
       <div className="space-y-1">
         <p className="t-display text-ink">Narrow it down.</p>
-        <p className="t-body-sm text-ink/60">Build dynamic filters to decide exactly when this rule triggers.</p>
+        <p className="t-body-sm text-ink/60">Decide exactly which pings trigger this reminder.</p>
       </div>
 
       {/* Summary Box */}
       <div 
-        className="p-4 rounded-3xl border flex items-start gap-3 transition-all"
+        className="p-4 rounded-3xl border flex items-start gap-3 transition-all animate-in fade-in duration-300"
         style={{ borderColor: tint(18), background: tint(5, "var(--canvas)") }}
       >
         <span className="size-8 rounded-xl bg-ink/5 grid place-items-center text-ink/50 shrink-0 mt-0.5">
@@ -462,176 +529,134 @@ export function RuleEditorSheet({
         <div className="min-w-0 flex-1">
           <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Real-time Rule Preview</p>
           <p className="text-xs font-semibold text-ink/80 mt-1 leading-normal">
-            {getRuleSummaryText(draft.conditions, draft.logicalOperator, draft.appName)}
+            {getRuleSummaryText(
+              draft.senderVal,
+              draft.includeVal,
+              draft.excludeVal,
+              draft.hasOtp,
+              draft.hasTx,
+              draft.hasLink,
+              draft.hasPriority,
+              draft.logicalOperator,
+              draft.appName
+            )}
           </p>
         </div>
       </div>
 
-      {/* Logic Operator Toggle */}
-      <div className="space-y-1.5">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Combine Logic</p>
-        <div className="grid grid-cols-2 gap-1 p-1 rounded-2xl bg-ink/[0.04] border border-ink/10">
-          {(["AND", "OR"] as const).map((op) => (
-            <button
-              key={op}
-              type="button"
-              onClick={() => setDraft((d) => ({ ...d, logicalOperator: op }))}
-              className={`py-2 rounded-xl t-button text-xs font-bold transition ${draft.logicalOperator === op ? "bg-white text-ink shadow-sm" : "text-ink/60"}`}
-            >
-              {op === "AND" ? "Match ALL (AND)" : "Match ANY (OR)"}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Active Conditions Cards */}
-      <div className="space-y-2.5">
-        {draft.conditions.length > 0 && (
-          <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Active Filters</p>
-        )}
-        <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
-          {draft.conditions.map((cond) => {
-            const FieldIcon = cond.field === "sender" ? UserRound 
-                            : cond.field === "text" ? Bell
-                            : cond.field === "otp" ? Check 
-                            : cond.field === "transaction" ? Clock 
-                            : cond.field === "link" ? InfinityIcon 
-                            : Zap;
-                            
-            const fieldLabel = cond.field === "sender" ? "Sender"
-                             : cond.field === "text" ? "Keywords"
-                             : cond.field === "otp" ? "OTP & Codes"
-                             : cond.field === "transaction" ? "Money Alerts"
-                             : cond.field === "link" ? "Web Links"
-                             : "High Priority";
-
-            const isTextMatch = cond.field === "sender" || cond.field === "text";
-
-            return (
-              <div 
-                key={cond.id} 
-                className="p-3.5 rounded-3xl bg-white border border-ink/[0.06] shadow-sm flex flex-col gap-2.5 transition-all"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="size-7 rounded-xl bg-ink/[0.04] grid place-items-center text-ink/60" style={{ color: accent }}>
-                      <FieldIcon className="size-3.5" />
-                    </span>
-                    <span className="text-xs font-bold text-ink/80">{fieldLabel}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={cond.operator}
-                      onChange={(e) => updateCondition(cond.id, { operator: e.target.value as ConditionOperator })}
-                      className="text-[10px] font-bold uppercase tracking-wider bg-ink/[0.04] border border-ink/10 rounded-lg px-2 py-1 outline-none text-ink/75 focus:border-ink/20 cursor-pointer"
-                    >
-                      {isTextMatch ? (
-                        <>
-                          <option value="contains">Contains</option>
-                          <option value="doesNotContain">Excludes (NOT)</option>
-                          <option value="equals">Equals</option>
-                        </>
-                      ) : (
-                        <>
-                          <option value="isTrue">Matches</option>
-                          <option value="doesNotContain">Excludes (NOT)</option>
-                        </>
-                      )}
-                    </select>
-
-                    <button
-                      type="button"
-                      onClick={() => removeCondition(cond.id)}
-                      className="size-7 rounded-full hover:bg-ink/5 grid place-items-center text-ink/40 hover:text-ink/80 transition"
-                      aria-label="Remove condition"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-                {isTextMatch && (
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={cond.value}
-                      onChange={(e) => updateCondition(cond.id, { value: e.target.value })}
-                      placeholder={cond.field === "sender" ? "Enter sender name..." : "Enter keywords (e.g. urgent, bill)..."}
-                      className="flex-1 px-3.5 py-2.5 rounded-2xl bg-card border border-ink/10 text-xs outline-none focus:border-ink/30 transition font-medium"
-                    />
-                    {cond.field === "sender" && (
-                      <button
-                        type="button"
-                        onClick={pickContact}
-                        aria-label="Pick from contacts"
-                        className="shrink-0 size-[38px] rounded-2xl bg-card border grid place-items-center hover:bg-ink/5 transition"
-                        style={{ borderColor: tint(18) }}
-                      >
-                        <UserRound className="size-4" style={{ color: accent }} />
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Add Match Filter Toggles */}
+      {/* Form Fields: Sender */}
       <div className="space-y-2">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Add Match Filter</p>
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => addCondition("sender")}
-            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
-          >
-            <Plus className="size-3" style={{ color: accent }} />
-            Sender
-          </button>
-          <button
-            type="button"
-            onClick={() => addCondition("text")}
-            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
-          >
-            <Plus className="size-3" style={{ color: accent }} />
-            Keywords
-          </button>
-          <button
-            type="button"
-            onClick={() => addCondition("otp")}
-            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
-          >
-            <Plus className="size-3" style={{ color: accent }} />
-            OTP / Codes
-          </button>
-          <button
-            type="button"
-            onClick={() => addCondition("transaction")}
-            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
-          >
-            <Plus className="size-3" style={{ color: accent }} />
-            Money Alerts
-          </button>
-          <button
-            type="button"
-            onClick={() => addCondition("link")}
-            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
-          >
-            <Plus className="size-3" style={{ color: accent }} />
-            Web Links
-          </button>
-          <button
-            type="button"
-            onClick={() => addCondition("priority")}
-            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
-          >
-            <Plus className="size-3" style={{ color: accent }} />
-            High Priority
-          </button>
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Sender Match</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={draft.senderVal}
+              onChange={(e) => setDraft(d => ({ ...d, senderVal: e.target.value }))}
+              placeholder="e.g. Mom, Boss (blank = match anyone)"
+              className="flex-1 px-4 py-3 rounded-2xl bg-card border border-ink/10 text-xs outline-none focus:border-ink/30 transition font-medium"
+            />
+            <button
+              type="button"
+              onClick={pickContact}
+              className="shrink-0 size-[42px] rounded-2xl bg-card border grid place-items-center hover:bg-ink/5 transition"
+              style={{ borderColor: tint(18) }}
+            >
+              <UserRound className="size-4" style={{ color: accent }} />
+            </button>
+          </div>
         </div>
+
+        {/* Form Fields: Keywords */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Include Keywords</label>
+            <input
+              type="text"
+              value={draft.includeVal}
+              onChange={(e) => setDraft(d => ({ ...d, includeVal: e.target.value }))}
+              placeholder="urgent, bill, alert"
+              className="w-full px-4 py-3 rounded-2xl bg-card border border-ink/10 text-xs outline-none focus:border-ink/30 transition font-medium"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Exclude Keywords</label>
+            <input
+              type="text"
+              value={draft.excludeVal}
+              onChange={(e) => setDraft(d => ({ ...d, excludeVal: e.target.value }))}
+              placeholder="newsletter, promo"
+              className="w-full px-4 py-3 rounded-2xl bg-card border border-ink/10 text-xs outline-none focus:border-ink/30 transition font-medium"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Smart Toggles list */}
+      <div className="space-y-2">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40 font-semibold">Smart Category Filters</p>
+        <div className="rounded-3xl border border-ink/10 bg-white overflow-hidden divide-y divide-ink/5">
+          <div className="flex items-center justify-between p-3.5">
+            <div className="min-w-0 flex-1 pr-3">
+              <p className="text-xs font-bold text-ink">OTP / Security Codes</p>
+              <p className="text-[10px] text-ink/40 leading-normal">Instantly detect authentication codes and pins</p>
+            </div>
+            <Switch
+              checked={draft.hasOtp}
+              onCheckedChange={(v) => setDraft(d => ({ ...d, hasOtp: v }))}
+              style={{ "--switch-accent": accent } as React.CSSProperties}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-3.5">
+            <div className="min-w-0 flex-1 pr-3">
+              <p className="text-xs font-bold text-ink">Money Transaction Alerts</p>
+              <p className="text-[10px] text-ink/40 leading-normal">Match bank debits, card transactions or UPI spent</p>
+            </div>
+            <Switch
+              checked={draft.hasTx}
+              onCheckedChange={(v) => setDraft(d => ({ ...d, hasTx: v }))}
+              style={{ "--switch-accent": accent } as React.CSSProperties}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-3.5">
+            <div className="min-w-0 flex-1 pr-3">
+              <p className="text-xs font-bold text-ink">Contains Web Links</p>
+              <p className="text-[10px] text-ink/40 leading-normal">Filter notifications with URLs / web links</p>
+            </div>
+            <Switch
+              checked={draft.hasLink}
+              onCheckedChange={(v) => setDraft(d => ({ ...d, hasLink: v }))}
+              style={{ "--switch-accent": accent } as React.CSSProperties}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-3.5">
+            <div className="min-w-0 flex-1 pr-3">
+              <p className="text-xs font-bold text-ink">High Priority Only</p>
+              <p className="text-[10px] text-ink/40 leading-normal">Only match OS-marked urgent notifications</p>
+            </div>
+            <Switch
+              checked={draft.hasPriority}
+              onCheckedChange={(v) => setDraft(d => ({ ...d, hasPriority: v }))}
+              style={{ "--switch-accent": accent } as React.CSSProperties}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Logical Operator (AND vs OR) Switch */}
+      <div className="flex items-center justify-between p-3.5 bg-card border border-ink/10 rounded-2xl">
+        <div className="min-w-0 flex-1 pr-3">
+          <p className="text-xs font-bold text-ink">Match All Active Filters (AND)</p>
+          <p className="text-[10px] text-ink/40 leading-normal">Turn off to trigger when any single active condition matches</p>
+        </div>
+        <Switch
+          checked={draft.logicalOperator === "AND"}
+          onCheckedChange={(v) => setDraft(d => ({ ...d, logicalOperator: v ? "AND" : "OR" }))}
+          style={{ "--switch-accent": accent } as React.CSSProperties}
+        />
       </div>
     </>
   )}
