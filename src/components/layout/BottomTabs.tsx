@@ -1,12 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bell, LayoutDashboard, MapPin, Settings, Clock } from "lucide-react";
-import { motion } from "framer-motion";
+import { Bell, LayoutDashboard, MapPin, Settings, Clock, Grid, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useCountryTheme } from "@/lib/theme/useCountryTheme";
+import { useState, useEffect } from "react";
 
 /**
- * Bottom navigation — Home centered as the hero action.
- * Side-tab accents pull from the current country theme so the app palette stays
- * consistent with the dashboard rooms (accent1 = Later, accent3 = Places).
+ * Bottom navigation — Space-saving floating radial action menu.
+ * Tapping the trigger rotates the icon and expands an elegant glassmorphism dock.
  */
 
 type SideTab = { to: string; label: string; icon: any; accent?: string };
@@ -23,107 +23,93 @@ function isActive(pathname: string, to: string): boolean {
   return pathname.startsWith(to);
 }
 
-function SideTabItem({ tab, active }: { tab: SideTab; active: boolean }) {
-  const Icon = tab.icon;
-  const color = tab.accent || "var(--ink)";
-  return (
-    <Link
-      to={tab.to as any}
-      onClick={() => { try { sessionStorage.removeItem("gmd:from"); } catch {} }}
-      aria-current={active ? "page" : undefined}
-      aria-label={tab.label}
-      className="relative flex flex-col items-center gap-1 pt-2.5 pb-1 press flex-1"
-    >
-      {active && (
-        <motion.span
-          layoutId="bottomtab-dot"
-          aria-hidden="true"
-          className="absolute top-1 h-[3px] w-5 rounded-full"
-          style={{ background: color }}
-          transition={{ type: "spring", stiffness: 500, damping: 38 }}
-        />
-      )}
-      <motion.span
-        animate={{ y: active ? -1 : 0, scale: active ? 1.08 : 1 }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-      >
-        <Icon
-          className="size-[19px] transition-colors"
-          strokeWidth={active ? 2.1 : 1.6}
-          aria-hidden="true"
-          style={{ color: active ? color : "color-mix(in oklab, var(--ink) 55%, transparent)" }}
-        />
-      </motion.span>
-      <span
-        className="t-eyebrow transition-colors"
-        style={{ color: active ? color : "color-mix(in oklab, var(--ink) 50%, transparent)" }}
-      >
-        {tab.label}
-      </span>
-    </Link>
-  );
-}
-
 export function BottomTabs() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { accent1, accent3 } = useCountryTheme();
-  const homeActive = isActive(pathname, "/dashboard");
-  const leftTabs: SideTab[] = [
-    { to: "/home",   label: "Later",  icon: Clock, accent: accent1 },
-    { to: "/notify", label: "Notify", icon: Bell },
-  ];
-  const rightTabs: SideTab[] = [
-    { to: "/places",   label: "Places",   icon: MapPin, accent: accent3 },
-    { to: "/settings", label: "Settings", icon: Settings },
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close navigation overlay automatically when navigating away
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  const allTabs: SideTab[] = [
+    { to: "/home",       label: "Later",    icon: Clock, accent: accent1 },
+    { to: "/notify",     label: "Notify",   icon: Bell },
+    { to: "/dashboard",  label: "Home",     icon: LayoutDashboard, accent: "var(--brand)" },
+    { to: "/places",     label: "Places",   icon: MapPin, accent: accent3 },
+    { to: "/settings",   label: "Settings", icon: Settings },
   ];
 
   return (
-    <nav
-      data-tour="bottom-tabs"
-      className="sticky bottom-0 z-30 shrink-0 pt-1 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
-      style={{
-        background: "color-mix(in srgb, var(--canvas) 82%, transparent)",
-        backdropFilter: "saturate(140%) blur(10px)",
-        WebkitBackdropFilter: "saturate(140%) blur(10px)",
-        borderTop: "1px solid var(--hairline)",
-      }}
-      aria-label="Primary"
-    >
-
-      <div className="relative flex items-stretch">
-        {leftTabs.map((t) => (
-          <SideTabItem key={t.to} tab={t} active={isActive(pathname, t.to)} />
-        ))}
-
-        {/* Centered Home — inline, icon-only, brand-tinted */}
-        <Link
-          to="/dashboard"
-          onClick={() => { try { sessionStorage.removeItem("gmd:from"); } catch {} }}
-          aria-current={homeActive ? "page" : undefined}
-          aria-label="Home"
-          className="relative flex-1 flex flex-col items-center justify-center pt-2.5 pb-1 press"
-        >
-          <motion.span
-            aria-hidden="true"
-            className="absolute top-1 h-[3px] w-6 rounded-full"
-            animate={{ opacity: homeActive ? 1 : 0 }}
-            style={{ background: "var(--brand)" }}
+    <div data-tour="bottom-tabs" className="relative">
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.25 }}
+            exit={{ opacity: 0 }}
+            className="fixed md:absolute inset-0 bg-ink z-30"
+            onClick={() => setIsOpen(false)}
           />
-          <motion.span
-            whileTap={{ scale: 0.92 }}
-            animate={{ scale: homeActive ? 1 : 0.96 }}
-            transition={{ type: "spring", stiffness: 400, damping: 22 }}
-            className="grid place-items-center size-11 rounded-full text-canvas shadow-[0_6px_16px_-6px_rgba(74,93,78,0.55)]"
-            style={{ background: homeActive ? "var(--brand)" : "var(--ink)" }}
-          >
-            <LayoutDashboard className="size-[20px]" strokeWidth={2} aria-hidden="true" />
-          </motion.span>
-        </Link>
+        )}
 
-        {rightTabs.map((t) => (
-          <SideTabItem key={t.to} tab={t} active={isActive(pathname, t.to)} />
-        ))}
-      </div>
-    </nav>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 15, x: "-50%" }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, scale: 0.9, y: 15, x: "-50%" }}
+            transition={{ type: "spring", damping: 26, stiffness: 220 }}
+            className="fixed md:absolute bottom-24 left-1/2 z-40 flex items-center justify-around gap-2 px-4 py-3 rounded-[2rem] border border-ink/10 bg-canvas/80 backdrop-blur-xl shadow-2xl w-[90%] max-w-[380px]"
+          >
+            {allTabs.map((t) => {
+              const active = isActive(pathname, t.to);
+              const Icon = t.icon;
+              const color = t.accent || "var(--ink)";
+              return (
+                <Link
+                  key={t.to}
+                  to={t.to as any}
+                  onClick={() => { try { sessionStorage.removeItem("gmd:from"); } catch {} }}
+                  className="flex flex-col items-center gap-1.5 p-2 press flex-1 min-w-0"
+                  aria-label={t.label}
+                >
+                  <motion.span
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="grid place-items-center size-10 rounded-full text-canvas shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
+                    style={{ background: active ? color : "color-mix(in oklab, var(--ink) 12%, transparent)", color: active ? "var(--canvas)" : "var(--ink)" }}
+                  >
+                    <Icon className="size-[18px]" strokeWidth={active ? 2.2 : 1.6} />
+                  </motion.span>
+                  <span
+                    className="t-eyebrow transition-colors truncate max-w-full text-[10px]"
+                    style={{ color: active ? color : "color-mix(in oklab, var(--ink) 60%, transparent)", fontWeight: active ? 600 : 400 }}
+                  >
+                    {t.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        whileTap={{ scale: 0.92 }}
+        whileHover={{ scale: 1.05 }}
+        className="fixed md:absolute bottom-6 left-1/2 -translate-x-1/2 z-40 grid place-items-center size-14 rounded-full bg-ink text-canvas shadow-[0_8px_24px_rgba(0,0,0,0.22)] border border-white/10 press"
+        aria-label={isOpen ? "Close Menu" : "Open Menu"}
+      >
+        <motion.span
+          animate={{ rotate: isOpen ? 90 : 0 }}
+          transition={{ type: "spring", stiffness: 450, damping: 22 }}
+        >
+          {isOpen ? <X className="size-[22px]" strokeWidth={2.2} /> : <Grid className="size-[22px]" strokeWidth={1.8} />}
+        </motion.span>
+      </motion.button>
+    </div>
   );
 }
