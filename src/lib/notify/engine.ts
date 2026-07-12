@@ -8,7 +8,7 @@
 import { NotifyBridge, type NativeRuleSnapshot } from "./bridge";
 import { pushToInbox, readRules, markRuleFired, markRuleTriggered } from "./store";
 import { pushCapture, tagCaptureMatched } from "./capture";
-import type { CapturedNotification, NotifyRule } from "./types";
+import type { CapturedNotification, NotifyRule, RuleCondition } from "./types";
 import { ALARM_EVENT, rescanScheduler, type AlarmDetail } from "@/lib/memoryos/scheduler";
 import type { Memory } from "@/lib/memoryos/types";
 
@@ -27,9 +27,67 @@ function haystack(n: CapturedNotification) {
   return `${n.title}\n${n.text}\n${n.bigText ?? ""}`.toLowerCase();
 }
 
+function checkCondition(cond: RuleCondition, n: CapturedNotification): boolean {
+  const hay = `${n.title}\n${n.text}\n${n.bigText ?? ""}`.toLowerCase();
+
+  if (cond.field === "sender") {
+    const s = cond.value.trim().toLowerCase();
+    const t = n.title.toLowerCase();
+    if (cond.operator === "equals") return t === s;
+    if (cond.operator === "doesNotContain") return !t.includes(s);
+    return t.includes(s);
+  }
+
+  if (cond.field === "text") {
+    const s = cond.value.trim().toLowerCase();
+    const b = n.text.toLowerCase();
+    if (cond.operator === "equals") return b === s;
+    if (cond.operator === "doesNotContain") return !b.includes(s);
+    return b.includes(s);
+  }
+
+  if (cond.field === "otp") {
+    const hasOtpKeywords = /otp|code|verification|verify|pin/i.test(hay);
+    const hasDigits = /\b\d{4,8}\b/.test(hay);
+    const isMatched = hasOtpKeywords && hasDigits;
+    return cond.operator === "doesNotContain" ? !isMatched : isMatched;
+  }
+
+  if (cond.field === "transaction") {
+    const hasMoneyKeywords = /debited|credited|spent|transaction|payment|paid|withdrawn|transferred/i.test(hay);
+    const hasCurrencySymbols = /[\$₹€£]/.test(hay);
+    const isMatched = hasMoneyKeywords || hasCurrencySymbols;
+    return cond.operator === "doesNotContain" ? !isMatched : isMatched;
+  }
+
+  if (cond.field === "link") {
+    const hasWebLink = /https?:\/\/[^\s]+/.test(hay);
+    return cond.operator === "doesNotContain" ? !hasWebLink : hasWebLink;
+  }
+
+  if (cond.field === "priority") {
+    const isHigh = (n.priority ?? 0) >= 1;
+    return cond.operator === "doesNotContain" ? !isHigh : isHigh;
+  }
+
+  return true;
+}
+
 function ruleMatches(rule: NotifyRule, n: CapturedNotification): boolean {
   if (!rule.enabled) return false;
   if (rule.pkg !== n.pkg) return false;
+
+  // Evaluate conditions list if present
+  if (rule.conditions && rule.conditions.length > 0) {
+    const results = rule.conditions.map((c) => checkCondition(c, n));
+    if (rule.logicalOperator === "OR") {
+      return results.some(Boolean);
+    } else {
+      return results.every(Boolean);
+    }
+  }
+
+  // Fallback to legacy rule logic
   if (rule.priorityOnly && (n.priority ?? 0) < 1) return false;
 
   const mode = rule.matchMode ?? "sender";
@@ -135,8 +193,16 @@ function handleNotification(n: CapturedNotification) {
   pushCapture(n, currentPlan());
   if (isDuplicate(n)) return;
   const rules = readRules();
+
+  // Prioritize checking by rule set specificity (more conditions first, catch-all last)
+  const sortedRules = [...rules].sort((a, b) => {
+    const aScore = (a.conditions?.length ?? 0) + (a.senderMatch ? 1 : 0);
+    const bScore = (b.conditions?.length ?? 0) + (b.senderMatch ? 1 : 0);
+    return bScore - aScore;
+  });
+
   const matchedIds: string[] = [];
-  for (const rule of rules) {
+  for (const rule of sortedRules) {
     if (rule.status && rule.status !== "active") continue;
     if (!ruleMatches(rule, n)) continue;
     let fired = false;
@@ -157,6 +223,7 @@ function handleNotification(n: CapturedNotification) {
       if (freq === "always") markRuleTriggered(rule.id);
       else markRuleFired(rule.id);
       matchedIds.push(rule.id);
+      break; // Only trigger the first/highest priority match in the rule set
     }
   }
   if (matchedIds.length) tagCaptureMatched(n.id, matchedIds);

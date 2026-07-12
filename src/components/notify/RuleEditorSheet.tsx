@@ -1,16 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, Bell, BellRing, Check, Clock, Infinity as InfinityIcon, Search, UserRound, X, Zap } from "lucide-react";
-import type { CapturedNotification, FrequencyMode, KnownApp, MatchMode, NotifyRule, PresetId, RemindMode, RuleDelivery } from "@/lib/notify/types";
+import { ArrowLeft, Bell, BellRing, Check, Clock, Infinity as InfinityIcon, Search, UserRound, X, Zap, Plus, Trash2 } from "lucide-react";
+import type { CapturedNotification, FrequencyMode, KnownApp, MatchMode, NotifyRule, PresetId, RemindMode, RuleDelivery, RuleCondition, ConditionField, ConditionOperator } from "@/lib/notify/types";
 import { NotifyBridge } from "@/lib/notify/bridge";
 import { PRESETS, getPreset } from "@/lib/notify/presets";
 import { Switch } from "@/components/ui/switch";
 import { NextTriggerPreview } from "@/components/reminders/NextTriggerPreview";
+import { isLightColor } from "@/lib/theme/palette";
 
 type Draft = {
  id: string;
  pkg: string;
  appName: string;
+ logicalOperator: "AND" | "OR";
+ conditions: RuleCondition[];
+
+ // Legacies
  matchMode: MatchMode;
  senderMatch: string;
  includeAny: string;
@@ -23,34 +28,52 @@ type Draft = {
  frequency?: FrequencyMode;
  rangeStart: string;
  rangeEnd: string;
-  remindNote: string;
-  delivery: RuleDelivery;
-  enabled: boolean;
+ remindNote: string;
+ delivery: RuleDelivery;
+ enabled: boolean;
 };
 
 function draftFromRule(r: NotifyRule | null, prefill?: Partial<CapturedNotification>): Draft {
- const today = new Date().toISOString().slice(0, 10);
- const weekLater = new Date(Date.now() + 7 * 86400_000).toISOString().slice(0, 10);
- return {
- id: r?.id ?? `nr-${Date.now()}`,
- pkg: r?.pkg ?? prefill?.pkg ?? "",
- appName: r?.appName ?? prefill?.appName ?? "",
- matchMode: r?.matchMode ?? "sender",
- senderMatch: r?.senderMatch ?? prefill?.title ?? "",
- includeAny: (r?.includeAny ?? []).join(", "),
- excludeAny: (r?.excludeAny ?? []).join(", "),
- priorityOnly: r?.priorityOnly ?? false,
- presetId: r?.presetId,
- remindMode: r?.remindMode,
- afterHours: r?.afterHours ?? 0,
- afterMinutes: r?.afterMinutes ?? 30,
- frequency: r?.frequency,
- rangeStart: r?.rangeStart ?? today,
- rangeEnd: r?.rangeEnd ?? weekLater,
-  remindNote: r?.remindNote ?? "",
-  delivery: r?.delivery ?? "notification",
-  enabled: r?.enabled ?? true,
- };
+  const today = new Date().toISOString().slice(0, 10);
+  const weekLater = new Date(Date.now() + 7 * 86400_000).toISOString().slice(0, 10);
+
+  let initialConditions = r?.conditions ?? [];
+  if (!r && prefill) {
+    initialConditions = [];
+    if (prefill.title) {
+      initialConditions.push({
+        id: `cond-sender-${Date.now()}`,
+        field: "sender",
+        operator: "contains",
+        value: prefill.title,
+      });
+    }
+  }
+
+  return {
+    id: r?.id ?? `nr-${Date.now()}`,
+    pkg: r?.pkg ?? prefill?.pkg ?? "",
+    appName: r?.appName ?? prefill?.appName ?? "",
+    logicalOperator: r?.logicalOperator ?? "AND",
+    conditions: initialConditions,
+
+    // Legacies
+    matchMode: r?.matchMode ?? "sender",
+    senderMatch: r?.senderMatch ?? prefill?.title ?? "",
+    includeAny: (r?.includeAny ?? []).join(", "),
+    excludeAny: (r?.excludeAny ?? []).join(", "),
+    priorityOnly: r?.priorityOnly ?? false,
+    presetId: r?.presetId,
+    remindMode: r?.remindMode,
+    afterHours: r?.afterHours ?? 0,
+    afterMinutes: r?.afterMinutes ?? 30,
+    frequency: r?.frequency,
+    rangeStart: r?.rangeStart ?? today,
+    rangeEnd: r?.rangeEnd ?? weekLater,
+    remindNote: r?.remindNote ?? "",
+    delivery: r?.delivery ?? "notification",
+    enabled: r?.enabled ?? true,
+  };
 }
 
 function parseCsv(s: string): string[] {
@@ -85,6 +108,54 @@ export function RuleEditorSheet({
  const NEUTRAL_SEL = { background: "color-mix(in oklab, var(--ink) 6%, var(--canvas))", color: "var(--ink)", borderColor: "color-mix(in oklab, var(--ink) 22%, transparent)" } as const;
  const NEUTRAL_UNSEL = { background: "var(--card)", color: "var(--ink)", borderColor: "color-mix(in oklab, var(--ink) 12%, transparent)" } as const;
 
+  const addCondition = (field: ConditionField) => {
+    const id = `cond-${field}-${Date.now()}`;
+    let operator: ConditionOperator = "contains";
+    let value = "";
+    if (field === "otp" || field === "transaction" || field === "link" || field === "priority") {
+      operator = "isTrue";
+    }
+    const newCond: RuleCondition = { id, field, operator, value };
+    setDraft(d => ({ ...d, conditions: [...d.conditions, newCond] }));
+  };
+
+  const updateCondition = (id: string, updates: Partial<RuleCondition>) => {
+    setDraft(d => ({
+      ...d,
+      conditions: d.conditions.map(c => c.id === id ? { ...c, ...updates } : c)
+    }));
+  };
+
+  const removeCondition = (id: string) => {
+    setDraft(d => ({
+      ...d,
+      conditions: d.conditions.filter(c => c.id !== id)
+    }));
+  };
+
+  const getRuleSummaryText = (conditions: RuleCondition[], operator: "AND" | "OR", appName: string): string => {
+    if (!conditions || conditions.length === 0) {
+      return `Will trigger for every notification from ${appName || "selected app"}.`;
+    }
+    
+    const parts = conditions.map(c => {
+      const isNot = c.operator === "doesNotContain";
+      const opText = isNot ? "does not contain" : "contains";
+      const opEqText = isNot ? "is not" : "is";
+      
+      if (c.field === "sender") return `sender ${opText} "${c.value || "..."}"`;
+      if (c.field === "text") return `body text ${opText} "${c.value || "..."}"`;
+      if (c.field === "otp") return `message ${isNot ? "does not look like" : "looks like"} an OTP / code`;
+      if (c.field === "transaction") return `message ${isNot ? "does not look like" : "looks like"} a transaction alert`;
+      if (c.field === "link") return `message ${isNot ? "does not contain" : "contains"} web links`;
+      if (c.field === "priority") return `priority ${opEqText} High`;
+      return "";
+    }).filter(Boolean);
+
+    const joiner = operator === "AND" ? " AND " : " OR ";
+    return `Will trigger if ${parts.join(joiner)}.`;
+  };
+
  const steps = useMemo<StepId[]>(() => {
  const base: StepId[] = ["source", "match", "when"];
  if (draft.remindMode === "after") base.push("timing");
@@ -107,38 +178,60 @@ export function RuleEditorSheet({
  const canSave = !!(draft.pkg && draft.appName);
 
  const handleSave = () => {
- if (!canSave) return;
- const remindMode: RemindMode = draft.remindMode ?? "immediate";
- const frequency: FrequencyMode = draft.frequency ?? "once";
- const built: NotifyRule = {
- id: draft.id,
- pkg: draft.pkg,
- appName: draft.appName,
- matchMode: draft.matchMode,
- senderMatch: draft.matchMode === "sender" ? draft.senderMatch.trim() : "",
- includeAny: draft.matchMode === "topic" ? parseCsv(draft.includeAny) : [],
- excludeAny: draft.matchMode === "topic" ? parseCsv(draft.excludeAny) : [],
- priorityOnly: draft.priorityOnly || undefined,
- presetId: draft.presetId,
- remindMode,
- afterHours: remindMode === "after" ? Math.max(0, draft.afterHours) : undefined,
- afterMinutes: remindMode === "after" ? Math.max(0, draft.afterMinutes) : undefined,
- frequency,
- rangeStart: undefined,
- rangeEnd: undefined,
- remindNote: draft.remindNote.trim() || undefined,
- delivery: draft.delivery,
- enabled: draft.enabled,
- createdAt: rule?.createdAt ?? Date.now(),
- };
- onSave(built);
- onClose();
- };
+    if (!canSave) return;
+    const remindMode: RemindMode = draft.remindMode ?? "immediate";
+    const frequency: FrequencyMode = draft.frequency ?? "once";
+    const built: NotifyRule = {
+      id: draft.id,
+      pkg: draft.pkg,
+      appName: draft.appName,
+      logicalOperator: draft.logicalOperator,
+      conditions: draft.conditions,
+      matchMode: draft.conditions.length > 0 ? undefined : draft.matchMode,
+      senderMatch: draft.senderMatch.trim(),
+      includeAny: parseCsv(draft.includeAny),
+      excludeAny: parseCsv(draft.excludeAny),
+      priorityOnly: draft.priorityOnly || undefined,
+      presetId: draft.presetId,
+      remindMode,
+      afterHours: remindMode === "after" ? Math.max(0, draft.afterHours) : undefined,
+      afterMinutes: remindMode === "after" ? Math.max(0, draft.afterMinutes) : undefined,
+      frequency,
+      rangeStart: undefined,
+      rangeEnd: undefined,
+      remindNote: draft.remindNote.trim() || undefined,
+      delivery: draft.delivery,
+      enabled: draft.enabled,
+      createdAt: rule?.createdAt ?? Date.now(),
+    };
+    onSave(built);
+    onClose();
+  };
 
- const pickContact = async () => {
- const c = await NotifyBridge.openContactsPicker();
- if (c.name) setDraft((d) => ({ ...d, senderMatch: c.name! }));
- };
+  const pickContact = async () => {
+    const c = await NotifyBridge.openContactsPicker();
+    if (c.name) {
+      setDraft((d) => {
+        const idx = d.conditions.findIndex((cond) => cond.field === "sender");
+        let newConditions = [...d.conditions];
+        if (idx >= 0) {
+          newConditions[idx] = { ...newConditions[idx], value: c.name! };
+        } else {
+          newConditions.push({
+            id: `cond-sender-${Date.now()}`,
+            field: "sender",
+            operator: "contains",
+            value: c.name!,
+          });
+        }
+        return {
+          ...d,
+          senderMatch: c.name!,
+          conditions: newConditions,
+        };
+      });
+    }
+  };
 
  const applyPreset = (id: PresetId) => {
  const p = getPreset(id);
@@ -201,6 +294,9 @@ export function RuleEditorSheet({
  note: "What to remind",
  review: "Review",
  };
+
+ const isLight = isLightColor(accent);
+ const btnTextColor = isLight ? "#1a1a1a" : "var(--canvas)";
 
  return (
  <AnimatePresence>
@@ -348,69 +444,197 @@ export function RuleEditorSheet({
  </>
  )}
 
- {step === "match" && (
- <>
- <div>
- <p className="t-display text-ink mb-1">Narrow it down.</p>
- <p className="t-body-sm text-ink/60">Match a sender, or match keywords in the message.</p>
- </div>
- <div className="grid grid-cols-2 gap-1 p-1 rounded-2xl bg-ink/[0.04] border border-ink/10">
- {(["sender", "topic"] as MatchMode[]).map((m) => (
- <button
- key={m}
- onClick={() => setDraft((d) => ({ ...d, matchMode: m }))}
- className={`py-2 rounded-xl t-button transition ${draft.matchMode === m ? "bg-canvas text-ink shadow-sm" : "text-ink/60"}`}
- >
- {m === "sender" ? "Sender" : "Topic"}
- </button>
- ))}
- </div>
+  {step === "match" && (
+    <>
+      <div className="space-y-1">
+        <p className="t-display text-ink">Narrow it down.</p>
+        <p className="t-body-sm text-ink/60">Build dynamic filters to decide exactly when this rule triggers.</p>
+      </div>
 
- {draft.matchMode === "sender" ? (
- <div className="flex gap-2">
- <input
- value={draft.senderMatch}
- onChange={(e) => setDraft((d) => ({ ...d, senderMatch: e.target.value }))}
- placeholder="e.g. Mom (blank = anyone)"
- className="t-body flex-1 px-4 py-3 rounded-2xl bg-card border focus:outline-none"
- style={{ borderColor: tint(18) }}
- />
- <button
- onClick={pickContact}
- aria-label="Pick from contacts"
- className="shrink-0 size-[46px] rounded-2xl bg-card border grid place-items-center transition"
- style={{ borderColor: tint(18) }}
- >
- <UserRound className="size-4" style={{ color: accent }} />
- </button>
- </div>
- ) : (
- <div className="space-y-2">
- <div>
- <label className="t-eyebrow text-ink/60">Include any of</label>
- <input
- value={draft.includeAny}
- onChange={(e) => setDraft((d) => ({ ...d, includeAny: e.target.value }))}
- placeholder="sale, discount, offer"
- className="t-body mt-1 w-full px-4 py-3 rounded-2xl bg-card border focus:outline-none"
- style={{ borderColor: tint(18) }}
- />
- <p className="t-meta text-ink/50 mt-1">Comma-separated. Blank = match everything.</p>
- </div>
- <div>
- <label className="t-eyebrow text-ink/60">Exclude</label>
- <input
- value={draft.excludeAny}
- onChange={(e) => setDraft((d) => ({ ...d, excludeAny: e.target.value }))}
- placeholder="promo, ad"
- className="t-body mt-1 w-full px-4 py-3 rounded-2xl bg-card border focus:outline-none"
- style={{ borderColor: tint(18) }}
- />
- </div>
- </div>
- )}
- </>
- )}
+      {/* Summary Box */}
+      <div 
+        className="p-4 rounded-3xl border flex items-start gap-3 transition-all"
+        style={{ borderColor: tint(18), background: tint(5, "var(--canvas)") }}
+      >
+        <span className="size-8 rounded-xl bg-ink/5 grid place-items-center text-ink/50 shrink-0 mt-0.5">
+          <Sparkles className="size-4" style={{ color: accent }} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Real-time Rule Preview</p>
+          <p className="text-xs font-semibold text-ink/80 mt-1 leading-normal">
+            {getRuleSummaryText(draft.conditions, draft.logicalOperator, draft.appName)}
+          </p>
+        </div>
+      </div>
+
+      {/* Logic Operator Toggle */}
+      <div className="space-y-1.5">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Combine Logic</p>
+        <div className="grid grid-cols-2 gap-1 p-1 rounded-2xl bg-ink/[0.04] border border-ink/10">
+          {(["AND", "OR"] as const).map((op) => (
+            <button
+              key={op}
+              type="button"
+              onClick={() => setDraft((d) => ({ ...d, logicalOperator: op }))}
+              className={`py-2 rounded-xl t-button text-xs font-bold transition ${draft.logicalOperator === op ? "bg-white text-ink shadow-sm" : "text-ink/60"}`}
+            >
+              {op === "AND" ? "Match ALL (AND)" : "Match ANY (OR)"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Active Conditions Cards */}
+      <div className="space-y-2.5">
+        {draft.conditions.length > 0 && (
+          <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Active Filters</p>
+        )}
+        <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+          {draft.conditions.map((cond) => {
+            const FieldIcon = cond.field === "sender" ? UserRound 
+                            : cond.field === "text" ? Bell
+                            : cond.field === "otp" ? Check 
+                            : cond.field === "transaction" ? Clock 
+                            : cond.field === "link" ? InfinityIcon 
+                            : Zap;
+                            
+            const fieldLabel = cond.field === "sender" ? "Sender"
+                             : cond.field === "text" ? "Keywords"
+                             : cond.field === "otp" ? "OTP & Codes"
+                             : cond.field === "transaction" ? "Money Alerts"
+                             : cond.field === "link" ? "Web Links"
+                             : "High Priority";
+
+            const isTextMatch = cond.field === "sender" || cond.field === "text";
+
+            return (
+              <div 
+                key={cond.id} 
+                className="p-3.5 rounded-3xl bg-white border border-ink/[0.06] shadow-sm flex flex-col gap-2.5 transition-all"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="size-7 rounded-xl bg-ink/[0.04] grid place-items-center text-ink/60" style={{ color: accent }}>
+                      <FieldIcon className="size-3.5" />
+                    </span>
+                    <span className="text-xs font-bold text-ink/80">{fieldLabel}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={cond.operator}
+                      onChange={(e) => updateCondition(cond.id, { operator: e.target.value as ConditionOperator })}
+                      className="text-[10px] font-bold uppercase tracking-wider bg-ink/[0.04] border border-ink/10 rounded-lg px-2 py-1 outline-none text-ink/75 focus:border-ink/20 cursor-pointer"
+                    >
+                      {isTextMatch ? (
+                        <>
+                          <option value="contains">Contains</option>
+                          <option value="doesNotContain">Excludes (NOT)</option>
+                          <option value="equals">Equals</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="isTrue">Matches</option>
+                          <option value="doesNotContain">Excludes (NOT)</option>
+                        </>
+                      )}
+                    </select>
+
+                    <button
+                      type="button"
+                      onClick={() => removeCondition(cond.id)}
+                      className="size-7 rounded-full hover:bg-ink/5 grid place-items-center text-ink/40 hover:text-ink/80 transition"
+                      aria-label="Remove condition"
+                    >
+                      <Trash2 className="size-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {isTextMatch && (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={cond.value}
+                      onChange={(e) => updateCondition(cond.id, { value: e.target.value })}
+                      placeholder={cond.field === "sender" ? "Enter sender name..." : "Enter keywords (e.g. urgent, bill)..."}
+                      className="flex-1 px-3.5 py-2.5 rounded-2xl bg-card border border-ink/10 text-xs outline-none focus:border-ink/30 transition font-medium"
+                    />
+                    {cond.field === "sender" && (
+                      <button
+                        type="button"
+                        onClick={pickContact}
+                        aria-label="Pick from contacts"
+                        className="shrink-0 size-[38px] rounded-2xl bg-card border grid place-items-center hover:bg-ink/5 transition"
+                        style={{ borderColor: tint(18) }}
+                      >
+                        <UserRound className="size-4" style={{ color: accent }} />
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Add Match Filter Toggles */}
+      <div className="space-y-2">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-ink/40">Add Match Filter</p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => addCondition("sender")}
+            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
+          >
+            <Plus className="size-3" style={{ color: accent }} />
+            Sender
+          </button>
+          <button
+            type="button"
+            onClick={() => addCondition("text")}
+            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
+          >
+            <Plus className="size-3" style={{ color: accent }} />
+            Keywords
+          </button>
+          <button
+            type="button"
+            onClick={() => addCondition("otp")}
+            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
+          >
+            <Plus className="size-3" style={{ color: accent }} />
+            OTP / Codes
+          </button>
+          <button
+            type="button"
+            onClick={() => addCondition("transaction")}
+            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
+          >
+            <Plus className="size-3" style={{ color: accent }} />
+            Money Alerts
+          </button>
+          <button
+            type="button"
+            onClick={() => addCondition("link")}
+            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
+          >
+            <Plus className="size-3" style={{ color: accent }} />
+            Web Links
+          </button>
+          <button
+            type="button"
+            onClick={() => addCondition("priority")}
+            className="t-button text-[10px] font-bold px-3 py-1.5 rounded-full border border-ink/10 bg-white text-ink/70 hover:bg-ink/[0.03] transition-all flex items-center gap-1.5"
+          >
+            <Plus className="size-3" style={{ color: accent }} />
+            High Priority
+          </button>
+        </div>
+      </div>
+    </>
+  )}
 
 
  {step === "when" && (
@@ -646,7 +870,8 @@ export function RuleEditorSheet({
  <button
  onClick={handleSave}
  disabled={!canSave}
- className="t-button w-full py-3.5 rounded-2xl bg-ink text-canvas disabled:opacity-40"
+ className="t-button w-full py-3.5 rounded-2xl disabled:opacity-40 shadow-sm transition-all"
+ style={{ backgroundColor: accent, color: btnTextColor }}
  >
  Save rule
  </button>
@@ -654,7 +879,8 @@ export function RuleEditorSheet({
  <button
  onClick={goNext}
  disabled={nextDisabled}
- className="t-button w-full py-3.5 rounded-2xl bg-ink text-canvas disabled:opacity-40"
+ className="t-button w-full py-3.5 rounded-2xl disabled:opacity-40 shadow-sm transition-all"
+ style={{ backgroundColor: accent, color: btnTextColor }}
  >
  Continue
  </button>

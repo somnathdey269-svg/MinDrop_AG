@@ -6,34 +6,68 @@ import type { NotifyRule } from "@/lib/notify/types";
 type Variant = "active" | "archived" | "erased";
 
 function ruleDescription(r: NotifyRule, accent: string): React.ReactNode {
- let filter: React.ReactNode;
- const mark = (text: React.ReactNode) => <b style={{ color: accent }}>{text}</b>;
- if ((r.matchMode ?? "sender") === "topic") {
- const inc = r.includeAny ?? [];
- filter = inc.length > 0
- ? <>about {mark(<>{inc.slice(0, 3).join(", ")}{inc.length > 3 ? "…" : ""}</>)}</>
- : <>about {mark("anything")}</>;
- } else {
- const sender = r.senderMatch?.trim() || "anyone";
- filter = <>from {mark(sender)}</>;
- }
- let when: React.ReactNode = mark("immediately");
- if (r.remindMode === "after") {
- const h = r.afterHours ?? 0;
- const m = r.afterMinutes ?? 0;
- const parts = [h ? `${h}h` : null, m ? `${m}m` : null].filter(Boolean).join(" ") || "5m";
- when = <>in {mark(parts)}</>;
- }
- const freq = r.frequency ?? "once";
- const freqLabel = freq === "always" ? " · every time" : "";
- const deliveryLabel = (r.delivery ?? "notification") === "alarm"
- ? <> · {mark("ring alarm")}</>
- : <> · {mark("send notification")}</>;
- return (
- <>
- If {mark(r.appName)} {filter}{r.priorityOnly ? <> · {mark("priority")}</> : null} → remind me {when}{freqLabel}{deliveryLabel}
- </>
- );
+  let filter: React.ReactNode;
+  const mark = (text: React.ReactNode) => <b style={{ color: accent }}>{text}</b>;
+
+  if (r.conditions && r.conditions.length > 0) {
+    const parts: React.ReactNode[] = [];
+    r.conditions.forEach((c, idx) => {
+      const isNot = c.operator === "doesNotContain";
+      const opText = isNot ? "excluding" : "matching";
+      const opEqText = isNot ? "not" : "";
+
+      let part: React.ReactNode;
+      if (c.field === "sender") {
+        part = <>{opText} sender {mark(c.value || "...")}</>;
+      } else if (c.field === "text") {
+        part = <>{opText} body {mark(c.value || "...")}</>;
+      } else if (c.field === "otp") {
+        part = <>{isNot ? "excluding" : "matching"} {mark("OTP/Codes")}</>;
+      } else if (c.field === "transaction") {
+        part = <>{isNot ? "excluding" : "matching"} {mark("Money Alerts")}</>;
+      } else if (c.field === "link") {
+        part = <>{isNot ? "excluding" : "matching"} {mark("Web Links")}</>;
+      } else if (c.field === "priority") {
+        part = <>{opEqText} {mark("High Priority")}</>;
+      }
+
+      if (part) {
+        if (idx > 0) {
+          parts.push(<span key={`join-${idx}`} className="text-ink/30 font-semibold lowercase"> {r.logicalOperator} </span>);
+        }
+        parts.push(<span key={c.id}>{part}</span>);
+      }
+    });
+    filter = <span className="inline-flex flex-wrap items-center gap-1.5">{parts}</span>;
+  } else {
+    if ((r.matchMode ?? "sender") === "topic") {
+      const inc = r.includeAny ?? [];
+      filter = inc.length > 0
+      ? <>about {mark(<>{inc.slice(0, 3).join(", ")}{inc.length > 3 ? "…" : ""}</>)}</>
+      : <>about {mark("anything")}</>;
+    } else {
+      const sender = r.senderMatch?.trim() || "anyone";
+      filter = <>from {mark(sender)}</>;
+    }
+  }
+
+  let when: React.ReactNode = mark("immediately");
+  if (r.remindMode === "after") {
+    const h = r.afterHours ?? 0;
+    const m = r.afterMinutes ?? 0;
+    const parts = [h ? `${h}h` : null, m ? `${m}m` : null].filter(Boolean).join(" ") || "5m";
+    when = <>in {mark(parts)}</>;
+  }
+  const freq = r.frequency ?? "once";
+  const freqLabel = freq === "always" ? " · every time" : "";
+  const deliveryLabel = (r.delivery ?? "notification") === "alarm"
+  ? <> · {mark("ring alarm")}</>
+  : <> · {mark("send notification")}</>;
+  return (
+  <>
+  If {mark(r.appName)} {filter}{r.priorityOnly ? <> · {mark("priority")}</> : null} → remind me {when}{freqLabel}{deliveryLabel}
+  </>
+  );
 }
 
 function firedAgo(ms?: number) {
