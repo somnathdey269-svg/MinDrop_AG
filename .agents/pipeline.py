@@ -56,7 +56,7 @@ if not has_sdk:
     LocalAgentConfig = lambda **kwargs: type("Config", (), kwargs)
     types = type("Types", (), {"CapabilitiesConfig": lambda **kwargs: None})
 
-# List of all 20 agents in order of pipeline execution
+# List of all 22 agents in order of pipeline execution
 AGENT_LIST = [
     "01_architect",
     "02_research",
@@ -77,7 +77,9 @@ AGENT_LIST = [
     "17_testing_qa",
     "18_bug_rectifier",
     "19_changelog_writer",
-    "20_analytics_marketing"
+    "20_analytics_marketing",
+    "21_dependency_analyzer",
+    "22_rule_pruner"
 ]
 
 KEYWORD_MAPPINGS = {
@@ -93,15 +95,150 @@ KEYWORD_MAPPINGS = {
     "12_native_android": ["android", "gradle", "apk", "xml", "manifest", "kotlin", "java"],
     "13_native_ios": ["ios", "swift", "cocoapods", "plist", "xcode", "podfile"],
     "14_security_auditor": ["security", "injection", "vulnerability", "auth", "token", "key", "secret"],
-    "15_performance_optimizer": ["performance", "speed", "lcp", "inp", "cls", "bundle", "optimize", "render"],
-    "16_accessibility_inspector": ["aria", "accessibility", "a11y", "semantic", "screen reader", "contrast", "keyboard"],
-    "17_testing_qa": ["test", "vitest", "mock", "spec", "assert", "expect", "qa"],
-    "18_bug_rectifier": ["bug", "fix", "error", "crash", "fails", "uncaught", "exception", "trace", "rectify"],
-    "20_analytics_marketing": ["analytics", "seo", "event", "tracking", "meta", "title", "head"]
+    "15_performance_optimizer": ["performance", "speed", "lcp", "inp", "optimize", "render", "lazy", "cache"],
+    "16_accessibility_inspector": ["a11y", "accessibility", "aria", "focus", "contrast", "keyboard", "alt"],
+    "17_testing_qa": ["test", "jest", "unit", "e2e", "spec", "assert", "expect", "playwright"],
+    "18_bug_rectifier": ["fix", "bug", "error", "crash", "rectify", "resolve", "broken", "issue"],
+    "19_changelog_writer": ["changelog", "release", "version", "commit", "update", "ledger"],
+    "20_analytics_marketing": ["analytics", "seo", "event", "tracking", "meta", "title", "head"],
+    "21_dependency_analyzer": ["dependency", "linker", "import", "package", "require", "depends", "connect"],
+    "22_rule_pruner": ["prune", "clean", "remove", "obsolete", "unused", "deprecated", "rules"]
 }
 
 MAPPING_FILE = "docs/mapping.json"
 MODULES_DIR = "docs/modules"
+
+def auto_scan_dependencies_by_imports(direct_impacts):
+    """
+    Automated Dependency Analyzer Agent:
+    Scans files matching direct impacts, checks their import statements,
+    and prepends matching 'Depends On: <module.md>' links to module docs.
+    """
+    if not os.path.exists(MAPPING_FILE) or not os.path.exists(MODULES_DIR):
+        return
+        
+    try:
+        with open(MAPPING_FILE, "r") as f:
+            mapping = json.load(f)
+    except Exception:
+        return
+
+    for doc in direct_impacts:
+        doc_path = os.path.join(MODULES_DIR, doc)
+        if not os.path.exists(doc_path):
+            continue
+            
+        # Collect directory paths mapped to this doc
+        target_dirs = [k for k, v in mapping.items() if v == doc]
+        if not target_dirs:
+            continue
+            
+        found_deps = set()
+        for t_dir in target_dirs:
+            if not os.path.exists(t_dir):
+                continue
+                
+            # Scan files inside mapped directory for imports
+            for root, _, files in os.walk(t_dir):
+                for f_name in files:
+                    if not (f_name.endswith(".ts") or f_name.endswith(".tsx") or f_name.endswith(".kt")):
+                        continue
+                    try:
+                        with open(os.path.join(root, f_name), "r", errors="ignore") as file:
+                            for line in file:
+                                if "import " in line or "from " in line or "package " in line:
+                                    # Cross-reference imports against mapping paths
+                                    for map_path, map_doc in mapping.items():
+                                        if map_doc != doc and map_path.strip("/") in line:
+                                            found_deps.add(map_doc)
+                    except Exception:
+                        pass
+                        
+        if found_deps:
+            try:
+                with open(doc_path, "r") as f:
+                    content = f.read()
+                
+                # Insert Depends On header if it's missing
+                updated = False
+                for dep in found_deps:
+                    dep_header = f"Depends On: {dep}"
+                    if dep_header not in content:
+                        content = f"{dep_header}\n" + content
+                        updated = True
+                        
+                if updated:
+                    with open(doc_path, "w") as f:
+                        f.write(content)
+                    print(f" -> [Dependency Analyzer] Automatically linked cascading dependency to {doc}!")
+            except Exception:
+                pass
+
+def auto_prune_obsolete_rules():
+    """
+    Automated Rule Pruning Agent:
+    Validates rules across module docs. If a rule refers to an import library
+    no longer referenced anywhere in its mapped directory, it comments it out.
+    """
+    if not os.path.exists(MAPPING_FILE) or not os.path.exists(MODULES_DIR):
+        return
+        
+    try:
+        with open(MAPPING_FILE, "r") as f:
+            mapping = json.load(f)
+    except Exception:
+        return
+
+    for doc in os.listdir(MODULES_DIR):
+        if not doc.endswith(".md"):
+            continue
+        doc_path = os.path.join(MODULES_DIR, doc)
+        
+        # Check rule lines
+        with open(doc_path, "r") as f:
+            lines = f.readlines()
+            
+        modified = False
+        new_lines = []
+        for line in lines:
+            if line.strip().startswith("* Rule:") or line.strip().startswith("- **Rule:"):
+                # Heuristic: Check if rule references library dependencies
+                # e.g. "capacitor-voice-recorder"
+                words = line.lower().split()
+                suspicious_libs = [w.strip("`'\",.") for w in words if "-" in w or "@" in w]
+                
+                for lib in suspicious_libs:
+                    # Scan mapped folder to verify if this library is imported
+                    mapped_folders = [k for k, v in mapping.items() if v == doc]
+                    lib_found = False
+                    for folder in mapped_folders:
+                        if not os.path.exists(folder):
+                            continue
+                        for root, _, files in os.walk(folder):
+                            for fn in files:
+                                if not (fn.endswith(".ts") or fn.endswith(".tsx") or fn.endswith(".json")):
+                                    continue
+                                try:
+                                    with open(os.path.join(root, fn), "r", errors="ignore") as fl:
+                                        if lib in fl.read():
+                                            lib_found = True
+                                            break
+                                except Exception:
+                                    pass
+                            if lib_found:
+                                break
+                                
+                    if not lib_found and mapped_folders:
+                        # Prune/comment out rule
+                        line = f"<!-- Obsolete Rule Pruned: {line.strip()} -->\n"
+                        modified = True
+                        print(f" -> [Rule Pruner] Auto-commented obsolete rule in {doc} referencing '{lib}'")
+                        break
+            new_lines.append(line)
+            
+        if modified:
+            with open(doc_path, "w") as f:
+                f.writelines(new_lines)
 
 def perform_impact_analysis(prompt):
     """
@@ -136,7 +273,10 @@ def perform_impact_analysis(prompt):
             if any(t in prompt_lower or t[:-1] in prompt_lower for t in tokens):
                 direct_impacts.add(doc)
 
-    # 3. Resolve secondary dependencies (Depends On: header checking)
+    # 3. Trigger Automated Dependency Linking before resolving secondary dependencies
+    auto_scan_dependencies_by_imports(list(direct_impacts))
+
+    # 4. Resolve secondary dependencies (Depends On: header checking)
     for doc in list(direct_impacts):
         doc_path = os.path.join(MODULES_DIR, doc)
         if os.path.exists(doc_path):
@@ -164,6 +304,8 @@ def determine_applicability(prompt, direct_impacts, secondary_impacts):
     applicability["01_architect"] = (True, "Required to orchestrate the pipeline.")
     applicability["02_research"] = (True, "Required to check API references and specifications.")
     applicability["19_changelog_writer"] = (True, "Required to document changes and update files touched.")
+    applicability["21_dependency_analyzer"] = (True, "Runs automated import scanning to link cascading dependencies.")
+    applicability["22_rule_pruner"] = (True, "Runs background heuristic scanner to comment out obsolete guidelines.")
 
     # Check if database module is impacted
     db_impacted = any("database" in d.lower() for d in (direct_impacts + secondary_impacts))
@@ -360,7 +502,10 @@ async def execute_pipeline(user_prompt):
             "output": output
         }
 
-    # 5. Save to Ledger
+    # 5. Run Rule Pruning validation to clean obsolete guidelines
+    auto_prune_obsolete_rules()
+
+    # 6. Save to Ledger
     ledger_path = ".agents/ledger.json"
     ledger_data = []
     if os.path.exists(ledger_path):
@@ -374,7 +519,7 @@ async def execute_pipeline(user_prompt):
     with open(ledger_path, "w") as f:
         json.dump(ledger_data, f, indent=2)
 
-    # 6. Update document change ledgers (Auto-Documentation Self-Healing)
+    # 7. Update document change ledgers (Auto-Documentation Self-Healing)
     if direct_impacts:
         update_module_ledgers(direct_impacts, f"Executed requirements: '{user_prompt}'")
 
