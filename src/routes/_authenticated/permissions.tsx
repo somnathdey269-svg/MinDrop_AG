@@ -69,8 +69,8 @@ function Permissions() {
 
   const [notifStatus, setNotifStatus] = useState<Status>("unknown");
   const [micStatus, setMicStatus] = useState<Status>("unknown");
-  const [exactAlarm, setExactAlarm] = useState<boolean>(true);
-  const [battOk, setBattOk] = useState<boolean>(true);
+  const [exactAlarm, setExactAlarm] = useState<boolean>(false);
+  const [battOk, setBattOk] = useState<boolean>(false);
   const [locFg, setLocFg] = useState<boolean>(false);
   const [locBg, setLocBg] = useState<boolean>(false);
   const [notifAccess, setNotifAccess] = useState<boolean>(false);
@@ -90,11 +90,19 @@ function Permissions() {
       }
     } catch {}
     try {
-      const q = await navigator.permissions?.query({ name: "microphone" as PermissionName });
-      if (q) {
-        setMicStatus(q.state as Status);
-        const isOn = q.state === "granted";
-        if (isOn !== p.mic) update({ permissions: { ...p, mic: isOn } });
+      if (isNative()) {
+        const { VoiceRecorder } = await import("capacitor-voice-recorder");
+        const has = await VoiceRecorder.hasAudioRecordingPermission();
+        const ok = has.value;
+        setMicStatus(ok ? "granted" : "prompt");
+        if (ok !== p.mic) update({ permissions: { ...p, mic: ok } });
+      } else {
+        const q = await navigator.permissions?.query({ name: "microphone" as PermissionName });
+        if (q) {
+          setMicStatus(q.state as Status);
+          const isOn = q.state === "granted";
+          if (isOn !== p.mic) update({ permissions: { ...p, mic: isOn } });
+        }
       }
     } catch {}
     if (isAndroid()) {
@@ -120,7 +128,13 @@ function Permissions() {
 
   useEffect(() => {
     refresh();
-    const onVis = () => { if (document.visibilityState === "visible") refresh(); };
+    const onVis = () => {
+      if (document.visibilityState === "visible") {
+        refresh();
+        // Query again after 600ms to handle Android OS setting updates latency
+        setTimeout(refresh, 600);
+      }
+    };
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, [refresh]);

@@ -106,16 +106,21 @@ function Settings() {
   const [permHint, setPermHint] = useState<string>("Tap to review");
   useEffect(() => {
     let cancelled = false;
-    import("@/lib/permissions/state").then(async ({ readPermissions, summarizePermissions }) => {
-      const snap = await readPermissions();
-      if (!cancelled) setPermHint(summarizePermissions(snap));
-    }).catch(() => {});
-    const onVis = () => { if (document.visibilityState === "visible") {
+    const load = () => {
       import("@/lib/permissions/state").then(async ({ readPermissions, summarizePermissions }) => {
         const snap = await readPermissions();
         if (!cancelled) setPermHint(summarizePermissions(snap));
       }).catch(() => {});
-    }};
+    };
+
+    load();
+    const onVis = () => {
+      if (document.visibilityState === "visible") {
+        load();
+        // Query again after 600ms to handle Android OS setting updates latency
+        setTimeout(() => { if (!cancelled) load(); }, 600);
+      }
+    };
     document.addEventListener("visibilitychange", onVis);
     return () => { cancelled = true; document.removeEventListener("visibilitychange", onVis); };
   }, []);

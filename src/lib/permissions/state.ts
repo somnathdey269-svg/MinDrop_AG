@@ -72,7 +72,11 @@ export async function readPermissions(): Promise<PermissionSnapshot> {
 
   // --- Microphone ---
   try {
-    if (typeof navigator !== "undefined" && "permissions" in navigator) {
+    if (isNative()) {
+      const { VoiceRecorder } = await import("capacitor-voice-recorder");
+      const has = await VoiceRecorder.hasAudioRecordingPermission();
+      snap.mic = has.value ? "granted" : "prompt";
+    } else if (typeof navigator !== "undefined" && "permissions" in navigator) {
       try {
         const q = await navigator.permissions.query({ name: "microphone" as PermissionName });
         snap.mic = q.state as PermStatus;
