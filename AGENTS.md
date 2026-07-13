@@ -16,7 +16,7 @@ Whenever the user submits a prompt, categorize the intent and respond accordingl
    If the prompt is an inquiry, question, or general query (e.g., *"How do I run X?"*, *"Where is the API URL?"*, *"Explain this function"*), answer directly and concisely. **Do not run the pipeline.**
 2. **Requirements & Code Modifications (Actionable)**:
    If the prompt is an actionable requirement, feature request, or code modification (e.g., *"Add a delete button"*, *"Fix the layout bug on settings screen"*, *"Create a table"*), you must automatically:
-   - Run the custom pipeline script in the background: `python3 .agents/pipeline.py "<requirement prompt>"`
+   - Run the custom pipeline script in the background: `python3.11 .agents/pipeline.py "<requirement prompt>"`
    - Read the audit trail and execute the code modifications.
-   - Run the reflection script: `python3 .agents/reflection.py` to persist lessons learned.
+   - Run the reflection script: `python3.11 .agents/reflection.py` to persist lessons learned.
 
