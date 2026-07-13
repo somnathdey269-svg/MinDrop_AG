@@ -165,7 +165,15 @@ async function nativeSyncAll() {
       markFired(m.id);
       continue;
     }
-    const at = dueAt <= now ? now + 1_000 : dueAt;
+    if (dueAt <= now) {
+      if (isAlarm) protectedNativeAlarmIds.add(m.id);
+      markFired(m.id);
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        window.dispatchEvent(new CustomEvent<AlarmDetail>(ALARM_EVENT, { detail: { memory: m } }));
+      }
+      continue;
+    }
+    const at = dueAt;
 
     const title = (isAlarm ? "⏰ " : "") + (m.text || (isAlarm ? "MinDrop alarm" : "MinDrop reminder"));
     const body = m.date || "It's time.";
@@ -300,14 +308,38 @@ export function snoozeMemory(id: string, minutes = 5) {
 async function reconcileStoppedAlarms() {
   if (!isNative()) return;
   try {
-    const stoppedIds = await AlarmsBridge.getStoppedAlarms();
-    if (stoppedIds && stoppedIds.length > 0) {
+    const res = await AlarmsBridge.getStoppedAlarms();
+    let changed = false;
+    
+    // 1. Process stopped alarms
+    if (res.stoppedIds && res.stoppedIds.length > 0) {
       const list = readMemories();
       const now = new Date().toISOString();
       const updated = list.map((m) =>
-        stoppedIds.includes(m.id) ? { ...m, archivedAt: now } : m
+        res.stoppedIds.includes(m.id) ? { ...m, archivedAt: now } : m
       );
       persist(updated);
+      changed = true;
+    }
+    
+    // 2. Process snoozed alarms
+    if (res.snoozed && res.snoozed.length > 0) {
+      const list = readMemories();
+      const now = Date.now();
+      let updated = [...list];
+      
+      res.snoozed.forEach((item) => {
+        const nextDue = new Date(now + item.minutes * 60_000).toISOString();
+        updated = updated.map((m) =>
+          m.id === item.id ? { ...m, dueAt: nextDue, firedAt: undefined } : m
+        );
+      });
+      
+      persist(updated);
+      changed = true;
+    }
+    
+    if (changed) {
       await AlarmsBridge.clearStoppedAlarms();
       rescan();
     }

@@ -59,7 +59,7 @@ interface AlarmsBridgePlugin {
   stopPreview(): Promise<void>;
   snoozeAlarm(opts: { id: string; minutes: number }): Promise<void>;
   getActiveAlarm(): Promise<{ id?: string; title?: string; body?: string }>;
-  getStoppedAlarms(): Promise<{ stoppedIds: string[] }>;
+  getStoppedAlarms(): Promise<{ stoppedIds: string[]; snoozed?: { id: string; minutes: number }[] }>;
   clearStoppedAlarms(): Promise<void>;
   setSnoozeIntervals(opts: { intervals: string[] }): Promise<void>;
   addListener(
@@ -152,9 +152,17 @@ export const AlarmsBridge = {
     try { return await native.getActiveAlarm(); } catch { return null; }
   },
 
-  async getStoppedAlarms(): Promise<string[]> {
-    if (!hasPlugin()) return [];
-    try { return (await native.getStoppedAlarms()).stoppedIds ?? []; } catch { return []; }
+  async getStoppedAlarms(): Promise<{ stoppedIds: string[]; snoozed?: { id: string; minutes: number }[] }> {
+    if (!hasPlugin()) return { stoppedIds: [], snoozed: [] };
+    try {
+      const res = await native.getStoppedAlarms();
+      return {
+        stoppedIds: res.stoppedIds ?? [],
+        snoozed: res.snoozed ?? [],
+      };
+    } catch {
+      return { stoppedIds: [], snoozed: [] };
+    }
   },
 
   async clearStoppedAlarms() {
