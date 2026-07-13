@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Archive, Bell, MessageCircle, Clock, Zap, RefreshCw, Trash, Undo, Pencil, RotateCcw, Trash2, Undo2, Sparkles } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import type { NotifyRule } from "@/lib/notify/types";
+import { useTier } from "@/lib/tier";
 
 type Variant = "active" | "archived" | "erased";
 
@@ -103,6 +104,7 @@ export function RulesList({
  onReuse?: (id: string) => void;
  onRestore?: (id: string) => void;
 }) {
+ const { tier } = useTier();
  const tint = (pct: number, base = "transparent") => `color-mix(in oklab, ${accent} ${pct}%, ${base})`;
  const emptyCards = variant === "archived"
  ? {
@@ -225,62 +227,68 @@ export function RulesList({
  )}
  </div>
  <div className="flex flex-wrap gap-1 mt-2 -mx-1 opacity-90">
- {variant === "active" && (
- <>
- <button
- onClick={() => onEdit(r)}
- className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
- >
- <Pencil className="size-3" /> Edit
- </button>
- <button
- onClick={() => onDelete(r.id)}
- className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
- >
- <Trash2 className="size-3" /> Erase
- </button>
- </>
- )}
- {variant === "archived" && (
- <>
- <button
- onClick={() => onReuse?.(r.id)}
- className="t-eyebrow px-2 py-1 rounded inline-flex items-center gap-1"
- style={{ color: accent }}
- >
- <RotateCcw className="size-3" /> Reuse
- </button>
- <button
- onClick={() => onEdit(r)}
- className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
- >
- <Pencil className="size-3" /> Edit
- </button>
- <button
- onClick={() => onDelete(r.id)}
- className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
- >
- <Trash2 className="size-3" /> Erase
- </button>
- </>
- )}
- {variant === "erased" && (
- <>
- <button
- onClick={() => onRestore?.(r.id)}
- className="t-eyebrow px-2 py-1 rounded inline-flex items-center gap-1"
- style={{ color: accent }}
- >
- <Undo2 className="size-3" /> Restore
- </button>
- <button
- onClick={() => onDelete(r.id)}
- className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
- >
- <Trash2 className="size-3" /> Delete forever
- </button>
- </>
- )}
+  {variant === "active" && (
+  <>
+  <button
+  onClick={() => onEdit(r)}
+  className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
+  >
+  <Pencil className="size-3" /> Edit
+  </button>
+  {tier === "premium" && (
+    <button
+    onClick={() => onDelete(r.id)}
+    className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
+    >
+    <Trash2 className="size-3" /> Erase
+    </button>
+  )}
+  </>
+  )}
+  {variant === "archived" && (
+  <>
+  <button
+  onClick={() => onReuse?.(r.id)}
+  className="t-eyebrow px-2 py-1 rounded inline-flex items-center gap-1"
+  style={{ color: accent }}
+  >
+  <RotateCcw className="size-3" /> Reuse
+  </button>
+  <button
+  onClick={() => onEdit(r)}
+  className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
+  >
+  <Pencil className="size-3" /> Edit
+  </button>
+  {tier === "premium" && (
+    <button
+    onClick={() => onDelete(r.id)}
+    className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
+    >
+    <Trash2 className="size-3" /> Erase
+    </button>
+  )}
+  </>
+  )}
+  {variant === "erased" && (
+  <>
+  <button
+  onClick={() => onRestore?.(r.id)}
+  className="t-eyebrow px-2 py-1 rounded inline-flex items-center gap-1"
+  style={{ color: accent }}
+  >
+  <Undo2 className="size-3" /> Restore
+  </button>
+  {tier === "premium" && (
+    <button
+    onClick={() => onDelete(r.id)}
+    className="t-eyebrow text-ink/60 px-2 py-1 rounded inline-flex items-center gap-1"
+    >
+    <Trash2 className="size-3" /> Delete forever
+    </button>
+  )}
+  </>
+  )}
  </div>
  </motion.li>
  );

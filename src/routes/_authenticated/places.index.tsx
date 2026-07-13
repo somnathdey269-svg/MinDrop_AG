@@ -310,9 +310,11 @@ function PlacesIndex() {
                             <button type="button" onClick={() => openEditRule(r)} aria-label="Edit rule" className="grid place-items-center size-8 rounded-full hover:bg-canvas press text-ink/60">
                               <Pencil className="size-4" />
                             </button>
-                            <button type="button" onClick={() => { if (confirm("Erase this rule?")) removeRule(r.id); }} aria-label="Erase rule" className="grid place-items-center size-8 rounded-full hover:bg-canvas press text-ink/60">
-                              <Trash2 className="size-4" />
-                            </button>
+                             {tier === "premium" && (
+                              <button type="button" onClick={() => { if (confirm("Erase this rule?")) removeRule(r.id); }} aria-label="Erase rule" className="grid place-items-center size-8 rounded-full hover:bg-canvas press text-ink/60">
+                                <Trash2 className="size-4" />
+                              </button>
+                             )}
                           </div>
                         </li>
                       );
