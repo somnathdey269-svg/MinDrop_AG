@@ -15,9 +15,15 @@ if os.path.exists(env_path):
                     os.environ["GEMINI_API_KEY"] = key
 
 # Import Google Antigravity SDK
-try:
-    from google.antigravity import Agent, LocalAgentConfig, types
-except ImportError:
+has_sdk = False
+if "GEMINI_API_KEY" in os.environ and os.environ["GEMINI_API_KEY"].strip():
+    try:
+        from google.antigravity import Agent, LocalAgentConfig, types
+        has_sdk = True
+    except ImportError:
+        pass
+
+if not has_sdk:
     class MockResponse:
         def __init__(self, text):
             self._text = text
@@ -264,9 +270,24 @@ async def run_agent(agent_name, prompt, discipline_content, docs_context):
         capabilities=types.CapabilitiesConfig(enable_subagents=False)
     )
     
-    async with Agent(config) as agent:
-        response = await agent.chat(prompt)
-        return await response.text()
+    max_retries = 3
+    retry_delay = 12  # Start with a safe 12-second backoff
+    
+    for attempt in range(max_retries + 1):
+        try:
+            async with Agent(config) as agent:
+                response = await agent.chat(prompt)
+                return await response.text()
+        except Exception as e:
+            err_msg = str(e)
+            if "429" in err_msg or "quota" in err_msg.lower() or "resource_exhausted" in err_msg.lower():
+                if attempt < max_retries:
+                    print(f" -> Rate limit hit for {agent_name} (attempt {attempt + 1}/{max_retries}). Retrying in {retry_delay}s...")
+                    await asyncio.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                    continue
+            raise e
+
 
 async def execute_pipeline(user_prompt):
     print("==================================================")
@@ -300,11 +321,17 @@ async def execute_pipeline(user_prompt):
     }
 
     # 4. Run sequential pipeline
+    active_agent_count = 0
     for agent in AGENT_LIST:
         is_active, reason = applicability[agent]
         clean_name = agent.split("_", 1)[1].replace("_", " ").upper()
         
         if is_active:
+            if active_agent_count > 0:
+                print(f" -> Proactive pacing delay: Sleeping 12 seconds before running {clean_name}...")
+                await asyncio.sleep(12)
+            active_agent_count += 1
+            
             discipline_path = f".agents/disciplines/{agent}.md"
             discipline_content = ""
             if os.path.exists(discipline_path):

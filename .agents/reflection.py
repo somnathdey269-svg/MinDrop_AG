@@ -45,9 +45,24 @@ async def generate_lesson_from_failure(error_msg, doc_module):
     )
     
     config = LocalAgentConfig(system_instructions="You translate logs into strict code disciplines.")
-    async with Agent(config) as agent:
-        response = await agent.chat(prompt)
-        return await response.text()
+    
+    max_retries = 3
+    retry_delay = 12  # Start with a safe 12-second backoff
+    
+    for attempt in range(max_retries + 1):
+        try:
+            async with Agent(config) as agent:
+                response = await agent.chat(prompt)
+                return await response.text()
+        except Exception as e:
+            err_msg = str(e)
+            if "429" in err_msg or "quota" in err_msg.lower() or "resource_exhausted" in err_msg.lower():
+                if attempt < max_retries:
+                    print(f" -> Rate limit hit during reflection (attempt {attempt + 1}/{max_retries}). Retrying in {retry_delay}s...")
+                    await asyncio.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                    continue
+            raise e
 
 async def run_reflection():
     print("==================================================")
@@ -104,6 +119,7 @@ async def run_reflection():
         })
 
     # Iterate over failures, create rules, and patch corresponding module docs
+    active_call_count = 0
     for fail in failures_detected:
         docs = fail["docs"]
         error = fail["error"]
@@ -112,6 +128,10 @@ async def run_reflection():
             doc_path = os.path.join(MODULES_DIR, doc)
             if os.path.exists(doc_path):
                 print(f"Analyzing failure for module: {doc}...")
+                if active_call_count > 0:
+                    print(" -> Proactive pacing delay: Sleeping 12 seconds...")
+                    await asyncio.sleep(12)
+                active_call_count += 1
                 new_rule = await generate_lesson_from_failure(error, doc)
                 print(f" Generated Lesson: {new_rule}")
                 
