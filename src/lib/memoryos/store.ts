@@ -182,9 +182,9 @@ export function useOnboarding() {
     setHydrated(true);
   }, []);
 
-  const update = (patch: Partial<OnboardingState>) =>
+  const update = (patch: Partial<OnboardingState> | ((prev: OnboardingState) => OnboardingState)) =>
     setState((s) => {
-      const next = { ...s, ...patch };
+      const next = typeof patch === "function" ? patch(s) : { ...s, ...patch };
       try {
         window.localStorage.setItem(KEY, JSON.stringify(next));
       } catch {}

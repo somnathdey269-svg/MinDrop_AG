@@ -81,12 +81,19 @@ function Permissions() {
         const r = await LocalNotifications.checkPermissions();
         const s = (r.display === "granted" ? "granted" : r.display === "denied" ? "denied" : "prompt") as Status;
         setNotifStatus(s);
-        if ((s === "granted") !== p.notifications) update({ permissions: { ...p, notifications: s === "granted" } });
+        update(prev => {
+          const isOk = s === "granted";
+          if (prev.permissions.notifications === isOk) return prev;
+          return { ...prev, permissions: { ...prev.permissions, notifications: isOk } };
+        });
       } else if (typeof window !== "undefined" && "Notification" in window) {
         const perm = Notification.permission as Status;
         setNotifStatus(perm);
         const isOn = perm === "granted";
-        if (isOn !== p.notifications) update({ permissions: { ...p, notifications: isOn } });
+        update(prev => {
+          if (prev.permissions.notifications === isOn) return prev;
+          return { ...prev, permissions: { ...prev.permissions, notifications: isOn } };
+        });
       }
     } catch {}
     try {
@@ -95,13 +102,19 @@ function Permissions() {
         const has = await VoiceRecorder.hasAudioRecordingPermission();
         const ok = has.value;
         setMicStatus(ok ? "granted" : "prompt");
-        if (ok !== p.mic) update({ permissions: { ...p, mic: ok } });
+        update(prev => {
+          if (prev.permissions.mic === ok) return prev;
+          return { ...prev, permissions: { ...prev.permissions, mic: ok } };
+        });
       } else {
         const q = await navigator.permissions?.query({ name: "microphone" as PermissionName });
         if (q) {
           setMicStatus(q.state as Status);
           const isOn = q.state === "granted";
-          if (isOn !== p.mic) update({ permissions: { ...p, mic: isOn } });
+          update(prev => {
+            if (prev.permissions.mic === isOn) return prev;
+            return { ...prev, permissions: { ...prev.permissions, mic: isOn } };
+          });
         }
       }
     } catch {}
@@ -145,7 +158,7 @@ function Permissions() {
         const st = await AlarmsBridge.requestNotificationPermission();
         const ok = st.postNotifications;
         setNotifStatus(ok ? "granted" : "denied");
-        update({ permissions: { ...p, notifications: ok } });
+        update(prev => ({ ...prev, permissions: { ...prev.permissions, notifications: ok } }));
         if (!ok) await AlarmsBridge.openNotificationSettings();
         return;
       }
@@ -153,11 +166,11 @@ function Permissions() {
         const r = await LocalNotifications.requestPermissions();
         const ok = r.display === "granted";
         setNotifStatus(ok ? "granted" : "denied");
-        update({ permissions: { ...p, notifications: ok } });
+        update(prev => ({ ...prev, permissions: { ...prev.permissions, notifications: ok } }));
       } else if ("Notification" in window) {
         const res = await Notification.requestPermission();
         setNotifStatus(res as Status);
-        update({ permissions: { ...p, notifications: res === "granted" } });
+        update(prev => ({ ...prev, permissions: { ...prev.permissions, notifications: res === "granted" } }));
       }
     } catch { setNotifStatus("denied"); }
   };
@@ -169,14 +182,14 @@ function Permissions() {
         const has = await mod.VoiceRecorder.hasAudioRecordingPermission();
         const ok = has.value || (await mod.VoiceRecorder.requestAudioRecordingPermission()).value;
         setMicStatus(ok ? "granted" : "denied");
-        update({ permissions: { ...p, mic: ok } });
+        update(prev => ({ ...prev, permissions: { ...prev.permissions, mic: ok } }));
       } else {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         stream.getTracks().forEach((t) => t.stop());
         setMicStatus("granted");
-        update({ permissions: { ...p, mic: true } });
+        update(prev => ({ ...prev, permissions: { ...prev.permissions, mic: true } }));
       }
-    } catch { setMicStatus("denied"); update({ permissions: { ...p, mic: false } }); }
+    } catch { setMicStatus("denied"); update(prev => ({ ...prev, permissions: { ...prev.permissions, mic: false } })); }
   };
 
   const grantLocation = async () => {
