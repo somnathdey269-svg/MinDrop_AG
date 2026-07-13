@@ -14,9 +14,15 @@ if os.path.exists(env_path):
                     os.environ["GEMINI_API_KEY"] = key
 
 # Import Google Antigravity SDK
-try:
-    from google.antigravity import Agent, LocalAgentConfig
-except ImportError:
+has_sdk = False
+if "GEMINI_API_KEY" in os.environ and os.environ["GEMINI_API_KEY"].strip():
+    try:
+        from google.antigravity import Agent, LocalAgentConfig
+        has_sdk = True
+    except ImportError:
+        pass
+
+if not has_sdk:
     class MockResponse:
         async def text(self):
             return "Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080."
