@@ -46,3 +46,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Implemented dynamic notification rules matching engine, compound conditions builder (AND/OR/NOT, OTP, Transactions, Links), and interactive rule set UI.'
 - **2026-07-13 01:20:53** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Removed microphone permission JIT check from notification rule setup flow.'
+- **2026-07-13 18:48:05** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Resolved duplicate notifications in inbox and native buffer.'

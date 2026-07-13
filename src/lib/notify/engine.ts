@@ -189,9 +189,9 @@ function isDuplicate(n: CapturedNotification): boolean {
 }
 
 function handleNotification(n: CapturedNotification) {
+  if (isDuplicate(n)) return;
   pushToInbox(n);
   pushCapture(n, currentPlan());
-  if (isDuplicate(n)) return;
   const rules = readRules();
 
   // Prioritize checking by rule set specificity (more conditions first, catch-all last)
