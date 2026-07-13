@@ -306,7 +306,10 @@ export function snoozeMemory(id: string, minutes = 5) {
 }
 
 async function reconcileStoppedAlarms() {
-  if (!isNative()) return;
+  if (!isNative()) {
+    rescan();
+    return;
+  }
   try {
     const res = await AlarmsBridge.getStoppedAlarms();
     let changed = false;
@@ -341,10 +344,11 @@ async function reconcileStoppedAlarms() {
     
     if (changed) {
       await AlarmsBridge.clearStoppedAlarms();
-      rescan();
     }
   } catch (e) {
     console.warn("[scheduler] reconcileStoppedAlarms failed", e);
+  } finally {
+    rescan();
   }
 }
 
@@ -355,7 +359,6 @@ export function startScheduler() {
   if (isNative()) {
     // Do NOT request notification permission on boot — user grants via /permissions
     // or the JIT prompt shown at capture time.
-    rescan();
     reconcileStoppedAlarms();
 
     LocalNotifications.addListener("localNotificationReceived", (n) => {
@@ -388,7 +391,6 @@ export function startScheduler() {
   window.addEventListener(MEM_CHANGED_EVENT, rescan);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
-      rescan();
       reconcileStoppedAlarms();
     }
   });
