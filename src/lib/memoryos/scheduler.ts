@@ -118,9 +118,9 @@ async function nativeSyncAll() {
   const list = readMemories();
   const useAlarmsBridge = AlarmsBridge.isNative();
   const defaultTone = (() => { try { return getDefaultTone(); } catch { return "classic"; } })();
-  const nativeFiredIds = useAlarmsBridge
-    ? new Set((await AlarmsBridge.getFiredLog()).map((entry) => entry.id))
-    : new Set<string>();
+  const nativeFiredMap = useAlarmsBridge
+    ? new Map<string, number>((await AlarmsBridge.getFiredLog()).map((entry) => [entry.id, entry.at]))
+    : new Map<string, number>();
 
   // Track only scheduler-owned IDs. Blanket cancelAll() was erasing valid
   // native alarms during the same minute they were supposed to ring.
@@ -144,7 +144,14 @@ async function nativeSyncAll() {
   for (const m of list) {
     if (!m.dueAt || m.archivedAt || m.deletedAt) continue;
     const isAlarm = m.notify === "alarm";
-    if (isAlarm && nativeFiredIds.has(m.id)) {
+    
+    // Check if the native fire event corresponds to the CURRENT dueAt time (within 10s tolerance)
+    const dueTime = m.dueAt ? new Date(m.dueAt).getTime() : 0;
+    const firedAtTime = nativeFiredMap.get(m.id);
+    const hasFiredNatively = firedAtTime !== undefined;
+    const firedForCurrentDue = hasFiredNatively && firedAtTime >= (dueTime - 10000);
+
+    if (isAlarm && firedForCurrentDue) {
       // Native receiver may fire while the WebView is closed. Reconcile on
       // next sync so the app does not schedule a second ringing alarm.
       protectedNativeAlarmIds.add(m.id);
