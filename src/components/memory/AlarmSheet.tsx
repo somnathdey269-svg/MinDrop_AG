@@ -150,6 +150,7 @@ export function AlarmSheet() {
       return;
     }
     incrementSnoozeCount();
+    AlarmsBridge.cancelAlarm(current.id).catch(() => {});
     snoozeMemory(current.id, minutes);
     dismiss();
   }
