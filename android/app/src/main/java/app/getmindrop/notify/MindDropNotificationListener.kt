@@ -96,10 +96,16 @@ class MindDropNotificationListener : NotificationListenerService() {
     ) {
         val snap = prefs.getString(KEY_RULES, null) ?: return
         val arr = try { JSONArray(snap) } catch (_: Throwable) { return }
-        val hay = "$title\n$text\n${bigText.orEmpty()}".lowercase()
+
+        // Use only the latest message text for keyword matching.
+        // For MessagingStyle notifications (WhatsApp, etc.) bigText contains ALL
+        // messages in the conversation thread. We only want the newest one
+        // (EXTRA_TEXT) so old unread messages don't re-trigger the alarm.
+        val hay = "$title\n$text".lowercase()
+
         val dedupeKey = "$pkg::$title::$text".hashCode()
         val now = System.currentTimeMillis()
-        // 60s dedupe
+        // 60s dedupe on exact same title+text
         val lastDedupe = prefs.getLong("dedupe_$dedupeKey", 0L)
         if (now - lastDedupe < 60_000L) return
 
@@ -117,9 +123,19 @@ class MindDropNotificationListener : NotificationListenerService() {
             }
             if (!match) continue
 
+            // ── Active-alarm guard ────────────────────────────────────────────
+            // If an alarm is already ringing for this pkg+title, do NOT fire
+            // another one. The registry is cleared only when the user taps Stop.
+            if (app.getmindrop.alarms.AlarmStore.isAlarmActive(
+                    applicationContext, pkg, title)) {
+                return // alarm already active for this conversation — skip
+            }
+
             val delivery = r.optString("delivery", "notification")
             if (delivery == "alarm") {
                 fireNativeAlarm(
+                    pkg = pkg,
+                    conversationTitle = title,
                     ruleId = r.optString("id"),
                     titleOverride = r.optString("title", "$appName alert"),
                     bodyOverride = r.optString("body", "").ifBlank { "$title · $text" }.take(240)
@@ -136,25 +152,36 @@ class MindDropNotificationListener : NotificationListenerService() {
         }
     }
 
-    /** Schedule an immediate loud alarm so it rings even if the WebView is dead. */
-    private fun fireNativeAlarm(ruleId: String, titleOverride: String, bodyOverride: String) {
+    /**
+     * Schedule an immediate loud alarm so it rings even if the WebView is dead.
+     * Also marks the alarm as "active" for this pkg+conversation so subsequent
+     * notification updates from the same thread do NOT re-trigger.
+     */
+    private fun fireNativeAlarm(
+        pkg: String, conversationTitle: String,
+        ruleId: String, titleOverride: String, bodyOverride: String
+    ) {
         try {
             val ctx = applicationContext
             val toneId = app.getmindrop.alarms.AlarmStore.getDefaultToneId(ctx)
             app.getmindrop.alarms.AlarmChannels.ensureAlarmChannel(ctx, toneId)
+            val alarmId = "notify-$ruleId-${System.currentTimeMillis()}"
             val entry = app.getmindrop.alarms.AlarmStore.Entry(
-                id = "notify-$ruleId-${System.currentTimeMillis()}",
+                id = alarmId,
                 at = System.currentTimeMillis(),
                 title = titleOverride,
                 body = bodyOverride,
                 delivery = "alarm",
                 toneId = toneId,
                 exact = true,
-                extra = null
+                // Store pkg::conversationTitle so AlarmReceiver can clear it on Stop
+                extra = "active_key::${pkg}::${conversationTitle}"
             )
             app.getmindrop.alarms.AlarmStore.upsert(ctx, entry)
             app.getmindrop.alarms.AlarmScheduler.schedule(ctx, entry)
-        } catch (_: Throwable) {
+            // Mark this conversation as "alarm active" — blocks re-triggers
+            app.getmindrop.alarms.AlarmStore.markAlarmActive(ctx, pkg, conversationTitle)
+        } catch (e: Throwable) {
             fireAlarm(ruleId, titleOverride, bodyOverride)
         }
     }

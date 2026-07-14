@@ -226,6 +226,18 @@ class AlarmsBridgePlugin : Plugin() {
     @PluginMethod
     fun cancelAlarm(call: PluginCall) {
         val id = call.getString("id") ?: run { call.reject("id required"); return }
+        // Read entry BEFORE removing so we can clear the active-alarm registry
+        val entry = AlarmStore.find(context, id)
+        val extra = entry?.extra ?: ""
+        if (extra.startsWith("active_key::")) {
+            val parts = extra.removePrefix("active_key::").split("::", limit = 2)
+            if (parts.size == 2) {
+                AlarmStore.clearAlarmActive(context, parts[0], parts[1])
+            }
+        }
+        // Also cancel the alarm notification posted by AlarmReceiver
+        val nm = context.getSystemService(android.app.NotificationManager::class.java)
+        nm?.cancel(AlarmStore.requestCode(id))
         AlarmScheduler.cancel(context, id)
         AlarmStore.remove(context, id)
         call.resolve()
@@ -356,13 +368,10 @@ object AlarmScheduler {
             delivery = "notify", toneId = "classic", exact = false
         )
         am.cancel(pendingIntent(ctx, stub))
-        // Also stop any ringing service that may be alive for this id.
+        // Use stopService() — always allowed by Android, triggers onDestroy()
+        // which stops the media player. startService() is blocked in background.
         try {
-            val stop = Intent(ctx, AlarmRingService::class.java).apply {
-                action = AlarmRingService.ACTION_STOP
-                putExtra("id", id)
-            }
-            ctx.startService(stop)
+            ctx.stopService(Intent(ctx, AlarmRingService::class.java))
         } catch (_: Throwable) {}
     }
 

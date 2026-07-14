@@ -122,12 +122,27 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun stopAlarm(ctx: Context, id: String, removeEntry: Boolean = true) {
         val nm = ctx.getSystemService(NotificationManager::class.java)
         nm.cancel(AlarmStore.requestCode(id))
-        if (removeEntry) AlarmStore.remove(ctx, id)
-        val svc = Intent(ctx, AlarmRingService::class.java).apply {
-            action = AlarmRingService.ACTION_STOP
-            putExtra("id", id)
+
+        // Read the stored alarm entry BEFORE removing it, so we can clear
+        // the active-alarm registry for this pkg+conversation.
+        val entry = AlarmStore.find(ctx, id)
+        val extra = entry?.extra ?: ""
+        // extra format: "active_key::{pkg}::{conversationTitle}"
+        if (extra.startsWith("active_key::")) {
+            val parts = extra.removePrefix("active_key::").split("::", limit = 2)
+            if (parts.size == 2) {
+                AlarmStore.clearAlarmActive(ctx, parts[0], parts[1])
+            }
         }
-        try { ctx.startService(svc) } catch (_: Throwable) {}
+
+        if (removeEntry) AlarmStore.remove(ctx, id)
+
+        // stopService() is always allowed by Android (unlike startService in
+        // background). It triggers onDestroy() on AlarmRingService which stops
+        // the media player and vibration.
+        try {
+            ctx.stopService(Intent(ctx, AlarmRingService::class.java))
+        } catch (_: Throwable) {}
     }
 
     private fun snoozeAndStop(ctx: Context, intent: Intent, minutes: Int) {
