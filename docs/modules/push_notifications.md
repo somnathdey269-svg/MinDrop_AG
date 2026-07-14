@@ -50,3 +50,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Resolved duplicate notifications in inbox and native buffer.'
 - **2026-07-14 13:10:22** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Fixed alarm notification dismissal and mapping order bugs.'
+- **2026-07-14 15:03:35** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Restored native notification dismissal on alarm cancel.'
