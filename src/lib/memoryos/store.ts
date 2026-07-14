@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { defaultQuestions, defaultPersonalities, type QuizQuestion, type Personality, type PersonalityId } from "./quiz";
 import { isUserAddedPackMemory, type Memory } from "./types";
-import { supabase } from "@/integrations/supabase/client";
-import { upsertMemoryReminder, deleteMemoryReminder } from "@/lib/memoryReminderSync.functions";
+
 
 const MEM_KEY = "memoryos.memories.v1";
 const MEM_CHANGED_EVENT = "memoryos:memories-changed";
@@ -59,46 +58,7 @@ export function useMemories() {
   const reschedule = (id: string, dueAt: string, when: string) =>
     persist(list.map((x) => (x.id === id ? { ...x, dueAt, date: when, archivedAt: undefined, deletedAt: undefined } : x)));
 
-  // Mirror reminder-bearing memories to the DB so server-side push cron can fire.
-  const syncedRef = useRef<Map<string, string>>(new Map());
-  useEffect(() => {
-    if (!hydrated) return;
-    let cancelled = false;
-    (async () => {
-      const { data: sess } = await supabase.auth.getSession();
-      if (!sess.session) return;
-      const cur = syncedRef.current;
-      const seen = new Set<string>();
-      for (const m of list) {
-        if (!m.id || m.deletedAt) continue;
-        const key = `${m.dueAt || ""}|${m.text?.slice(0, 200) || ""}|${m.firedAt ? "1" : "0"}`;
-        seen.add(m.id);
-        if (!m.dueAt) continue; // only track reminder-bearing memories
-        if (cur.get(m.id) === key) continue;
-        try {
-          await upsertMemoryReminder({
-            data: {
-              id: m.id,
-              title: m.text || "Reminder",
-              remindAt: m.dueAt,
-              snoozedUntil: null,
-              fired: m.firedAt ? true : false,
-            },
-          });
-          cur.set(m.id, key);
-        } catch { /* offline / auth expired — retry next change */ }
-        if (cancelled) return;
-      }
-      // Delete rows for memories that were removed locally
-      for (const id of Array.from(cur.keys())) {
-        if (!seen.has(id)) {
-          try { await deleteMemoryReminder({ data: { id } }); } catch {}
-          cur.delete(id);
-        }
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [list, hydrated]);
+
 
   return { list, add, remove, update, persist, softDelete, archive, restore, reschedule, hydrated };
 }
