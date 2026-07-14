@@ -50,3 +50,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Restored native notification dismissal on alarm cancel.'
 - **2026-07-14 15:15:30** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Fixed sync loop race condition causing alarm refires.'
+- **2026-07-14 17:04:53** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fixed messaging group conversation unread history alarm re-triggering.'

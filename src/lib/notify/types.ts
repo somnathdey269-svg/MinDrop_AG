@@ -7,6 +7,7 @@ export interface CapturedNotification {
   bigText?: string;        // expanded body if available
   timestamp: number;       // ms since epoch
   priority?: number;       // OS-reported priority; >=1 = high (native only)
+  isMessaging?: boolean;   // Indicates a MessagingStyle grouped notification
 }
 
 export type ConditionField = 

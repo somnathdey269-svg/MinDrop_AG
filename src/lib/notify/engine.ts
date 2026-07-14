@@ -24,11 +24,16 @@ function currentPlan(): "free" | "premium" {
 }
 
 function haystack(n: CapturedNotification) {
+  if (n.isMessaging) {
+    return `${n.title}\n${n.text}`.toLowerCase();
+  }
   return `${n.title}\n${n.text}\n${n.bigText ?? ""}`.toLowerCase();
 }
 
 function checkCondition(cond: RuleCondition, n: CapturedNotification): boolean {
-  const hay = `${n.title}\n${n.text}\n${n.bigText ?? ""}`.toLowerCase();
+  const hay = n.isMessaging
+    ? `${n.title}\n${n.text}`.toLowerCase()
+    : `${n.title}\n${n.text}\n${n.bigText ?? ""}`.toLowerCase();
 
   if (cond.field === "sender") {
     const s = cond.value.trim().toLowerCase();
