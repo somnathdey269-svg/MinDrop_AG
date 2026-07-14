@@ -119,7 +119,11 @@ async function nativeSyncAll() {
   const useAlarmsBridge = AlarmsBridge.isNative();
   const defaultTone = (() => { try { return getDefaultTone(); } catch { return "classic"; } })();
   const nativeFiredMap = useAlarmsBridge
-    ? new Map<string, number>((await AlarmsBridge.getFiredLog()).map((entry) => [entry.id, entry.at]))
+    ? new Map<string, number>(
+        [...(await AlarmsBridge.getFiredLog())]
+          .reverse()
+          .map((entry) => [entry.id, entry.at])
+      )
     : new Map<string, number>();
 
   // Track only scheduler-owned IDs. Blanket cancelAll() was erasing valid
