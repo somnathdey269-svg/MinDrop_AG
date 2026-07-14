@@ -92,29 +92,43 @@ export function AlarmSheet() {
     window.addEventListener(ALARM_EVENT, onFire as EventListener);
 
     // 2. Check if an alarm is already ringing on app launch/resume
-    AlarmsBridge.getActiveAlarm()
-      .then((active) => {
-        if (active && active.id) {
-          let mem: Memory | undefined;
-          try {
-            const raw = window.localStorage.getItem("memoryos.memories.v1");
-            const list: Memory[] = raw ? JSON.parse(raw) : [];
-            mem = list.find((x) => x.id === active.id);
-          } catch {}
-          
-          const targetMem: Memory = mem || {
-            id: active.id,
-            text: active.title || "Alarm",
-            date: active.body || "",
-            notify: "alarm",
-          } as any;
-          
-          setQueue((q) => (q.some((m) => m.id === targetMem.id) ? q : [...q, targetMem]));
-        }
-      })
-      .catch(() => {});
+    const checkActiveAlarm = () => {
+      AlarmsBridge.getActiveAlarm()
+        .then((active) => {
+          if (active && active.id) {
+            let mem: Memory | undefined;
+            try {
+              const raw = window.localStorage.getItem("memoryos.memories.v1");
+              const list: Memory[] = raw ? JSON.parse(raw) : [];
+              mem = list.find((x) => x.id === active.id);
+            } catch {}
+            
+            const targetMem: Memory = mem || {
+              id: active.id,
+              text: active.title || "Alarm",
+              date: active.body || "",
+              notify: "alarm",
+            } as any;
+            
+            setQueue((q) => (q.some((m) => m.id === targetMem.id) ? q : [...q, targetMem]));
+          }
+        })
+        .catch(() => {});
+    };
 
-    return () => window.removeEventListener(ALARM_EVENT, onFire as EventListener);
+    checkActiveAlarm();
+
+    const onVis = () => {
+      if (document.visibilityState === "visible") {
+        checkActiveAlarm();
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+
+    return () => {
+      window.removeEventListener(ALARM_EVENT, onFire as EventListener);
+      document.removeEventListener("visibilitychange", onVis);
+    };
   }, []);
 
   const dismiss = () => { setSnoozeOpen(false); setQueue((q) => q.slice(1)); };
