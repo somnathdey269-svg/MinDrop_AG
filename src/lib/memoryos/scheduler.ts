@@ -147,64 +147,69 @@ async function nativeSyncAll() {
 
   for (const m of list) {
     if (!m.dueAt || m.archivedAt || m.deletedAt) continue;
-    const isAlarm = m.notify === "alarm";
+
+    // Refresh memory object from latest localStorage to prevent race conditions during async awaits
+    const currentMem = readMemories().find((x) => x.id === m.id) || m;
+    if (!currentMem.dueAt || currentMem.archivedAt || currentMem.deletedAt) continue;
+
+    const isAlarm = currentMem.notify === "alarm";
     
     // Check if the native fire event corresponds to the CURRENT dueAt time (within 10s tolerance)
-    const dueTime = m.dueAt ? new Date(m.dueAt).getTime() : 0;
-    const firedAtTime = nativeFiredMap.get(m.id);
+    const dueTime = currentMem.dueAt ? new Date(currentMem.dueAt).getTime() : 0;
+    const firedAtTime = nativeFiredMap.get(currentMem.id);
     const hasFiredNatively = firedAtTime !== undefined;
     const firedForCurrentDue = hasFiredNatively && firedAtTime >= (dueTime - 10000);
 
     if (isAlarm && firedForCurrentDue) {
       // Native receiver may fire while the WebView is closed. Reconcile on
       // next sync so the app does not schedule a second ringing alarm.
-      protectedNativeAlarmIds.add(m.id);
-      if (!m.firedAt) markFired(m.id);
+      protectedNativeAlarmIds.add(currentMem.id);
+      if (!currentMem.firedAt) markFired(currentMem.id);
       continue;
     }
-    if (isAlarm && m.firedAt) {
+    if (isAlarm && currentMem.firedAt) {
       // Do not call cancelAlarm here: cancelling also stops the currently
       // ringing foreground service. Stop/Snooze actions clean up native state.
-      protectedNativeAlarmIds.add(m.id);
+      protectedNativeAlarmIds.add(currentMem.id);
       continue;
     }
-    if (m.firedAt) continue;
-    const dueAt = new Date(m.dueAt).getTime();
+    if (currentMem.firedAt) continue;
+    const dueAt = new Date(currentMem.dueAt).getTime();
     if (Number.isNaN(dueAt)) continue;
     if (dueAt <= now - OVERDUE_GRACE_MS) {
-      if (isAlarm) protectedNativeAlarmIds.add(m.id);
-      markFired(m.id);
+      if (isAlarm) protectedNativeAlarmIds.add(currentMem.id);
+      markFired(currentMem.id);
       continue;
     }
     if (dueAt <= now) {
-      if (isAlarm) protectedNativeAlarmIds.add(m.id);
-      markFired(m.id);
+      if (isAlarm) protectedNativeAlarmIds.add(currentMem.id);
+      markFired(currentMem.id);
       if (typeof document !== "undefined" && document.visibilityState === "visible") {
-        window.dispatchEvent(new CustomEvent<AlarmDetail>(ALARM_EVENT, { detail: { memory: m } }));
+        window.dispatchEvent(new CustomEvent<AlarmDetail>(ALARM_EVENT, { detail: { memory: currentMem } }));
       }
       continue;
     }
     const at = dueAt;
 
-    const title = (isAlarm ? "⏰ " : "") + (m.text || (isAlarm ? "MinDrop alarm" : "MinDrop reminder"));
-    const body = m.date || "It's time.";
+    const title = (isAlarm ? "⏰ " : "") + (currentMem.text || (isAlarm ? "MinDrop alarm" : "MinDrop reminder"));
+    const body = currentMem.date || "It's time.";
 
     if (isAlarm && useAlarmsBridge) {
       // Loud ringing path — native AlarmsBridge handles tone, full-screen intent, snooze actions.
-      nextNativeAlarmIds.push(m.id);
+      nextNativeAlarmIds.push(currentMem.id);
       const res = await AlarmsBridge.scheduleAlarm({
-        id: m.id,
+        id: currentMem.id,
         at,
         title,
         body,
         delivery: "alarm",
         toneId: defaultTone,
-        extra: { memoryId: m.id, kind: "alarm" },
+        extra: { memoryId: currentMem.id, kind: "alarm" },
       });
       if (res.reason && res.reason !== "ok") {
         try {
           window.dispatchEvent(new CustomEvent("mindrop:alarm-blocked", {
-            detail: { title: m.text || "Alarm", reason: res.reason },
+            detail: { title: currentMem.text || "Alarm", reason: res.reason },
           }));
         } catch {}
       }
