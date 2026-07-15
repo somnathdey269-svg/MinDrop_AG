@@ -30,9 +30,14 @@ class MindDropNotificationListener : NotificationListenerService() {
         try {
             val n = sbn.notification ?: return
             if (sbn.packageName == packageName) return
-            // Read everything for now — group summaries and ongoing (music,
-            // navigation, calls) included. Was previously filtered; user
-            // asked to capture all notifications.
+
+            // ── Fix 4: Skip group-summary notifications ───────────────────
+            // Android bundles individual notifications into a group summary
+            // (FLAG_GROUP_SUMMARY). Processing summaries causes the same
+            // message to trigger an alarm twice — once for the individual
+            // notification and once for the summary. We only want to evaluate
+            // the individual, atomic notification.
+            if ((n.flags and android.app.Notification.FLAG_GROUP_SUMMARY) != 0) return
 
             val extracted = extractContent(n)
             val title = extracted.title
@@ -111,8 +116,18 @@ class MindDropNotificationListener : NotificationListenerService() {
 
         for (i in 0 until arr.length()) {
             val r = arr.optJSONObject(i) ?: continue
+            val ruleId = r.optString("id")
             if (r.optString("pkg") != pkg) continue
             if (r.optBoolean("priorityOnly", false) && priority < 1) continue
+
+            // ── Fix 2 & 3: Permanent once-rule guard ──────────────────────
+            // "once" rules that the user has stopped (or that have already
+            // fired once) are written into the stopped-rules set. They must
+            // NEVER fire again — not even after a phone restart — because
+            // SharedPreferences survives reboots.
+            val frequency = r.optString("frequency", "once")
+            if (frequency == "once" && isRuleStopped(ruleId)) continue
+
             val kwArr = r.optJSONArray("keywords") ?: JSONArray()
             var match = kwArr.length() == 0
             if (!match) {
@@ -123,7 +138,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             }
             if (!match) continue
 
-            // ── Active-alarm guard ────────────────────────────────────────────
+            // ── Active-alarm guard (for always-rules) ─────────────────────
             // If an alarm is already ringing for this pkg+title, do NOT fire
             // another one. The registry is cleared only when the user taps Stop.
             if (app.getmindrop.alarms.AlarmStore.isAlarmActive(
@@ -136,20 +151,39 @@ class MindDropNotificationListener : NotificationListenerService() {
                 fireNativeAlarm(
                     pkg = pkg,
                     conversationTitle = title,
-                    ruleId = r.optString("id"),
+                    ruleId = ruleId,
                     titleOverride = r.optString("title", "$appName alert"),
                     bodyOverride = r.optString("body", "").ifBlank { "$title · $text" }.take(240)
                 )
             } else {
                 fireAlarm(
-                    ruleId = r.optString("id"),
+                    ruleId = ruleId,
                     titleOverride = r.optString("title", "$appName alert"),
                     bodyOverride = r.optString("body", "").ifBlank { "$title · $text" }.take(240)
                 )
             }
+
+            // ── Fix 3: Retire once-rules permanently after first fire ──────
+            // Once the alarm fires for a "once" rule, immediately mark it
+            // as stopped so no future notification from the same sender ever
+            // triggers this rule again — even before the user taps Stop.
+            if (frequency == "once") markRuleStopped(ruleId)
+
             prefs.edit().putLong("dedupe_$dedupeKey", now).apply()
             break // one alarm per notification
         }
+    }
+
+    // ── Stopped-rules set ────────────────────────────────────────────────
+    // Persisted in SharedPreferences (survives reboots). Written when a
+    // once-rule fires OR when the user explicitly taps Stop on any alarm
+    // that originated from a once-rule. Checked before every evaluateAndFire.
+
+    private fun isRuleStopped(ruleId: String): Boolean =
+        prefs.getBoolean("stopped_rule_$ruleId", false)
+
+    fun markRuleStopped(ruleId: String) {
+        prefs.edit().putBoolean("stopped_rule_$ruleId", true).apply()
     }
 
     /**
@@ -174,8 +208,10 @@ class MindDropNotificationListener : NotificationListenerService() {
                 delivery = "alarm",
                 toneId = toneId,
                 exact = true,
-                // Store pkg::conversationTitle so AlarmReceiver can clear it on Stop
-                extra = "active_key::${pkg}::${conversationTitle}"
+                // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
+                // AlarmReceiver uses pkg+title to clear active-alarm registry
+                // and ruleId to permanently retire once-rules on Stop.
+                extra = "active_key::${pkg}::${conversationTitle}::${ruleId}"
             )
             app.getmindrop.alarms.AlarmStore.upsert(ctx, entry)
             app.getmindrop.alarms.AlarmScheduler.schedule(ctx, entry)

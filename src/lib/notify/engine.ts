@@ -250,6 +250,8 @@ export function buildNativeRuleSnapshot(): NativeRuleSnapshot[] {
       title: `${r.appName} · ${r.senderMatch || "match"}`,
       body: r.remindNote || "",
       delivery: r.delivery ?? "notification",
+      // Fix 2: tell native layer whether to retire (once) or keep alive (always).
+      frequency: (r.frequency ?? "once") as "once" | "always",
     }));
 }
 

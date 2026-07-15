@@ -12,7 +12,9 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -21,13 +23,21 @@ import androidx.core.app.NotificationCompat
 /**
  * AlarmRingService — foreground service that actually plays the alarm tone
  * on the ALARM audio stream and vibrates. Started by AlarmReceiver when a
- * scheduled alarm fires; stopped by the Stop / Snooze notification actions
- * or the JS AlarmSheet.
+ * scheduled alarm fires; stopped by the Stop / Snooze notification actions,
+ * the JS AlarmSheet, or the 30-second auto-stop timer.
  */
 class AlarmRingService : Service() {
 
     private var player: MediaPlayer? = null
     private var vibrator: Vibrator? = null
+
+    // ── Fix 1: 30-second auto-stop ──────────────────────────────────────
+    // If the user doesn't interact within AUTO_STOP_MS, the alarm stops
+    // itself. Treated identically to a user-triggered Stop so the
+    // AlarmStore active-registry is cleared and the rule lifecycle is honoured.
+    private val autoStopHandler = Handler(Looper.getMainLooper())
+    private val autoStopRunnable = Runnable { stopSelfCleanly() }
+    private val AUTO_STOP_MS = 30_000L
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -35,6 +45,7 @@ class AlarmRingService : Service() {
         val action = intent?.action ?: ACTION_RING
         when (action) {
             ACTION_STOP -> {
+                autoStopHandler.removeCallbacks(autoStopRunnable)
                 stopSelfCleanly()
                 return START_NOT_STICKY
             }
@@ -42,12 +53,16 @@ class AlarmRingService : Service() {
                 val toneId = intent?.getStringExtra("toneId") ?: "classic"
                 startForegroundIfNeeded("Previewing alarm tone")
                 startTone(toneId, vibrate = false)
+                // No auto-stop for previews — user triggers stopPreview() from JS.
                 return START_NOT_STICKY
             }
             else -> {
                 val toneId = intent?.getStringExtra("toneId") ?: "classic"
                 startForegroundIfNeeded("Alarm ringing")
                 startTone(toneId, vibrate = true)
+                // Schedule auto-stop after 30 seconds.
+                autoStopHandler.removeCallbacks(autoStopRunnable)
+                autoStopHandler.postDelayed(autoStopRunnable, AUTO_STOP_MS)
                 return START_NOT_STICKY
             }
         }
@@ -166,6 +181,7 @@ class AlarmRingService : Service() {
     }
 
     override fun onDestroy() {
+        autoStopHandler.removeCallbacks(autoStopRunnable)
         stopPlayback()
         super.onDestroy()
     }

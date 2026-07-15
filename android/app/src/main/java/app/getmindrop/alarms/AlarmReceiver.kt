@@ -124,14 +124,26 @@ class AlarmReceiver : BroadcastReceiver() {
         nm.cancel(AlarmStore.requestCode(id))
 
         // Read the stored alarm entry BEFORE removing it, so we can clear
-        // the active-alarm registry for this pkg+conversation.
+        // the active-alarm registry and mark once-rules as permanently stopped.
         val entry = AlarmStore.find(ctx, id)
         val extra = entry?.extra ?: ""
-        // extra format: "active_key::{pkg}::{conversationTitle}"
+        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
+        // ruleId segment is optional (legacy entries have only pkg::title).
         if (extra.startsWith("active_key::")) {
-            val parts = extra.removePrefix("active_key::").split("::", limit = 2)
-            if (parts.size == 2) {
+            val parts = extra.removePrefix("active_key::").split("::", limit = 3)
+            if (parts.size >= 2) {
                 AlarmStore.clearAlarmActive(ctx, parts[0], parts[1])
+            }
+            // Fix 3: If ruleId was embedded, permanently retire this rule so it
+            // never fires again (once-rule semantics). The listener's SharedPrefs
+            // are the same PREFS file so we write directly.
+            if (parts.size == 3) {
+                val ruleId = parts[2]
+                val listenerPrefs = ctx.getSharedPreferences(
+                    app.getmindrop.notify.MindDropNotificationListener.PREFS,
+                    android.content.Context.MODE_PRIVATE
+                )
+                listenerPrefs.edit().putBoolean("stopped_rule_$ruleId", true).apply()
             }
         }
 

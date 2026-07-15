@@ -227,12 +227,24 @@ class AlarmsBridgePlugin : Plugin() {
     fun cancelAlarm(call: PluginCall) {
         val id = call.getString("id") ?: run { call.reject("id required"); return }
         // Read entry BEFORE removing so we can clear the active-alarm registry
+        // and permanently retire once-rules.
         val entry = AlarmStore.find(context, id)
         val extra = entry?.extra ?: ""
+        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
+        // ruleId segment is optional (legacy entries have only pkg::title).
         if (extra.startsWith("active_key::")) {
-            val parts = extra.removePrefix("active_key::").split("::", limit = 2)
-            if (parts.size == 2) {
+            val parts = extra.removePrefix("active_key::").split("::", limit = 3)
+            if (parts.size >= 2) {
                 AlarmStore.clearAlarmActive(context, parts[0], parts[1])
+            }
+            // Fix 3: Permanently retire once-rules so they never fire again.
+            if (parts.size == 3) {
+                val ruleId = parts[2]
+                val listenerPrefs = context.getSharedPreferences(
+                    app.getmindrop.notify.MindDropNotificationListener.PREFS,
+                    android.content.Context.MODE_PRIVATE
+                )
+                listenerPrefs.edit().putBoolean("stopped_rule_$ruleId", true).apply()
             }
         }
         // Also cancel the alarm notification posted by AlarmReceiver
