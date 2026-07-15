@@ -43,3 +43,5 @@ Coordinates platform compiles, package manifests, podfiles, and build automation
   * **Change**: Executed requirements: 'Restored native notification dismissal on alarm cancel.'
 - **2026-07-14 17:38:57** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Fixed foreground audio service background stop failures and implemented missing native alarm reconciliation.'
+- **2026-07-15 14:59:55** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix 4 alarm/notification concerns: (1) Alarm auto-stops after 30 seconds if user doesnt interact. (2) Close the once vs everytime loop - frequency field must be passed to native snapshot and native side must honor it - once means permanently retire after firing, always means keep alive. (3) If user stops alarm for a once-rule, it should never alarm again - native snapshot must re-sync after archiving. (4) Filter out group summary notifications in MindDropNotificationListener - only process individual atomic notifications to prevent duplicate alarms.'
