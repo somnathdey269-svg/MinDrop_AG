@@ -27,11 +27,8 @@ const INCLUDE_PREFIXES = [
   "mindrop.cloud.",          // cloud sync metadata (userId, timestamps)
   "mindrop.install_country", // install country + synced flag
   "mindrop.tier.",           // cached plan tier
-  "mindrop.countryThemes.",  // country themes cache
   "mindrop.admin.",          // admin sidebar preferences
   "mindrop.localMigration",  // migration-ran flag
-  "mindrop.snooze.",         // paywall snooze daily counts
-  "mindrop.drive.",          // auto-backup last-ran timestamp
   "mindrop.summary.",        // BYOK keys, presets, active preset, category overrides, scheduler, profile, history, last report, used suggestions
 ] as const;
 
@@ -42,11 +39,14 @@ const EXCLUDE_KEYS = new Set<string>([
 ]);
 
 // Additional single keys (or prefixes) we exclude because they represent
-// per-device UI/onboarding state, not user content.
+// per-device UI/onboarding state or ephemeral runtime data — not user content.
 const EXCLUDE_PREFIXES = [
-  "mindrop.splash.",        // splash-screen shown flag — device-only
+  "mindrop.splash.",         // splash-screen shown flag — device-only
   "mindrop.disclosure.",     // Play Store disclosure acks — device-only
   "mindrop.perm.",           // permission ask timestamps — device-only
+  "mindrop.snooze.",         // paywall snooze daily counts — runtime, not user data
+  "mindrop.drive.",          // last auto-backup timestamp — device-specific, auto-updates on next sync
+  "mindrop.countryThemes.",  // country themes cache — auto-regenerates from country code
 ] as const;
 
 function shouldInclude(key: string): boolean {
