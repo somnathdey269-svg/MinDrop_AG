@@ -36,3 +36,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
 - **2026-07-12 10:31:54** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'You chnaged the position of the pill and move it words, pls dont do that, keep it at original place only'
+- **2026-07-15 19:23:58** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Set android:allowBackup=false in AndroidManifest.xml so uninstalling the app fully wipes all app data and reinstall starts fresh. Also clean up backup.ts INCLUDE_PREFIXES to exclude operational/ephemeral keys: mindrop.snooze. (paywall snooze daily counts - runtime state), mindrop.drive. (last backup timestamp - device-specific), mindrop.countryThemes. (cache that auto-regenerates). Only user-created data (memories, rules, places, alarms, appearance, theme overrides) should be in backup.'
