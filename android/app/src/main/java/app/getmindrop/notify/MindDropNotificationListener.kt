@@ -31,6 +31,10 @@ class MindDropNotificationListener : NotificationListenerService() {
             val n = sbn.notification ?: return
             if (sbn.packageName == packageName) return
 
+            // Skip background sync/ongoing notifications (e.g. WhatsApp "Checking for new messages")
+            val ongoingOrService = (n.flags and (android.app.Notification.FLAG_ONGOING_EVENT or android.app.Notification.FLAG_FOREGROUND_SERVICE)) != 0
+            if (ongoingOrService) return
+
             // ── Fix 4: Skip group-summary notifications ───────────────────
             // Android bundles individual notifications into a group summary
             // (FLAG_GROUP_SUMMARY). Processing summaries causes the same
@@ -44,6 +48,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             val text = extracted.text
             val bigText = extracted.bigText
             val subText = extracted.subText
+            val isMessaging = extracted.isMessaging
             if (title.isBlank() && text.isBlank() && bigText.isNullOrBlank()) return
 
             val appName = resolveAppLabel(sbn.packageName)
@@ -55,7 +60,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             evaluateAndFire(sbn.packageName, appName, title, text, bigText, n.priority)
 
             // 2. Buffer the raw event so JS can drain on next open.
-            bufferEvent(id, sbn.packageName, appName, title, text, bigText, subText, n.priority, sbn.postTime)
+            bufferEvent(id, sbn.packageName, appName, title, text, bigText, subText, n.priority, sbn.postTime, isMessaging)
 
             // 3. Live forward to JS if it's alive.
             NotifyBridgePlugin.instance?.emitNotification(
@@ -67,7 +72,8 @@ class MindDropNotificationListener : NotificationListenerService() {
                 bigText = bigText,
                 subText = subText,
                 priority = n.priority,
-                timestamp = sbn.postTime
+                timestamp = sbn.postTime,
+                isMessaging = isMessaging
             )
         } catch (_: Throwable) {
             // Never crash the listener — Android will disable us if we do.
@@ -270,7 +276,8 @@ class MindDropNotificationListener : NotificationListenerService() {
 
     private fun bufferEvent(
         id: String, pkg: String, appName: String, title: String, text: String,
-        bigText: String?, subText: String?, priority: Int, timestamp: Long
+        bigText: String?, subText: String?, priority: Int, timestamp: Long,
+        isMessaging: Boolean
     ) {
         try {
             val raw = prefs.getString(KEY_PENDING, "[]") ?: "[]"
@@ -279,6 +286,7 @@ class MindDropNotificationListener : NotificationListenerService() {
                 .put("id", id).put("pkg", pkg).put("appName", appName)
                 .put("title", title).put("text", text)
                 .put("priority", priority).put("timestamp", timestamp)
+                .put("isMessaging", isMessaging)
             if (bigText != null) o.put("bigText", bigText)
             if (subText != null) o.put("subText", subText)
             arr.put(o)
@@ -290,7 +298,8 @@ class MindDropNotificationListener : NotificationListenerService() {
 
     private data class Extracted(
         val title: String, val text: String,
-        val bigText: String?, val subText: String?
+        val bigText: String?, val subText: String?,
+        val isMessaging: Boolean
     )
 
     /**
@@ -306,6 +315,7 @@ class MindDropNotificationListener : NotificationListenerService() {
         var text = extras?.getCharSequence(Notification.EXTRA_TEXT)?.toString().orEmpty()
         var bigText = extras?.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()
         val subText = extras?.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString()
+        var isMessaging = false
 
         val looksRedacted = text.equals("Sensitive notification content hidden", true) ||
             text.contains("notification content hidden", true) ||
@@ -315,6 +325,7 @@ class MindDropNotificationListener : NotificationListenerService() {
         try {
             val msgs = extras?.getParcelableArray(Notification.EXTRA_MESSAGES)
             if (msgs != null && msgs.isNotEmpty()) {
+                isMessaging = true
                 val lines = mutableListOf<String>()
                 var lastSender: String? = null
                 for (p in msgs) {
@@ -353,7 +364,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             if (ticker.isNotBlank()) text = ticker
         }
 
-        return Extracted(title, text, bigText, subText)
+        return Extracted(title, text, bigText, subText, isMessaging)
     }
 
     companion object {

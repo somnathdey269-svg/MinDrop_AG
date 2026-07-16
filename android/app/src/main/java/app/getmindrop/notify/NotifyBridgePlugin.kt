@@ -144,7 +144,7 @@ class NotifyBridgePlugin : Plugin() {
     fun emitNotification(
         id: String, pkg: String, appName: String,
         title: String, text: String, bigText: String?, subText: String?,
-        priority: Int, timestamp: Long
+        priority: Int, timestamp: Long, isMessaging: Boolean
     ) {
         val o = JSObject()
             .put("id", id)
@@ -154,6 +154,7 @@ class NotifyBridgePlugin : Plugin() {
             .put("text", text)
             .put("priority", priority)
             .put("timestamp", timestamp)
+            .put("isMessaging", isMessaging)
         if (bigText != null) o.put("bigText", bigText)
         if (subText != null) o.put("subText", subText)
         notifyListeners("notificationPosted", o)
