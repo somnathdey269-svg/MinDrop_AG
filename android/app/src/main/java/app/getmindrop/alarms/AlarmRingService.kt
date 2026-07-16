@@ -21,20 +21,20 @@ import android.os.VibratorManager
 import androidx.core.app.NotificationCompat
 
 /**
- * AlarmRingService — foreground service that actually plays the alarm tone
- * on the ALARM audio stream and vibrates. Started by AlarmReceiver when a
- * scheduled alarm fires; stopped by the Stop / Snooze notification actions,
- * the JS AlarmSheet, or the 30-second auto-stop timer.
+ * AlarmRingService — foreground service that plays the alarm tone on the ALARM
+ * audio stream and vibrates. Started by AlarmReceiver; stopped by Stop / Snooze
+ * notification actions, the JS AlarmSheet, or the 30-second auto-stop timer.
+ *
+ * GLOBAL LOCK: only ONE alarm can ever ring at a time. Any ACTION_RING received
+ * while isRinging == true is silently dropped. This is the definitive fix for
+ * double-ring regardless of what causes it (dual path, race condition, thread
+ * re-trigger, app startup timing). Nothing can bypass this gate.
  */
 class AlarmRingService : Service() {
 
     private var player: MediaPlayer? = null
     private var vibrator: Vibrator? = null
 
-    // ── Fix 1: 30-second auto-stop ──────────────────────────────────────
-    // If the user doesn't interact within AUTO_STOP_MS, the alarm stops
-    // itself. Treated identically to a user-triggered Stop so the
-    // AlarmStore active-registry is cleared and the rule lifecycle is honoured.
     private val autoStopHandler = Handler(Looper.getMainLooper())
     private val autoStopRunnable = Runnable { stopSelfCleanly() }
     private val AUTO_STOP_MS = 30_000L
@@ -53,14 +53,23 @@ class AlarmRingService : Service() {
                 val toneId = intent?.getStringExtra("toneId") ?: "classic"
                 startForegroundIfNeeded("Previewing alarm tone")
                 startTone(toneId, vibrate = false)
-                // No auto-stop for previews — user triggers stopPreview() from JS.
                 return START_NOT_STICKY
             }
             else -> {
+                // ── Global single-instance lock ───────────────────────────────
+                // If an alarm is already ringing, drop this request immediately.
+                // This is the definitive guard against any double-ring scenario —
+                // dual native+JS paths, WhatsApp thread re-posts, startup race,
+                // snooze overlaps — nothing can bypass this check.
+                if (isRinging) {
+                    return START_NOT_STICKY
+                }
+                // Acquire the lock before touching audio/vibration.
+                setRinging(applicationContext, true)
+
                 val toneId = intent?.getStringExtra("toneId") ?: "classic"
                 startForegroundIfNeeded("Alarm ringing")
                 startTone(toneId, vibrate = true)
-                // Schedule auto-stop after 30 seconds.
                 autoStopHandler.removeCallbacks(autoStopRunnable)
                 autoStopHandler.postDelayed(autoStopRunnable, AUTO_STOP_MS)
                 return START_NOT_STICKY
@@ -79,10 +88,8 @@ class AlarmRingService : Service() {
             .build()
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(
-                    SERVICE_NOTIFICATION_ID, n,
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-                )
+                startForeground(SERVICE_NOTIFICATION_ID, n,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
             } else {
                 startForeground(SERVICE_NOTIFICATION_ID, n)
             }
@@ -108,18 +115,15 @@ class AlarmRingService : Service() {
     private fun startTone(toneId: String, vibrate: Boolean) {
         stopPlayback()
         val uri = resolveToneUri(this, toneId) ?: run {
-            // Silent tone or missing resource — vibrate only.
             if (vibrate) startVibration()
             return
         }
         try {
             player = MediaPlayer().apply {
-                setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build()
-                )
+                setAudioAttributes(AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build())
                 isLooping = true
                 setDataSource(this@AlarmRingService, uri)
                 prepare()
@@ -128,15 +132,12 @@ class AlarmRingService : Service() {
         } catch (_: Throwable) {
             player = null
             try {
-                // Fall back to system default alarm.
                 val def = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
                 player = MediaPlayer().apply {
-                    setAudioAttributes(
-                        AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_ALARM)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .build()
-                    )
+                    setAudioAttributes(AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build())
                     isLooping = true
                     setDataSource(this@AlarmRingService, def)
                     prepare()
@@ -175,6 +176,8 @@ class AlarmRingService : Service() {
     }
 
     private fun stopSelfCleanly() {
+        // Release the global lock so the next legitimate alarm can ring.
+        setRinging(applicationContext, false)
         stopPlayback()
         try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Throwable) {}
         stopSelf()
@@ -182,6 +185,8 @@ class AlarmRingService : Service() {
 
     override fun onDestroy() {
         autoStopHandler.removeCallbacks(autoStopRunnable)
+        // Always release the lock on destroy — covers force-kill / crash.
+        setRinging(applicationContext, false)
         stopPlayback()
         super.onDestroy()
     }
@@ -195,10 +200,30 @@ class AlarmRingService : Service() {
     }
 
     companion object {
-        const val ACTION_RING = "app.getmindrop.alarms.RING"
-        const val ACTION_STOP = "app.getmindrop.alarms.RING_STOP"
+        const val ACTION_RING    = "app.getmindrop.alarms.RING"
+        const val ACTION_STOP   = "app.getmindrop.alarms.RING_STOP"
         const val ACTION_PREVIEW = "app.getmindrop.alarms.RING_PREVIEW"
-        private const val SERVICE_CHANNEL = "mindrop-alarm-service"
+        private const val SERVICE_CHANNEL        = "mindrop-alarm-service"
         private const val SERVICE_NOTIFICATION_ID = 9911
+        private const val PREFS_NAME  = "mindrop_ring_lock"
+        private const val KEY_RINGING = "is_ringing"
+
+        // @Volatile — process-scoped, zero-overhead check on the hot path.
+        // Backed by SharedPreferences so process-restart doesn't orphan the lock.
+        @Volatile
+        var isRinging = false
+            private set
+
+        fun setRinging(ctx: Context, value: Boolean) {
+            isRinging = value
+            ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .edit().putBoolean(KEY_RINGING, value).apply()
+        }
+
+        /** Restore lock state after process restart (call from Application.onCreate). */
+        fun restoreRingingState(ctx: Context) {
+            isRinging = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getBoolean(KEY_RINGING, false)
+        }
     }
 }
