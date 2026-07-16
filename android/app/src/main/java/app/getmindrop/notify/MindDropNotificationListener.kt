@@ -199,7 +199,9 @@ class MindDropNotificationListener : NotificationListenerService() {
                     results.add(checkCondition(cond, title, text, bigText, isMessaging, priority))
                 }
                 val logicalOperator = r.optString("logicalOperator", "AND")
-                match = if (logicalOperator == "OR") {
+                match = if (results.isEmpty()) {
+                    false
+                } else if (logicalOperator == "OR") {
                     results.any { it }
                 } else {
                     results.all { it }
