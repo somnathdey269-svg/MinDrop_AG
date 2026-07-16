@@ -1,81 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlarmClock, Bell, Clock, X } from "lucide-react";
 import { ALARM_EVENT, snoozeMemory, type AlarmDetail } from "@/lib/memoryos/scheduler";
 import type { Memory } from "@/lib/memoryos/types";
 import { incrementSnoozeCount, openPaywall, readSnoozeCountToday, useTier } from "@/lib/tier";
-import { getDefaultTone, getVibrationEnabled } from "@/lib/alarms/prefs";
-import { toneById } from "@/lib/alarms/tones";
 import { SnoozeMenu } from "@/components/alarms/SnoozeMenu";
-
-/**
- * Loop the user-chosen tone via HTMLAudio while the alarm is on screen.
- * Falls back to a synthesised oscillator beep if the .ogg fails to load
- * (should be rare — see public/alarms/).
- */
-function useAlarmTone(active: boolean, isAlarm: boolean) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const oscRef = useRef<{ ctx: AudioContext; timer: number } | null>(null);
-
-  useEffect(() => {
-    if (!active || !isAlarm) return;
-    // On native mobile platforms, the native AlarmRingService foreground service
-    // plays the sound natively using the ALARM stream. Web audio inside the WebView
-    // here is completely redundant and causes double ringing.
-    if (AlarmsBridge.isNative()) return;
-
-    const tone = toneById(getDefaultTone());
-    let stopped = false;
-
-    if (!tone.silentOnly) {
-      try {
-        const a = new Audio(tone.webUrl);
-        a.loop = true;
-        a.volume = 1;
-        audioRef.current = a;
-        a.play().catch(() => {
-          // Autoplay blocked or file missing — synth fallback.
-          try {
-            const Ctx = window.AudioContext || (window as any).webkitAudioContext;
-            if (!Ctx) return;
-            const ctx = new Ctx();
-            const beep = () => {
-              if (stopped) return;
-              const osc = ctx.createOscillator();
-              const gain = ctx.createGain();
-              osc.type = "sine";
-              osc.frequency.value = 880;
-              gain.gain.setValueAtTime(0, ctx.currentTime);
-              gain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + 0.02);
-              gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.35);
-              osc.connect(gain).connect(ctx.destination);
-              osc.start();
-              osc.stop(ctx.currentTime + 0.4);
-            };
-            beep();
-            const timer = window.setInterval(beep, 700);
-            oscRef.current = { ctx, timer };
-          } catch {}
-        });
-      } catch {}
-    }
-
-    if (getVibrationEnabled()) {
-      try { navigator.vibrate?.([400, 200, 400, 200, 400, 200, 400]); } catch {}
-    }
-
-    return () => {
-      stopped = true;
-      try { audioRef.current?.pause(); audioRef.current = null; } catch {}
-      if (oscRef.current) {
-        window.clearInterval(oscRef.current.timer);
-        try { oscRef.current.ctx.close(); } catch {}
-        oscRef.current = null;
-      }
-      try { navigator.vibrate?.(0); } catch {}
-    };
-  }, [active, isAlarm]);
-}
 
 import { AlarmsBridge } from "@/lib/alarms/bridge";
 
@@ -83,8 +12,6 @@ export function AlarmSheet() {
   const [queue, setQueue] = useState<Memory[]>([]);
   const [snoozeOpen, setSnoozeOpen] = useState(false);
   const current = queue[0];
-  const isLoud = current?.notify === "alarm";
-  useAlarmTone(!!current, isLoud);
   const { tier, limits } = useTier();
 
   useEffect(() => {
