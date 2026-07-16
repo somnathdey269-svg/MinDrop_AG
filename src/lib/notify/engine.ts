@@ -147,8 +147,11 @@ async function fireImmediate(rule: NotifyRule, n: CapturedNotification) {
     window.dispatchEvent(new CustomEvent<AlarmDetail>(ALARM_EVENT, { detail: { memory: mem } }));
     try {
       const { AlarmsBridge } = await import("@/lib/alarms/bridge");
+      // Use a STABLE ID (rule-scoped, not timestamp-based) so only ONE alarm
+      // entry ever exists for this rule at a time. If native somehow also
+      // scheduled one (edge case), upsert() merges them into the same slot.
       await AlarmsBridge.scheduleAlarm({
-        id: `notify-${rule.id}-${Date.now()}`,
+        id: `notify-active-${rule.id}`,
         at: Date.now(),
         title: `${n.appName} · ${n.title || "alert"}`,
         body: (rule.remindNote || n.text || "").slice(0, 240),
@@ -261,7 +264,17 @@ export async function syncNativeRules() {
 
 async function drainPending() {
   const events = await NotifyBridge.drainPendingEvents();
-  for (const e of events) handleNotification(e);
+  for (const e of events) {
+    // Drained events are notifications that arrived while JS was dead and were
+    // handled natively (alarm already fired via MindDropNotificationListener).
+    // We must NOT re-fire alarms here — that would create a second alarm entry
+    // and cause the "rings again when you open the app" bug.
+    // Only update the inbox and capture buffer for history/UI purposes.
+    if (!isDuplicate(e)) {
+      pushToInbox(e);
+      pushCapture(e, currentPlan());
+    }
+  }
 }
 
 let started = false;

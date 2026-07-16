@@ -148,6 +148,19 @@ class MindDropNotificationListener : NotificationListenerService() {
 
             val delivery = r.optString("delivery", "notification")
             if (delivery == "alarm") {
+                // ── Single-alarm ownership guard ──────────────────────────────
+                // If the JS engine is alive (WebView not dead), it receives this
+                // notification via emitNotification() and will schedule its own
+                // alarm via AlarmsBridge. Firing a native alarm here too creates
+                // TWO independent alarm entries. Stopping one leaves the other
+                // running → "still rings / rings again" bug.
+                //
+                // Rule: JS alive → JS owns the alarm. Native → only when JS dead.
+                if (NotifyBridgePlugin.instance != null) {
+                    // JS will handle it. Record dedupe so we don't re-evaluate.
+                    prefs.edit().putLong("dedupe_$dedupeKey", now).apply()
+                    break
+                }
                 fireNativeAlarm(
                     pkg = pkg,
                     conversationTitle = title,
