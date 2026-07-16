@@ -124,26 +124,28 @@ class AlarmReceiver : BroadcastReceiver() {
         nm.cancel(AlarmStore.requestCode(id))
 
         // Read the stored alarm entry BEFORE removing it, so we can clear
-        // the active-alarm registry and mark once-rules as permanently stopped.
+        // all state: active-alarm registry, once-rule retirement, notif-key flag.
         val entry = AlarmStore.find(ctx, id)
         val extra = entry?.extra ?: ""
-        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
-        // ruleId segment is optional (legacy entries have only pkg::title).
+        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}::{notifKeyHash}"
+        // Older entries may have fewer segments — handled gracefully.
         if (extra.startsWith("active_key::")) {
-            val parts = extra.removePrefix("active_key::").split("::", limit = 3)
+            val parts = extra.removePrefix("active_key::").split("::", limit = 4)
             if (parts.size >= 2) {
                 AlarmStore.clearAlarmActive(ctx, parts[0], parts[1])
             }
-            // Fix 3: If ruleId was embedded, permanently retire this rule so it
-            // never fires again (once-rule semantics). The listener's SharedPrefs
-            // are the same PREFS file so we write directly.
-            if (parts.size == 3) {
-                val ruleId = parts[2]
-                val listenerPrefs = ctx.getSharedPreferences(
-                    app.getmindrop.notify.MindDropNotificationListener.PREFS,
-                    android.content.Context.MODE_PRIVATE
-                )
-                listenerPrefs.edit().putBoolean("stopped_rule_$ruleId", true).apply()
+            val listenerPrefs = ctx.getSharedPreferences(
+                app.getmindrop.notify.MindDropNotificationListener.PREFS,
+                android.content.Context.MODE_PRIVATE
+            )
+            // Permanently retire once-rules on Stop.
+            if (parts.size >= 3 && parts[2].isNotBlank()) {
+                listenerPrefs.edit().putBoolean("stopped_rule_${parts[2]}", true).apply()
+            }
+            // Clear the notification-key active flag so future new messages
+            // from the same sender can re-trigger (always-rules).
+            if (parts.size >= 4 && parts[3].isNotBlank()) {
+                listenerPrefs.edit().remove("notif_key_active_${parts[3]}").apply()
             }
         }
 

@@ -226,25 +226,28 @@ class AlarmsBridgePlugin : Plugin() {
     @PluginMethod
     fun cancelAlarm(call: PluginCall) {
         val id = call.getString("id") ?: run { call.reject("id required"); return }
-        // Read entry BEFORE removing so we can clear the active-alarm registry
-        // and permanently retire once-rules.
+        // Read entry BEFORE removing so we can clear all state on Stop.
         val entry = AlarmStore.find(context, id)
         val extra = entry?.extra ?: ""
-        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
-        // ruleId segment is optional (legacy entries have only pkg::title).
+        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}::{notifKeyHash}"
+        // Older entries may have fewer segments — handled gracefully.
         if (extra.startsWith("active_key::")) {
-            val parts = extra.removePrefix("active_key::").split("::", limit = 3)
+            val parts = extra.removePrefix("active_key::").split("::", limit = 4)
             if (parts.size >= 2) {
                 AlarmStore.clearAlarmActive(context, parts[0], parts[1])
             }
-            // Fix 3: Permanently retire once-rules so they never fire again.
-            if (parts.size == 3) {
-                val ruleId = parts[2]
-                val listenerPrefs = context.getSharedPreferences(
-                    app.getmindrop.notify.MindDropNotificationListener.PREFS,
-                    android.content.Context.MODE_PRIVATE
-                )
-                listenerPrefs.edit().putBoolean("stopped_rule_$ruleId", true).apply()
+            val listenerPrefs = context.getSharedPreferences(
+                app.getmindrop.notify.MindDropNotificationListener.PREFS,
+                android.content.Context.MODE_PRIVATE
+            )
+            // Permanently retire once-rules on Stop.
+            if (parts.size >= 3 && parts[2].isNotBlank()) {
+                listenerPrefs.edit().putBoolean("stopped_rule_${parts[2]}", true).apply()
+            }
+            // Clear the notification-key active flag so future new messages
+            // from the same sender can re-trigger (always-rules).
+            if (parts.size >= 4 && parts[3].isNotBlank()) {
+                listenerPrefs.edit().remove("notif_key_active_${parts[3]}").apply()
             }
         }
         // Also cancel the alarm notification posted by AlarmReceiver
