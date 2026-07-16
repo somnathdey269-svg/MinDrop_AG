@@ -13,7 +13,7 @@
  *   - addListener('notificationPosted', cb)
  */
 import { Capacitor, registerPlugin } from "@capacitor/core";
-import type { CapturedNotification } from "./types";
+import type { CapturedNotification, RuleCondition } from "./types";
 
 export interface NativeRuleSnapshot {
   id: string;
@@ -27,6 +27,8 @@ export interface NativeRuleSnapshot {
   /** "once" → archive rule after first fire and never trigger again.
    *  "always" → keep rule active; each new matching message fires the alarm. */
   frequency?: "once" | "always";
+  conditions?: RuleCondition[];
+  logicalOperator?: "AND" | "OR";
 }
 
 interface NotifyBridgePlugin {

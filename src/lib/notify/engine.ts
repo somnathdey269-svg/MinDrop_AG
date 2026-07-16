@@ -244,7 +244,6 @@ export function buildNativeRuleSnapshot(): NativeRuleSnapshot[] {
   const rules = readRules();
   return rules
     .filter((r) => r.enabled && (r.status ?? "active") === "active")
-    .filter((r) => (r.matchMode ?? "sender") === "sender")
     .map((r) => ({
       id: r.id,
       pkg: r.pkg,
@@ -255,6 +254,8 @@ export function buildNativeRuleSnapshot(): NativeRuleSnapshot[] {
       delivery: r.delivery ?? "notification",
       // Fix 2: tell native layer whether to retire (once) or keep alive (always).
       frequency: (r.frequency ?? "once") as "once" | "always",
+      conditions: r.conditions,
+      logicalOperator: r.logicalOperator,
     }));
 }
 
