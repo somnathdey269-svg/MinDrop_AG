@@ -90,7 +90,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             val conversationTitle = normalizeConversationTitle(title)
             val notifKeyHash = sbn.key.hashCode()
 
-            AlarmStore.clearAlarmActive(applicationContext, sbn.packageName, conversationTitle)
+            app.getmindrop.alarms.AlarmStore.clearAlarmActive(applicationContext, sbn.packageName, conversationTitle)
             prefs.edit()
                 .remove("notif_key_active_$notifKeyHash")
                 .apply()
