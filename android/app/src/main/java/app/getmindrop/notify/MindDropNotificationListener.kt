@@ -74,7 +74,28 @@ class MindDropNotificationListener : NotificationListenerService() {
         }
     }
 
-    override fun onNotificationRemoved(sbn: StatusBarNotification) { /* no-op */ }
+    override fun onNotificationRemoved(sbn: StatusBarNotification) {
+        try {
+            // Skip our own notifications (MinDrop alarm/service notifications).
+            if (sbn.packageName == packageName) return
+            // Skip group summaries — the individual notifications will fire their own removed events.
+            if ((sbn.notification?.flags ?: 0 and android.app.Notification.FLAG_GROUP_SUMMARY) != 0) return
+
+            // When a notification is dismissed from the shade, clear the alarm
+            // guards so future messages from the same sender can ring again.
+            // This is the ONLY place we clear guards — NOT on Stop — so that
+            // WhatsApp re-posts while the notification is still unread cannot
+            // immediately re-trigger the alarm the user just stopped.
+            val title = extractContent(sbn.notification ?: return).title
+            val conversationTitle = normalizeConversationTitle(title)
+            val notifKeyHash = sbn.key.hashCode()
+
+            AlarmStore.clearAlarmActive(applicationContext, sbn.packageName, conversationTitle)
+            prefs.edit()
+                .remove("notif_key_active_$notifKeyHash")
+                .apply()
+        } catch (_: Throwable) {}
+    }
 
     override fun onListenerConnected() {
         super.onListenerConnected()

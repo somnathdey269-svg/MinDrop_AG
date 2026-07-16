@@ -123,17 +123,12 @@ class AlarmReceiver : BroadcastReceiver() {
         val nm = ctx.getSystemService(NotificationManager::class.java)
         nm.cancel(AlarmStore.requestCode(id))
 
-        // Read the stored alarm entry BEFORE removing it, so we can clear
-        // all state: active-alarm registry, once-rule retirement, notif-key flag.
+        // Read the stored alarm entry BEFORE removing it.
         val entry = AlarmStore.find(ctx, id)
         val extra = entry?.extra ?: ""
         // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}::{notifKeyHash}"
-        // Older entries may have fewer segments — handled gracefully.
         if (extra.startsWith("active_key::")) {
             val parts = extra.removePrefix("active_key::").split("::", limit = 4)
-            if (parts.size >= 2) {
-                AlarmStore.clearAlarmActive(ctx, parts[0], parts[1])
-            }
             val listenerPrefs = ctx.getSharedPreferences(
                 app.getmindrop.notify.MindDropNotificationListener.PREFS,
                 android.content.Context.MODE_PRIVATE
@@ -142,22 +137,21 @@ class AlarmReceiver : BroadcastReceiver() {
             if (parts.size >= 3 && parts[2].isNotBlank()) {
                 listenerPrefs.edit().putBoolean("stopped_rule_${parts[2]}", true).apply()
             }
-            // Clear the notification-key active flag so future new messages
-            // from the same sender can re-trigger (always-rules).
-            if (parts.size >= 4 && parts[3].isNotBlank()) {
-                listenerPrefs.edit().remove("notif_key_active_${parts[3]}").apply()
-            }
+            // ── DO NOT clear isAlarmActive or notif_key_active here ──────
+            // These guards are intentionally kept alive after Stop so that
+            // WhatsApp / other apps re-posting the same notification thread
+            // do NOT immediately re-trigger the alarm.
+            // Guards are only cleared in onNotificationRemoved() — when the
+            // user actually dismisses the source notification from the shade.
         }
 
         if (removeEntry) AlarmStore.remove(ctx, id)
 
-        // stopService() is always allowed by Android (unlike startService in
-        // background). It triggers onDestroy() on AlarmRingService which stops
-        // the media player and vibration.
         try {
             ctx.stopService(Intent(ctx, AlarmRingService::class.java))
         } catch (_: Throwable) {}
     }
+
 
     private fun snoozeAndStop(ctx: Context, intent: Intent, minutes: Int) {
         val id = intent.getStringExtra("id") ?: return

@@ -226,16 +226,11 @@ class AlarmsBridgePlugin : Plugin() {
     @PluginMethod
     fun cancelAlarm(call: PluginCall) {
         val id = call.getString("id") ?: run { call.reject("id required"); return }
-        // Read entry BEFORE removing so we can clear all state on Stop.
         val entry = AlarmStore.find(context, id)
         val extra = entry?.extra ?: ""
         // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}::{notifKeyHash}"
-        // Older entries may have fewer segments — handled gracefully.
         if (extra.startsWith("active_key::")) {
             val parts = extra.removePrefix("active_key::").split("::", limit = 4)
-            if (parts.size >= 2) {
-                AlarmStore.clearAlarmActive(context, parts[0], parts[1])
-            }
             val listenerPrefs = context.getSharedPreferences(
                 app.getmindrop.notify.MindDropNotificationListener.PREFS,
                 android.content.Context.MODE_PRIVATE
@@ -244,19 +239,18 @@ class AlarmsBridgePlugin : Plugin() {
             if (parts.size >= 3 && parts[2].isNotBlank()) {
                 listenerPrefs.edit().putBoolean("stopped_rule_${parts[2]}", true).apply()
             }
-            // Clear the notification-key active flag so future new messages
-            // from the same sender can re-trigger (always-rules).
-            if (parts.size >= 4 && parts[3].isNotBlank()) {
-                listenerPrefs.edit().remove("notif_key_active_${parts[3]}").apply()
-            }
+            // ── DO NOT clear isAlarmActive or notif_key_active here ──────
+            // Kept alive so WhatsApp re-posts don't immediately re-trigger.
+            // Cleared only in onNotificationRemoved() when the source
+            // notification is dismissed from the shade by the user.
         }
-        // Also cancel the alarm notification posted by AlarmReceiver
         val nm = context.getSystemService(android.app.NotificationManager::class.java)
         nm?.cancel(AlarmStore.requestCode(id))
         AlarmScheduler.cancel(context, id)
         AlarmStore.remove(context, id)
         call.resolve()
     }
+
 
     @PluginMethod
     fun cancelAll(call: PluginCall) {
