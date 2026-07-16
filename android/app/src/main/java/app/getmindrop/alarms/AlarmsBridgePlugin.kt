@@ -274,6 +274,43 @@ class AlarmsBridgePlugin : Plugin() {
         call.resolve(JSObject().put("alarms", arr))
     }
 
+    @PluginMethod
+    fun getActiveAlarm(call: PluginCall) {
+        val res = JSObject()
+        val id = AlarmRingService.activeAlarmId
+        if (id != null) {
+            res.put("id", id)
+            res.put("title", AlarmRingService.activeAlarmTitle)
+            res.put("body", AlarmRingService.activeAlarmBody)
+        }
+        call.resolve(res)
+    }
+
+    @PluginMethod
+    fun getStoppedAlarms(call: PluginCall) {
+        val stoppedIds = AlarmStore.getStoppedAlarms(context)
+        val snoozedJson = AlarmStore.getSnoozedAlarmsJson(context)
+        val res = JSObject()
+
+        val stoppedArr = com.getcapacitor.JSArray()
+        stoppedIds.forEach { stoppedArr.put(it) }
+        res.put("stoppedIds", stoppedArr)
+
+        try {
+            res.put("snoozed", com.getcapacitor.JSArray(snoozedJson))
+        } catch (_: Throwable) {
+            res.put("snoozed", com.getcapacitor.JSArray())
+        }
+
+        call.resolve(res)
+    }
+
+    @PluginMethod
+    fun clearStoppedAlarms(call: PluginCall) {
+        AlarmStore.clearStoppedAlarms(context)
+        call.resolve()
+    }
+
     companion object {
         @Volatile var instance: AlarmsBridgePlugin? = null
     }

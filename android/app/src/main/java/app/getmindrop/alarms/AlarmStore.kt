@@ -205,4 +205,45 @@ object AlarmStore {
         val toRemove = prefs.all.keys.filter { it.startsWith(ACTIVE_PREFIX) }
         prefs.edit().apply { toRemove.forEach { remove(it) } }.apply()
     }
+
+    // ─── Stopped & Snoozed Alarms Registry ─────────────────────────────────
+    // Tracks alarms that were stopped/snoozed from the notification drawer
+    // while the app was closed. Read/cleared by JS on resume.
+
+    private const val KEY_STOPPED = "stoppedAlarms"
+    private const val KEY_SNOOZED = "snoozedAlarms"
+
+    fun recordStoppedAlarm(ctx: Context, id: String) {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val current = prefs.getStringSet(KEY_STOPPED, emptySet())?.toMutableSet() ?: mutableSetOf()
+        current.add(id)
+        prefs.edit().putStringSet(KEY_STOPPED, current).apply()
+    }
+
+    fun getStoppedAlarms(ctx: Context): Set<String> {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        return prefs.getStringSet(KEY_STOPPED, emptySet()) ?: emptySet()
+    }
+
+    fun recordSnoozedAlarm(ctx: Context, id: String, minutes: Int) {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val raw = prefs.getString(KEY_SNOOZED, "[]") ?: "[]"
+        try {
+            val arr = JSONArray(raw)
+            // JSON shape matches { "id": "...", "minutes": N }
+            val o = JSONObject().put("id", id).put("minutes", minutes)
+            arr.put(o)
+            prefs.edit().putString(KEY_SNOOZED, arr.toString()).apply()
+        } catch (_: Throwable) {}
+    }
+
+    fun getSnoozedAlarmsJson(ctx: Context): String {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        return prefs.getString(KEY_SNOOZED, "[]") ?: "[]"
+    }
+
+    fun clearStoppedAlarms(ctx: Context) {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        prefs.edit().remove(KEY_STOPPED).remove(KEY_SNOOZED).apply()
+    }
 }

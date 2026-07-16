@@ -123,6 +123,9 @@ class AlarmReceiver : BroadcastReceiver() {
         val nm = ctx.getSystemService(NotificationManager::class.java)
         nm.cancel(AlarmStore.requestCode(id))
 
+        // Record that this alarm was stopped so the JS side can reconcile it on opening.
+        AlarmStore.recordStoppedAlarm(ctx, id)
+
         // Read the stored alarm entry BEFORE removing it.
         val entry = AlarmStore.find(ctx, id)
         val extra = entry?.extra ?: ""
@@ -152,6 +155,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun snoozeAndStop(ctx: Context, intent: Intent, minutes: Int) {
         val id = intent.getStringExtra("id") ?: return
+        // Record that this alarm was snoozed so the JS side can reconcile it on opening.
+        AlarmStore.recordSnoozedAlarm(ctx, id, minutes)
         stopAlarm(ctx, id, removeEntry = false)
         AlarmScheduler.snooze(ctx, id, minutes.toLong())
     }

@@ -67,6 +67,11 @@ class AlarmRingService : Service() {
                 // Acquire the lock before touching audio/vibration.
                 setRinging(applicationContext, true)
 
+                // Track the currently active alarm details for getActiveAlarm()
+                activeAlarmId = intent?.getStringExtra("id")
+                activeAlarmTitle = intent?.getStringExtra("title") ?: "MinDrop reminder"
+                activeAlarmBody = intent?.getStringExtra("body") ?: ""
+
                 val toneId = intent?.getStringExtra("toneId") ?: "classic"
                 startForegroundIfNeeded("Alarm ringing")
                 startTone(toneId, vibrate = true)
@@ -178,6 +183,9 @@ class AlarmRingService : Service() {
     private fun stopSelfCleanly() {
         // Release the global lock so the next legitimate alarm can ring.
         setRinging(applicationContext, false)
+        activeAlarmId = null
+        activeAlarmTitle = null
+        activeAlarmBody = null
         stopPlayback()
         try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Throwable) {}
         stopSelf()
@@ -187,6 +195,9 @@ class AlarmRingService : Service() {
         autoStopHandler.removeCallbacks(autoStopRunnable)
         // Always release the lock on destroy — covers force-kill / crash.
         setRinging(applicationContext, false)
+        activeAlarmId = null
+        activeAlarmTitle = null
+        activeAlarmBody = null
         stopPlayback()
         super.onDestroy()
     }
@@ -207,6 +218,11 @@ class AlarmRingService : Service() {
         private const val SERVICE_NOTIFICATION_ID = 9911
         private const val PREFS_NAME  = "mindrop_ring_lock"
         private const val KEY_RINGING = "is_ringing"
+
+        // Expose currently active alarm details to getActiveAlarm()
+        @Volatile var activeAlarmId: String? = null
+        @Volatile var activeAlarmTitle: String? = null
+        @Volatile var activeAlarmBody: String? = null
 
         // @Volatile — process-scoped, zero-overhead check on the hot path.
         // Backed by SharedPreferences so process-restart doesn't orphan the lock.
