@@ -397,18 +397,20 @@ class MindDropNotificationListener : NotificationListenerService() {
                 isMessaging = true
                 val lines = mutableListOf<String>()
                 var lastSender: String? = null
+                var lastMessageBody = ""
                 for (p in msgs) {
                     val b = p as? android.os.Bundle ?: continue
                     val body = b.getCharSequence("text")?.toString().orEmpty()
                     val sender = b.getCharSequence("sender")?.toString()
                         ?: (b.getBundle("sender_person")?.getCharSequence("name")?.toString())
                     if (body.isBlank()) continue
+                    lastMessageBody = body
                     if (sender != null) lastSender = sender
                     lines += if (sender != null) "$sender: $body" else body
                 }
                 if (lines.isNotEmpty()) {
                     val joined = lines.joinToString("\n")
-                    if (looksRedacted || text.isBlank()) text = lines.last().substringAfter(": ", lines.last())
+                    text = lastMessageBody
                     if (bigText.isNullOrBlank()) bigText = joined
                     if (title.isBlank() && lastSender != null) title = lastSender
                 }
