@@ -12,6 +12,7 @@ export function AlarmSheet() {
   const [queue, setQueue] = useState<Memory[]>([]);
   const [snoozeOpen, setSnoozeOpen] = useState(false);
   const current = queue[0];
+  const isLoud = current?.notify === "alarm";
   const { tier, limits } = useTier();
 
   useEffect(() => {
