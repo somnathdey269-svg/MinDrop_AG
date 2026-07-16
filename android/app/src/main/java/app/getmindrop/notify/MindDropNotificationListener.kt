@@ -57,7 +57,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             NotifyBridgePlugin.cacheContentIntent(id, n.contentIntent)
 
             // 1. Evaluate rules natively so we fire even when JS is dead.
-            evaluateAndFire(sbn.packageName, appName, title, text, bigText, n.priority)
+            evaluateAndFire(sbn.packageName, appName, title, text, bigText, n.priority, isMessaging)
 
             // 2. Buffer the raw event so JS can drain on next open.
             bufferEvent(id, sbn.packageName, appName, title, text, bigText, subText, n.priority, sbn.postTime, isMessaging)
@@ -101,9 +101,64 @@ class MindDropNotificationListener : NotificationListenerService() {
         catch (_: Throwable) { pkg }
     }
 
+    private fun checkCondition(
+        cond: JSONObject, title: String, text: String,
+        bigText: String?, isMessaging: Boolean, priority: Int
+    ): Boolean {
+        val field = cond.optString("field", "")
+        val operator = cond.optString("operator", "contains")
+        val value = cond.optString("value", "").trim().lowercase()
+
+        val hay = if (isMessaging) {
+            "$title\n$text".lowercase()
+        } else {
+            "$title\n$text\n${bigText ?: ""}".lowercase()
+        }
+
+        when (field) {
+            "sender" -> {
+                val t = title.lowercase()
+                return when (operator) {
+                    "equals" -> t == value
+                    "doesNotContain" -> !t.contains(value)
+                    else -> t.contains(value)
+                }
+            }
+            "text" -> {
+                val b = text.lowercase()
+                return when (operator) {
+                    "equals" -> b == value
+                    "doesNotContain" -> !b.contains(value)
+                    else -> b.contains(value)
+                }
+            }
+            "otp" -> {
+                val hasOtpKeywords = Regex("otp|code|verification|verify|pin", RegexOption.IGNORE_CASE).containsMatchIn(hay)
+                val hasDigits = Regex("\\b\\d{4,8}\\b").containsMatchIn(hay)
+                val isMatched = hasOtpKeywords && hasDigits
+                return if (operator == "doesNotContain") !isMatched else isMatched
+            }
+            "transaction" -> {
+                val hasMoneyKeywords = Regex("debited|credited|spent|transaction|payment|paid|withdrawn|transferred", RegexOption.IGNORE_CASE).containsMatchIn(hay)
+                val hasCurrencySymbols = Regex("[\\$₹€£]").containsMatchIn(hay)
+                val isMatched = hasMoneyKeywords || hasCurrencySymbols
+                return if (operator == "doesNotContain") !isMatched else isMatched
+            }
+            "link" -> {
+                val hasWebLink = Regex("https?://[^\\s]+").containsMatchIn(hay)
+                return if (operator == "doesNotContain") !hasWebLink else hasWebLink
+            }
+            "priority" -> {
+                val isHigh = priority >= 1
+                return if (operator == "doesNotContain") !isHigh else isHigh
+            }
+        }
+        return true
+    }
+
     private fun evaluateAndFire(
         pkg: String, appName: String, title: String, text: String,
-        bigText: String?, priority: Int
+        bigText: String?, priority: Int, isMessaging: Boolean
     ) {
         val snap = prefs.getString(KEY_RULES, null) ?: return
         val arr = try { JSONArray(snap) } catch (_: Throwable) { return }
@@ -113,12 +168,6 @@ class MindDropNotificationListener : NotificationListenerService() {
         //   "Mr. X" → "Mr. X (2 messages)" → "Mr. X (5 messages)"
         // Strip the suffix so all updates map to the same conversation key.
         val conversationTitle = normalizeConversationTitle(title)
-
-        // Use only the latest message text for keyword matching.
-        // For MessagingStyle notifications (WhatsApp, etc.) bigText contains ALL
-        // messages in the conversation thread. We only want the newest one
-        // (EXTRA_TEXT) so old unread messages don't re-trigger the alarm.
-        val hay = "$conversationTitle\n$text".lowercase()
 
         val dedupeKey = "$pkg::$conversationTitle::$text".hashCode()
         val now = System.currentTimeMillis()
@@ -140,14 +189,34 @@ class MindDropNotificationListener : NotificationListenerService() {
             val frequency = r.optString("frequency", "once")
             if (frequency == "once" && isRuleStopped(ruleId)) continue
 
-            val kwArr = r.optJSONArray("keywords") ?: JSONArray()
-            var match = kwArr.length() == 0
-            if (!match) {
-                for (k in 0 until kwArr.length()) {
-                    val kw = kwArr.optString(k, "").lowercase()
-                    if (kw.isNotBlank() && hay.contains(kw)) { match = true; break }
+            // Evaluate modern rule conditions if present
+            val conditions = r.optJSONArray("conditions")
+            var match = false
+            if (conditions != null && conditions.length() > 0) {
+                val results = mutableListOf<Boolean>()
+                for (cIdx in 0 until conditions.length()) {
+                    val cond = conditions.optJSONObject(cIdx) ?: continue
+                    results.add(checkCondition(cond, title, text, bigText, isMessaging, priority))
+                }
+                val logicalOperator = r.optString("logicalOperator", "AND")
+                match = if (logicalOperator == "OR") {
+                    results.any { it }
+                } else {
+                    results.all { it }
+                }
+            } else {
+                // Fallback to legacy rule logic
+                val kwArr = r.optJSONArray("keywords") ?: JSONArray()
+                match = kwArr.length() == 0
+                if (!match) {
+                    val hay = "$conversationTitle\n$text".lowercase()
+                    for (k in 0 until kwArr.length()) {
+                        val kw = kwArr.optString(k, "").lowercase()
+                        if (kw.isNotBlank() && hay.contains(kw)) { match = true; break }
+                    }
                 }
             }
+
             if (!match) continue
 
             // ── Active-alarm guard (for always-rules) ─────────────────────
