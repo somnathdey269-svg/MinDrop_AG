@@ -52,7 +52,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             NotifyBridgePlugin.cacheContentIntent(id, n.contentIntent)
 
             // 1. Evaluate rules natively so we fire even when JS is dead.
-            evaluateAndFire(sbn.packageName, appName, title, text, bigText, n.priority, sbn.key)
+            evaluateAndFire(sbn.packageName, appName, title, text, bigText, n.priority)
 
             // 2. Buffer the raw event so JS can drain on next open.
             bufferEvent(id, sbn.packageName, appName, title, text, bigText, subText, n.priority, sbn.postTime)
@@ -74,28 +74,7 @@ class MindDropNotificationListener : NotificationListenerService() {
         }
     }
 
-    override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        try {
-            // Skip our own notifications (MinDrop alarm/service notifications).
-            if (sbn.packageName == packageName) return
-            // Skip group summaries — the individual notifications will fire their own removed events.
-            if ((sbn.notification?.flags ?: 0 and android.app.Notification.FLAG_GROUP_SUMMARY) != 0) return
-
-            // When a notification is dismissed from the shade, clear the alarm
-            // guards so future messages from the same sender can ring again.
-            // This is the ONLY place we clear guards — NOT on Stop — so that
-            // WhatsApp re-posts while the notification is still unread cannot
-            // immediately re-trigger the alarm the user just stopped.
-            val title = extractContent(sbn.notification ?: return).title
-            val conversationTitle = normalizeConversationTitle(title)
-            val notifKeyHash = sbn.key.hashCode()
-
-            app.getmindrop.alarms.AlarmStore.clearAlarmActive(applicationContext, sbn.packageName, conversationTitle)
-            prefs.edit()
-                .remove("notif_key_active_$notifKeyHash")
-                .apply()
-        } catch (_: Throwable) {}
-    }
+    override fun onNotificationRemoved(sbn: StatusBarNotification) { /* no-op */ }
 
     override fun onListenerConnected() {
         super.onListenerConnected()
@@ -118,7 +97,7 @@ class MindDropNotificationListener : NotificationListenerService() {
 
     private fun evaluateAndFire(
         pkg: String, appName: String, title: String, text: String,
-        bigText: String?, priority: Int, notifKey: String
+        bigText: String?, priority: Int
     ) {
         val snap = prefs.getString(KEY_RULES, null) ?: return
         val arr = try { JSONArray(snap) } catch (_: Throwable) { return }
@@ -128,13 +107,6 @@ class MindDropNotificationListener : NotificationListenerService() {
         //   "Mr. X" → "Mr. X (2 messages)" → "Mr. X (5 messages)"
         // Strip the suffix so all updates map to the same conversation key.
         val conversationTitle = normalizeConversationTitle(title)
-
-        // ── Notification-key dedupe ────────────────────────────────────────
-        // Android reuses the same StatusBarNotification.key for every update
-        // to the same conversation thread. Once we fire for a key, any further
-        // updates to that same thread are suppressed until the user stops.
-        val notifKeyPref = "notif_key_active_${notifKey.hashCode()}"
-        if (prefs.getBoolean(notifKeyPref, false)) return
 
         // Use only the latest message text for keyword matching.
         // For MessagingStyle notifications (WhatsApp, etc.) bigText contains ALL
@@ -188,16 +160,12 @@ class MindDropNotificationListener : NotificationListenerService() {
                     prefs.edit().putLong("dedupe_$dedupeKey", now).apply()
                     break
                 }
-                // Mark the Android notification key as "alarm fired" so any
-                // subsequent updates to the same thread are blocked.
-                prefs.edit().putBoolean(notifKeyPref, true).apply()
                 fireNativeAlarm(
                     pkg = pkg,
                     conversationTitle = conversationTitle,
                     ruleId = ruleId,
                     titleOverride = r.optString("title", "$appName alert"),
-                    bodyOverride = r.optString("body", "").ifBlank { "$conversationTitle · $text" }.take(240),
-                    notifKey = notifKey
+                    bodyOverride = r.optString("body", "").ifBlank { "$conversationTitle · $text" }.take(240)
                 )
             } else {
                 fireAlarm(
@@ -225,14 +193,6 @@ class MindDropNotificationListener : NotificationListenerService() {
         return title.replace(Regex("\\s*\\(\\d+\\s+(new\\s+)?messages?\\)\\s*$"), "").trim()
     }
 
-    // ── Notification-key active marker cleanup ────────────────────────────
-    // Called from AlarmReceiver / AlarmsBridgePlugin when user taps Stop.
-    // Clears the notif_key_active_* flag so future new messages from the
-    // same sender (same notif key) can trigger alarm again (always-rules).
-    fun clearNotifKeyActive(notifKey: String) {
-        prefs.edit().remove("notif_key_active_${notifKey.hashCode()}").apply()
-    }
-
     // ── Stopped-rules set ────────────────────────────────────────────────
     // Persisted in SharedPreferences (survives reboots). Written when a
     // once-rule fires OR when the user explicitly taps Stop on any alarm
@@ -252,8 +212,7 @@ class MindDropNotificationListener : NotificationListenerService() {
      */
     private fun fireNativeAlarm(
         pkg: String, conversationTitle: String,
-        ruleId: String, titleOverride: String, bodyOverride: String,
-        notifKey: String = ""
+        ruleId: String, titleOverride: String, bodyOverride: String
     ) {
         try {
             val ctx = applicationContext
@@ -268,9 +227,9 @@ class MindDropNotificationListener : NotificationListenerService() {
                 delivery = "alarm",
                 toneId = toneId,
                 exact = true,
-                // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}::{notifKeyHash}"
+                // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
                 // AlarmReceiver uses these parts to clear all state on Stop.
-                extra = "active_key::${pkg}::${conversationTitle}::${ruleId}::${notifKey.hashCode()}"
+                extra = "active_key::${pkg}::${conversationTitle}::${ruleId}"
             )
             app.getmindrop.alarms.AlarmStore.upsert(ctx, entry)
             app.getmindrop.alarms.AlarmScheduler.schedule(ctx, entry)

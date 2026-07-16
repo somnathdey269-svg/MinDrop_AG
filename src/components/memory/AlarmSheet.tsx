@@ -19,6 +19,11 @@ function useAlarmTone(active: boolean, isAlarm: boolean) {
 
   useEffect(() => {
     if (!active || !isAlarm) return;
+    // On native mobile platforms, the native AlarmRingService foreground service
+    // plays the sound natively using the ALARM stream. Web audio inside the WebView
+    // here is completely redundant and causes double ringing.
+    if (AlarmsBridge.isNative()) return;
+
     const tone = toneById(getDefaultTone());
     let stopped = false;
 

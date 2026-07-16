@@ -228,21 +228,20 @@ class AlarmsBridgePlugin : Plugin() {
         val id = call.getString("id") ?: run { call.reject("id required"); return }
         val entry = AlarmStore.find(context, id)
         val extra = entry?.extra ?: ""
-        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}::{notifKeyHash}"
+        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
         if (extra.startsWith("active_key::")) {
-            val parts = extra.removePrefix("active_key::").split("::", limit = 4)
-            val listenerPrefs = context.getSharedPreferences(
-                app.getmindrop.notify.MindDropNotificationListener.PREFS,
-                android.content.Context.MODE_PRIVATE
-            )
+            val parts = extra.removePrefix("active_key::").split("::", limit = 3)
+            if (parts.size >= 2) {
+                AlarmStore.clearAlarmActive(context, parts[0], parts[1])
+            }
             // Permanently retire once-rules on Stop.
-            if (parts.size >= 3 && parts[2].isNotBlank()) {
+            if (parts.size == 3 && parts[2].isNotBlank()) {
+                val listenerPrefs = context.getSharedPreferences(
+                    app.getmindrop.notify.MindDropNotificationListener.PREFS,
+                    android.content.Context.MODE_PRIVATE
+                )
                 listenerPrefs.edit().putBoolean("stopped_rule_${parts[2]}", true).apply()
             }
-            // ── DO NOT clear isAlarmActive or notif_key_active here ──────
-            // Kept alive so WhatsApp re-posts don't immediately re-trigger.
-            // Cleared only in onNotificationRemoved() when the source
-            // notification is dismissed from the shade by the user.
         }
         val nm = context.getSystemService(android.app.NotificationManager::class.java)
         nm?.cancel(AlarmStore.requestCode(id))

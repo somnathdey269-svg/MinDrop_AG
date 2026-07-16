@@ -126,23 +126,20 @@ class AlarmReceiver : BroadcastReceiver() {
         // Read the stored alarm entry BEFORE removing it.
         val entry = AlarmStore.find(ctx, id)
         val extra = entry?.extra ?: ""
-        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}::{notifKeyHash}"
+        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
         if (extra.startsWith("active_key::")) {
-            val parts = extra.removePrefix("active_key::").split("::", limit = 4)
-            val listenerPrefs = ctx.getSharedPreferences(
-                app.getmindrop.notify.MindDropNotificationListener.PREFS,
-                android.content.Context.MODE_PRIVATE
-            )
+            val parts = extra.removePrefix("active_key::").split("::", limit = 3)
+            if (parts.size >= 2) {
+                AlarmStore.clearAlarmActive(ctx, parts[0], parts[1])
+            }
             // Permanently retire once-rules on Stop.
-            if (parts.size >= 3 && parts[2].isNotBlank()) {
+            if (parts.size == 3 && parts[2].isNotBlank()) {
+                val listenerPrefs = ctx.getSharedPreferences(
+                    app.getmindrop.notify.MindDropNotificationListener.PREFS,
+                    android.content.Context.MODE_PRIVATE
+                )
                 listenerPrefs.edit().putBoolean("stopped_rule_${parts[2]}", true).apply()
             }
-            // ── DO NOT clear isAlarmActive or notif_key_active here ──────
-            // These guards are intentionally kept alive after Stop so that
-            // WhatsApp / other apps re-posting the same notification thread
-            // do NOT immediately re-trigger the alarm.
-            // Guards are only cleared in onNotificationRemoved() — when the
-            // user actually dismisses the source notification from the shade.
         }
 
         if (removeEntry) AlarmStore.remove(ctx, id)
