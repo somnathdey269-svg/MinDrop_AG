@@ -265,7 +265,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             val delivery = if (r.optString("delivery") == "alarm") "alarm" else "notify"
             app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: remindMode=$remindMode, delayMs=$delayMs, delivery=$delivery")
 
-            val remindNote = r.optString("remindNote", "")
+            val remindNote = r.optString("remindNote", "").ifBlank { r.optString("body", "") }
             val customTitle = if (conversationTitle.isNotBlank()) "$appName • $conversationTitle" else appName
             val customBody = if (remindNote.isNotBlank()) remindNote else text
 

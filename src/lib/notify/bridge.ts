@@ -32,6 +32,7 @@ export interface NativeRuleSnapshot {
   remindMode?: "immediate" | "after";
   afterHours?: number;
   afterMinutes?: number;
+  remindNote?: string;
 }
 
 interface NotifyBridgePlugin {
