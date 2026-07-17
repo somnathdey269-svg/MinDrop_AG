@@ -142,6 +142,7 @@ async function fireImmediate(rule: NotifyRule, n: CapturedNotification) {
   const delivery = rule.delivery ?? "notify";
   const mem = buildMemoryFromRule(rule, n, new Date());
   if (delivery === "alarm") {
+    mem.id = `notify-active-${rule.id}`; // Keep ID in sync with native alarm
     // Loud path: dispatch the in-app alarm sheet AND schedule a native alarm
     // right now so the phone rings even if the WebView is backgrounded.
     window.dispatchEvent(new CustomEvent<AlarmDetail>(ALARM_EVENT, { detail: { memory: mem } }));
@@ -200,6 +201,15 @@ function handleNotification(n: CapturedNotification) {
   if (isDuplicate(n)) return;
   pushToInbox(n);
   pushCapture(n, currentPlan());
+
+  if (NotifyBridge.isNative()) {
+    // Under native platforms, the Kotlin listener service is the sole executor
+    // of all rule evaluations and alarm playbacks to prevent double-triggering
+    // and sync errors. Return early here.
+    return;
+  }
+
+  if (n.isAlarmActive) return; // Skip triggering any new alarms while one is active/snoozed
   const rules = readRules();
 
   // Prioritize checking by rule set specificity (more conditions first, catch-all last)
@@ -256,6 +266,9 @@ export function buildNativeRuleSnapshot(): NativeRuleSnapshot[] {
       frequency: (r.frequency ?? "once") as "once" | "always",
       conditions: r.conditions,
       logicalOperator: r.logicalOperator,
+      remindMode: r.remindMode ?? "immediate",
+      afterHours: r.afterHours,
+      afterMinutes: r.afterMinutes,
     }));
 }
 
@@ -291,5 +304,8 @@ export function startNotifyEngine() {
   syncNativeRules();
   window.addEventListener("storage", (e) => {
     if (e.key === "mindrop.notify.rules.v1" || e.key === null) syncNativeRules();
+  });
+  window.addEventListener("mindrop:rules-changed", () => {
+    syncNativeRules();
   });
 }

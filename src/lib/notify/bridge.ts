@@ -29,6 +29,9 @@ export interface NativeRuleSnapshot {
   frequency?: "once" | "always";
   conditions?: RuleCondition[];
   logicalOperator?: "AND" | "OR";
+  remindMode?: "immediate" | "after";
+  afterHours?: number;
+  afterMinutes?: number;
 }
 
 interface NotifyBridgePlugin {

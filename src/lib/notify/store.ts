@@ -79,6 +79,7 @@ export function markRuleTriggered(id: string) {
 function persistRules(next: NotifyRule[]) {
   write(RULES_KEY, next);
   try { window.dispatchEvent(new StorageEvent("storage", { key: RULES_KEY })); } catch {}
+  try { window.dispatchEvent(new CustomEvent("mindrop:rules-changed")); } catch {}
 }
 
 export function useRules() {

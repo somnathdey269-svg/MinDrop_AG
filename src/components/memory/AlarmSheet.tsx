@@ -97,7 +97,7 @@ export function AlarmSheet() {
       return;
     }
     incrementSnoozeCount();
-    AlarmsBridge.cancelAlarm(current.id).catch(() => {});
+    AlarmsBridge.snoozeAlarm(current.id, minutes).catch(() => {});
     snoozeMemory(current.id, minutes);
     dismiss();
   }

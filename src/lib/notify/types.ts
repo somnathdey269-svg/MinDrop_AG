@@ -8,6 +8,7 @@ export interface CapturedNotification {
   timestamp: number;       // ms since epoch
   priority?: number;       // OS-reported priority; >=1 = high (native only)
   isMessaging?: boolean;   // Indicates a MessagingStyle grouped notification
+  isAlarmActive?: boolean; // Blocks duplicate alarm triggers if one is active/snoozed
 }
 
 export type ConditionField = 

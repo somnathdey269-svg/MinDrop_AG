@@ -170,6 +170,9 @@ class AlarmsBridgePlugin : Plugin() {
     fun snoozeAlarm(call: PluginCall) {
         val id = call.getString("id") ?: run { call.reject("id required"); return }
         val minutes = call.getInt("minutes") ?: 5
+        Diagnostics.log(context, "AlarmsBridgePlugin.snoozeAlarm: JS request received for id=$id, minutes=$minutes")
+        val nm = context.getSystemService(android.app.NotificationManager::class.java)
+        nm?.cancel(AlarmStore.requestCode(id))
         AlarmScheduler.snooze(context, id, minutes.toLong())
         call.resolve()
     }
@@ -384,7 +387,10 @@ object AlarmScheduler {
     fun schedule(ctx: Context, e: AlarmStore.Entry) {
         val am = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pi = pendingIntent(ctx, e)
-        val useExact = e.exact && (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || am.canScheduleExactAlarms())
+        val canExact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S || am.canScheduleExactAlarms()
+        val ignoringBattery = (ctx.getSystemService(Context.POWER_SERVICE) as? android.os.PowerManager)?.isIgnoringBatteryOptimizations(ctx.packageName) ?: false
+        Diagnostics.log(ctx, "AlarmScheduler.schedule: id=${e.id}, at=${e.at} (${(e.at - System.currentTimeMillis()) / 1000}s from now), delivery=${e.delivery}, exact=${e.exact}, canExact=$canExact, ignoringBattery=$ignoringBattery")
+        val useExact = e.exact && canExact
         try {
             if (e.delivery == "alarm" && useExact) {
                 // Strongest Doze exemption + shows next-alarm icon.
@@ -396,17 +402,22 @@ object AlarmScheduler {
                 }
                 val info = AlarmManager.AlarmClockInfo(e.at, showIntent)
                 am.setAlarmClock(info, pi)
+                Diagnostics.log(ctx, "AlarmScheduler.schedule: scheduled via am.setAlarmClock")
             } else if (useExact) {
                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, e.at, pi)
+                Diagnostics.log(ctx, "AlarmScheduler.schedule: scheduled via am.setExactAndAllowWhileIdle")
             } else {
                 am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, e.at, pi)
+                Diagnostics.log(ctx, "AlarmScheduler.schedule: scheduled via am.setAndAllowWhileIdle")
             }
-        } catch (_: SecurityException) {
+        } catch (err: SecurityException) {
+            Diagnostics.logError(ctx, "AlarmScheduler.schedule: exact alarm permission SecurityException fallback", err)
             am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, e.at, pi)
         }
     }
 
     fun cancel(ctx: Context, id: String) {
+        Diagnostics.log(ctx, "AlarmScheduler.cancel: cancelling alarm id=$id")
         val am = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val stub = AlarmStore.Entry(
             id = id, at = 0, title = "", body = "",
@@ -422,8 +433,14 @@ object AlarmScheduler {
 
     /** Reschedule an existing entry `minutes` from now. */
     fun snooze(ctx: Context, id: String, minutes: Long) {
-        val existing = AlarmStore.find(ctx, id) ?: return
+        Diagnostics.log(ctx, "AlarmScheduler.snooze: request received for id=$id, minutes=$minutes")
+        val existing = AlarmStore.find(ctx, id)
+        if (existing == null) {
+            Diagnostics.log(ctx, "AlarmScheduler.snooze: FAILED - existing entry not found in AlarmStore for id=$id")
+            return
+        }
         val next = existing.copy(at = System.currentTimeMillis() + minutes * 60_000L)
+        Diagnostics.log(ctx, "AlarmScheduler.snooze: copy created. existing.at=${existing.at}, next.at=${next.at}")
         cancel(ctx, id)
         AlarmStore.upsert(ctx, next)
         schedule(ctx, next)

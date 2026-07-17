@@ -237,7 +237,7 @@ async function nativeSyncAll() {
   if (useAlarmsBridge) {
     const desired = new Set(nextNativeAlarmIds);
     await Promise.all(previousNativeAlarmIds
-      .filter((id) => !desired.has(id) && !protectedNativeAlarmIds.has(id))
+      .filter((id) => !desired.has(id) && !protectedNativeAlarmIds.has(id) && !id.startsWith("notify-"))
       .map((id) => AlarmsBridge.cancelAlarm(id)));
   }
   writeStringList(NATIVE_ALARM_IDS_KEY, nextNativeAlarmIds);

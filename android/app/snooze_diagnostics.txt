@@ -1,0 +1,16 @@
+[2026-07-17 17:04:39.716] AlarmScheduler.snooze: request received for id=notify-active-rule1, minutes=5
+[2026-07-17 17:04:57.069] AlarmScheduler.snooze: request received for id=notify-active-rule1, minutes=5
+[2026-07-17 17:04:57.075] AlarmScheduler.snooze: copy created. existing.at=1784288087051, next.at=1784288397073
+[2026-07-17 17:04:57.075] AlarmScheduler.cancel: cancelling alarm id=notify-active-rule1
+[2026-07-17 17:04:57.090] AlarmScheduler.schedule: id=notify-active-rule1, at=1784288397073 (299s from now), delivery=alarm, exact=true, canExact=true, ignoringBattery=false
+[2026-07-17 17:04:57.091] AlarmScheduler.schedule: scheduled via am.setAlarmClock
+[2026-07-17 17:26:28.821] AlarmScheduler.snooze: request received for id=notify-active-rule1, minutes=5
+[2026-07-17 17:26:28.829] AlarmScheduler.snooze: copy created. existing.at=1784289378805, next.at=1784289688827
+[2026-07-17 17:26:28.829] AlarmScheduler.cancel: cancelling alarm id=notify-active-rule1
+[2026-07-17 17:26:28.845] AlarmScheduler.schedule: id=notify-active-rule1, at=1784289688827 (299s from now), delivery=alarm, exact=true, canExact=true, ignoringBattery=false
+[2026-07-17 17:26:28.846] AlarmScheduler.schedule: scheduled via am.setAlarmClock
+[2026-07-17 17:32:42.945] AlarmScheduler.snooze: request received for id=notify-active-rule1, minutes=5
+[2026-07-17 17:32:42.951] AlarmScheduler.snooze: copy created. existing.at=1784289752926, next.at=1784290062949
+[2026-07-17 17:32:42.951] AlarmScheduler.cancel: cancelling alarm id=notify-active-rule1
+[2026-07-17 17:32:42.965] AlarmScheduler.schedule: id=notify-active-rule1, at=1784290062949 (299s from now), delivery=alarm, exact=true, canExact=true, ignoringBattery=false
+[2026-07-17 17:32:42.967] AlarmScheduler.schedule: scheduled via am.setAlarmClock
