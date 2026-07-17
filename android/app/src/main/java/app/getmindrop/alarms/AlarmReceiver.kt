@@ -130,7 +130,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val entry = AlarmStore.find(ctx, id)
         val extra = entry?.extra ?: ""
         // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
-        if (extra.startsWith("active_key::")) {
+        if (removeEntry && extra.startsWith("active_key::")) {
             val parts = extra.removePrefix("active_key::").split("::", limit = 3)
             if (parts.size >= 2) {
                 AlarmStore.clearAlarmActive(ctx, parts[0], parts[1])
