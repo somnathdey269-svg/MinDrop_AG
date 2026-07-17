@@ -3,6 +3,7 @@ package app.getmindrop.alarms
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -73,7 +74,7 @@ class AlarmRingService : Service() {
                 activeAlarmBody = intent?.getStringExtra("body") ?: ""
 
                 val toneId = intent?.getStringExtra("toneId") ?: "classic"
-                startForegroundIfNeeded("Alarm ringing")
+                startForegroundIfNeeded("Alarm ringing", activeAlarmId)
                 startTone(toneId, vibrate = true)
                 autoStopHandler.removeCallbacks(autoStopRunnable)
                 autoStopHandler.postDelayed(autoStopRunnable, AUTO_STOP_MS)
@@ -82,15 +83,25 @@ class AlarmRingService : Service() {
         }
     }
 
-    private fun startForegroundIfNeeded(text: String) {
+    private fun startForegroundIfNeeded(text: String, alarmId: String? = null) {
         ensureServiceChannel()
-        val n: Notification = NotificationCompat.Builder(this, SERVICE_CHANNEL)
-            .setContentTitle("MinDrop")
-            .setContentText(text)
+        val title = if (alarmId != null) activeAlarmTitle else "MinDrop"
+        val body = if (alarmId != null) activeAlarmBody else text
+
+        val builder = NotificationCompat.Builder(this, SERVICE_CHANNEL)
+            .setContentTitle(title)
+            .setContentText(body)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
-            .build()
+
+        if (alarmId != null) {
+            builder.addAction(0, "Stop", actionPI(this, alarmId, AlarmReceiver.ACTION_STOP))
+            builder.addAction(0, "5m",   actionPI(this, alarmId, AlarmReceiver.ACTION_SNOOZE_5))
+            builder.addAction(0, "30m",  actionPI(this, alarmId, AlarmReceiver.ACTION_SNOOZE_30))
+        }
+
+        val n = builder.build()
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 startForeground(SERVICE_NOTIFICATION_ID, n,
@@ -101,6 +112,18 @@ class AlarmRingService : Service() {
         } catch (_: Throwable) {
             try { startForeground(SERVICE_NOTIFICATION_ID, n) } catch (_: Throwable) {}
         }
+    }
+
+    private fun actionPI(ctx: Context, id: String, action: String): PendingIntent {
+        val i = Intent(ctx, AlarmReceiver::class.java).apply {
+            this.action = action
+            putExtra("id", id)
+        }
+        val rc = (AlarmStore.requestCode(id) xor action.hashCode()) and 0x7fffffff
+        return PendingIntent.getBroadcast(
+            ctx, rc, i,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     private fun ensureServiceChannel() {
