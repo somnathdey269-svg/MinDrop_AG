@@ -265,14 +265,18 @@ class MindDropNotificationListener : NotificationListenerService() {
             val delivery = if (r.optString("delivery") == "alarm") "alarm" else "notify"
             app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: remindMode=$remindMode, delayMs=$delayMs, delivery=$delivery")
 
+            val remindNote = r.optString("remindNote", "")
+            val customTitle = if (conversationTitle.isNotBlank()) "$appName • $conversationTitle" else appName
+            val customBody = if (remindNote.isNotBlank()) remindNote else text
+
             if (delivery == "alarm" || delayMs > 0L) {
                 app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: Firing native alarm/scheduled notification.")
                 fireNativeAlarm(
                     pkg = pkg,
                     conversationTitle = conversationTitle,
                     ruleId = ruleId,
-                    titleOverride = r.optString("title", "$appName alert"),
-                    bodyOverride = r.optString("body", "").ifBlank { "$conversationTitle · $text" }.take(240),
+                    titleOverride = customTitle,
+                    bodyOverride = customBody.take(240),
                     delivery = delivery,
                     delayMs = delayMs
                 )
@@ -280,8 +284,8 @@ class MindDropNotificationListener : NotificationListenerService() {
                 app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: Firing immediate normal notification.")
                 fireAlarm(
                     ruleId = ruleId,
-                    titleOverride = r.optString("title", "$appName alert"),
-                    bodyOverride = r.optString("body", "").ifBlank { "$title · $text" }.take(240)
+                    titleOverride = customTitle,
+                    bodyOverride = customBody.take(240)
                 )
             }
 
