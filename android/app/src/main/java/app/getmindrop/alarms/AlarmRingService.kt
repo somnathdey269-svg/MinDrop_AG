@@ -74,7 +74,7 @@ class AlarmRingService : Service() {
                 activeAlarmBody = intent?.getStringExtra("body") ?: ""
 
                 val toneId = intent?.getStringExtra("toneId") ?: "classic"
-                startForegroundIfNeeded("Alarm ringing", activeAlarmId)
+                startForegroundIfNeeded("Alarm ringing", activeAlarmId, toneId)
                 startTone(toneId, vibrate = true)
                 autoStopHandler.removeCallbacks(autoStopRunnable)
                 autoStopHandler.postDelayed(autoStopRunnable, AUTO_STOP_MS)
@@ -83,34 +83,57 @@ class AlarmRingService : Service() {
         }
     }
 
-    private fun startForegroundIfNeeded(text: String, alarmId: String? = null) {
-        ensureServiceChannel()
+    private fun startForegroundIfNeeded(text: String, alarmId: String? = null, toneId: String = "classic") {
+        val channelId = if (alarmId != null) {
+            AlarmChannels.ensureAlarmChannel(this, toneId)
+            AlarmChannels.alarmChannelIdFor(toneId)
+        } else {
+            ensureServiceChannel()
+            SERVICE_CHANNEL
+        }
+
         val title = if (alarmId != null) activeAlarmTitle else "MinDrop"
         val body = if (alarmId != null) activeAlarmBody else text
 
-        val builder = NotificationCompat.Builder(this, SERVICE_CHANNEL)
+        val contentIntent = packageManager.getLaunchIntentForPackage(packageName)
+            ?.let {
+                PendingIntent.getActivity(
+                    this, AlarmStore.requestCode(alarmId ?: "preview"), it,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            }
+
+        val builder = NotificationCompat.Builder(this, channelId)
             .setContentTitle(title)
             .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
+            .setContentIntent(contentIntent)
 
         if (alarmId != null) {
+            builder.setPriority(NotificationCompat.PRIORITY_MAX)
+            builder.setCategory(NotificationCompat.CATEGORY_ALARM)
+            contentIntent?.let { builder.setFullScreenIntent(it, true) }
             builder.addAction(0, "Stop", actionPI(this, alarmId, AlarmReceiver.ACTION_STOP))
             builder.addAction(0, "5m",   actionPI(this, alarmId, AlarmReceiver.ACTION_SNOOZE_5))
             builder.addAction(0, "30m",  actionPI(this, alarmId, AlarmReceiver.ACTION_SNOOZE_30))
+        } else {
+            builder.setPriority(NotificationCompat.PRIORITY_LOW)
         }
 
         val n = builder.build()
+        val notificationId = if (alarmId != null) AlarmStore.requestCode(alarmId) else SERVICE_NOTIFICATION_ID
+
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(SERVICE_NOTIFICATION_ID, n,
+                startForeground(notificationId, n,
                     ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
             } else {
-                startForeground(SERVICE_NOTIFICATION_ID, n)
+                startForeground(notificationId, n)
             }
         } catch (_: Throwable) {
-            try { startForeground(SERVICE_NOTIFICATION_ID, n) } catch (_: Throwable) {}
+            try { startForeground(notificationId, n) } catch (_: Throwable) {}
         }
     }
 

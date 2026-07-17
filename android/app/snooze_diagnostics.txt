@@ -36,3 +36,9 @@
 [2026-07-17 20:57:45.271] AlarmScheduler.cancel: AlarmManager cancelled and PendingIntent cache cleared for id=notify-active-rule1
 [2026-07-17 20:57:45.280] AlarmScheduler.schedule: id=notify-active-rule1, at=1784302365259 (299s from now), delivery=alarm, exact=true, canExact=true, ignoringBattery=false
 [2026-07-17 20:57:45.281] AlarmScheduler.schedule: scheduled via am.setAlarmClock
+[2026-07-17 22:42:57.843] AlarmScheduler.snooze: request received for id=notify-active-rule1, minutes=5
+[2026-07-17 22:42:57.854] AlarmScheduler.snooze: copy created. existing.at=1784308367812, next.at=1784308677852
+[2026-07-17 22:42:57.855] AlarmScheduler.cancel: cancelling alarm id=notify-active-rule1
+[2026-07-17 22:42:57.863] AlarmScheduler.cancel: AlarmManager cancelled and PendingIntent cache cleared for id=notify-active-rule1
+[2026-07-17 22:42:57.884] AlarmScheduler.schedule: id=notify-active-rule1, at=1784308677852 (299s from now), delivery=alarm, exact=true, canExact=true, ignoringBattery=false
+[2026-07-17 22:42:57.885] AlarmScheduler.schedule: scheduled via am.setAlarmClock

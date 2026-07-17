@@ -62,7 +62,7 @@ class AlarmReceiver : BroadcastReceiver() {
         if (delivery == "alarm") AlarmChannels.ensureAlarmChannel(context, toneId)
         else AlarmChannels.ensureNotifyChannel(context)
 
-        if (canPost) {
+        if (canPost && delivery != "alarm") {
             val nm = context.getSystemService(NotificationManager::class.java)
 
             val contentIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
@@ -80,27 +80,13 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setStyle(NotificationCompat.BigTextStyle().bigText(body))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent)
-                .setPriority(
-                    if (delivery == "alarm") NotificationCompat.PRIORITY_MAX
-                    else NotificationCompat.PRIORITY_DEFAULT
-                )
-                .setCategory(
-                    if (delivery == "alarm") NotificationCompat.CATEGORY_ALARM
-                    else NotificationCompat.CATEGORY_REMINDER
-                )
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
 
-            if (delivery == "alarm") {
-                // Full-screen intent → wakes the screen even on lock screen.
-                contentIntent?.let { builder.setFullScreenIntent(it, true) }
-                builder.addAction(0, "Stop", actionPI(context, id, ACTION_STOP))
-                builder.addAction(0, "5m",   actionPI(context, id, ACTION_SNOOZE_5))
-                builder.addAction(0, "30m",  actionPI(context, id, ACTION_SNOOZE_30))
-                builder.setOngoing(true)
-            }
-            Diagnostics.log(context, "AlarmReceiver.onReceive: calling nm.notify for id=$id, requestCode=${AlarmStore.requestCode(id)}")
+            Diagnostics.log(context, "AlarmReceiver.onReceive: calling nm.notify for non-alarm delivery id=$id, requestCode=${AlarmStore.requestCode(id)}")
             nm.notify(AlarmStore.requestCode(id), builder.build())
             Diagnostics.log(context, "AlarmReceiver.onReceive: nm.notify completed successfully")
-        } else {
+        } else if (!canPost) {
             Diagnostics.log(context, "AlarmReceiver.onReceive: canPost was FALSE (cannot post notification)")
         }
         if (delivery == "alarm") {
