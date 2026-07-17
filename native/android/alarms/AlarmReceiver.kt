@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        Diagnostics.log(context, "AlarmReceiver.onReceive: action=${intent.action}, id=${intent.getStringExtra("id")}")
         when (intent.action) {
             ACTION_STOP -> {
                 val id = intent.getStringExtra("id") ?: return
@@ -96,18 +97,26 @@ class AlarmReceiver : BroadcastReceiver() {
                 builder.addAction(0, "30m",  actionPI(context, id, ACTION_SNOOZE_30))
                 builder.setOngoing(true)
             }
-
+            Diagnostics.log(context, "AlarmReceiver.onReceive: calling nm.notify for id=$id, requestCode=${AlarmStore.requestCode(id)}")
             nm.notify(AlarmStore.requestCode(id), builder.build())
+            Diagnostics.log(context, "AlarmReceiver.onReceive: nm.notify completed successfully")
+        } else {
+            Diagnostics.log(context, "AlarmReceiver.onReceive: canPost was FALSE (cannot post notification)")
         }
-
         if (delivery == "alarm") {
             // Loud looping ringtone + vibration.
+            Diagnostics.log(context, "AlarmReceiver.onReceive: starting foreground service AlarmRingService for id=$id")
             val svc = Intent(context, AlarmRingService::class.java).apply {
                 action = AlarmRingService.ACTION_RING
                 putExtra("id", id)
                 putExtra("toneId", toneId)
             }
-            try { ContextCompat.startForegroundService(context, svc) } catch (_: Throwable) {}
+            try {
+                ContextCompat.startForegroundService(context, svc)
+                Diagnostics.log(context, "AlarmReceiver.onReceive: foreground service start successful")
+            } catch (t: Throwable) {
+                Diagnostics.logError(context, "AlarmReceiver.onReceive: failed to start foreground service", t)
+            }
         }
 
         // The one-shot notification has fired — remove it from the persisted
@@ -119,20 +128,51 @@ class AlarmReceiver : BroadcastReceiver() {
         AlarmsBridgePlugin.instance?.emitFired(id, extra)
     }
 
-    private fun stopAlarm(ctx: Context, id: String, removeEntry: Boolean = true) {
+    private fun stopAlarm(ctx: Context, id: String, removeEntry: Boolean = true, recordStopped: Boolean = true) {
+        Diagnostics.log(ctx, "AlarmReceiver.stopAlarm: stop clicked for id=$id, removeEntry=$removeEntry, recordStopped=$recordStopped")
         val nm = ctx.getSystemService(NotificationManager::class.java)
         nm.cancel(AlarmStore.requestCode(id))
-        if (removeEntry) AlarmStore.remove(ctx, id)
-        val svc = Intent(ctx, AlarmRingService::class.java).apply {
-            action = AlarmRingService.ACTION_STOP
-            putExtra("id", id)
+
+        // Record that this alarm was stopped so the JS side can reconcile it on opening.
+        if (recordStopped) {
+            AlarmStore.recordStoppedAlarm(ctx, id)
         }
-        try { ctx.startService(svc) } catch (_: Throwable) {}
+
+        // Read the stored alarm entry BEFORE removing it.
+        val entry = AlarmStore.find(ctx, id)
+        val extra = entry?.extra ?: ""
+        // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
+        if (removeEntry && extra.startsWith("active_key::")) {
+            val parts = extra.removePrefix("active_key::").split("::", limit = 3)
+            if (parts.size >= 2) {
+                AlarmStore.clearAlarmActive(ctx, parts[0], parts[1])
+            }
+            // Permanently retire once-rules on Stop.
+            if (parts.size == 3 && parts[2].isNotBlank()) {
+                val listenerPrefs = ctx.getSharedPreferences(
+                    app.getmindrop.notify.MindDropNotificationListener.PREFS,
+                    android.content.Context.MODE_PRIVATE
+                )
+                listenerPrefs.edit().putBoolean("stopped_rule_${parts[2]}", true).apply()
+            }
+        }
+
+        if (removeEntry) AlarmStore.remove(ctx, id)
+
+        try {
+            ctx.stopService(Intent(ctx, AlarmRingService::class.java))
+        } catch (t: Throwable) {
+            Diagnostics.logError(ctx, "AlarmReceiver.stopAlarm: failed to stop service", t)
+        }
     }
+
 
     private fun snoozeAndStop(ctx: Context, intent: Intent, minutes: Int) {
         val id = intent.getStringExtra("id") ?: return
-        stopAlarm(ctx, id, removeEntry = false)
+        Diagnostics.log(ctx, "AlarmReceiver.snoozeAndStop: snooze action received for id=$id, minutes=$minutes")
+        // Record that this alarm was snoozed so the JS side can reconcile it on opening.
+        AlarmStore.recordSnoozedAlarm(ctx, id, minutes)
+        stopAlarm(ctx, id, removeEntry = false, recordStopped = false)
         AlarmScheduler.snooze(ctx, id, minutes.toLong())
     }
 

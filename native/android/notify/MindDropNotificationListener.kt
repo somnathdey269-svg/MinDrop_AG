@@ -27,30 +27,50 @@ class MindDropNotificationListener : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
+        val ctx = applicationContext
         try {
             val n = sbn.notification ?: return
             if (sbn.packageName == packageName) return
-            // Read everything for now — group summaries and ongoing (music,
-            // navigation, calls) included. Was previously filtered; user
-            // asked to capture all notifications.
+
+            app.getmindrop.alarms.Diagnostics.log(ctx, "onNotificationPosted: pkg=${sbn.packageName}, flags=${n.flags}")
+
+            // Skip background sync/ongoing notifications (e.g. WhatsApp "Checking for new messages")
+            val ongoingOrService = (n.flags and (android.app.Notification.FLAG_ONGOING_EVENT or android.app.Notification.FLAG_FOREGROUND_SERVICE)) != 0
+            if (ongoingOrService) return
+
+            // ── Fix 4: Skip group-summary notifications ───────────────────
+            // Android bundles individual notifications into a group summary
+            // (FLAG_GROUP_SUMMARY). Processing summaries causes the same
+            // message to trigger an alarm twice — once for the individual
+            // notification and once for the summary. We only want to evaluate
+            // the individual, atomic notification.
+            if ((n.flags and android.app.Notification.FLAG_GROUP_SUMMARY) != 0) return
 
             val extracted = extractContent(n)
             val title = extracted.title
             val text = extracted.text
             val bigText = extracted.bigText
             val subText = extracted.subText
+            val isMessaging = extracted.isMessaging
             if (title.isBlank() && text.isBlank() && bigText.isNullOrBlank()) return
+
+            app.getmindrop.alarms.Diagnostics.log(ctx, "onNotificationPosted: extracted content: title='$title', text='$text'")
 
             val appName = resolveAppLabel(sbn.packageName)
             val id = "${sbn.packageName}#${sbn.postTime}#${sbn.id}"
 
             NotifyBridgePlugin.cacheContentIntent(id, n.contentIntent)
 
+            val conversationTitle = normalizeConversationTitle(title)
+            val isAlarmActive = app.getmindrop.alarms.AlarmStore.isAlarmActive(
+                ctx, sbn.packageName, conversationTitle
+            )
+
             // 1. Evaluate rules natively so we fire even when JS is dead.
-            evaluateAndFire(sbn.packageName, appName, title, text, bigText, n.priority)
+            evaluateAndFire(sbn.packageName, appName, title, text, bigText, n.priority, isMessaging)
 
             // 2. Buffer the raw event so JS can drain on next open.
-            bufferEvent(id, sbn.packageName, appName, title, text, bigText, subText, n.priority, sbn.postTime)
+            bufferEvent(id, sbn.packageName, appName, title, text, bigText, subText, n.priority, sbn.postTime, isMessaging, isAlarmActive)
 
             // 3. Live forward to JS if it's alive.
             NotifyBridgePlugin.instance?.emitNotification(
@@ -62,10 +82,13 @@ class MindDropNotificationListener : NotificationListenerService() {
                 bigText = bigText,
                 subText = subText,
                 priority = n.priority,
-                timestamp = sbn.postTime
+                timestamp = sbn.postTime,
+                isMessaging = isMessaging,
+                isAlarmActive = isAlarmActive
             )
-        } catch (_: Throwable) {
+        } catch (t: Throwable) {
             // Never crash the listener — Android will disable us if we do.
+            app.getmindrop.alarms.Diagnostics.logError(ctx, "onNotificationPosted: exception inside try-catch", t)
         }
     }
 
@@ -90,72 +113,247 @@ class MindDropNotificationListener : NotificationListenerService() {
         catch (_: Throwable) { pkg }
     }
 
+    private fun checkCondition(
+        cond: JSONObject, title: String, text: String,
+        bigText: String?, isMessaging: Boolean, priority: Int
+    ): Boolean {
+        val field = cond.optString("field", "")
+        val operator = cond.optString("operator", "contains")
+        val value = cond.optString("value", "").trim().lowercase()
+
+        val hay = if (isMessaging) {
+            "$title\n$text".lowercase()
+        } else {
+            "$title\n$text\n${bigText ?: ""}".lowercase()
+        }
+
+        when (field) {
+            "sender" -> {
+                val t = title.lowercase()
+                return when (operator) {
+                    "equals" -> t == value
+                    "doesNotContain" -> !t.contains(value)
+                    else -> t.contains(value)
+                }
+            }
+            "text" -> {
+                val b = text.lowercase()
+                return when (operator) {
+                    "equals" -> b == value
+                    "doesNotContain" -> !b.contains(value)
+                    else -> b.contains(value)
+                }
+            }
+            "otp" -> {
+                val hasOtpKeywords = Regex("otp|code|verification|verify|pin", RegexOption.IGNORE_CASE).containsMatchIn(hay)
+                val hasDigits = Regex("\\b\\d{4,8}\\b").containsMatchIn(hay)
+                val isMatched = hasOtpKeywords && hasDigits
+                return if (operator == "doesNotContain") !isMatched else isMatched
+            }
+            "transaction" -> {
+                val hasMoneyKeywords = Regex("debited|credited|spent|transaction|payment|paid|withdrawn|transferred", RegexOption.IGNORE_CASE).containsMatchIn(hay)
+                val hasCurrencySymbols = Regex("[\\$₹€£]").containsMatchIn(hay)
+                val isMatched = hasMoneyKeywords || hasCurrencySymbols
+                return if (operator == "doesNotContain") !isMatched else isMatched
+            }
+            "link" -> {
+                val hasWebLink = Regex("https?://[^\\s]+").containsMatchIn(hay)
+                return if (operator == "doesNotContain") !hasWebLink else hasWebLink
+            }
+            "priority" -> {
+                val isHigh = priority >= 1
+                return if (operator == "doesNotContain") !isHigh else isHigh
+            }
+        }
+        return true
+    }
+
     private fun evaluateAndFire(
         pkg: String, appName: String, title: String, text: String,
-        bigText: String?, priority: Int
+        bigText: String?, priority: Int, isMessaging: Boolean
     ) {
-        val snap = prefs.getString(KEY_RULES, null) ?: return
-        val arr = try { JSONArray(snap) } catch (_: Throwable) { return }
-        val hay = "$title\n$text\n${bigText.orEmpty()}".lowercase()
-        val dedupeKey = "$pkg::$title::$text".hashCode()
+        val snap = prefs.getString(KEY_RULES, null)
+        app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: loaded rules snapshot: $snap")
+        if (snap == null) return
+        val arr = try { JSONArray(snap) } catch (t: Throwable) {
+            app.getmindrop.alarms.Diagnostics.logError(applicationContext, "evaluateAndFire: failed to parse rules JSON", t)
+            return
+        }
+
+        // ── Normalize conversation title ───────────────────────────────────
+        // Apps like WhatsApp update the notification title as messages accumulate:
+        //   "Mr. X" → "Mr. X (2 messages)" → "Mr. X (5 messages)"
+        // Strip the suffix so all updates map to the same conversation key.
+        val conversationTitle = normalizeConversationTitle(title)
+
+        val dedupeKey = "$pkg::$conversationTitle::$text".hashCode()
         val now = System.currentTimeMillis()
-        // 60s dedupe
+        // 60s dedupe on exact same title+text
         val lastDedupe = prefs.getLong("dedupe_$dedupeKey", 0L)
         if (now - lastDedupe < 60_000L) return
 
         for (i in 0 until arr.length()) {
             val r = arr.optJSONObject(i) ?: continue
+            val ruleId = r.optString("id")
+            app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: evaluating rule id=$ruleId, rulePkg=${r.optString("pkg")}, notificationPkg=$pkg")
             if (r.optString("pkg") != pkg) continue
             if (r.optBoolean("priorityOnly", false) && priority < 1) continue
-            val kwArr = r.optJSONArray("keywords") ?: JSONArray()
-            var match = kwArr.length() == 0
-            if (!match) {
-                for (k in 0 until kwArr.length()) {
-                    val kw = kwArr.optString(k, "").lowercase()
-                    if (kw.isNotBlank() && hay.contains(kw)) { match = true; break }
+
+            // ── Fix 2 & 3: Permanent once-rule guard ──────────────────────
+            // "once" rules that the user has stopped (or that have already
+            // fired once) are written into the stopped-rules set. They must
+            // NEVER fire again — not even after a phone restart — because
+            // SharedPreferences survives reboots.
+            val frequency = r.optString("frequency", "once")
+            if (frequency == "once" && isRuleStopped(ruleId)) {
+                app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: rule id=$ruleId is already stopped, skipping")
+                continue
+            }
+
+            // Evaluate modern rule conditions if present
+            val conditions = r.optJSONArray("conditions")
+            var match = false
+            if (conditions != null && conditions.length() > 0) {
+                val results = mutableListOf<Boolean>()
+                for (cIdx in 0 until conditions.length()) {
+                    val cond = conditions.optJSONObject(cIdx) ?: continue
+                    results.add(checkCondition(cond, title, text, bigText, isMessaging, priority))
+                }
+                val logicalOperator = r.optString("logicalOperator", "AND")
+                match = if (results.isEmpty()) {
+                    false
+                } else if (logicalOperator == "OR") {
+                    results.any { it }
+                } else {
+                    results.all { it }
+                }
+            } else {
+                // Fallback to legacy rule logic
+                val kwArr = r.optJSONArray("keywords") ?: JSONArray()
+                match = kwArr.length() == 0
+                if (!match) {
+                    val hay = "$conversationTitle\n$text".lowercase()
+                    for (k in 0 until kwArr.length()) {
+                        val kw = kwArr.optString(k, "").lowercase()
+                        if (kw.isNotBlank() && hay.contains(kw)) { match = true; break }
+                    }
                 }
             }
+
+            app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: rule id=$ruleId MATCH evaluation result: $match")
             if (!match) continue
 
-            val delivery = r.optString("delivery", "notification")
-            if (delivery == "alarm") {
+            // ── Active-alarm guard (for always-rules) ─────────────────────
+            // Uses NORMALIZED title so "Mr. X" and "Mr. X (2 messages)" map
+            // to the same conversation slot in the registry.
+            val isAlarmActive = app.getmindrop.alarms.AlarmStore.isAlarmActive(applicationContext, pkg, conversationTitle)
+            app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: active alarm status for conversation $conversationTitle: $isAlarmActive")
+            if (isAlarmActive) {
+                return // alarm already active for this conversation — skip
+            }
+
+            val remindMode = r.optString("remindMode", "immediate")
+            val delayMs = if (remindMode == "after") {
+                val hrs = r.optInt("afterHours", 0)
+                val mins = r.optInt("afterMinutes", 0)
+                val totalMins = Math.max(1, hrs * 60 + mins)
+                totalMins * 60 * 1000L
+            } else {
+                0L
+            }
+
+            val delivery = if (r.optString("delivery") == "alarm") "alarm" else "notify"
+            app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: remindMode=$remindMode, delayMs=$delayMs, delivery=$delivery")
+
+            if (delivery == "alarm" || delayMs > 0L) {
+                app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: Firing native alarm/scheduled notification.")
                 fireNativeAlarm(
-                    ruleId = r.optString("id"),
+                    pkg = pkg,
+                    conversationTitle = conversationTitle,
+                    ruleId = ruleId,
                     titleOverride = r.optString("title", "$appName alert"),
-                    bodyOverride = r.optString("body", "").ifBlank { "$title · $text" }.take(240)
+                    bodyOverride = r.optString("body", "").ifBlank { "$conversationTitle · $text" }.take(240),
+                    delivery = delivery,
+                    delayMs = delayMs
                 )
             } else {
+                app.getmindrop.alarms.Diagnostics.log(applicationContext, "evaluateAndFire: Firing immediate normal notification.")
                 fireAlarm(
-                    ruleId = r.optString("id"),
+                    ruleId = ruleId,
                     titleOverride = r.optString("title", "$appName alert"),
                     bodyOverride = r.optString("body", "").ifBlank { "$title · $text" }.take(240)
                 )
             }
+
+            // ── Fix 3: Retire once-rules permanently after first fire ──────
+            if (frequency == "once") markRuleStopped(ruleId)
+
             prefs.edit().putLong("dedupe_$dedupeKey", now).apply()
             break // one alarm per notification
         }
     }
 
-    /** Schedule an immediate loud alarm so it rings even if the WebView is dead. */
-    private fun fireNativeAlarm(ruleId: String, titleOverride: String, bodyOverride: String) {
+    // ── Conversation title normalizer ─────────────────────────────────────
+    // Strips the " (N messages)" or " (N new messages)" suffix that messaging
+    // apps append when a thread accumulates unread messages. Without this,
+    // "Mr. X" and "Mr. X (2 messages)" hash to different active-alarm keys
+    // and the guard fails → second alarm fires for the same conversation.
+    private fun normalizeConversationTitle(title: String): String {
+        // Matches patterns like " (2 messages)", " (5 new messages)", " (1 message)"
+        return title.replace(Regex("\\s*\\(\\d+\\s+(new\\s+)?messages?\\)\\s*$"), "").trim()
+    }
+
+    // ── Stopped-rules set ────────────────────────────────────────────────
+    // Persisted in SharedPreferences (survives reboots). Written when a
+    // once-rule fires OR when the user explicitly taps Stop on any alarm
+    // that originated from a once-rule. Checked before every evaluateAndFire.
+
+    private fun isRuleStopped(ruleId: String): Boolean =
+        prefs.getBoolean("stopped_rule_$ruleId", false)
+
+    fun markRuleStopped(ruleId: String) {
+        prefs.edit().putBoolean("stopped_rule_$ruleId", true).apply()
+    }
+
+    /**
+     * Schedule an immediate loud alarm so it rings even if the WebView is dead.
+     * Also marks the alarm as "active" for this pkg+conversation so subsequent
+     * notification updates from the same thread do NOT re-trigger.
+     */
+    private fun fireNativeAlarm(
+        pkg: String, conversationTitle: String,
+        ruleId: String, titleOverride: String, bodyOverride: String,
+        delivery: String, delayMs: Long
+    ) {
         try {
             val ctx = applicationContext
+            val alarmId = "notify-$ruleId-${System.currentTimeMillis()}"
+            val targetAt = System.currentTimeMillis() + delayMs
             val toneId = app.getmindrop.alarms.AlarmStore.getDefaultToneId(ctx)
-            app.getmindrop.alarms.AlarmChannels.ensureAlarmChannel(ctx, toneId)
+            if (delivery == "alarm") {
+                app.getmindrop.alarms.AlarmChannels.ensureAlarmChannel(ctx, toneId)
+            }
             val entry = app.getmindrop.alarms.AlarmStore.Entry(
-                id = "notify-$ruleId-${System.currentTimeMillis()}",
-                at = System.currentTimeMillis(),
+                id = alarmId,
+                at = targetAt,
                 title = titleOverride,
                 body = bodyOverride,
-                delivery = "alarm",
+                delivery = delivery,
                 toneId = toneId,
                 exact = true,
-                extra = null
+                // Format: "active_key::{pkg}::{conversationTitle}::{ruleId}"
+                // AlarmReceiver uses these parts to clear all state on Stop.
+                extra = "active_key::${pkg}::${conversationTitle}::${ruleId}"
             )
             app.getmindrop.alarms.AlarmStore.upsert(ctx, entry)
             app.getmindrop.alarms.AlarmScheduler.schedule(ctx, entry)
-        } catch (_: Throwable) {
-            fireAlarm(ruleId, titleOverride, bodyOverride)
+            // Mark this conversation as "alarm active" — blocks re-triggers
+            app.getmindrop.alarms.AlarmStore.markAlarmActive(ctx, pkg, conversationTitle)
+        } catch (e: Throwable) {
+            app.getmindrop.alarms.Diagnostics.logError(applicationContext, "fireNativeAlarm failed to schedule", e)
+            if (delayMs == 0L) {
+                fireAlarm(ruleId, titleOverride, bodyOverride)
+            }
         }
     }
 
@@ -189,7 +387,8 @@ class MindDropNotificationListener : NotificationListenerService() {
 
     private fun bufferEvent(
         id: String, pkg: String, appName: String, title: String, text: String,
-        bigText: String?, subText: String?, priority: Int, timestamp: Long
+        bigText: String?, subText: String?, priority: Int, timestamp: Long,
+        isMessaging: Boolean, isAlarmActive: Boolean
     ) {
         try {
             val raw = prefs.getString(KEY_PENDING, "[]") ?: "[]"
@@ -198,6 +397,8 @@ class MindDropNotificationListener : NotificationListenerService() {
                 .put("id", id).put("pkg", pkg).put("appName", appName)
                 .put("title", title).put("text", text)
                 .put("priority", priority).put("timestamp", timestamp)
+                .put("isMessaging", isMessaging)
+                .put("isAlarmActive", isAlarmActive)
             if (bigText != null) o.put("bigText", bigText)
             if (subText != null) o.put("subText", subText)
             arr.put(o)
@@ -209,7 +410,8 @@ class MindDropNotificationListener : NotificationListenerService() {
 
     private data class Extracted(
         val title: String, val text: String,
-        val bigText: String?, val subText: String?
+        val bigText: String?, val subText: String?,
+        val isMessaging: Boolean
     )
 
     /**
@@ -225,6 +427,7 @@ class MindDropNotificationListener : NotificationListenerService() {
         var text = extras?.getCharSequence(Notification.EXTRA_TEXT)?.toString().orEmpty()
         var bigText = extras?.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()
         val subText = extras?.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString()
+        var isMessaging = false
 
         val looksRedacted = text.equals("Sensitive notification content hidden", true) ||
             text.contains("notification content hidden", true) ||
@@ -234,20 +437,23 @@ class MindDropNotificationListener : NotificationListenerService() {
         try {
             val msgs = extras?.getParcelableArray(Notification.EXTRA_MESSAGES)
             if (msgs != null && msgs.isNotEmpty()) {
+                isMessaging = true
                 val lines = mutableListOf<String>()
                 var lastSender: String? = null
+                var lastMessageBody = ""
                 for (p in msgs) {
                     val b = p as? android.os.Bundle ?: continue
                     val body = b.getCharSequence("text")?.toString().orEmpty()
                     val sender = b.getCharSequence("sender")?.toString()
                         ?: (b.getBundle("sender_person")?.getCharSequence("name")?.toString())
                     if (body.isBlank()) continue
+                    lastMessageBody = body
                     if (sender != null) lastSender = sender
                     lines += if (sender != null) "$sender: $body" else body
                 }
                 if (lines.isNotEmpty()) {
                     val joined = lines.joinToString("\n")
-                    if (looksRedacted || text.isBlank()) text = lines.last().substringAfter(": ", lines.last())
+                    text = lastMessageBody
                     if (bigText.isNullOrBlank()) bigText = joined
                     if (title.isBlank() && lastSender != null) title = lastSender
                 }
@@ -272,7 +478,7 @@ class MindDropNotificationListener : NotificationListenerService() {
             if (ticker.isNotBlank()) text = ticker
         }
 
-        return Extracted(title, text, bigText, subText)
+        return Extracted(title, text, bigText, subText, isMessaging)
     }
 
     companion object {

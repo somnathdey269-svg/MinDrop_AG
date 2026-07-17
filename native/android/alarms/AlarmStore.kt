@@ -156,4 +156,94 @@ object AlarmStore {
         } catch (_: Throwable) {}
         return out
     }
+
+    // ─── Active-Alarm Registry ─────────────────────────────────────────────
+    // Prevents the same pkg+conversation from re-triggering the alarm while
+    // one is still active. Key = "active_{pkg}_{conversationHash}".
+    // Cleared ONLY when the user explicitly taps Stop (not Snooze).
+
+    private const val ACTIVE_PREFIX = "active_"
+
+    /**
+     * Call when an alarm is fired for a given pkg + conversation title.
+     * This blocks re-triggers from the same conversation until clearAlarmActive().
+     */
+    fun markAlarmActive(ctx: Context, pkg: String, conversationTitle: String) {
+        val key = ACTIVE_PREFIX + "${pkg}_${conversationTitle}".hashCode()
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit().putLong(key, System.currentTimeMillis()).apply()
+    }
+
+    /**
+     * Returns true if an alarm is already active for this pkg+conversation.
+     * We treat it as "still active" for up to 30 minutes — after that we
+     * allow a new trigger (covers the case the user killed the app mid-alarm).
+     */
+    fun isAlarmActive(ctx: Context, pkg: String, conversationTitle: String): Boolean {
+        val key = ACTIVE_PREFIX + "${pkg}_${conversationTitle}".hashCode()
+        val firedAt = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .getLong(key, 0L)
+        if (firedAt == 0L) return false
+        return (System.currentTimeMillis() - firedAt) < 30 * 60 * 1000L // 30 min window
+    }
+
+    /**
+     * Call when the user taps Stop. Clears the active marker so a future
+     * message from the same contact can trigger again if rules match.
+     */
+    fun clearAlarmActive(ctx: Context, pkg: String, conversationTitle: String) {
+        val key = ACTIVE_PREFIX + "${pkg}_${conversationTitle}".hashCode()
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit().remove(key).apply()
+    }
+
+    /**
+     * Convenience: clear ALL active alarm markers (called on global stop).
+     */
+    fun clearAllActiveAlarms(ctx: Context) {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val toRemove = prefs.all.keys.filter { it.startsWith(ACTIVE_PREFIX) }
+        prefs.edit().apply { toRemove.forEach { remove(it) } }.apply()
+    }
+
+    // ─── Stopped & Snoozed Alarms Registry ─────────────────────────────────
+    // Tracks alarms that were stopped/snoozed from the notification drawer
+    // while the app was closed. Read/cleared by JS on resume.
+
+    private const val KEY_STOPPED = "stoppedAlarms"
+    private const val KEY_SNOOZED = "snoozedAlarms"
+
+    fun recordStoppedAlarm(ctx: Context, id: String) {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val current = prefs.getStringSet(KEY_STOPPED, emptySet())?.toMutableSet() ?: mutableSetOf()
+        current.add(id)
+        prefs.edit().putStringSet(KEY_STOPPED, current).apply()
+    }
+
+    fun getStoppedAlarms(ctx: Context): Set<String> {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        return prefs.getStringSet(KEY_STOPPED, emptySet()) ?: emptySet()
+    }
+
+    fun recordSnoozedAlarm(ctx: Context, id: String, minutes: Int) {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val raw = prefs.getString(KEY_SNOOZED, "[]") ?: "[]"
+        try {
+            val arr = JSONArray(raw)
+            // JSON shape matches { "id": "...", "minutes": N }
+            val o = JSONObject().put("id", id).put("minutes", minutes)
+            arr.put(o)
+            prefs.edit().putString(KEY_SNOOZED, arr.toString()).apply()
+        } catch (_: Throwable) {}
+    }
+
+    fun getSnoozedAlarmsJson(ctx: Context): String {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        return prefs.getString(KEY_SNOOZED, "[]") ?: "[]"
+    }
+
+    fun clearStoppedAlarms(ctx: Context) {
+        val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        prefs.edit().remove(KEY_STOPPED).remove(KEY_SNOOZED).apply()
+    }
 }

@@ -97,10 +97,12 @@ class AlarmReceiver : BroadcastReceiver() {
                 builder.addAction(0, "30m",  actionPI(context, id, ACTION_SNOOZE_30))
                 builder.setOngoing(true)
             }
-
+            Diagnostics.log(context, "AlarmReceiver.onReceive: calling nm.notify for id=$id, requestCode=${AlarmStore.requestCode(id)}")
             nm.notify(AlarmStore.requestCode(id), builder.build())
+            Diagnostics.log(context, "AlarmReceiver.onReceive: nm.notify completed successfully")
+        } else {
+            Diagnostics.log(context, "AlarmReceiver.onReceive: canPost was FALSE (cannot post notification)")
         }
-
         if (delivery == "alarm") {
             // Loud looping ringtone + vibration.
             Diagnostics.log(context, "AlarmReceiver.onReceive: starting foreground service AlarmRingService for id=$id")

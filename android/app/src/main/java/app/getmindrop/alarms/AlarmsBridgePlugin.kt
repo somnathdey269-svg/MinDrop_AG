@@ -419,11 +419,18 @@ object AlarmScheduler {
     fun cancel(ctx: Context, id: String) {
         Diagnostics.log(ctx, "AlarmScheduler.cancel: cancelling alarm id=$id")
         val am = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val stub = AlarmStore.Entry(
-            id = id, at = 0, title = "", body = "",
-            delivery = "notify", toneId = "classic", exact = false
-        )
-        am.cancel(pendingIntent(ctx, stub))
+        val i = Intent(ctx, AlarmReceiver::class.java).apply {
+            action = "app.getmindrop.alarms.FIRE"
+        }
+        val flags = PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        val pi = PendingIntent.getBroadcast(ctx, AlarmStore.requestCode(id), i, flags)
+        if (pi != null) {
+            am.cancel(pi)
+            pi.cancel()
+            Diagnostics.log(ctx, "AlarmScheduler.cancel: AlarmManager cancelled and PendingIntent cache cleared for id=$id")
+        } else {
+            Diagnostics.log(ctx, "AlarmScheduler.cancel: PendingIntent not found for id=$id")
+        }
         // Use stopService() — always allowed by Android, triggers onDestroy()
         // which stops the media player. startService() is blocked in background.
         try {
