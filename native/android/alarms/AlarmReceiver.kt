@@ -95,6 +95,8 @@ class AlarmReceiver : BroadcastReceiver() {
             val svc = Intent(context, AlarmRingService::class.java).apply {
                 action = AlarmRingService.ACTION_RING
                 putExtra("id", id)
+                putExtra("title", title)
+                putExtra("body", body)
                 putExtra("toneId", toneId)
             }
             try {
