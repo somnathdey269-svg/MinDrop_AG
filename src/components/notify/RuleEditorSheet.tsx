@@ -134,6 +134,7 @@ export function RuleEditorSheet({
  rule,
  prefill,
  knownApps,
+ existingRules = [],
 }: {
  open: boolean;
  accent: string;
@@ -142,10 +143,49 @@ export function RuleEditorSheet({
  rule: NotifyRule | null;
  prefill?: Partial<CapturedNotification>;
  knownApps: KnownApp[];
+ existingRules?: NotifyRule[];
 }) {
  const [draft, setDraft] = useState<Draft>(() => draftFromRule(rule, prefill));
  const [stepIdx, setStepIdx] = useState(0);
  const [appSearch, setAppSearch] = useState("");
+
+  const isDuplicate = useMemo(() => {
+    if (!draft.pkg) return false;
+    const others = (existingRules || []).filter((r) => r.id !== draft.id);
+    return others.some((r) => {
+      if (r.pkg !== draft.pkg) return false;
+      let rSender = "";
+      let rInclude = "";
+      let rExclude = "";
+      let rOtp = false;
+      let rTx = false;
+      let rLink = false;
+      let rPriority = false;
+      r.conditions?.forEach((c) => {
+        if (c.field === "sender") rSender = c.value;
+        else if (c.field === "text" && c.operator === "contains") rInclude = c.value;
+        else if (c.field === "text" && c.operator === "doesNotContain") rExclude = c.value;
+        else if (c.field === "otp" && c.operator === "isTrue") rOtp = true;
+        else if (c.field === "transaction" && c.operator === "isTrue") rTx = true;
+        else if (c.field === "link" && c.operator === "isTrue") rLink = true;
+        else if (c.field === "priority" && c.operator === "isTrue") rPriority = true;
+      });
+      const s1 = rSender.trim().toLowerCase();
+      const s2 = draft.senderVal.trim().toLowerCase();
+      const i1 = rInclude.trim().toLowerCase();
+      const i2 = draft.includeVal.trim().toLowerCase();
+      const e1 = rExclude.trim().toLowerCase();
+      const e2 = draft.excludeVal.trim().toLowerCase();
+      return s1 === s2 &&
+             i1 === i2 &&
+             e1 === e2 &&
+             rOtp === draft.hasOtp &&
+             rTx === draft.hasTx &&
+             rLink === draft.hasLink &&
+             rPriority === draft.hasPriority;
+    });
+  }, [draft, existingRules]);
+
  const tint = (pct: number, base = "transparent") => `color-mix(in oklab, ${accent} ${pct}%, ${base})`;
  // Subtle neutral palette for selected states inside the sheet — the loud
  // country accent is reserved for tiny hints (check icons, thin rails).
@@ -339,7 +379,7 @@ export function RuleEditorSheet({
  (step === "when" && !draft.remindMode) ||
  (step === "timing" && draft.remindMode === "after" && draft.afterHours === 0 && draft.afterMinutes === 0) ||
  (step === "frequency" && !draft.frequency) ||
- (step === "note" && !draft.remindNote.trim());
+ (step === "note" && (draft.remindNote.length > 50 || !draft.remindNote.trim()));
 
  const pickWhen = (mode: RemindMode) => {
  setDraft((d) => ({ ...d, remindMode: mode }));
@@ -820,105 +860,149 @@ export function RuleEditorSheet({
  <p className="t-display text-ink mb-1">What should we remind you about?</p>
  <p className="t-body-sm text-ink/60">Optional — a short line so future-you knows why this pinged.</p>
  </div>
- <textarea
- value={draft.remindNote}
- onChange={(e) => setDraft((d) => ({ ...d, remindNote: e.target.value }))}
- placeholder="e.g. Reply to Priya about weekend plans"
- rows={4}
- className="t-body w-full px-4 py-3 rounded-2xl bg-card border focus:outline-none resize-none"
- style={{ borderColor: tint(18) }}
- />
- <button
- onClick={goNext}
- className="t-eyebrow text-ink/60"
- >
- Skip →
- </button>
- </>
- )}
-
- {step === "review" && (
- <>
- <div>
- <p className="t-display text-ink mb-1">Looks good?</p>
- <p className="t-body-sm text-ink/60">Review and save your rule.</p>
- </div>
- <div className="t-body rounded-2xl bg-card border divide-y divide-ink/5" style={{ borderColor: tint(18) }}>
- <Row label="App" value={draft.appName || "—"} sub={draft.pkg} />
- <Row
- label="Filter"
- value={
- draft.matchMode === "sender"
- ? draft.senderMatch || "Anyone"
- : parseCsv(draft.includeAny).join(", ") || "Any message"
- }
- sub={draft.matchMode === "topic" && draft.excludeAny ? `Exclude: ${draft.excludeAny}` : undefined}
- />
- 
- <Row
- label="Remind"
- value={
- draft.remindMode === "immediate"
- ? "Right away"
- : `In ${draft.afterHours ? `${draft.afterHours}h ` : ""}${draft.afterMinutes}m`
- }
- />
- <Row
- label="Delivery"
- value={draft.delivery === "alarm" ? "Loud alarm" : "Silent notification"}
- />
-  <Row
- label="How often"
- value={draft.frequency === "once" ? "Just once" : "Every time"}
- />
-
- <Row label="Note" value={draft.remindNote || "—"} />
- </div>
- <label className="flex items-center justify-between p-3 rounded-2xl bg-card border" style={{ borderColor: tint(18) }}>
- <p className="t-body text-ink">Enable rule</p>
- <Switch
- checked={draft.enabled}
- onCheckedChange={(v) => setDraft((d) => ({ ...d, enabled: v }))}
- aria-label="Enable rule"
- style={{ "--switch-accent": accent } as React.CSSProperties}
- />
- </label>
- </>
- )}
- </motion.div>
- </AnimatePresence>
- </div>
-
- {/* Footer */}
- <div className="px-5 pt-3 pb-4 border-t border-ink/5 bg-canvas">
- {isLast ? (
- <button
- onClick={handleSave}
- disabled={!canSave}
- className="t-button w-full py-3.5 rounded-2xl disabled:opacity-40 shadow-sm transition-all"
- style={{ backgroundColor: accent, color: btnTextColor }}
- >
- Save rule
- </button>
- ) : (
- <button
- onClick={goNext}
- disabled={nextDisabled}
- className="t-button w-full py-3.5 rounded-2xl disabled:opacity-40 shadow-sm transition-all"
- style={{ backgroundColor: accent, color: btnTextColor }}
- >
- Continue
- </button>
- )}
- <div className="mt-2 flex justify-center">
- <button
- onClick={stepIdx > 0 ? goBack : onClose}
- className="t-meta text-ink/50 hover:text-ink transition"
- >
- {stepIdx > 0 ? "← Back" : "Close"}
- </button>
- </div>
+  <div className="relative">
+    <textarea
+      value={draft.remindNote}
+      onChange={(e) => setDraft((d) => ({ ...d, remindNote: e.target.value }))}
+      placeholder="e.g. Reply to Priya about weekend plans"
+      rows={4}
+      className={`t-body w-full px-4 py-3 rounded-2xl bg-card border focus:outline-none resize-none transition-all ${
+        draft.remindNote.length > 50 ? "border-red-500 focus:border-red-500" : ""
+      }`}
+      style={draft.remindNote.length > 50 ? {} : { borderColor: tint(18) }}
+    />
+    <div className={`t-meta text-right mt-1 ${draft.remindNote.length > 50 ? "text-red-500 font-medium" : "text-ink/40"}`}>
+      {draft.remindNote.length}/50 characters
+    </div>
   </div>
+  <button
+    onClick={() => {
+      setDraft((d) => ({ ...d, remindNote: "" }));
+      goNext();
+    }}
+    className="t-eyebrow text-ink/60 mt-2"
+  >
+    Skip →
+  </button>
+ </>
+ )}
+
+  {step === "review" && (
+  <>
+  {isDuplicate ? (
+    <div className="flex flex-col items-center text-center py-8 px-4 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="size-16 rounded-full bg-amber-500/10 text-amber-500 grid place-items-center mb-2">
+        <Zap className="size-8 animate-bounce" />
+      </div>
+      <div>
+        <h3 className="t-display text-ink mb-2">Duplicate Rule Detected</h3>
+        <p className="t-body-sm text-ink/60 max-w-[280px]">
+          A rule with this exact same package and filter criteria already exists.
+        </p>
+      </div>
+      <div className="w-full flex flex-col gap-2 mt-6">
+        <button
+          onClick={() => {
+            setStepIdx(0); // Start from first question itself
+          }}
+          className="t-button w-full py-3.5 rounded-2xl shadow-sm transition-all"
+          style={{ backgroundColor: accent, color: btnTextColor }}
+        >
+          Edit rule
+        </button>
+        <button
+          onClick={onClose} // Forget it now: close and go to main page of rules
+          className="t-button w-full py-3.5 rounded-2xl bg-ink/5 hover:bg-ink/10 text-ink transition-all border border-ink/5"
+        >
+          Forget it now
+        </button>
+      </div>
+    </div>
+  ) : (
+    <>
+      <div>
+        <p className="t-display text-ink mb-1">Looks good?</p>
+        <p className="t-body-sm text-ink/60">Review and save your rule.</p>
+      </div>
+      <div className="t-body rounded-2xl bg-card border divide-y divide-ink/5" style={{ borderColor: tint(18) }}>
+        <Row label="App" value={draft.appName || "—"} sub={draft.pkg} />
+        <Row
+          label="Filter"
+          value={
+            draft.matchMode === "sender"
+              ? draft.senderMatch || "Anyone"
+              : parseCsv(draft.includeAny).join(", ") || "Any message"
+          }
+          sub={draft.matchMode === "topic" && draft.excludeAny ? `Exclude: ${draft.excludeAny}` : undefined}
+        />
+        <Row
+          label="Remind"
+          value={
+            draft.remindMode === "immediate"
+              ? "Right away"
+              : `In ${draft.afterHours ? `${draft.afterHours}h ` : ""}${draft.afterMinutes}m`
+          }
+        />
+        <Row
+          label="Delivery"
+          value={draft.delivery === "alarm" ? "Loud alarm" : "Silent notification"}
+        />
+        <Row
+          label="How often"
+          value={draft.frequency === "once" ? "Just once" : "Every time"}
+        />
+        <Row label="Note" value={draft.remindNote || "—"} />
+      </div>
+      <label className="flex items-center justify-between p-3 rounded-2xl bg-card border" style={{ borderColor: tint(18) }}>
+        <p className="t-body text-ink">Enable rule</p>
+        <Switch
+          checked={draft.enabled}
+          onCheckedChange={(v) => setDraft((d) => ({ ...d, enabled: v }))}
+          aria-label="Enable rule"
+          style={{ "--switch-accent": accent } as React.CSSProperties}
+        />
+      </label>
+    </>
+  )}
+  </>
+  )}
+  </motion.div>
+  </AnimatePresence>
+  </div>
+
+  {/* Footer */}
+  {!isDuplicate && (
+    <div className="px-5 pt-3 pb-4 border-t border-ink/5 bg-canvas">
+      {isLast ? (
+        <button
+          onClick={handleSave}
+          disabled={!canSave}
+          className="t-button w-full py-3.5 rounded-2xl disabled:opacity-40 shadow-sm transition-all"
+          style={{ backgroundColor: accent, color: btnTextColor }}
+        >
+          Save rule
+        </button>
+      ) : (
+        <button
+          onClick={goNext}
+          disabled={nextDisabled}
+          className="t-button w-full py-3.5 rounded-2xl disabled:opacity-40 shadow-sm transition-all"
+          style={{ backgroundColor: accent, color: btnTextColor }}
+        >
+          Continue
+        </button>
+      )}
+      <div className="mt-2 flex justify-center">
+        <button
+          onClick={stepIdx > 0 ? goBack : onClose}
+          className="t-meta text-ink/50 hover:text-ink transition"
+        >
+          {stepIdx > 0 ? "← Back" : "Close"}
+        </button>
+      </div>
+    </div>
+  )}
+
  </motion.div>
 
  </>

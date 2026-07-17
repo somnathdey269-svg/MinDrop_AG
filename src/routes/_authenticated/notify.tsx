@@ -458,6 +458,7 @@ function NotifyPage() {
  rule={editingRule}
  prefill={prefill}
  knownApps={knownApps}
+ existingRules={rules}
  />
  <NotificationDetailSheet
  notification={detail}
