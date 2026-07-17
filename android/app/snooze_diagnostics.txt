@@ -14,3 +14,8 @@
 [2026-07-17 17:32:42.951] AlarmScheduler.cancel: cancelling alarm id=notify-active-rule1
 [2026-07-17 17:32:42.965] AlarmScheduler.schedule: id=notify-active-rule1, at=1784290062949 (299s from now), delivery=alarm, exact=true, canExact=true, ignoringBattery=false
 [2026-07-17 17:32:42.967] AlarmScheduler.schedule: scheduled via am.setAlarmClock
+[2026-07-17 18:10:23.217] AlarmScheduler.snooze: request received for id=notify-active-rule1, minutes=5
+[2026-07-17 18:10:23.224] AlarmScheduler.snooze: copy created. existing.at=1784292013201, next.at=1784292323223
+[2026-07-17 18:10:23.224] AlarmScheduler.cancel: cancelling alarm id=notify-active-rule1
+[2026-07-17 18:10:23.238] AlarmScheduler.schedule: id=notify-active-rule1, at=1784292323223 (299s from now), delivery=alarm, exact=true, canExact=true, ignoringBattery=false
+[2026-07-17 18:10:23.239] AlarmScheduler.schedule: scheduled via am.setAlarmClock

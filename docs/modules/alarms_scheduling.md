@@ -62,3 +62,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Set android:allowBackup=false in AndroidManifest.xml so uninstalling the app fully wipes all app data and reinstall starts fresh. Also clean up backup.ts INCLUDE_PREFIXES to exclude operational/ephemeral keys: mindrop.snooze. (paywall snooze daily counts - runtime state), mindrop.drive. (last backup timestamp - device-specific), mindrop.countryThemes. (cache that auto-regenerates). Only user-created data (memories, rules, places, alarms, appearance, theme overrides) should be in backup.'
 - **2026-07-17 13:07:08** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Great the same is working for 1st alarm But snooze has stopped now...i want same rule which you rectified for 1st time alarm is applicable to snooze also. Ensure snooze should work when user set for it'
+- **2026-07-17 20:25:06** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'ensure a notification with Stop/Snooze action buttons is shown when a snoozed alarm triggers, identical to the first alarm ring'
