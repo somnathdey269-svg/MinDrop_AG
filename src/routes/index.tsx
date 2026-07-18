@@ -198,7 +198,7 @@ function ShowcaseDeckPage() {
   let rightBubbleTransform = "translate(0px, -50%) scale(0.85)";
 
   if (hoverZone === "left") {
-    // Mouse goes Left -> Active card slides LEFT (-230px), behind card slides RIGHT (230px) and flattens out
+    // Mouse goes Left -> Active card slides LEFT (-230px), behind card slides RIGHT (230px) and flattens out (Match Screenshot 1)
     activeX = -230;
     activeRotate = -12;
     behindX = 230;
@@ -208,12 +208,12 @@ function ShowcaseDeckPage() {
     leftBubbleTransform = "translate(12vw, -50%) scale(1.35)";
     rightBubbleTransform = "translate(-3vw, -50%) scale(0.7)";
   } else if (hoverZone === "right") {
-    // Mouse goes Right -> Active card slides RIGHT (230px), behind card slides LEFT (-230px) and flattens out
+    // Mouse goes Right -> Active card slides RIGHT (230px), behind card remains at original place in stack (Match Screenshot 2)
     activeX = 230;
     activeRotate = 12;
-    behindX = -230;
-    behindRotate = -2;
-    behindScale = 1;
+    behindX = 0;
+    behindRotate = 4;
+    behindScale = 0.95;
 
     leftBubbleTransform = "translate(3vw, -50%) scale(0.7)";
     rightBubbleTransform = "translate(-12vw, -50%) scale(1.35)";
@@ -297,7 +297,7 @@ function ShowcaseDeckPage() {
               </button>
             </div>
 
-            {/* 3D Stacked Cards Deck (Transforms handled fully within Framer motion variables) */}
+            {/* 3D Stacked Cards Deck */}
             <div className="relative w-[280px] sm:w-[320px] md:w-[480px] lg:w-[520px] h-[340px] sm:h-[380px] md:h-[500px] lg:h-[540px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
@@ -434,14 +434,15 @@ function ShowcaseDeckPage() {
 
       </div>
 
-      {/* 3. Footer Corners */}
-      <footer className="flex justify-between items-center w-full z-30 shrink-0">
-        <div className="text-xs font-black uppercase tracking-wider text-ink/50 hidden sm:block">
+      {/* 3. Footer Corners (Mathematically aligned 3-column grid structure) */}
+      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
+        <div className="justify-self-start text-xs font-black uppercase tracking-wider text-ink/50 hidden sm:block">
           MinDrop for Mobile (Offline)
         </div>
+        <div className="sm:hidden" />
 
         {/* Dynamic Pill Switcher Grid/Deck Controls */}
-        <div className="flex items-center bg-ink border-2 border-ink rounded-full p-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
+        <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
           <button
             onClick={() => handleToggleView("deck")}
             className={`p-2 rounded-full transition cursor-pointer ${
@@ -462,12 +463,14 @@ function ShowcaseDeckPage() {
           </button>
         </div>
 
-        <Link
-          to="/privacy"
-          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
-        >
-          Privacy
-        </Link>
+        <div className="justify-self-end">
+          <Link
+            to="/privacy"
+            className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
+          >
+            Privacy
+          </Link>
+        </div>
       </footer>
 
       {/* About Dialog Modal Overlay */}
