@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { Eye, Trash2, Pencil, Bell, AlarmClock, Sparkles, Clock, Mic } from "lucide-react";
 import { CategoryChip } from "@/components/memory/CategoryChip";
 import { VoicePlayer } from "@/components/memory/VoicePlayer";
+import { isNative } from "@/lib/platform";
+import { MobileGate } from "@/components/layout/MobileGate";
+
 
 import { CaptureBar } from "@/components/memory/CaptureBar";
 import { PhoneFrame } from "@/components/layout/PhoneFrame";
@@ -41,6 +44,10 @@ function packLabel(packs: ReturnType<typeof usePacks>["list"], id: string) {
 }
 
 function Home() {
+  if (!isNative()) {
+    return <MobileGate />;
+  }
+
  const navigate = useNavigate();
  const { accent1 } = useCountryTheme();
  const swipe = useDoItLaterSwipe();

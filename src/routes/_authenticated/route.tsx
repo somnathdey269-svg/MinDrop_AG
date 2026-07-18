@@ -5,6 +5,8 @@ import { recordInstallCountry } from "@/lib/profile/install-country.functions";
 import { installDriveAutoBackup } from "@/lib/drive/auto";
 import { scheduleDailyBackupNotification } from "@/lib/memoryos/backup";
 import { useOnboarding } from "@/lib/memoryos/store";
+import { isNative } from "@/lib/platform";
+import { MobileGate } from "@/components/layout/MobileGate";
 
 /**
  * App layout for consumer routes.
@@ -59,11 +61,17 @@ function DriveAutoBackup() {
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
-  component: () => (
-    <>
-      <InstallCountryCapture />
-      <DriveAutoBackup />
-      <Outlet />
-    </>
-  ),
+  component: () => {
+    if (!isNative()) {
+      return <MobileGate />;
+    }
+    return (
+      <>
+        <InstallCountryCapture />
+        <DriveAutoBackup />
+        <Outlet />
+      </>
+    );
+  },
 });
+

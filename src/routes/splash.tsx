@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { PhoneFrame } from "@/components/layout/PhoneFrame";
 import { useOnboarding } from "@/lib/memoryos/store";
+import { isNative } from "@/lib/platform";
+import { MobileGate } from "@/components/layout/MobileGate";
+
 
 export const Route = createFileRoute("/splash")({
   head: () => ({
@@ -280,6 +283,10 @@ function markSplashShown() {
 }
 
 function Splash() {
+  if (!isNative()) {
+    return <MobileGate />;
+  }
+
   const [i, setI] = useState(0);
   const navigate = useNavigate();
   const { update } = useOnboarding();
