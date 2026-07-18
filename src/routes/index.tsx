@@ -160,8 +160,10 @@ function ShowcaseDeckPage() {
   const CardIcon = currentCard.illustrator;
   const NextIcon = nextCard.illustrator;
 
-  // Determine current viewport background color dynamically
+  // Background color calculations (sweeping side bubbles)
   const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFD043";
+  const bgColorPrev = DECK_CARDS[(activeIdx - 1 + DECK_CARDS.length) % DECK_CARDS.length].bgColor;
+  const bgColorNext = DECK_CARDS[(activeIdx + 1) % DECK_CARDS.length].bgColor;
 
   return (
     <div 
@@ -173,6 +175,22 @@ function ShowcaseDeckPage() {
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
       
+      {/* Dynamic Background Circles (Signature Google Web Showcase side bubble curves) */}
+      <div 
+        className="absolute top-1/2 -translate-y-1/2 -left-[40vw] lg:-left-[30vw] w-[80vw] lg:w-[65vw] h-[80vw] lg:h-[65vw] rounded-full pointer-events-none z-0 hidden md:block"
+        style={{
+          backgroundColor: viewMode === "deck" ? bgColorPrev : "transparent",
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+        }}
+      />
+      <div 
+        className="absolute top-1/2 -translate-y-1/2 -right-[40vw] lg:-right-[30vw] w-[80vw] lg:w-[65vw] h-[80vw] lg:h-[65vw] rounded-full pointer-events-none z-0 hidden md:block"
+        style={{
+          backgroundColor: viewMode === "deck" ? bgColorNext : "transparent",
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+        }}
+      />
+
       {/* 1. Header Corners */}
       <header className="flex justify-between items-center w-full z-30 shrink-0">
         <button
@@ -196,7 +214,7 @@ function ShowcaseDeckPage() {
       </header>
 
       {/* 2. Main content area depending on mode */}
-      <div className="flex-1 flex items-center justify-center relative w-full my-2 overflow-y-auto no-scrollbar">
+      <div className="flex-1 flex items-center justify-center relative w-full my-2 overflow-y-auto no-scrollbar z-10">
         
         {viewMode === "deck" ? (
           /* DECK VIEW MODE */
@@ -215,7 +233,7 @@ function ShowcaseDeckPage() {
               </button>
             </div>
 
-            {/* 3D Stacked Cards Deck (Enlarged and Spacing Tightened) */}
+            {/* 3D Stacked Cards Deck */}
             <div className="relative w-[320px] sm:w-[420px] md:w-[480px] lg:w-[520px] h-[420px] sm:h-[500px] md:h-[540px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
@@ -237,7 +255,7 @@ function ShowcaseDeckPage() {
                   </div>
                 </motion.div>
 
-                {/* Front Active Card (Adjusted typography scales to fit perfectly with no empty space) */}
+                {/* Front Active Card */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -287,7 +305,7 @@ function ShowcaseDeckPage() {
 
           </div>
         ) : (
-          /* GRID VIEW MODE CATALOG (Multi-color cards displaying brand colors) */
+          /* GRID VIEW MODE CATALOG */
           <div className="w-full max-w-6xl mx-auto px-4 py-8 z-10">
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
