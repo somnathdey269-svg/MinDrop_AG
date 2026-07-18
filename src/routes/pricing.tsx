@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MarketingLayout } from "@/components/marketing/MarketingLayout";
-import { Check, ArrowLeft, Download, ShieldCheck, HelpCircle } from "lucide-react";
+import { Sparkles, Check, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -9,139 +9,108 @@ export const Route = createFileRoute("/pricing")({
       { name: "description", content: "Compare MinDrop's Free Plan with the Premium Plan. Unlimited active drops and private Google Drive backup sync." },
     ],
   }),
-  component: PricingPage,
+  component: PricingDetailView,
 });
 
-function PricingPage() {
+function PricingDetailView() {
   return (
-    <MarketingLayout>
-      <section className="relative overflow-hidden bg-canvas py-16 md:py-24 border-b border-ink/5">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-orange-500/5 blur-[100px]" />
-        
-        <div className="mx-auto max-w-4xl px-5 md:px-8 text-center">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[#FF671F] hover:underline font-bold text-xs uppercase tracking-wider mb-6">
-            <ArrowLeft className="size-3.5" /> Back to Home
+    <div className="fixed inset-0 bg-[#FDF2F7] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
+      
+      {/* Top Header Sync */}
+      <header className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs uppercase tracking-wider font-black text-ink/40">Spec Sheet</span>
+        <div className="flex items-center gap-2">
+          <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink/80">MinDrop Specs</span>
+        </div>
+        <Link
+          to="/"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          View Deck
+        </Link>
+      </header>
+
+      {/* Main Centered Showcase Card */}
+      <main className="flex-1 flex items-center justify-center relative w-full my-4">
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0, y: 15 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[80vh] overflow-y-auto"
+        >
+          {/* Close Button X linking back to homepage */}
+          <Link
+            to="/"
+            className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
+            aria-label="Close"
+          >
+            <X className="size-5 text-ink" />
           </Link>
 
-          <span className="t-eyebrow inline-flex items-center gap-2 rounded-full bg-orange-50 px-3.5 py-1.5 text-[#FF671F] font-bold border border-orange-100 mb-5">
-            💎 Plans & Pricing
-          </span>
+          {/* Left Side Content Column */}
+          <div className="md:col-span-7 text-left">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FDF2F7] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#EC4899] mb-6">
+              💎 Pricing Specs
+            </span>
 
-          <h1 className="t-display text-4xl sm:text-5xl font-black leading-tight text-ink">
-            Keep it free, or <span className="text-[#FF671F]">unlock limits.</span>
-          </h1>
+            <h1 className="text-4xl sm:text-5xl font-black text-ink leading-tight tracking-tight">
+              Keep it free, or unlock limits.
+            </h1>
 
-          <p className="t-body mt-4 text-ink/75 max-w-xl mx-auto leading-relaxed">
-            MinDrop is designed to be affordable, private, and simple. Start for free with full functionality, or support the project and get unlimited capacity.
-          </p>
-        </div>
-      </section>
-
-      {/* Pricing Cards Grid */}
-      <section className="py-20 bg-[#f9f7f2]">
-        <div className="mx-auto max-w-4xl px-5 md:px-8 grid gap-8 md:grid-cols-2 items-stretch">
-          
-          {/* Free Plan */}
-          <div className="bg-white border border-ink/8 p-8 rounded-[2.5rem] shadow-sm flex flex-col justify-between">
-            <div>
-              <p className="t-eyebrow text-ink/50 uppercase tracking-wider font-bold">Standard</p>
-              <h2 className="t-display text-3xl font-black text-ink mt-2">Free</h2>
-              <p className="t-body-sm text-ink/70 mt-3 leading-relaxed">
-                Full module access for standard daily reminders. Keeps your head clean with a strict cap.
+            <div className="mt-6">
+              <p className="text-[#EA3323] text-xs font-black uppercase tracking-widest">TL;DR</p>
+              <p className="text-sm font-semibold text-ink/75 mt-1 leading-relaxed">
+                Start with a powerful Free plan that covers up to 5 concurrent active alarms. Support the development with a one-time lifetime Premium purchase to unlock unlimited storage.
               </p>
-              
-              <ul className="mt-8 space-y-3.5 border-t border-ink/5 pt-6">
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Up to 5 active reminders (drops)</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Full Later (looping alarms) access</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Full Notify (alert filters) access</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Full Places (geofenced alerts) access</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>100% on-device local storage</span>
-                </li>
-              </ul>
             </div>
 
-            <Link
-              to="/download"
-              className="t-button mt-8 w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-ink/15 text-ink hover:bg-ink/[0.02] py-3.5 font-bold transition"
-            >
-              Get Free APK
-            </Link>
+            <div className="grid grid-cols-2 gap-4 mt-8 pt-6 border-t-2 border-dashed border-ink/10">
+              <div className="border-2 border-ink rounded-2xl p-4 bg-canvas">
+                <p className="text-[10px] uppercase font-bold text-ink/50">Free Plan</p>
+                <p className="text-xl font-black text-ink mt-1">₹0 / Free</p>
+                <ul className="text-[11px] text-ink/70 font-semibold mt-3 space-y-1">
+                  <li>• 5 Active drops</li>
+                  <li>• Voice & photo alarms</li>
+                  <li>• Notification listeners</li>
+                  <li>• SQLite database</li>
+                </ul>
+              </div>
+              <div className="border-2 border-ink rounded-2xl p-4 bg-[#FDF2F7]">
+                <p className="text-[10px] uppercase font-bold text-[#EC4899]">Premium</p>
+                <p className="text-xl font-black text-ink mt-1">Lifetime</p>
+                <ul className="text-[11px] text-ink/70 font-semibold mt-3 space-y-1">
+                  <li>• Unlimited active drops</li>
+                  <li>• Google Drive Sync</li>
+                  <li>• Custom theme packs</li>
+                  <li>• Priority support</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
-          {/* Premium Plan */}
-          <div className="bg-white border-2 border-[#FF671F] p-8 rounded-[2.5rem] shadow-md shadow-[#FF671F]/5 flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-[#FF671F] text-white text-[9px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl">
-              Pro Access
-            </div>
-            
-            <div>
-              <p className="t-eyebrow text-[#FF671F] uppercase tracking-wider font-bold">Premium</p>
-              <h2 className="t-display text-3xl font-black text-ink mt-2">
-                One-time Payment
-              </h2>
-              <p className="t-body-sm text-ink/70 mt-3 leading-relaxed">
-                Unlock unlimited capability and secure backup options. Directly supports active updates.
-              </p>
-              
-              <ul className="mt-8 space-y-3.5 border-t border-ink/5 pt-6">
-                <li className="flex items-center gap-3 text-ink font-bold t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Unlimited active reminders (drops)</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Secure Google Drive Backup sync</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Custom theme packs & country grids</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Prioritized background location triggers</span>
-                </li>
-                <li className="flex items-center gap-3 text-ink/85 t-body-sm">
-                  <Check className="size-4.5 text-[#FF671F] shrink-0" />
-                  <span>Lifetime premium updates</span>
-                </li>
-              </ul>
-            </div>
-
-            <Link
-              to="/download"
-              className="t-button mt-8 w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#FF671F] text-white hover:opacity-95 py-3.5 font-bold transition shadow-md shadow-[#FF671F]/10"
+          {/* Right Side Graphics Column */}
+          <div className="md:col-span-5 flex justify-center items-center">
+            <motion.div
+              animate={{ rotate: [-8, 8, -8], y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="size-48 md:size-60 bg-[#FDF2F7] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
             >
-              Get Premium APK
-            </Link>
+              <Sparkles className="size-20 md:size-24 text-ink stroke-[2.5px]" />
+            </motion.div>
           </div>
+        </motion.div>
+      </main>
 
-        </div>
-      </section>
-
-      {/* Trust Banner */}
-      <section className="py-16 bg-white border-b border-ink/5 text-center">
-        <div className="mx-auto max-w-2xl px-5 md:px-8 flex flex-col items-center">
-          <ShieldCheck className="size-8 text-[#FF671F]/80 mb-3" />
-          <h3 className="t-title font-bold text-lg text-ink">Zero Knowledge Sync</h3>
-          <p className="t-body-sm text-ink/70 mt-2 max-w-md leading-relaxed mx-auto">
-            When you backup on Premium, all data goes directly from your phone to your personal Google Drive folder. We have 0% access to your data, credentials, or reminders.
-          </p>
-        </div>
-      </section>
-    </MarketingLayout>
+      {/* Bottom Footer Sync */}
+      <footer className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs font-black uppercase tracking-wider text-ink/40">India · Purchase Options</span>
+        <Link
+          to="/privacy"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          Privacy Promise
+        </Link>
+      </footer>
+    </div>
   );
 }

@@ -1,119 +1,112 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MarketingLayout } from "@/components/marketing/MarketingLayout";
+import { Navigation, Check, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Navigation, Battery, Locate, ShieldAlert, CheckCircle } from "lucide-react";
 
 export const Route = createFileRoute("/places-feature")({
   head: () => ({
     meta: [
-      { title: "Places Module — MinDrop Geolocation Reminders" },
-      { name: "description", content: "Receive loop alerts and reminders exactly when you arrive or leave specified geofenced areas." },
+      { title: "Places Module — MinDrop Geofencing" },
+      { name: "description", content: "Learn how MinDrop maps coordinate radiuses and triggers checklist alarms upon entry." },
     ],
   }),
-  component: PlacesFeature,
+  component: PlacesDetailView,
 });
 
-function PlacesFeature() {
+function PlacesDetailView() {
   return (
-    <MarketingLayout>
-      <section className="relative overflow-hidden bg-canvas py-16 md:py-24 border-b border-ink/5">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-purple-500/5 blur-[100px]" />
-        
-        <div className="mx-auto max-w-4xl px-5 md:px-8 text-center">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-purple-600 hover:underline font-bold text-xs uppercase tracking-wider mb-6">
-            <ArrowLeft className="size-3.5" /> Back to Home
+    <div className="fixed inset-0 bg-[#F5F3FF] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
+      
+      {/* Top Header Sync */}
+      <header className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs uppercase tracking-wider font-black text-ink/40">Spec Sheet</span>
+        <div className="flex items-center gap-2">
+          <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink/80">MinDrop Specs</span>
+        </div>
+        <Link
+          to="/"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          View Deck
+        </Link>
+      </header>
+
+      {/* Main Centered Showcase Card */}
+      <main className="flex-1 flex items-center justify-center relative w-full my-4">
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0, y: 15 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[80vh] overflow-y-auto"
+        >
+          {/* Close Button X linking back to homepage */}
+          <Link
+            to="/"
+            className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
+            aria-label="Close"
+          >
+            <X className="size-5 text-ink" />
           </Link>
-          
-          <span className="t-eyebrow inline-flex items-center gap-2 rounded-full bg-purple-50 px-3.5 py-1.5 text-[#8b5cf6] font-bold border border-purple-100 mb-5">
-            📍 Places Module
-          </span>
 
-          <h1 className="t-display text-4xl sm:text-5xl font-black leading-tight text-ink">
-            Reminders triggered <span className="text-[#8b5cf6]">exactly where they matter.</span>
-          </h1>
+          {/* Left Side Content Column */}
+          <div className="md:col-span-7 text-left">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#F5F3FF] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#8B5CF6] mb-6">
+              📍 Places Mapping
+            </span>
 
-          <p className="t-body mt-4 text-ink/75 max-w-xl mx-auto leading-relaxed">
-            Thoughts only count when you can act on them. MinDrop's Places Module tracks geofence perimeters and triggers loud loop alarms the exact minute you cross the boundary.
-          </p>
+            <h1 className="text-4xl sm:text-5xl font-black text-ink leading-tight tracking-tight">
+              Trigger reminders near locations.
+            </h1>
 
-          <div className="mt-8 flex justify-center">
-            <Link to="/download" className="t-button inline-flex items-center gap-2 bg-ink text-canvas rounded-2xl px-6 py-3.5 hover:opacity-90 font-bold transition">
-              Get the App
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Details Grid */}
-      <section className="py-20 bg-[#f9f7f2]">
-        <div className="mx-auto max-w-5xl px-5 md:px-8 grid gap-8 md:grid-cols-2">
-          
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-purple-50 text-purple-600 mb-4">
-                <Locate className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">Radius Customization</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                Set exact location perimeters. Select your workspace, home, grocery store, or pharmacy, and define custom radius sizes (e.g. 100 meters, 500 meters). Trigger drops upon entry or departure.
+            <div className="mt-6">
+              <p className="text-[#EA3323] text-xs font-black uppercase tracking-widest">TL;DR</p>
+              <p className="text-sm font-semibold text-ink/75 mt-1 leading-relaxed">
+                Most coordinate alarms drain background batteries by keeping active GPS tracking continuously. MinDrop uses battery-optimized native OS cell sweeps to detect borders.
               </p>
             </div>
+
+            <ul className="mt-8 space-y-3.5 border-t-2 border-dashed border-ink/10 pt-6">
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#8B5CF6] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>Zero-drain sweeps trigger geofences only when your device shifts tower areas.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#8B5CF6] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>Radius custom limits allow mapping boundaries from 50m to 1km areas.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#8B5CF6] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>Medication alerts trigger loop alarms the exact minute you arrive at the clinic.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#8B5CF6] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>On-device SQLite storage ensures location histories remain confidential.</span>
+              </li>
+            </ul>
           </div>
 
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-purple-50 text-purple-600 mb-4">
-                <Battery className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">Zero-Drain Geofencing</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                Most reminder apps drain battery by keeping GPS running. MinDrop uses native Android Geofencing hardware listeners that sweep coordinates only when cell towers indicate movement, keeping battery drain to 0%.
-              </p>
-            </div>
+          {/* Right Side Graphics Column */}
+          <div className="md:col-span-5 flex justify-center items-center">
+            <motion.div
+              animate={{ y: [0, -12, 0], scale: [1, 1.03, 1] }}
+              transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+              className="size-48 md:size-60 bg-[#F5F3FF] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
+            >
+              <Navigation className="size-20 md:size-24 text-ink stroke-[2.5px]" />
+            </motion.div>
           </div>
+        </motion.div>
+      </main>
 
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-purple-50 text-purple-600 mb-4">
-                <Navigation className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">Drop on Arrival Alarms</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                Make sure you get the alarm. Instead of a silent notification banner that goes unnoticed, MinDrop triggers an active, looping alarm screen that rings when you enter the radius boundary.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-purple-50 text-purple-600 mb-4">
-                <CheckCircle className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">Full Offline Tracking</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                Your location records are saved strictly on-device in a secure SQLite database. MinDrop never uploads your telemetry logs, locations, or coordinates to any external server—your movements stay yours.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Footer CTA */}
-      <section className="py-16 bg-ink text-canvas text-center">
-        <div className="mx-auto max-w-3xl px-5 md:px-8">
-          <h2 className="t-display text-2xl md:text-3xl">Get triggered exactly where it matters.</h2>
-          <p className="t-body mt-3 text-canvas/70 text-sm">Download the MinDrop APK for Android and never miss a location trigger again.</p>
-          <div className="mt-6 flex justify-center gap-3">
-            <Link to="/download" className="t-button rounded-full bg-white text-ink px-6 py-3 font-semibold">
-              Get the APK
-            </Link>
-            <Link to="/" className="t-button rounded-full bg-white/10 text-canvas px-6 py-3 border border-white/15">
-              Back to Home
-            </Link>
-          </div>
-        </div>
-      </section>
-    </MarketingLayout>
+      {/* Bottom Footer Sync */}
+      <footer className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs font-black uppercase tracking-wider text-ink/40">India · Geofence Hook</span>
+        <Link
+          to="/privacy"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          Privacy Promise
+        </Link>
+      </footer>
+    </div>
   );
 }

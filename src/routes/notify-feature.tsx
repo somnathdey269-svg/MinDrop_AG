@@ -1,119 +1,112 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MarketingLayout } from "@/components/marketing/MarketingLayout";
+import { BellRing, Check, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { ArrowLeft, BellRing, Filter, Smartphone, Volume2, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/notify-feature")({
   head: () => ({
     meta: [
-      { title: "Notify Module — MinDrop Notification Filters" },
-      { name: "description", content: "Build smart rule-based filters to turn noisy push alerts from Slack or banks into loud device alarms." },
+      { title: "Notify Module — MinDrop Filters" },
+      { name: "description", content: "Learn how MinDrop converts noisy notification alerts into active, DND-bypassing loop alarms." },
     ],
   }),
-  component: NotifyFeature,
+  component: NotifyDetailView,
 });
 
-function NotifyFeature() {
+function NotifyDetailView() {
   return (
-    <MarketingLayout>
-      <section className="relative overflow-hidden bg-canvas py-16 md:py-24 border-b border-ink/5">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-amber-500/5 blur-[100px]" />
-        
-        <div className="mx-auto max-w-4xl px-5 md:px-8 text-center">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-amber-600 hover:underline font-bold text-xs uppercase tracking-wider mb-6">
-            <ArrowLeft className="size-3.5" /> Back to Home
+    <div className="fixed inset-0 bg-[#FFFBEB] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
+      
+      {/* Top Header Sync */}
+      <header className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs uppercase tracking-wider font-black text-ink/40">Spec Sheet</span>
+        <div className="flex items-center gap-2">
+          <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink/80">MinDrop Specs</span>
+        </div>
+        <Link
+          to="/"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          View Deck
+        </Link>
+      </header>
+
+      {/* Main Centered Showcase Card */}
+      <main className="flex-1 flex items-center justify-center relative w-full my-4">
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0, y: 15 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[80vh] overflow-y-auto"
+        >
+          {/* Close Button X linking back to homepage */}
+          <Link
+            to="/"
+            className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
+            aria-label="Close"
+          >
+            <X className="size-5 text-ink" />
           </Link>
-          
-          <span className="t-eyebrow inline-flex items-center gap-2 rounded-full bg-amber-50 px-3.5 py-1.5 text-[#f59e0b] font-bold border border-amber-100 mb-5">
-            🔔 Notify Module
-          </span>
 
-          <h1 className="t-display text-4xl sm:text-5xl font-black leading-tight text-ink">
-            Noisy alerts, <span className="text-[#f59e0b]">filtered to what matters.</span>
-          </h1>
+          {/* Left Side Content Column */}
+          <div className="md:col-span-7 text-left">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FFFBEB] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#F59E0B] mb-6">
+              🔔 Smart Filters
+            </span>
 
-          <p className="t-body mt-4 text-ink/75 max-w-xl mx-auto leading-relaxed">
-            Your phone is constantly vibrating with social media clutter. MinDrop's Notify Module monitors incoming notifications and sounds active, looping alarms *only* for the rules you configure.
-          </p>
+            <h1 className="text-4xl sm:text-5xl font-black text-ink leading-tight tracking-tight">
+              Filter messy pings into alarms.
+            </h1>
 
-          <div className="mt-8 flex justify-center">
-            <Link to="/download" className="t-button inline-flex items-center gap-2 bg-ink text-canvas rounded-2xl px-6 py-3.5 hover:opacity-90 font-bold transition">
-              Get the App
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Details Grid */}
-      <section className="py-20 bg-[#f9f7f2]">
-        <div className="mx-auto max-w-5xl px-5 md:px-8 grid gap-8 md:grid-cols-2">
-          
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-amber-50 text-amber-600 mb-4">
-                <Filter className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">Custom Rule Builder</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                Define rules using plain-text triggers. Link specific alert words from any application to local alarms. For example: set a rule to sound an alarm whenever a Slack notification from your manager arrives.
+            <div className="mt-6">
+              <p className="text-[#EA3323] text-xs font-black uppercase tracking-widest">TL;DR</p>
+              <p className="text-sm font-semibold text-ink/75 mt-1 leading-relaxed">
+                Most push notifications are distractions that keep you glued to your phone. MinDrop intercepts notifications locally and triggers persistent loop alarms only for rules you set.
               </p>
             </div>
+
+            <ul className="mt-8 space-y-3.5 border-t-2 border-dashed border-ink/10 pt-6">
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#F59E0B] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>Custom text triggers parse alerts from Slack, WhatsApp, or Outlook.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#F59E0B] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>Bypass DND overrides to force alarms even during silent or meeting modes.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#F59E0B] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>Build UPI transaction monitors matching bank SMS alerts above specific amounts.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs md:text-sm font-bold text-ink">
+                <Check className="size-5 text-[#F59E0B] shrink-0 mt-0.5 stroke-[3px]" />
+                <span>Notification sweeps happen entirely on-device, preserving messaging privacy.</span>
+              </li>
+            </ul>
           </div>
 
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-amber-50 text-amber-600 mb-4">
-                <Volume2 className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">Override Silent Mode</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                Some notifications simply cannot be ignored. Configure high-priority rules (like system warning logs or server failure alerts) to bypass Do Not Disturb (DND) or silent mode settings, ensuring you wake up instantly.
-              </p>
-            </div>
+          {/* Right Side Graphics Column */}
+          <div className="md:col-span-5 flex justify-center items-center">
+            <motion.div
+              animate={{ rotateZ: [-10, 10, -10], y: [0, -8, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              className="size-48 md:size-60 bg-[#FFFBEB] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
+            >
+              <BellRing className="size-20 md:size-24 text-ink stroke-[2.5px]" />
+            </motion.div>
           </div>
+        </motion.div>
+      </main>
 
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-amber-50 text-amber-600 mb-4">
-                <Smartphone className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">UPI Transaction Alarms</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                Track payments in real-time. Build filters matching transaction alerts from Google Pay, PhonePe, or bank notifications. Sound alarms only for deposits above a custom amount (e.g. ₹5,000) to confirm receipt immediately.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white border border-ink/8 p-7 rounded-[2rem] flex flex-col justify-between shadow-sm">
-            <div>
-              <span className="inline-grid place-items-center size-10 rounded-xl bg-amber-50 text-amber-600 mb-4">
-                <ShieldCheck className="size-5" />
-              </span>
-              <h3 className="t-title font-bold text-xl text-ink">On-Device Processing</h3>
-              <p className="t-body-sm text-ink/70 mt-2 leading-relaxed">
-                MinDrop reads your notifications locally using Android's accessibility/notification listeners. Absolutely no notification content is sent to our servers or the cloud—your incoming logs stay private.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Footer CTA */}
-      <section className="py-16 bg-ink text-canvas text-center">
-        <div className="mx-auto max-w-3xl px-5 md:px-8">
-          <h2 className="t-display text-2xl md:text-3xl">Take control of your notifications.</h2>
-          <p className="t-body mt-3 text-canvas/70 text-sm">Download the MinDrop APK for Android and stop checking your phone every 10 seconds.</p>
-          <div className="mt-6 flex justify-center gap-3">
-            <Link to="/download" className="t-button rounded-full bg-white text-ink px-6 py-3 font-semibold">
-              Get the APK
-            </Link>
-            <Link to="/" className="t-button rounded-full bg-white/10 text-canvas px-6 py-3 border border-white/15">
-              Back to Home
-            </Link>
-          </div>
-        </div>
-      </section>
-    </MarketingLayout>
+      {/* Bottom Footer Sync */}
+      <footer className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs font-black uppercase tracking-wider text-ink/40">India · Privacy Secured</span>
+        <Link
+          to="/privacy"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          Privacy Promise
+        </Link>
+      </footer>
+    </div>
   );
 }

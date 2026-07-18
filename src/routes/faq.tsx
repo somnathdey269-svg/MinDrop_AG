@@ -1,16 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MarketingLayout } from "@/components/marketing/MarketingLayout";
+import { ShieldCheck, Check, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { ChevronDown, ArrowLeft, HelpCircle } from "lucide-react";
+import { motion } from "framer-motion";
 
 const faqData = [
   {
     q: "Is my data private and secure?",
     a: "Absolutely. MinDrop is built on a zero-knowledge local storage model. Your drops, notes, photos, and voice clips are stored locally on your Android device in a secure SQLite database. If you upgrade to Premium, backups sync directly to your private Google Drive folder. We have zero servers, zero trackers, and zero access to your information."
-  },
-  {
-    q: "Do I need a sign-in or account to use MinDrop?",
-    a: "No. You don't need to sign in, verify emails, or input passwords. Simply install the APK and start using it immediately. Your local device session holds your local data."
   },
   {
     q: "How does the location geofencing work offline?",
@@ -27,18 +23,6 @@ const faqData = [
   {
     q: "How do Notify filters read incoming notifications?",
     a: "MinDrop requests Android's Notification Listener Permission. This is a local service that runs on your device to inspect incoming notification banners. When it matches a word rule you set (e.g., 'boss' on Slack, or '₹' on bank messages), it plays a looping alarm. No notification data ever leaves your device."
-  },
-  {
-    q: "Can I run MinDrop on my computer or web browser?",
-    a: "MinDrop is designed to run natively on mobile devices. If you hit authenticated dashboard pages on a desktop web browser, the app displays a 'Get App' download gate. Developers can bypass this gate during local testing by adding `?native=1` to the URL query string."
-  },
-  {
-    q: "What is the difference between the Free and Premium plans?",
-    a: "The Free plan includes full access to all three modules (Later, Notify, Places) but limits you to keeping 5 active concurrent drops at a time. The Premium plan unlocks unlimited drops, Google Drive sync, and custom theme packs."
-  },
-  {
-    q: "Will there be an iOS / iPhone app?",
-    a: "Currently, we only support Android. iOS has strict limitations on notification listeners and custom background alarm scheduling, which are required for MinDrop's core loop alarms and Notify filters to run reliably."
   }
 ];
 
@@ -49,77 +33,103 @@ export const Route = createFileRoute("/faq")({
       { name: "description", content: "Answers to common questions about MinDrop's privacy, location geofencing, notification filters, and battery performance." },
     ],
   }),
-  component: FaqPage,
+  component: FaqDetailView,
 });
 
-function FaqPage() {
+function FaqDetailView() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   return (
-    <MarketingLayout>
-      <section className="relative overflow-hidden bg-canvas py-16 md:py-24 border-b-3 border-ink">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-[#FF671F]/5 blur-[100px]" />
-        
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 md:px-12 lg:px-16 text-center">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[#FF671F] hover:underline font-bold text-xs uppercase tracking-wider mb-6">
-            <ArrowLeft className="size-3.5" /> Back to Home
+    <div className="fixed inset-0 bg-[#F0FDF4] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
+      
+      {/* Top Header Sync */}
+      <header className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs uppercase tracking-wider font-black text-ink/40">Spec Sheet</span>
+        <div className="flex items-center gap-2">
+          <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink/80">MinDrop Specs</span>
+        </div>
+        <Link
+          to="/"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          View Deck
+        </Link>
+      </header>
+
+      {/* Main Centered Showcase Card */}
+      <main className="flex-1 flex items-center justify-center relative w-full my-4">
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0, y: 15 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[80vh] overflow-y-auto"
+        >
+          {/* Close Button X linking back to homepage */}
+          <Link
+            to="/"
+            className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
+            aria-label="Close"
+          >
+            <X className="size-5 text-ink" />
           </Link>
 
-          <span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-ink shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)] mb-5">
-            <HelpCircle className="size-4 text-[#FF671F]" /> FAQ Center
-          </span>
+          {/* Left Side Content Column */}
+          <div className="md:col-span-7 text-left w-full">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#F0FDF4] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#22C55E] mb-6">
+              🛡️ Help Center
+            </span>
 
-          <h1 className="t-display text-4xl sm:text-5xl font-black leading-tight text-ink">
-            Frequently Asked <span className="text-[#FF671F] underline decoration-2 decoration-ink">Questions.</span>
-          </h1>
+            <h1 className="text-4xl sm:text-5xl font-black text-ink leading-tight tracking-tight">
+              Get answers to key questions.
+            </h1>
 
-          <p className="mt-4 text-ink/75 max-w-xl mx-auto leading-relaxed font-semibold text-sm md:text-base">
-            Honest, technical answers about how MinDrop respects your privacy, manages your battery, and handles alarms locally on your device.
-          </p>
-        </div>
-      </section>
-
-      {/* FAQ Accordions */}
-      <section className="py-20 bg-[#f9f7f2]">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 md:px-12 lg:px-16">
-          <div className="max-w-4xl mx-auto space-y-5">
-            {faqData.map((faq, index) => {
-              const isOpen = activeFaq === index;
-              return (
-                <div key={index} className="bg-white rounded-3xl border-3 border-ink overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : index)}
-                    className="w-full flex items-center justify-between p-6 text-left font-black text-ink cursor-pointer hover:bg-ink/[0.01] text-base md:text-lg"
-                  >
-                    <span>{faq.q}</span>
-                    <ChevronDown className={`size-5 text-ink/50 transition-transform duration-200 shrink-0 ml-4 ${isOpen ? "rotate-180" : ""}`} />
-                  </button>
-                  {isOpen && (
-                    <div className="px-6 pb-6 pt-2 border-t-3 border-ink text-ink/75 t-body-sm leading-relaxed text-sm md:text-base font-semibold">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            {/* Accordion panel inside detailed view */}
+            <div className="mt-8 space-y-3.5 max-h-[45vh] overflow-y-auto pr-2 no-scrollbar">
+              {faqData.map((faq, index) => {
+                const isOpen = activeFaq === index;
+                return (
+                  <div key={index} className="bg-canvas rounded-2xl border-2 border-ink overflow-hidden transition-all duration-200">
+                    <button
+                      onClick={() => setActiveFaq(isOpen ? null : index)}
+                      className="w-full flex items-center justify-between p-4 text-left font-black text-ink cursor-pointer hover:bg-ink/[0.01] text-xs md:text-sm"
+                    >
+                      <span>{faq.q}</span>
+                      <ChevronDown className={`size-4 text-ink/50 transition-transform duration-200 shrink-0 ml-4 ${isOpen ? "rotate-180" : ""}`} />
+                    </button>
+                    {isOpen && (
+                      <div className="px-4 pb-4 pt-1 border-t-2 border-ink text-ink/75 t-body-sm leading-relaxed text-xs font-semibold">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Help Banner */}
-      <section className="py-16 bg-white border-b-3 border-ink text-center">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 md:px-12 lg:px-16">
-          <h3 className="text-2xl font-black text-ink">Still have questions?</h3>
-          <p className="text-ink/70 mt-2 max-w-md mx-auto leading-relaxed font-semibold text-sm">
-            We are here to help you get the most out of your second brain. Contact our developer support team directly.
-          </p>
-          <div className="mt-6">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-xl bg-ink text-canvas border-2 border-ink px-6 py-3.5 hover:bg-[#FF671F] hover:text-white transition shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-xs uppercase tracking-wider active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
-              Contact Support
-            </Link>
+          {/* Right Side Graphics Column */}
+          <div className="md:col-span-5 flex justify-center items-center">
+            <motion.div
+              animate={{ rotateZ: [-5, 5, -5], y: [0, -8, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="size-48 md:size-60 bg-[#F0FDF4] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
+            >
+              <ShieldCheck className="size-20 md:size-24 text-ink stroke-[2.5px]" />
+            </motion.div>
           </div>
-        </div>
-      </section>
-    </MarketingLayout>
+        </motion.div>
+      </main>
+
+      {/* Bottom Footer Sync */}
+      <footer className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs font-black uppercase tracking-wider text-ink/40">India · FAQs FAQ</span>
+        <Link
+          to="/privacy"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          Privacy Promise
+        </Link>
+      </footer>
+    </div>
   );
 }

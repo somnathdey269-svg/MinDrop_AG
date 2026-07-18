@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MarketingLayout } from "@/components/marketing/MarketingLayout";
-import { Smartphone, Download, ArrowLeft, ShieldCheck } from "lucide-react";
+import { Download, Check, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/download")({
   head: () => ({
@@ -9,123 +9,110 @@ export const Route = createFileRoute("/download")({
       { name: "description", content: "Download the MinDrop mobile application. Install the Android APK directly or get it on the Play Store." },
     ],
   }),
-  component: DownloadPage,
+  component: DownloadDetailView,
 });
 
-// Configure Play Store and APK download link placeholders.
 const PLAY_STORE_URL: string | null = null;
-const APK_URL: string | null = "https://github.com/somnathdey269-svg/MinDrop_AG/releases"; // Update when direct release exists
+const APK_URL: string | null = "https://github.com/somnathdey269-svg/MinDrop_AG/releases";
 
-function DownloadPage() {
+function DownloadDetailView() {
   return (
-    <MarketingLayout>
-      <section className="relative overflow-hidden bg-canvas py-16 md:py-24 border-b border-ink/5">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-orange-500/5 blur-[100px]" />
-        
-        <div className="mx-auto max-w-4xl px-5 md:px-8 text-center">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[#FF671F] hover:underline font-bold text-xs uppercase tracking-wider mb-6">
-            <ArrowLeft className="size-3.5" /> Back to Home
+    <div className="fixed inset-0 bg-[#EFF6FF] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
+      
+      {/* Top Header Sync */}
+      <header className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs uppercase tracking-wider font-black text-ink/40">Spec Sheet</span>
+        <div className="flex items-center gap-2">
+          <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink/80">MinDrop Specs</span>
+        </div>
+        <Link
+          to="/"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          View Deck
+        </Link>
+      </header>
+
+      {/* Main Centered Showcase Card */}
+      <main className="flex-1 flex items-center justify-center relative w-full my-4">
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0, y: 15 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[80vh] overflow-y-auto"
+        >
+          {/* Close Button X linking back to homepage */}
+          <Link
+            to="/"
+            className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
+            aria-label="Close"
+          >
+            <X className="size-5 text-ink" />
           </Link>
 
-          <span className="t-eyebrow inline-flex items-center gap-2 rounded-full bg-orange-50 px-3.5 py-1.5 text-[#FF671F] font-bold border border-orange-100 mb-5">
-            📲 Download Center
-          </span>
+          {/* Left Side Content Column */}
+          <div className="md:col-span-7 text-left w-full">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#EFF6FF] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#3B82F6] mb-6">
+              📲 Download Center
+            </span>
 
-          <h1 className="t-display text-4xl sm:text-5xl font-black leading-tight text-ink">
-            Take the Keeper <span className="text-[#FF671F]">home.</span>
-          </h1>
+            <h1 className="text-4xl sm:text-5xl font-black text-ink leading-tight tracking-tight">
+              Get the MinDrop Android app.
+            </h1>
 
-          <p className="t-body mt-4 text-ink/75 max-w-md mx-auto leading-relaxed">
-            MinDrop is designed natively for mobile platforms. Download the Android app below to start offloading your mental burden.
-          </p>
-        </div>
-      </section>
-
-      {/* Download Options */}
-      <section className="py-20 bg-[#f9f7f2]">
-        <div className="mx-auto max-w-4xl px-5 md:px-8 grid gap-8 md:grid-cols-2 items-stretch">
-          
-          {/* Play Store */}
-          <div className="bg-white border border-ink/8 p-8 rounded-[2.5rem] shadow-sm flex flex-col justify-between text-center items-center">
-            <div className="flex flex-col items-center">
-              <span className="text-4xl mb-4">🤖</span>
-              <h2 className="t-display text-2xl font-black text-ink">Google Play Store</h2>
-              <p className="t-body-sm text-ink/70 mt-3 leading-relaxed max-w-xs">
-                Install directly from the Play Store. Automatic updates, certified secure by Google Play Protect.
+            <div className="mt-6">
+              <p className="text-[#EA3323] text-xs font-black uppercase tracking-widest">TL;DR</p>
+              <p className="text-sm font-semibold text-ink/75 mt-1 leading-relaxed">
+                MinDrop is designed to run natively on Android devices. Download the compiled package (.apk) file directly below to install it on your device in seconds.
               </p>
             </div>
 
-            <a
-              href={PLAY_STORE_URL ?? undefined}
-              onClick={(e) => { if (!PLAY_STORE_URL) e.preventDefault(); }}
-              className={`t-button mt-8 w-full inline-flex items-center justify-center gap-2 rounded-2xl py-3.5 font-bold transition ${
-                PLAY_STORE_URL 
-                  ? "bg-ink text-canvas hover:opacity-95" 
-                  : "bg-ink/5 text-ink/30 cursor-not-allowed border border-ink/10"
-              }`}
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <a
+                href={APK_URL ?? undefined}
+                className="flex-1 text-center py-4 rounded-2xl bg-ink text-canvas border-2 border-ink hover:bg-[#FF671F] hover:text-white transition font-black text-xs uppercase tracking-wider shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px]"
+              >
+                Download APK Package
+              </a>
+              <button
+                disabled
+                className="flex-1 text-center py-4 rounded-2xl border-3 border-ink bg-[#f1ede4]/40 text-ink/30 font-black text-xs uppercase tracking-wider cursor-not-allowed select-none"
+              >
+                Play Store — Soon
+              </button>
+            </div>
+            
+            <p className="text-[10px] text-ink/50 font-bold mt-4">
+              *Requires Android 8.0 or above. Install instructions: Download the file, open it, allow install from unknown sources, and launch.
+            </p>
+          </div>
+
+          {/* Right Side Graphics Column */}
+          <div className="md:col-span-5 flex justify-center items-center">
+            <motion.div
+              animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
+              transition={{
+                rotate: { duration: 45, repeat: Infinity, ease: "linear" },
+                scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+              }}
+              className="size-48 md:size-60 bg-[#EFF6FF] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
             >
-              <Smartphone className="size-4.5" />
-              <span>{PLAY_STORE_URL ? "Get it on Google Play" : "Play Store — Coming Soon"}</span>
-            </a>
+              <Download className="size-20 md:size-24 text-ink stroke-[2.5px]" />
+            </motion.div>
           </div>
+        </motion.div>
+      </main>
 
-          {/* APK Link */}
-          <div className="bg-white border-2 border-dashed border-[#FF671F]/40 p-8 rounded-[2.5rem] shadow-sm flex flex-col justify-between text-center items-center">
-            <div className="flex flex-col items-center">
-              <span className="text-4xl mb-4">📦</span>
-              <h2 className="t-display text-2xl font-black text-ink">Direct APK Download</h2>
-              <p className="t-body-sm text-ink/70 mt-3 leading-relaxed max-w-xs">
-                For developers and power users. Download and install the raw Android package (.apk) file directly.
-              </p>
-            </div>
-
-            <a
-              href={APK_URL ?? undefined}
-              onClick={(e) => { if (!APK_URL) e.preventDefault(); }}
-              className={`t-button mt-8 w-full inline-flex items-center justify-center gap-2 rounded-2xl py-3.5 font-bold transition ${
-                APK_URL 
-                  ? "bg-[#FF671F] text-white hover:opacity-95 shadow-md shadow-[#FF671F]/15" 
-                  : "bg-ink/5 text-ink/30 cursor-not-allowed border border-ink/10"
-              }`}
-            >
-              <Download className="size-4.5" />
-              <span>{APK_URL ? "Download APK Package" : "APK — Soon"}</span>
-            </a>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Instructions */}
-      <section className="py-20 bg-canvas border-b border-ink/5">
-        <div className="mx-auto max-w-3xl px-5 md:px-8">
-          <h2 className="t-display text-center text-2xl font-extrabold text-ink mb-10">How to install the APK</h2>
-          
-          <div className="space-y-6">
-            <div className="flex gap-4">
-              <span className="shrink-0 size-8 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-xs font-bold text-[#FF671F]">1</span>
-              <div>
-                <h4 className="t-title font-bold text-ink text-base">Download the file</h4>
-                <p className="t-body-sm text-ink/75 mt-1">Click the "Download APK Package" button above to save the package file on your phone.</p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 size-8 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-xs font-bold text-[#FF671F]">2</span>
-              <div>
-                <h4 className="t-title font-bold text-ink text-base">Enable Unknown Sources</h4>
-                <p className="t-body-sm text-ink/75 mt-1">If prompted, allow your browser or files app to install applications from unknown sources in your Android settings.</p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 size-8 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-xs font-bold text-[#FF671F]">3</span>
-              <div>
-                <h4 className="t-title font-bold text-ink text-base">Run the installer</h4>
-                <p className="t-body-sm text-ink/75 mt-1">Open the downloaded file and click "Install" to complete. You're ready to drop your first thought!</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </MarketingLayout>
+      {/* Bottom Footer Sync */}
+      <footer className="flex justify-between items-center w-full z-10 shrink-0">
+        <span className="text-xs font-black uppercase tracking-wider text-ink/40">India · Direct Installer</span>
+        <Link
+          to="/privacy"
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+        >
+          Privacy Promise
+        </Link>
+      </footer>
+    </div>
   );
 }
