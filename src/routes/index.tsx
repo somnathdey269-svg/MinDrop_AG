@@ -90,6 +90,224 @@ const DECK_CARDS: ShowcaseCard[] = [
   }
 ];
 
+/* 
+ * 1. Later Alarm Illustration: Rings loopingly with soundwave concentric circles and dismiss/snooze options.
+ */
+function LaterAlarmIllustration() {
+  return (
+    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-3.5 flex flex-col items-center justify-center gap-1.5 w-[200px] sm:w-[240px] relative overflow-hidden">
+      <div className="relative size-12 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: [-7, 7, -7] }}
+          transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}
+          className="p-2 bg-[#E2F5EC] border-2 border-ink rounded-full relative z-10"
+        >
+          <AlarmClock className="size-6 text-ink" />
+        </motion.div>
+
+        {/* Pulsing expanding rings */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <motion.div
+            animate={{ scale: [1, 2.2], opacity: [0.6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
+            className="absolute border-2 border-[#10B981]/50 rounded-full size-10"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.7], opacity: [0.6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut", delay: 0.5 }}
+            className="absolute border border-[#10B981]/30 rounded-full size-10"
+          />
+        </div>
+      </div>
+
+      <div className="text-[8px] font-black uppercase text-[#10B981] animate-pulse">Alarm Ringing</div>
+
+      <div className="flex gap-2 mt-1 w-full z-10">
+        <div className="flex-1 py-1 text-[7px] font-black uppercase text-center border-2 border-ink bg-[#10B981] text-white rounded-md">Dismiss</div>
+        <div className="flex-1 py-1 text-[7px] font-black uppercase text-center border-2 border-ink bg-white text-ink rounded-md">Snooze</div>
+      </div>
+    </div>
+  );
+}
+
+/* 
+ * 2. Smart Filters Illustration: Notifications stream down, rules block normal pings, boss alerts trigger alarms.
+ */
+function SmartFiltersIllustration() {
+  return (
+    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-3 w-[200px] sm:w-[240px] relative overflow-hidden h-[95px] sm:h-[110px]">
+      {/* Target boundary line */}
+      <div className="absolute top-[45%] left-0 right-0 border-t-2 border-dashed border-ink/20 z-0 flex justify-center">
+        <span className="bg-white px-2 text-[6px] font-black uppercase tracking-wider -translate-y-[5px] text-ink/40">Filter rules</span>
+      </div>
+
+      {/* Standard Ping - slide down past boundary silently */}
+      <motion.div
+        animate={{ y: [-30, 95] }}
+        transition={{ repeat: Infinity, duration: 3.2, ease: "linear" }}
+        className="absolute left-4 z-10 px-2 py-0.5 border border-ink bg-canvas rounded text-[6px] font-bold text-ink/60 shadow-[1px_1px_0px_rgba(0,0,0,0.15)]"
+      >
+        💬 Lunch?
+      </motion.div>
+
+      {/* Critical Boss Ping - triggers flashing alerts */}
+      <motion.div
+        animate={{ y: [-30, 38, 38, 95], opacity: [1, 1, 1, 0] }}
+        transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+        className="absolute right-4 z-10 px-2 py-0.5 border-2 border-ink bg-[#FFFBEB] rounded text-[6px] font-black text-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1"
+      >
+        <motion.span
+          animate={{ color: ["#111", "#EF4444", "#111"] }}
+          transition={{ repeat: Infinity, duration: 0.6 }}
+        >
+          🚨 Boss alert
+        </motion.span>
+      </motion.div>
+
+      {/* Alert Indicator Bell */}
+      <div className="absolute right-2 bottom-2 z-10">
+        <motion.div
+          animate={{ rotate: [-6, 6, -6], scale: [1, 1.1, 1] }}
+          transition={{ repeat: Infinity, duration: 0.18 }}
+          className="p-1 bg-[#F59E0B] border-2 border-ink text-white rounded-lg shadow-[1px_1px_0px_rgba(0,0,0,1)]"
+        >
+          <BellRing className="size-3.5" />
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/* 
+ * 3. Places Mapping Illustration: Locator pin walking into geofence circular perimeter, popping checklists.
+ */
+function PlacesMappingIllustration() {
+  return (
+    <div className="border-2 border-ink bg-[#FAF9F6] rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2.5 w-[200px] sm:w-[240px] h-[95px] sm:h-[110px] relative overflow-hidden">
+      {/* Grid structure roads */}
+      <div className="absolute left-[35%] top-0 bottom-0 w-1.5 bg-ink/10" />
+      <div className="absolute top-[45%] left-0 right-0 h-1.5 bg-ink/10" />
+
+      {/* Pulse Geofence perimeter */}
+      <div className="absolute top-[28%] left-[45%] -translate-x-1/2 -translate-y-1/2">
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.35, 0.5, 0.35] }}
+          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+          className="size-16 rounded-full border-2 border-dashed border-[#8B5CF6] bg-[#8B5CF6]/10"
+        />
+        <Navigation className="size-4 text-[#8B5CF6] fill-[#8B5CF6] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      </div>
+
+      {/* Walking GPS Dot */}
+      <motion.div
+        animate={{
+          x: [10, 80, 80, 80],
+          y: [60, 60, 20, 20],
+          scale: [1, 1, 1.25, 1]
+        }}
+        transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut" }}
+        className="absolute size-4 rounded-full border-2 border-ink bg-[#8B5CF6] shadow-[1px_1px_0px_rgba(0,0,0,0.15)] flex items-center justify-center text-[7px]"
+      >
+        📍
+      </motion.div>
+
+      {/* Popup reminder checklist */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: [0, 0, 1, 1, 0],
+          scale: [0.8, 0.8, 1, 1, 0.8],
+          x: [120, 120, 108, 108, 120]
+        }}
+        transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut" }}
+        className="absolute right-2 top-2 p-1.5 border-2 border-ink bg-white rounded-lg shadow-[2px_2px_0px_rgba(0,0,0,1)] max-w-[85px]"
+      >
+        <div className="text-[6px] font-black leading-none text-[#8B5CF6] uppercase">Home Zone</div>
+        <div className="text-[5px] font-bold text-ink/70 leading-tight mt-1">✓ Fetch keys</div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* 
+ * 4. Pricing Tier Illustration: Free drops max visual slider beside glowing support star.
+ */
+function PricingTierIllustration() {
+  return (
+    <div className="flex gap-2 justify-center items-center w-[200px] sm:w-[240px]">
+      <div className="flex-1 border-2 border-ink bg-white rounded-xl p-2.5 h-[85px] sm:h-[98px] flex flex-col justify-between shadow-[2px_2px_0px_rgba(0,0,0,1)] opacity-70">
+        <div>
+          <div className="text-[7px] font-black uppercase text-ink/40">Free Plan</div>
+          <div className="text-[9px] font-black mt-1">5 active drops</div>
+        </div>
+        <div className="w-full bg-ink/10 h-1.5 rounded-full overflow-hidden border border-ink/20">
+          <div className="bg-[#EC4899] h-full w-[80%]" />
+        </div>
+      </div>
+
+      <div className="flex-1 border-2 border-ink bg-[#FFFBEB] rounded-xl p-2.5 h-[85px] sm:h-[98px] flex flex-col justify-between shadow-[3px_3px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+        <div className="absolute top-1.5 right-1.5">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
+          >
+            <Sparkles className="size-4 text-[#F59E0B]" />
+          </motion.div>
+        </div>
+        <div>
+          <div className="text-[7px] font-black uppercase text-[#EC4899]">Pro Support</div>
+          <div className="text-[9px] font-black mt-1">Unlimited</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <motion.div
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+            className="text-[6px] font-black bg-[#EC4899] text-white px-2 py-0.5 rounded"
+          >
+            Unlock all bounds
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* 
+ * 5. FAQ Help Illustration: Brain circuit database linking green checks with safe signal.
+ */
+function FAQHelpIllustration() {
+  return (
+    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-3.5 w-[200px] sm:w-[240px] h-[95px] sm:h-[110px] flex items-center justify-between relative overflow-hidden">
+      <div className="flex flex-col items-center gap-1 z-10">
+        <div className="p-1 bg-[#F0FDF4] border-2 border-ink rounded-lg shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+          <BrainCircuit className="size-6 text-ink" />
+        </div>
+        <span className="text-[6px] font-black uppercase text-ink/40">Local DB</span>
+      </div>
+
+      <div className="flex flex-col items-center justify-center relative z-10">
+        <motion.div
+          animate={{ scale: [1, 1.25, 1], opacity: [1, 0.4, 1] }}
+          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+          className="p-2 bg-[#22C55E]/10 border-2 border-[#22C55E] rounded-full text-[#22C55E]"
+        >
+          <ShieldCheck className="size-5" />
+        </motion.div>
+        <span className="text-[6px] font-black uppercase text-[#22C55E] mt-1">Encrypted</span>
+      </div>
+
+      {/* Sync ripple light signals */}
+      <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none opacity-20 z-0">
+        <motion.div
+          animate={{ x: [-20, 140] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+          className="size-1.5 bg-[#22C55E] rounded-full"
+        />
+      </div>
+    </div>
+  );
+}
+
 function ShowcaseDeckPage() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
@@ -298,7 +516,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[280px] sm:w-[320px] md:w-[480px] lg:w-[520px] h-[340px] sm:h-[380px] md:h-[500px] lg:h-[540px] flex items-center justify-center z-10">
+            <div className="relative w-[280px] sm:w-[320px] md:w-[480px] lg:w-[520px] h-[360px] sm:h-[400px] md:h-[520px] lg:h-[560px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
@@ -314,18 +532,28 @@ function ShowcaseDeckPage() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
-                  <div>
+                  <div className="shrink-0">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-ink mt-6 sm:mt-8 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-ink mt-4 sm:mt-6 leading-tight">{nextCard.title}</h3>
                   </div>
-                  <div className="flex justify-end pt-4">
+
+                  {/* Behind card illustration preview */}
+                  <div className="flex-1 my-4 flex items-center justify-center overflow-hidden w-full max-h-[140px] opacity-40 pointer-events-none scale-90">
+                    {nextCard.id === "later" && <LaterAlarmIllustration />}
+                    {nextCard.id === "notify" && <SmartFiltersIllustration />}
+                    {nextCard.id === "places" && <PlacesMappingIllustration />}
+                    {nextCard.id === "pricing" && <PricingTierIllustration />}
+                    {nextCard.id === "faq" && <FAQHelpIllustration />}
+                  </div>
+
+                  <div className="flex justify-end pt-4 shrink-0">
                     <span className="inline-grid place-items-center size-12 sm:size-14 rounded-2xl bg-canvas border-2 border-ink">
                       <NextIcon className="size-6 sm:size-7 text-ink/40" />
                     </span>
                   </div>
                 </motion.div>
 
-                {/* Front Active Card (Now clickable directly to open specs) */}
+                {/* Front Active Card */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -340,23 +568,32 @@ function ShowcaseDeckPage() {
                   onClick={handleShowMe}
                   className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
-                  <div>
+                  <div className="shrink-0">
                     <div className="flex justify-between items-center">
                       <span className="text-[10px] uppercase font-bold tracking-wider text-ink/60 bg-white/50 border border-ink/10 px-3 py-1 rounded-full">
                         {currentCard.tag}
                       </span>
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-6 sm:mt-8 leading-tight tracking-tight">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-4 sm:mt-6 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-ink/80 font-bold mt-4 sm:mt-6 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-ink/80 font-bold mt-3 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
-                  <div className="flex justify-between items-end pt-4 sm:pt-6">
+                  {/* Centered Premium Live Illustration Component */}
+                  <div className="flex-1 my-4 flex items-center justify-center overflow-hidden w-full max-h-[160px] sm:max-h-[200px]">
+                    {currentCard.id === "later" && <LaterAlarmIllustration />}
+                    {currentCard.id === "notify" && <SmartFiltersIllustration />}
+                    {currentCard.id === "places" && <PlacesMappingIllustration />}
+                    {currentCard.id === "pricing" && <PricingTierIllustration />}
+                    {currentCard.id === "faq" && <FAQHelpIllustration />}
+                  </div>
+
+                  <div className="flex justify-between items-end pt-4 sm:pt-6 shrink-0">
                     <span className="text-[10px] uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
                     <span className="inline-grid place-items-center size-12 sm:size-16 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                       <CardIcon className="size-6 sm:size-8 text-ink" />
