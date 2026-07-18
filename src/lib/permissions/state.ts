@@ -96,37 +96,66 @@ export async function readPermissions(): Promise<PermissionSnapshot> {
   return snap;
 }
 
+export interface UserEnabledMap {
+  notifications?: boolean;
+  exactAlarm?: boolean;
+  battery?: boolean;
+  location?: boolean;
+  notificationAccess?: boolean;
+  mic?: boolean;
+}
+
+const USER_ENABLED_KEY = "mindrop.permissions.user_enabled";
+
+export function getUserEnabledPermissions(): UserEnabledMap {
+  try {
+    const raw = window.localStorage.getItem(USER_ENABLED_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function setUserPermissionEnabled(key: keyof UserEnabledMap, enabled: boolean) {
+  try {
+    const map = getUserEnabledPermissions();
+    map[key] = enabled;
+    window.localStorage.setItem(USER_ENABLED_KEY, JSON.stringify(map));
+  } catch {}
+}
+
 /** Compact summary used by the Settings tile ("3 of 4 granted"). */
 export function summarizePermissions(s: PermissionSnapshot): string {
+  const userEnabled = getUserEnabledPermissions();
   const applicable: PermStatus[] = [];
 
   // Notifications (all platforms)
-  applicable.push(s.notifications);
+  applicable.push(userEnabled.notifications && s.notifications === "granted" ? "granted" : "prompt");
 
   // Exact alarms (Android only)
   if (isAndroid()) {
-    applicable.push(s.exactAlarm);
+    applicable.push(userEnabled.exactAlarm && s.exactAlarm === "granted" ? "granted" : "prompt");
   }
 
   // Ignore battery optimization (Android only)
   if (isAndroid()) {
-    applicable.push(s.battery);
+    applicable.push(userEnabled.battery && s.battery === "granted" ? "granted" : "prompt");
   }
 
   // Location (all platforms)
   if (isAndroid()) {
-    applicable.push(s.locationFg === "granted" && s.locationBg === "granted" ? "granted" : "prompt");
+    applicable.push(userEnabled.location && s.locationFg === "granted" && s.locationBg === "granted" ? "granted" : "prompt");
   } else {
-    applicable.push(s.locationFg);
+    applicable.push(userEnabled.location && s.locationFg === "granted" ? "granted" : "prompt");
   }
 
   // Notification Access (Android only)
   if (isAndroid()) {
-    applicable.push(s.notificationAccess);
+    applicable.push(userEnabled.notificationAccess && s.notificationAccess === "granted" ? "granted" : "prompt");
   }
 
   // Microphone (all platforms)
-  applicable.push(s.mic);
+  applicable.push(userEnabled.mic && s.mic === "granted" ? "granted" : "prompt");
 
   const granted = applicable.filter((v) => v === "granted").length;
   if (granted === 0) return "Setup needed";

@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { AlarmClock, BatteryCharging, Bell, Ear, MapPin, Mic } from "lucide-react";
+import { AlarmClock, BatteryCharging, Bell, Ear, MapPin, Mic, ShieldAlert, Sparkles } from "lucide-react";
 import { Capacitor } from "@capacitor/core";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { PhoneFrame } from "@/components/layout/PhoneFrame";
@@ -11,7 +11,13 @@ import { AlarmsBridge } from "@/lib/alarms/bridge";
 import { PlacesBridge } from "@/lib/places/bridge";
 import { NotifyBridge } from "@/lib/notify/bridge";
 import { Switch } from "@/components/ui/switch";
-
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  getUserEnabledPermissions,
+  setUserPermissionEnabled,
+  type UserEnabledMap,
+  readPermissions
+} from "@/lib/permissions/state";
 
 export const Route = createFileRoute("/_authenticated/permissions")({
   head: () => ({
@@ -40,7 +46,7 @@ function Row({
     <button
       type="button"
       onClick={onAction}
-      className="w-full text-left p-4 bg-white rounded-2xl border border-ink/10 active:bg-ink/[0.02] transition-colors"
+      className="w-full text-left p-4 bg-white rounded-2xl border border-ink/10 active:bg-ink/[0.02] transition-colors animate-in fade-in duration-200"
     >
       <div className="flex items-center gap-3">
         <div 
@@ -62,11 +68,58 @@ function Row({
   );
 }
 
+interface RevokeModalInfo {
+  key: keyof UserEnabledMap;
+  title: string;
+  body: string;
+  redirect: () => Promise<void>;
+}
+
+const REVOKE_INFO: Record<keyof UserEnabledMap, { title: string; body: string; redirect: () => Promise<void> }> = {
+  notifications: {
+    title: "Keep Notifications Active?",
+    body: "Without notifications, MinDrop cannot alert you when rules trigger or memories fade. Let's keep them active so you never miss a beat!",
+    redirect: async () => { await AlarmsBridge.openNotificationSettings(); }
+  },
+  exactAlarm: {
+    title: "Keep Precise Reminders?",
+    body: "Exact alarms ensure MinDrop wakes up instantly and alerts you down to the exact second. Disabling this might lead to delayed reminders by Android's battery-saving system.",
+    redirect: async () => { await AlarmsBridge.openExactAlarmSettings(); }
+  },
+  battery: {
+    title: "Stay Always Connected?",
+    body: "Ignoring battery restrictions allows MinDrop to reliably run background triggers so you stay on schedule. Disabling this could result in Android silencing the app.",
+    redirect: async () => { await AlarmsBridge.openBatteryOptimizationSettings(); }
+  },
+  location: {
+    title: "Keep Location Reminders?",
+    body: "Location settings let MinDrop fire reminders exactly when you arrive at or leave saved places. Disabling this makes location-based triggers impossible.",
+    redirect: async () => {
+      if (isAndroid()) {
+        await PlacesBridge.openPermissionSettings?.();
+      } else {
+        await AlarmsBridge.openAppDetails();
+      }
+    }
+  },
+  notificationAccess: {
+    title: "Keep Intelligent Filters?",
+    body: "Notification access is the heart of Notify — it converts incoming WhatsApp or system alerts into alarms. Disabling this shuts down your capture filters.",
+    redirect: async () => { await NotifyBridge.openPermissionSettings(); }
+  },
+  mic: {
+    title: "Keep Hands-Free Notes?",
+    body: "Microphone permission powers your voice notes, allowing you to capture ideas effortlessly. Disabling this prevents voice recordings.",
+    redirect: async () => { await AlarmsBridge.openAppDetails(); }
+  }
+};
+
 function Permissions() {
   const navigate = useNavigate();
   const { state, update } = useOnboarding();
   const p = state.permissions;
 
+  const [userEnabled, setUserEnabled] = useState<UserEnabledMap>({});
   const [notifStatus, setNotifStatus] = useState<Status>("unknown");
   const [micStatus, setMicStatus] = useState<Status>("unknown");
   const [exactAlarm, setExactAlarm] = useState<boolean>(false);
@@ -75,7 +128,10 @@ function Permissions() {
   const [locBg, setLocBg] = useState<boolean>(false);
   const [notifAccess, setNotifAccess] = useState<boolean>(false);
 
+  const [revokeModal, setRevokeModal] = useState<RevokeModalInfo | null>(null);
+
   const refresh = useCallback(async () => {
+    setUserEnabled(getUserEnabledPermissions());
     try {
       if (isNative()) {
         const r = await LocalNotifications.checkPermissions();
@@ -130,21 +186,28 @@ function Permissions() {
       } catch {}
       try { setNotifAccess(await NotifyBridge.hasPermission()); } catch {}
     } else {
-      // Web: query geolocation permission (no background on web).
       try {
         const q = await navigator.permissions?.query({ name: "geolocation" as PermissionName });
         if (q) setLocFg(q.state === "granted");
       } catch {}
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [update]);
+
+  // Polling helper to capture quick system settings changes
+  const startPolling = () => {
+    let count = 0;
+    const interval = setInterval(() => {
+      refresh();
+      count++;
+      if (count > 8) clearInterval(interval);
+    }, 1000);
+  };
 
   useEffect(() => {
     refresh();
     const onVis = () => {
       if (document.visibilityState === "visible") {
         refresh();
-        // Query again after 600ms to handle Android OS setting updates latency
         setTimeout(refresh, 600);
       }
     };
@@ -212,9 +275,116 @@ function Permissions() {
     } catch {}
   };
 
+  // Main Toggle Handler
+  const handleToggle = async (key: keyof UserEnabledMap, isCurrentlyActive: boolean) => {
+    if (isCurrentlyActive) {
+      // Toggle OFF requested -> show positive revocation modal
+      const info = REVOKE_INFO[key];
+      setRevokeModal({
+        key,
+        title: info.title,
+        body: info.body,
+        redirect: info.redirect
+      });
+    } else {
+      // Toggle ON requested -> enable preference, request OS permission, start polling
+      setUserPermissionEnabled(key, true);
+      setUserEnabled(getUserEnabledPermissions());
+      
+      if (key === "notifications") await grantNotif();
+      else if (key === "mic") await grantMic();
+      else if (key === "location") await grantLocation();
+      else if (key === "exactAlarm") await AlarmsBridge.openExactAlarmSettings();
+      else if (key === "battery") await AlarmsBridge.openBatteryOptimizationSettings();
+      else if (key === "notificationAccess") await NotifyBridge.openPermissionSettings();
+
+      startPolling();
+    }
+  };
+
+  // Perform revocation after modal confirmation
+  const confirmRevoke = async () => {
+    if (!revokeModal) return;
+    const { key, redirect } = revokeModal;
+    
+    setUserPermissionEnabled(key, false);
+    setUserEnabled(getUserEnabledPermissions());
+    setRevokeModal(null);
+    
+    try {
+      await redirect();
+    } catch {}
+    
+    startPolling();
+  };
+
+  // Allow All sequential triggers
+  const handleAllowAll = async () => {
+    const keys: Array<keyof UserEnabledMap> = ["notifications", "exactAlarm", "battery", "location", "notificationAccess", "mic"];
+    keys.forEach((k) => setUserPermissionEnabled(k, true));
+    setUserEnabled(getUserEnabledPermissions());
+
+    try {
+      if (notifStatus !== "granted") {
+        if (isAndroid()) {
+          const st = await AlarmsBridge.requestNotificationPermission();
+          if (st.postNotifications) {
+            setNotifStatus("granted");
+            update(prev => ({ ...prev, permissions: { ...prev.permissions, notifications: true } }));
+          } else {
+            await AlarmsBridge.openNotificationSettings();
+          }
+        } else if (isNative()) {
+          const r = await LocalNotifications.requestPermissions();
+          if (r.display === "granted") setNotifStatus("granted");
+        } else if ("Notification" in window) {
+          await Notification.requestPermission();
+        }
+      }
+
+      if (micStatus !== "granted") {
+        if (isNative()) {
+          const mod = await import("capacitor-voice-recorder");
+          await mod.VoiceRecorder.requestAudioRecordingPermission();
+        } else {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach((t) => t.stop());
+        }
+      }
+
+      if (!locFg || (isAndroid() && !locBg)) {
+        if (isAndroid()) {
+          await PlacesBridge.requestPermission?.();
+        }
+      }
+
+      if (isAndroid() && !exactAlarm) {
+        await AlarmsBridge.openExactAlarmSettings();
+      }
+      if (isAndroid() && !battOk) {
+        await AlarmsBridge.openBatteryOptimizationSettings();
+      }
+      if (isAndroid() && !notifAccess) {
+        await NotifyBridge.openPermissionSettings();
+      }
+    } catch (e) {
+      console.warn("Allow All flow interrupted: ", e);
+    }
+
+    startPolling();
+  };
+
+  // Determine visual toggling states
+  const showNotif = !!(userEnabled.notifications && notifStatus === "granted");
+  const showMic = !!(userEnabled.mic && micStatus === "granted");
+  const showExact = !!(userEnabled.exactAlarm && exactAlarm);
+  const showBattery = !!(userEnabled.battery && battOk);
+  const showLocation = !!(userEnabled.location && (isAndroid() ? (locFg && locBg) : locFg));
+  const showAccess = !!(userEnabled.notificationAccess && notifAccess);
+
   return (
     <PhoneFrame>
-      <div className="px-5 pt-5 pb-5 flex flex-col h-full overflow-y-auto">
+      <div className="px-5 pt-5 pb-5 flex flex-col h-full overflow-y-auto relative">
         <BackHeader />
         <p className="t-eyebrow text-ink/70 mb-1">Permissions</p>
         <h1 className="t-display mb-1">Ring on time. Every time.</h1>
@@ -222,23 +392,32 @@ function Permissions() {
           🔒 <strong className="font-semibold text-[#FF671F]">100% Data Privacy</strong> — Your data stays securely on your own mobile or private Google Drive. We never collect or see it.
         </p>
 
+        <div className="mb-4 flex items-center justify-between">
+          <button
+            onClick={handleAllowAll}
+            style={{ color: "#FF671F", borderColor: "rgba(255, 103, 31, 0.2)" }}
+            className="px-3.5 py-1.5 rounded-xl border bg-white hover:bg-[#FF671F]/5 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+          >
+            <Sparkles className="size-3.5" /> Enable All Required
+          </button>
+        </div>
+
         <div data-tour="perm-list" className="space-y-2.5">
           <Row
             icon={Bell}
             title="Notifications"
             body="So MinDrop can post reminders and alarms."
-            granted={p.notifications}
-            onAction={grantNotif}
+            granted={showNotif}
+            onAction={() => handleToggle("notifications", showNotif)}
           />
-
 
           {isAndroid() && (
             <Row
               icon={AlarmClock}
               title="Exact alarms"
               body="Fire at the exact minute — even in Doze."
-              granted={exactAlarm}
-              onAction={async () => { await AlarmsBridge.openExactAlarmSettings(); }}
+              granted={showExact}
+              onAction={() => handleToggle("exactAlarm", showExact)}
             />
           )}
 
@@ -247,8 +426,8 @@ function Permissions() {
               icon={BatteryCharging}
               title="Ignore battery optimization"
               body="Prevents Android from silencing reminders."
-              granted={battOk}
-              onAction={async () => { await AlarmsBridge.openBatteryOptimizationSettings(); }}
+              granted={showBattery}
+              onAction={() => handleToggle("battery", showBattery)}
             />
           )}
 
@@ -257,16 +436,16 @@ function Permissions() {
               icon={MapPin}
               title="Location (Allow all the time)"
               body="Needed for place-based reminders while MinDrop is closed."
-              granted={locFg && locBg}
-              onAction={grantLocation}
+              granted={showLocation}
+              onAction={() => handleToggle("location", showLocation)}
             />
           ) : (
             <Row
               icon={MapPin}
               title="Location"
               body="Fire reminders when you arrive at a saved place."
-              granted={locFg}
-              onAction={grantLocation}
+              granted={showLocation}
+              onAction={() => handleToggle("location", showLocation)}
             />
           )}
 
@@ -275,8 +454,8 @@ function Permissions() {
               icon={Ear}
               title="Notification access"
               body="So MinDrop can read notifications from other apps and act on them."
-              granted={notifAccess}
-              onAction={async () => { await NotifyBridge.openPermissionSettings(); }}
+              granted={showAccess}
+              onAction={() => handleToggle("notificationAccess", showAccess)}
             />
           )}
 
@@ -284,8 +463,8 @@ function Permissions() {
             icon={Mic}
             title="Microphone"
             body="Capture a thought hands-free with a voice note."
-            granted={p.mic}
-            onAction={grantMic}
+            granted={showMic}
+            onAction={() => handleToggle("mic", showMic)}
           />
         </div>
 
@@ -295,6 +474,7 @@ function Permissions() {
             : "In the web preview, alarms only ring while MinDrop is open. Install the APK for background alarms."}
         </p>
         <div className="flex-1 min-h-2" />
+        
         <button
           onClick={() => navigate({ to: "/home" })}
           data-tour="perm-cta"
@@ -307,6 +487,48 @@ function Permissions() {
         >
           Continue
         </button>
+
+        {/* Motivational Revocation Dialog */}
+        <AnimatePresence>
+          {revokeModal && (
+            <div className="fixed inset-0 z-[150] flex items-center justify-center p-5">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setRevokeModal(null)}
+                className="absolute inset-0 bg-ink/50 backdrop-blur-sm"
+              />
+              <motion.div
+                initial={{ scale: 0.95, y: 15 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                className="relative bg-canvas rounded-3xl border border-ink/10 max-w-sm w-full p-6 shadow-2xl z-10 text-center"
+              >
+                <div className="mx-auto mb-3.5 size-12 rounded-2xl bg-amber-50 grid place-items-center text-amber-600">
+                  <ShieldAlert className="size-6" />
+                </div>
+                <h3 className="t-title mb-2 text-ink">{revokeModal.title}</h3>
+                <p className="t-body-sm text-ink/70 mb-6 leading-relaxed">{revokeModal.body}</p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => setRevokeModal(null)}
+                    style={{ backgroundColor: "#FF671F" }}
+                    className="w-full text-white py-3.5 rounded-2xl t-button hover:opacity-95 font-semibold transition-all active:scale-[0.99]"
+                  >
+                    Keep Enabled
+                  </button>
+                  <button
+                    onClick={confirmRevoke}
+                    className="w-full text-ink/50 hover:text-red-500 py-2.5 text-xs font-semibold transition-colors"
+                  >
+                    Disable Anyway
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </PhoneFrame>
   );
