@@ -97,7 +97,6 @@ function ShowcaseDeckPage() {
   const [autoPlay, setAutoPlay] = useState(false);
   const [viewMode, setViewMode] = useState<"deck" | "grid">("deck");
   
-  // Track cursor position coordinates
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const scrollCooldown = useRef(false);
 
@@ -124,7 +123,6 @@ function ShowcaseDeckPage() {
     const width = window.innerWidth;
     const height = window.innerHeight;
     
-    // Normalized offset from -0.5 to 0.5 representing coordinates relative to center
     const x = (clientX / width) - 0.5;
     const y = (clientY / height) - 0.5;
     setMousePos({ x, y });
@@ -194,7 +192,7 @@ function ShowcaseDeckPage() {
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
       
-      {/* Dynamic Background Circles (Signature Google Web Showcase side bubble curves with cursor parallax shifts) */}
+      {/* Dynamic Background Circles */}
       <div 
         className="absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0 hidden md:block"
         style={{
@@ -229,7 +227,7 @@ function ShowcaseDeckPage() {
         
         <div className="flex items-center gap-2">
           <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
-          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink">MinDrop — A Kind Second Brain</span>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink">MinDrop</span>
         </div>
 
         <Link
@@ -245,10 +243,10 @@ function ShowcaseDeckPage() {
         
         {viewMode === "deck" ? (
           /* DECK VIEW MODE */
-          <div className="w-full h-full flex items-center justify-center relative">
+          <div className="w-full h-full flex flex-col items-center justify-center relative">
             
-            {/* Next Card Trigger on the Left */}
-            <div className="absolute left-4 lg:left-12 z-30">
+            {/* Desktop-only Next Card Trigger on the Left */}
+            <div className="absolute left-4 lg:left-12 z-30 hidden md:flex">
               <button
                 onClick={handleNext}
                 className="flex flex-col items-start gap-1 group text-left cursor-pointer"
@@ -260,9 +258,9 @@ function ShowcaseDeckPage() {
               </button>
             </div>
 
-            {/* 3D Stacked Cards Deck with responsive cursor translation and rotation sweeps */}
+            {/* 3D Stacked Cards Deck (Responsive width/height to fit mobile perfectly) */}
             <div 
-              className="relative w-[320px] sm:w-[420px] md:w-[480px] lg:w-[520px] h-[420px] sm:h-[500px] md:h-[540px] flex items-center justify-center z-10"
+              className="relative w-[280px] sm:w-[320px] md:w-[480px] lg:w-[520px] h-[340px] sm:h-[380px] md:h-[500px] lg:h-[540px] flex items-center justify-center z-10"
               style={{
                 transform: `perspective(1200px) rotateY(${mousePos.x * 30}deg) rotateX(${-mousePos.y * 20}deg) translateX(${mousePos.x * 70}px) translateY(${mousePos.y * 30}px)`,
                 transition: "transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1)"
@@ -275,15 +273,15 @@ function ShowcaseDeckPage() {
                   initial={{ scale: 0.9, rotate: 6, opacity: 0.8 }}
                   animate={{ scale: 0.95, rotate: 8, opacity: 0.9 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-8 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-3xl sm:text-4xl font-black text-ink mt-8 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-ink mt-6 sm:mt-8 leading-tight">{nextCard.title}</h3>
                   </div>
                   <div className="flex justify-end pt-4">
-                    <span className="inline-grid place-items-center size-14 rounded-2xl bg-canvas border-2 border-ink">
-                      <NextIcon className="size-7 text-ink/40" />
+                    <span className="inline-grid place-items-center size-12 sm:size-14 rounded-2xl bg-canvas border-2 border-ink">
+                      <NextIcon className="size-6 sm:size-7 text-ink/40" />
                     </span>
                   </div>
                 </motion.div>
@@ -295,7 +293,7 @@ function ShowcaseDeckPage() {
                   animate={{ x: 0, rotate: -2, scale: 1, opacity: 1 }}
                   exit={{ x: -400, rotate: -18, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 14 }}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-8 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${currentCard.bgClass}`}
                 >
                   <div>
                     <div className="flex justify-between items-center">
@@ -304,27 +302,27 @@ function ShowcaseDeckPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink mt-8 leading-tight tracking-tight">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-6 sm:mt-8 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-ink/80 font-bold mt-6 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-ink/80 font-bold mt-4 sm:mt-6 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
-                  <div className="flex justify-between items-end pt-6">
+                  <div className="flex justify-between items-end pt-4 sm:pt-6">
                     <span className="text-[10px] uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
-                    <span className="inline-grid place-items-center size-16 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                      <CardIcon className="size-8 text-ink" />
+                    <span className="inline-grid place-items-center size-12 sm:size-16 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                      <CardIcon className="size-6 sm:size-8 text-ink" />
                     </span>
                   </div>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Detailed View Trigger on the Right */}
-            <div className="absolute right-4 lg:right-12 z-30">
+            {/* Desktop-only Detailed View Trigger on the Right */}
+            <div className="absolute right-4 lg:right-12 z-30 hidden md:flex">
               <button
                 onClick={handleShowMe}
                 className="flex flex-col items-end gap-1 group text-right cursor-pointer"
@@ -333,6 +331,22 @@ function ShowcaseDeckPage() {
                 <span className="text-xl md:text-2xl lg:text-3xl font-black text-ink border-b-3 border-ink group-hover:text-[#FF671F] group-hover:border-[#FF671F] transition-colors pb-0.5">
                   Show me!
                 </span>
+              </button>
+            </div>
+
+            {/* Mobile-only control row below the card stack (Google style) */}
+            <div className="flex justify-between items-center w-full max-w-[280px] sm:max-w-[320px] mt-6 md:hidden z-30">
+              <button
+                onClick={handleNext}
+                className="text-sm font-black text-ink border-b-2 border-ink pb-0.5 cursor-pointer active:scale-95 transition-transform"
+              >
+                Next card
+              </button>
+              <button
+                onClick={handleShowMe}
+                className="text-sm font-black text-ink border-b-2 border-ink pb-0.5 cursor-pointer active:scale-95 transition-transform"
+              >
+                Show me!
               </button>
             </div>
 
@@ -378,7 +392,7 @@ function ShowcaseDeckPage() {
 
       {/* 3. Footer Corners */}
       <footer className="flex justify-between items-center w-full z-30 shrink-0">
-        <div className="text-xs font-black uppercase tracking-wider text-ink/50">
+        <div className="text-xs font-black uppercase tracking-wider text-ink/50 hidden sm:block">
           MinDrop for Mobile (Offline)
         </div>
 
