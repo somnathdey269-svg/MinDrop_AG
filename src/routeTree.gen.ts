@@ -21,6 +21,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PlacesFeatureRouteImport } from './routes/places-feature'
 import { Route as NotifyFeatureRouteImport } from './routes/notify-feature'
+import { Route as LaterFeatureRouteImport } from './routes/later-feature'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as FeaturesRouteImport } from './routes/features'
@@ -139,6 +140,11 @@ const PlacesFeatureRoute = PlacesFeatureRouteImport.update({
 const NotifyFeatureRoute = NotifyFeatureRouteImport.update({
   id: '/notify-feature',
   path: '/notify-feature',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaterFeatureRoute = LaterFeatureRouteImport.update({
+  id: '/later-feature',
+  path: '/later-feature',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -463,6 +469,7 @@ export interface FileRoutesByFullPath {
   '/features': typeof FeaturesRoute
   '/home': typeof HomeRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/later-feature': typeof LaterFeatureRoute
   '/notify-feature': typeof NotifyFeatureRoute
   '/places-feature': typeof PlacesFeatureRoute
   '/pricing': typeof PricingRoute
@@ -534,6 +541,7 @@ export interface FileRoutesByTo {
   '/features': typeof FeaturesRoute
   '/home': typeof HomeRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/later-feature': typeof LaterFeatureRoute
   '/notify-feature': typeof NotifyFeatureRoute
   '/places-feature': typeof PlacesFeatureRoute
   '/pricing': typeof PricingRoute
@@ -605,6 +613,7 @@ export interface FileRoutesById {
   '/features': typeof FeaturesRoute
   '/home': typeof HomeRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/later-feature': typeof LaterFeatureRoute
   '/notify-feature': typeof NotifyFeatureRoute
   '/places-feature': typeof PlacesFeatureRoute
   '/pricing': typeof PricingRoute
@@ -679,6 +688,7 @@ export interface FileRouteTypes {
     | '/features'
     | '/home'
     | '/how-it-works'
+    | '/later-feature'
     | '/notify-feature'
     | '/places-feature'
     | '/pricing'
@@ -750,6 +760,7 @@ export interface FileRouteTypes {
     | '/features'
     | '/home'
     | '/how-it-works'
+    | '/later-feature'
     | '/notify-feature'
     | '/places-feature'
     | '/pricing'
@@ -820,6 +831,7 @@ export interface FileRouteTypes {
     | '/features'
     | '/home'
     | '/how-it-works'
+    | '/later-feature'
     | '/notify-feature'
     | '/places-feature'
     | '/pricing'
@@ -894,6 +906,7 @@ export interface RootRouteChildren {
   FeaturesRoute: typeof FeaturesRoute
   HomeRoute: typeof HomeRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  LaterFeatureRoute: typeof LaterFeatureRoute
   NotifyFeatureRoute: typeof NotifyFeatureRoute
   PlacesFeatureRoute: typeof PlacesFeatureRoute
   PricingRoute: typeof PricingRoute
@@ -995,6 +1008,13 @@ declare module '@tanstack/react-router' {
       path: '/notify-feature'
       fullPath: '/notify-feature'
       preLoaderRoute: typeof NotifyFeatureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/later-feature': {
+      id: '/later-feature'
+      path: '/later-feature'
+      fullPath: '/later-feature'
+      preLoaderRoute: typeof LaterFeatureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -1570,6 +1590,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesRoute: FeaturesRoute,
   HomeRoute: HomeRoute,
   HowItWorksRoute: HowItWorksRoute,
+  LaterFeatureRoute: LaterFeatureRoute,
   NotifyFeatureRoute: NotifyFeatureRoute,
   PlacesFeatureRoute: PlacesFeatureRoute,
   PricingRoute: PricingRoute,
