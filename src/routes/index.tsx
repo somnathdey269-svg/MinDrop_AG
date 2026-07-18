@@ -97,7 +97,8 @@ function ShowcaseDeckPage() {
   const [autoPlay, setAutoPlay] = useState(false);
   const [viewMode, setViewMode] = useState<"deck" | "grid">("deck");
   
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  // Track active hover zones
+  const [hoverZone, setHoverZone] = useState<"center" | "left" | "right">("center");
   const scrollCooldown = useRef(false);
 
   useEffect(() => {
@@ -119,17 +120,23 @@ function ShowcaseDeckPage() {
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (viewMode !== "deck" || aboutOpen) return;
-    const { clientX, clientY } = e;
+    const { clientX } = e;
     const width = window.innerWidth;
-    const height = window.innerHeight;
     
+    // Normalized X from -0.5 (left side) to 0.5 (right side)
     const x = (clientX / width) - 0.5;
-    const y = (clientY / height) - 0.5;
-    setMousePos({ x, y });
+
+    if (x < -0.16) {
+      setHoverZone("left");
+    } else if (x > 0.16) {
+      setHoverZone("right");
+    } else {
+      setHoverZone("center");
+    }
   };
 
   const handleMouseLeave = () => {
-    setMousePos({ x: 0, y: 0 });
+    setHoverZone("center");
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -180,6 +187,23 @@ function ShowcaseDeckPage() {
   const bgColorPrev = DECK_CARDS[(activeIdx - 1 + DECK_CARDS.length) % DECK_CARDS.length].bgColor;
   const bgColorNext = DECK_CARDS[(activeIdx + 1) % DECK_CARDS.length].bgColor;
 
+  // Custom positioning offsets depending on hover states
+  let cardTransform = "perspective(1200px) rotateY(-2deg) rotateX(0deg) translateX(0px)";
+  let leftBubbleTransform = "translate(0px, -50%) scale(0.85)";
+  let rightBubbleTransform = "translate(0px, -50%) scale(0.85)";
+
+  if (hoverZone === "left") {
+    // Hovering left slides cards right and reveals left yellow bubble
+    cardTransform = "perspective(1200px) rotateY(16deg) rotateX(1.5deg) translateX(65px)";
+    leftBubbleTransform = "translate(12vw, -50%) scale(1.35)";
+    rightBubbleTransform = "translate(-3vw, -50%) scale(0.7)";
+  } else if (hoverZone === "right") {
+    // Hovering right slides cards left and reveals right blue bubble
+    cardTransform = "perspective(1200px) rotateY(-18deg) rotateX(-1.5deg) translateX(-65px)";
+    leftBubbleTransform = "translate(3vw, -50%) scale(0.7)";
+    rightBubbleTransform = "translate(-12vw, -50%) scale(1.35)";
+  }
+
   return (
     <div 
       onMouseMove={handleMouseMove}
@@ -192,7 +216,7 @@ function ShowcaseDeckPage() {
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
       
-      {/* Dynamic Background Circles */}
+      {/* Dynamic Background Circles (Signature Google Web Showcase side bubble curves with cursor parallax shifts) */}
       <div 
         className="absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0 hidden md:block"
         style={{
@@ -200,8 +224,8 @@ function ShowcaseDeckPage() {
           left: "-30vw",
           width: "65vw",
           height: "65vw",
-          transform: `translate(${mousePos.x * -40}px, calc(-50% + ${mousePos.y * -30}px))`,
-          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1)"
+          transform: leftBubbleTransform,
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)"
         }}
       />
       <div 
@@ -211,8 +235,8 @@ function ShowcaseDeckPage() {
           right: "-30vw",
           width: "65vw",
           height: "65vw",
-          transform: `translate(${mousePos.x * -40}px, calc(-50% + ${mousePos.y * -30}px))`,
-          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1)"
+          transform: rightBubbleTransform,
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)"
         }}
       />
 
@@ -258,12 +282,12 @@ function ShowcaseDeckPage() {
               </button>
             </div>
 
-            {/* 3D Stacked Cards Deck (Responsive width/height to fit mobile perfectly) */}
+            {/* 3D Stacked Cards Deck with responsive cursor translation and rotation sweeps */}
             <div 
               className="relative w-[280px] sm:w-[320px] md:w-[480px] lg:w-[520px] h-[340px] sm:h-[380px] md:h-[500px] lg:h-[540px] flex items-center justify-center z-10"
               style={{
-                transform: `perspective(1200px) rotateY(${mousePos.x * 30}deg) rotateX(${-mousePos.y * 20}deg) translateX(${mousePos.x * 70}px) translateY(${mousePos.y * 30}px)`,
-                transition: "transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1)"
+                transform: cardTransform,
+                transition: "transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)"
               }}
             >
               <AnimatePresence mode="popLayout">
