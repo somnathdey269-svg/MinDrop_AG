@@ -325,7 +325,7 @@ function ShowcaseDeckPage() {
                   </div>
                 </motion.div>
 
-                {/* Front Active Card */}
+                {/* Front Active Card (Now clickable directly to open specs) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -337,7 +337,8 @@ function ShowcaseDeckPage() {
                   }}
                   exit={{ x: -400, rotate: -18, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${currentCard.bgClass}`}
+                  onClick={handleShowMe}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   <div>
                     <div className="flex justify-between items-center">
@@ -434,7 +435,7 @@ function ShowcaseDeckPage() {
 
       </div>
 
-      {/* 3. Footer Corners (Mathematically aligned 3-column grid structure) */}
+      {/* 3. Footer Corners */}
       <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
         <div className="justify-self-start text-xs font-black uppercase tracking-wider text-ink/50 hidden sm:block">
           MinDrop for Mobile (Offline)
