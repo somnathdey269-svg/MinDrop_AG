@@ -3,6 +3,11 @@ import { BellRing, Check, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/notify-feature")({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      from: (search.from as string) || undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Notify Module — MinDrop Filters" },
@@ -13,6 +18,8 @@ export const Route = createFileRoute("/notify-feature")({
 });
 
 function NotifyDetailView() {
+  const { from } = Route.useSearch();
+
   return (
     <div className="fixed inset-0 bg-[#FFFBEB] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
       
@@ -25,6 +32,7 @@ function NotifyDetailView() {
         </div>
         <Link
           to="/"
+          hash={from === "grid" ? "grid" : undefined}
           className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
         >
           View Deck
@@ -41,6 +49,7 @@ function NotifyDetailView() {
           {/* Close Button X linking back to homepage */}
           <Link
             to="/"
+            hash={from === "grid" ? "grid" : undefined}
             className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
             aria-label="Close"
           >

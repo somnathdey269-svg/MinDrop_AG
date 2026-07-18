@@ -3,6 +3,11 @@ import { Download, Check, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/download")({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      from: (search.from as string) || undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Download MinDrop — Android APK" },
@@ -16,6 +21,8 @@ const PLAY_STORE_URL: string | null = null;
 const APK_URL: string | null = "https://github.com/somnathdey269-svg/MinDrop_AG/releases";
 
 function DownloadDetailView() {
+  const { from } = Route.useSearch();
+
   return (
     <div className="fixed inset-0 bg-[#EFF6FF] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
       
@@ -28,6 +35,7 @@ function DownloadDetailView() {
         </div>
         <Link
           to="/"
+          hash={from === "grid" ? "grid" : undefined}
           className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
         >
           View Deck
@@ -44,6 +52,7 @@ function DownloadDetailView() {
           {/* Close Button X linking back to homepage */}
           <Link
             to="/"
+            hash={from === "grid" ? "grid" : undefined}
             className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
             aria-label="Close"
           >
