@@ -57,23 +57,23 @@ function FaqPage() {
 
   return (
     <MarketingLayout>
-      <section className="relative overflow-hidden bg-canvas py-16 md:py-24 border-b border-ink/5">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-orange-500/5 blur-[100px]" />
+      <section className="relative overflow-hidden bg-canvas py-16 md:py-24 border-b-3 border-ink">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-[#FF671F]/5 blur-[100px]" />
         
         <div className="mx-auto max-w-7xl px-5 sm:px-8 md:px-12 lg:px-16 text-center">
           <Link to="/" className="inline-flex items-center gap-1.5 text-[#FF671F] hover:underline font-bold text-xs uppercase tracking-wider mb-6">
             <ArrowLeft className="size-3.5" /> Back to Home
           </Link>
 
-          <span className="t-eyebrow inline-flex items-center gap-2 rounded-full bg-orange-50 px-3.5 py-1.5 text-[#FF671F] font-bold border border-orange-100 mb-5">
-            <HelpCircle className="size-4" /> FAQ Center
+          <span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-ink shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)] mb-5">
+            <HelpCircle className="size-4 text-[#FF671F]" /> FAQ Center
           </span>
 
           <h1 className="t-display text-4xl sm:text-5xl font-black leading-tight text-ink">
-            Frequently Asked <span className="text-[#FF671F]">Questions.</span>
+            Frequently Asked <span className="text-[#FF671F] underline decoration-2 decoration-ink">Questions.</span>
           </h1>
 
-          <p className="t-body mt-4 text-ink/75 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-4 text-ink/75 max-w-xl mx-auto leading-relaxed font-semibold text-sm md:text-base">
             Honest, technical answers about how MinDrop respects your privacy, manages your battery, and handles alarms locally on your device.
           </p>
         </div>
@@ -82,20 +82,20 @@ function FaqPage() {
       {/* FAQ Accordions */}
       <section className="py-20 bg-[#f9f7f2]">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 md:px-12 lg:px-16">
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-4xl mx-auto space-y-5">
             {faqData.map((faq, index) => {
               const isOpen = activeFaq === index;
               return (
-                <div key={index} className="bg-white rounded-3xl border border-ink/8 overflow-hidden shadow-sm transition-all duration-300">
+                <div key={index} className="bg-white rounded-3xl border-3 border-ink overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300">
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : index)}
-                    className="w-full flex items-center justify-between p-6 text-left font-bold text-ink cursor-pointer hover:bg-ink/[0.01] text-base"
+                    className="w-full flex items-center justify-between p-6 text-left font-black text-ink cursor-pointer hover:bg-ink/[0.01] text-base md:text-lg"
                   >
                     <span>{faq.q}</span>
                     <ChevronDown className={`size-5 text-ink/50 transition-transform duration-200 shrink-0 ml-4 ${isOpen ? "rotate-180" : ""}`} />
                   </button>
                   {isOpen && (
-                    <div className="px-6 pb-6 pt-2 border-t border-ink/5 text-ink/75 t-body-sm leading-relaxed text-sm md:text-base">
+                    <div className="px-6 pb-6 pt-2 border-t-3 border-ink text-ink/75 t-body-sm leading-relaxed text-sm md:text-base font-semibold">
                       {faq.a}
                     </div>
                   )}
@@ -107,14 +107,14 @@ function FaqPage() {
       </section>
 
       {/* Help Banner */}
-      <section className="py-16 bg-white border-b border-ink/5 text-center">
+      <section className="py-16 bg-white border-b-3 border-ink text-center">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 md:px-12 lg:px-16">
-          <h3 className="t-title font-bold text-xl text-ink">Still have questions?</h3>
-          <p className="t-body-sm text-ink/70 mt-2 max-w-md mx-auto leading-relaxed">
+          <h3 className="text-2xl font-black text-ink">Still have questions?</h3>
+          <p className="text-ink/70 mt-2 max-w-md mx-auto leading-relaxed font-semibold text-sm">
             We are here to help you get the most out of your second brain. Contact our developer support team directly.
           </p>
           <div className="mt-6">
-            <Link to="/contact" className="t-button inline-flex items-center gap-2 rounded-2xl bg-ink text-canvas px-6 py-3.5 hover:opacity-90 font-bold transition text-xs uppercase tracking-wider">
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-xl bg-ink text-canvas border-2 border-ink px-6 py-3.5 hover:bg-[#FF671F] hover:text-white transition shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-xs uppercase tracking-wider active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
               Contact Support
             </Link>
           </div>
