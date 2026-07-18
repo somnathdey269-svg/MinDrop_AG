@@ -187,22 +187,34 @@ function ShowcaseDeckPage() {
   const bgColorPrev = DECK_CARDS[(activeIdx - 1 + DECK_CARDS.length) % DECK_CARDS.length].bgColor;
   const bgColorNext = DECK_CARDS[(activeIdx + 1) % DECK_CARDS.length].bgColor;
 
-  // Custom positioning offsets depending on hover states (repositioned in matching direction)
-  let activeCardTransform = "perspective(1200px) rotateY(-2deg) rotateX(0deg) translateX(0px)";
-  let behindCardTransform = "scale(0.95) rotate(8deg) translateX(0px)";
+  // Custom positioning offsets passed directly to Framer Motion animate parameters
+  let activeX = 0;
+  let activeRotate = -2;
+  let behindX = 0;
+  let behindRotate = 8;
+  let behindScale = 0.95;
+
   let leftBubbleTransform = "translate(0px, -50%) scale(0.85)";
   let rightBubbleTransform = "translate(0px, -50%) scale(0.85)";
 
   if (hoverZone === "left") {
-    // Mouse goes Left -> Active card slides LEFT (translateX -220px) to reveal next card on the RIGHT
-    activeCardTransform = "perspective(1200px) rotateY(-16deg) rotateX(-1.5deg) translateX(-210px)";
-    behindCardTransform = "scale(0.98) rotate(2deg) translateX(70px)";
+    // Mouse goes Left -> Active card slides LEFT (-230px), behind card slides RIGHT (230px) and flattens out
+    activeX = -230;
+    activeRotate = -12;
+    behindX = 230;
+    behindRotate = 2;
+    behindScale = 1;
+
     leftBubbleTransform = "translate(12vw, -50%) scale(1.35)";
     rightBubbleTransform = "translate(-3vw, -50%) scale(0.7)";
   } else if (hoverZone === "right") {
-    // Mouse goes Right -> Active card slides RIGHT (translateX 220px) to reveal next card on the LEFT
-    activeCardTransform = "perspective(1200px) rotateY(16deg) rotateX(1.5deg) translateX(210px)";
-    behindCardTransform = "scale(0.98) rotate(-4deg) translateX(-70px)";
+    // Mouse goes Right -> Active card slides RIGHT (230px), behind card slides LEFT (-230px) and flattens out
+    activeX = 230;
+    activeRotate = 12;
+    behindX = -230;
+    behindRotate = -2;
+    behindScale = 1;
+
     leftBubbleTransform = "translate(3vw, -50%) scale(0.7)";
     rightBubbleTransform = "translate(-12vw, -50%) scale(1.35)";
   }
@@ -285,16 +297,21 @@ function ShowcaseDeckPage() {
               </button>
             </div>
 
-            {/* 3D Stacked Cards Deck with responsive cursor translation and rotation sweeps */}
+            {/* 3D Stacked Cards Deck (Transforms handled fully within Framer motion variables) */}
             <div className="relative w-[280px] sm:w-[320px] md:w-[480px] lg:w-[520px] h-[340px] sm:h-[380px] md:h-[500px] lg:h-[540px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
-                {/* Behind stacked preview card (Exposes content visually by shifting dynamically) */}
+                {/* Behind stacked preview card */}
                 <motion.div
                   key={`next-${nextCard.id}`}
-                  style={{
-                    transform: behindCardTransform,
-                    transition: "transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)"
+                  initial={{ scale: 0.9, rotate: 6, x: 0, opacity: 0.8 }}
+                  animate={{
+                    scale: behindScale,
+                    rotate: behindRotate,
+                    x: behindX,
+                    opacity: 0.95
                   }}
+                  exit={{ opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div>
@@ -308,17 +325,18 @@ function ShowcaseDeckPage() {
                   </div>
                 </motion.div>
 
-                {/* Front Active Card (Slides left/right following mouse coordinates same-directionally) */}
+                {/* Front Active Card */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
-                  animate={{ x: 0, rotate: -2, scale: 1, opacity: 1 }}
-                  exit={{ x: -400, rotate: -18, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 100, damping: 14 }}
-                  style={{
-                    transform: activeCardTransform,
-                    transition: "transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)"
+                  animate={{
+                    x: activeX,
+                    rotate: activeRotate,
+                    scale: 1,
+                    opacity: 1
                   }}
+                  exit={{ x: -400, rotate: -18, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${currentCard.bgClass}`}
                 >
                   <div>
