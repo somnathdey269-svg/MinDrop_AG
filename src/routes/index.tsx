@@ -97,6 +97,8 @@ function ShowcaseDeckPage() {
   const [autoPlay, setAutoPlay] = useState(false);
   const [viewMode, setViewMode] = useState<"deck" | "grid">("deck");
   
+  // Track cursor position coordinates
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const scrollCooldown = useRef(false);
 
   useEffect(() => {
@@ -114,6 +116,22 @@ function ShowcaseDeckPage() {
     if (typeof window !== "undefined") {
       window.location.hash = mode === "grid" ? "grid" : "";
     }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (viewMode !== "deck" || aboutOpen) return;
+    const { clientX, clientY } = e;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    
+    // Normalized offset from -0.5 to 0.5 representing coordinates relative to center
+    const x = (clientX / width) - 0.5;
+    const y = (clientY / height) - 0.5;
+    setMousePos({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 });
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -160,13 +178,14 @@ function ShowcaseDeckPage() {
   const CardIcon = currentCard.illustrator;
   const NextIcon = nextCard.illustrator;
 
-  // Background color calculations (sweeping side bubbles)
   const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFD043";
   const bgColorPrev = DECK_CARDS[(activeIdx - 1 + DECK_CARDS.length) % DECK_CARDS.length].bgColor;
   const bgColorNext = DECK_CARDS[(activeIdx + 1) % DECK_CARDS.length].bgColor;
 
   return (
     <div 
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onWheel={handleWheel}
       style={{
         backgroundColor: activeBgColor,
@@ -175,19 +194,27 @@ function ShowcaseDeckPage() {
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
       
-      {/* Dynamic Background Circles (Signature Google Web Showcase side bubble curves) */}
+      {/* Dynamic Background Circles (Signature Google Web Showcase side bubble curves with cursor parallax shifts) */}
       <div 
-        className="absolute top-1/2 -translate-y-1/2 -left-[40vw] lg:-left-[30vw] w-[80vw] lg:w-[65vw] h-[80vw] lg:h-[65vw] rounded-full pointer-events-none z-0 hidden md:block"
+        className="absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0 hidden md:block"
         style={{
           backgroundColor: viewMode === "deck" ? bgColorPrev : "transparent",
-          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+          left: "-30vw",
+          width: "65vw",
+          height: "65vw",
+          transform: `translate(${mousePos.x * -40}px, calc(-50% + ${mousePos.y * -30}px))`,
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1)"
         }}
       />
       <div 
-        className="absolute top-1/2 -translate-y-1/2 -right-[40vw] lg:-right-[30vw] w-[80vw] lg:w-[65vw] h-[80vw] lg:h-[65vw] rounded-full pointer-events-none z-0 hidden md:block"
+        className="absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0 hidden md:block"
         style={{
           backgroundColor: viewMode === "deck" ? bgColorNext : "transparent",
-          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+          right: "-30vw",
+          width: "65vw",
+          height: "65vw",
+          transform: `translate(${mousePos.x * -40}px, calc(-50% + ${mousePos.y * -30}px))`,
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1)"
         }}
       />
 
@@ -233,8 +260,14 @@ function ShowcaseDeckPage() {
               </button>
             </div>
 
-            {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[320px] sm:w-[420px] md:w-[480px] lg:w-[520px] h-[420px] sm:h-[500px] md:h-[540px] flex items-center justify-center z-10">
+            {/* 3D Stacked Cards Deck with responsive cursor translation and rotation sweeps */}
+            <div 
+              className="relative w-[320px] sm:w-[420px] md:w-[480px] lg:w-[520px] h-[420px] sm:h-[500px] md:h-[540px] flex items-center justify-center z-10"
+              style={{
+                transform: `perspective(1200px) rotateY(${mousePos.x * 30}deg) rotateX(${-mousePos.y * 20}deg) translateX(${mousePos.x * 70}px) translateY(${mousePos.y * 30}px)`,
+                transition: "transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1)"
+              }}
+            >
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
