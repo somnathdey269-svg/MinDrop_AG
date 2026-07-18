@@ -64,3 +64,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Great the same is working for 1st alarm But snooze has stopped now...i want same rule which you rectified for 1st time alarm is applicable to snooze also. Ensure snooze should work when user set for it'
 - **2026-07-17 20:25:06** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'ensure a notification with Stop/Snooze action buttons is shown when a snoozed alarm triggers, identical to the first alarm ring'
+- **2026-07-19 01:26:07** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Revamp the public marketing website to Path A (Modern Product Landing Page) by making src/routes/index.tsx, notify-feature.tsx, places-feature.tsx, pricing.tsx static React pages instead of database CMS pages. Add a new static route later-feature.tsx for Later module details, and update links in MarketingLayout.tsx. Make the content crisp, modern, explaining later alarms, notify rule filters, places geofencing, memory recall, and weekly summaries. Ensure fully responsive layout for all screens.'
