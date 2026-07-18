@@ -1,40 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { StoryLayout } from "@/components/marketing/story/StoryLayout";
-import { CMSChapter } from "@/components/marketing/story/CMSChapter";
-import { getPublishedChapterBySlug } from "@/lib/marketing/story.functions";
-import { assetUrl } from "@/lib/marketing/assetRegistry";
-
-const SITE = "https://getmindrop.lovable.app";
-export const SLUG = "why" as const;
-
-const chapterQuery = () => ({
-  queryKey: ["story-chapter", SLUG] as const,
-  queryFn: async () => (await getPublishedChapterBySlug({ data: { slug: SLUG } })).chapter,
-});
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/why-mindrop")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(chapterQuery()),
-  head: ({ loaderData }) => {
-    const c = loaderData;
-    const title = c ? `Ch. 0${c.number} · ${c.title} — MinDrop` : "MinDrop";
-    const desc = c?.teaser || "";
-    const heroUrl = assetUrl(c?.hero_key);
-    const ogImage = heroUrl ? SITE + heroUrl : undefined;
-    return {
-      meta: [
-        { title },
-        { name: "description", content: desc },
-        { property: "og:title", content: title },
-        { property: "og:description", content: desc },
-        { property: "og:url", content: SITE + "/why-mindrop" },
-        ...(ogImage ? [{ property: "og:image", content: ogImage }, { name: "twitter:image", content: ogImage }] : []),
-      ],
-      links: [{ rel: "canonical", href: SITE + "/why-mindrop" }],
-    };
+  beforeLoad: () => {
+    throw redirect({ to: "/" });
   },
-  component: () => (
-    <StoryLayout>
-      <CMSChapter slug={SLUG} />
-    </StoryLayout>
-  ),
 });
