@@ -654,7 +654,7 @@ function ShowcaseDeckPage() {
 
           </div>
         ) : (
-          /* GRID VIEW MODE CATALOG (No-flex margins to resolve layout overlaps) */
+          /* GRID VIEW MODE CATALOG (Live illustrations integrated inside h-[350px] catalog cards) */
           <div className="w-full max-w-6xl mx-auto px-4 z-10">
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
@@ -668,19 +668,28 @@ function ShowcaseDeckPage() {
                     key={card.id}
                     to={card.to}
                     search={{ from: "grid" }}
-                    className={`rounded-[2rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between h-[280px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between h-[340px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
                   >
-                    <div>
+                    <div className="shrink-0">
                       <span className="text-[9px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full">
                         {card.tag}
                       </span>
-                      <h3 className="text-2xl font-black text-ink mt-6 leading-tight tracking-tight">{card.title}</h3>
+                      <h3 className="text-xl font-black text-ink mt-2.5 leading-tight tracking-tight">{card.title}</h3>
+                    </div>
+
+                    {/* Centered Live Vector Illustration scaled to 88% */}
+                    <div className="flex-1 my-3 flex items-center justify-center overflow-hidden w-full max-h-[110px] scale-[0.88] pointer-events-none">
+                      {card.id === "later" && <LaterAlarmIllustration />}
+                      {card.id === "notify" && <SmartFiltersIllustration />}
+                      {card.id === "places" && <PlacesMappingIllustration />}
+                      {card.id === "pricing" && <PricingTierIllustration />}
+                      {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
                     
-                    <div className="flex justify-between items-end pt-4">
+                    <div className="flex justify-between items-end pt-2 shrink-0">
                       <span className="text-[9px] font-black uppercase text-ink/40 tracking-wider">Open card</span>
-                      <span className="inline-grid place-items-center size-12 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        <Icon className="size-6 text-ink" />
+                      <span className="inline-grid place-items-center size-10 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        <Icon className="size-5 text-ink" />
                       </span>
                     </div>
                   </Link>
