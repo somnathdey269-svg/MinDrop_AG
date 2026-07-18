@@ -26,6 +26,7 @@ interface ShowcaseCard {
   title: string;
   description: string;
   bgClass: string;
+  bgColor: string;
   tag: string;
   illustrator: any;
   to: string;
@@ -38,6 +39,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     title: "Ring looping alarms for tasks.",
     description: "MinDrop Later alarms ring continuously like a phone call until checked, surviving power restarts.",
     bgClass: "bg-[#E2F5EC] border-[#10B981]",
+    bgColor: "#E2F5EC",
     tag: "⏰ Later alarm",
     illustrator: AlarmClock,
     to: "/later-feature"
@@ -48,6 +50,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     title: "Filter messy pings into alarms.",
     description: "Build local rules matching Slack boss alerts or UPI receipts to trigger immediate loop rings.",
     bgClass: "bg-[#FFFBEB] border-[#F59E0B]",
+    bgColor: "#FFFBEB",
     tag: "🔔 Smart filters",
     illustrator: BellRing,
     to: "/notify-feature"
@@ -58,6 +61,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     title: "Trigger reminders near locations.",
     description: "Define coordinates and trigger active checklists exactly when stepping inside the perimeter.",
     bgClass: "bg-[#F5F3FF] border-[#8B5CF6]",
+    bgColor: "#F5F3FF",
     tag: "📍 Places mapping",
     illustrator: Navigation,
     to: "/places-feature"
@@ -68,6 +72,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     title: "Keep it free, or unlock limits.",
     description: "Start free with up to 5 concurrent active drops, or support the project for unlimited storage.",
     bgClass: "bg-[#FDF2F7] border-[#EC4899]",
+    bgColor: "#FDF2F7",
     tag: "💎 Affordable pricing",
     illustrator: Sparkles,
     to: "/pricing"
@@ -78,6 +83,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     title: "Get answers to key questions.",
     description: "Read details about SQLite storage databases, permission listeners, and native background sweeps.",
     bgClass: "bg-[#F0FDF4] border-[#22C55E]",
+    bgColor: "#F0FDF4",
     tag: "❔ FAQ Help",
     illustrator: ShieldCheck,
     to: "/faq"
@@ -91,10 +97,8 @@ function ShowcaseDeckPage() {
   const [autoPlay, setAutoPlay] = useState(false);
   const [viewMode, setViewMode] = useState<"deck" | "grid">("deck");
   
-  // Ref to prevent scrolling too quickly (cooldown)
   const scrollCooldown = useRef(false);
 
-  // Sync viewMode from location hash on load
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.location.hash === "#grid") {
@@ -105,7 +109,6 @@ function ShowcaseDeckPage() {
     }
   }, []);
 
-  // Update hash when viewMode changes
   const handleToggleView = (mode: "deck" | "grid") => {
     setViewMode(mode);
     if (typeof window !== "undefined") {
@@ -113,30 +116,24 @@ function ShowcaseDeckPage() {
     }
   };
 
-  // Mouse wheel scroll event listener to change slides
   const handleWheel = (e: React.WheelEvent) => {
     if (viewMode !== "deck" || aboutOpen) return;
-    
-    // Check threshold for delta
     if (Math.abs(e.deltaY) < 15 && Math.abs(e.deltaX) < 15) return;
 
     if (scrollCooldown.current) return;
     scrollCooldown.current = true;
 
     if (e.deltaY > 0 || e.deltaX > 0) {
-      // Scroll down or right -> Next Card
       setActiveIdx((prev) => (prev + 1) % DECK_CARDS.length);
     } else {
-      // Scroll up or left -> Prev Card
       setActiveIdx((prev) => (prev - 1 + DECK_CARDS.length) % DECK_CARDS.length);
     }
 
     setTimeout(() => {
       scrollCooldown.current = false;
-    }, 8500); // 850ms transition cooldown
+    }, 850);
   };
 
-  // Auto-play cycling effect if toggled
   useEffect(() => {
     if (!autoPlay || viewMode !== "deck") return;
     const t = setInterval(() => {
@@ -163,10 +160,17 @@ function ShowcaseDeckPage() {
   const CardIcon = currentCard.illustrator;
   const NextIcon = nextCard.illustrator;
 
+  // Determine current viewport background color dynamically
+  const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFD043";
+
   return (
     <div 
       onWheel={handleWheel}
-      className="fixed inset-0 bg-canvas text-ink font-sans flex flex-col justify-between p-6 select-none overflow-hidden h-[100dvh] w-screen"
+      style={{
+        backgroundColor: activeBgColor,
+        transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+      }}
+      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
       
       {/* 1. Header Corners */}
@@ -180,7 +184,7 @@ function ShowcaseDeckPage() {
         
         <div className="flex items-center gap-2">
           <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
-          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink">MinDrop — The Web Can Do What!?</span>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink">MinDrop — A Kind Second Brain</span>
         </div>
 
         <Link
@@ -192,7 +196,7 @@ function ShowcaseDeckPage() {
       </header>
 
       {/* 2. Main content area depending on mode */}
-      <div className="flex-1 flex items-center justify-center relative w-full my-4 overflow-y-auto no-scrollbar">
+      <div className="flex-1 flex items-center justify-center relative w-full my-2 overflow-y-auto no-scrollbar">
         
         {viewMode === "deck" ? (
           /* DECK VIEW MODE */
@@ -205,63 +209,63 @@ function ShowcaseDeckPage() {
                 className="flex flex-col items-start gap-1 group text-left cursor-pointer"
               >
                 <span className="text-[10px] uppercase font-bold tracking-widest text-ink/40">Cycle Deck</span>
-                <span className="text-xl md:text-2xl font-black text-ink border-b-3 border-ink group-hover:text-[#FF671F] group-hover:border-[#FF671F] transition-colors pb-0.5">
+                <span className="text-xl md:text-2xl lg:text-3xl font-black text-ink border-b-3 border-ink group-hover:text-[#FF671F] group-hover:border-[#FF671F] transition-colors pb-0.5">
                   Next card
                 </span>
               </button>
             </div>
 
-            {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[300px] sm:w-[360px] md:w-[400px] h-[400px] sm:h-[460px] flex items-center justify-center z-10">
+            {/* 3D Stacked Cards Deck (Enlarged and Spacing Tightened) */}
+            <div className="relative w-[320px] sm:w-[420px] md:w-[480px] lg:w-[520px] h-[420px] sm:h-[500px] md:h-[540px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
                   key={`next-${nextCard.id}`}
                   initial={{ scale: 0.9, rotate: 6, opacity: 0.8 }}
-                  animate={{ scale: 0.94, rotate: 8, opacity: 0.9 }}
+                  animate={{ scale: 0.95, rotate: 8, opacity: 0.9 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-8 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-8 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-2xl font-black text-ink mt-8 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-3xl sm:text-4xl font-black text-ink mt-8 leading-tight">{nextCard.title}</h3>
                   </div>
                   <div className="flex justify-end pt-4">
-                    <span className="inline-grid place-items-center size-12 rounded-2xl bg-canvas border-2 border-ink">
-                      <NextIcon className="size-6 text-ink/40" />
+                    <span className="inline-grid place-items-center size-14 rounded-2xl bg-canvas border-2 border-ink">
+                      <NextIcon className="size-7 text-ink/40" />
                     </span>
                   </div>
                 </motion.div>
 
-                {/* Front Active Card */}
+                {/* Front Active Card (Adjusted typography scales to fit perfectly with no empty space) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
-                  initial={{ x: 200, rotate: -15, scale: 0.85, opacity: 0 }}
+                  initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
                   animate={{ x: 0, rotate: -2, scale: 1, opacity: 1 }}
-                  exit={{ x: -350, rotate: -18, opacity: 0 }}
+                  exit={{ x: -400, rotate: -18, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 14 }}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-8 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${currentCard.bgClass}`}
                 >
                   <div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-ink/60 bg-white/40 border border-ink/10 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-ink/60 bg-white/50 border border-ink/10 px-3 py-1 rounded-full">
                         {currentCard.tag}
                       </span>
                     </div>
 
-                    <h3 className="text-3xl font-black text-ink mt-8 leading-tight">
+                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink mt-8 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-xs text-ink/75 font-semibold mt-4 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-ink/80 font-bold mt-6 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
                   <div className="flex justify-between items-end pt-6">
-                    <span className="text-[9px] uppercase font-black text-ink/40">MinDrop Brain</span>
-                    <span className="inline-grid place-items-center size-14 rounded-2xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                      <CardIcon className="size-7 text-ink" />
+                    <span className="text-[10px] uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
+                    <span className="inline-grid place-items-center size-16 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                      <CardIcon className="size-8 text-ink" />
                     </span>
                   </div>
                 </motion.div>
@@ -275,7 +279,7 @@ function ShowcaseDeckPage() {
                 className="flex flex-col items-end gap-1 group text-right cursor-pointer"
               >
                 <span className="text-[10px] uppercase font-bold tracking-widest text-ink/40">Read specs</span>
-                <span className="text-xl md:text-2xl font-black text-ink border-b-3 border-ink group-hover:text-[#FF671F] group-hover:border-[#FF671F] transition-colors pb-0.5">
+                <span className="text-xl md:text-2xl lg:text-3xl font-black text-ink border-b-3 border-ink group-hover:text-[#FF671F] group-hover:border-[#FF671F] transition-colors pb-0.5">
                   Show me!
                 </span>
               </button>
@@ -283,7 +287,7 @@ function ShowcaseDeckPage() {
 
           </div>
         ) : (
-          /* GRID VIEW MODE CATALOG */
+          /* GRID VIEW MODE CATALOG (Multi-color cards displaying brand colors) */
           <div className="w-full max-w-6xl mx-auto px-4 py-8 z-10">
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
@@ -297,19 +301,19 @@ function ShowcaseDeckPage() {
                     key={card.id}
                     to={card.to}
                     search={{ from: "grid" }}
-                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between h-[250px] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between h-[280px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
                   >
                     <div>
-                      <span className="text-[9px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2 py-0.5 rounded-full">
+                      <span className="text-[9px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full">
                         {card.tag}
                       </span>
-                      <h3 className="text-xl font-black text-ink mt-6 leading-tight">{card.title}</h3>
+                      <h3 className="text-2xl font-black text-ink mt-6 leading-tight tracking-tight">{card.title}</h3>
                     </div>
                     
                     <div className="flex justify-between items-end pt-4">
-                      <span className="text-[9px] font-black uppercase text-ink/40">Open card</span>
-                      <span className="inline-grid place-items-center size-10 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        <Icon className="size-5.5 text-ink" />
+                      <span className="text-[9px] font-black uppercase text-ink/40 tracking-wider">Open card</span>
+                      <span className="inline-grid place-items-center size-12 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        <Icon className="size-6 text-ink" />
                       </span>
                     </div>
                   </Link>
@@ -324,7 +328,7 @@ function ShowcaseDeckPage() {
       {/* 3. Footer Corners */}
       <footer className="flex justify-between items-center w-full z-30 shrink-0">
         <div className="text-xs font-black uppercase tracking-wider text-ink/50">
-          Chrome for Developers (Inspired)
+          MinDrop for Mobile (Offline)
         </div>
 
         {/* Dynamic Pill Switcher Grid/Deck Controls */}

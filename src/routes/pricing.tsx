@@ -39,14 +39,13 @@ function PricingDetailView() {
         </Link>
       </header>
 
-      {/* Main Centered Showcase Card */}
-      <main className="flex-1 flex items-center justify-center relative w-full my-4">
+      {/* Main Centered Showcase Card (Optimized constraints to remove empty space) */}
+      <main className="flex-1 flex items-center justify-center relative w-full my-2">
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 15 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[80vh] overflow-y-auto"
+          className="w-full max-w-6xl bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[85vh] min-h-[70vh] overflow-y-auto"
         >
-          {/* Close Button X linking back to homepage */}
           <Link
             to="/"
             hash={from === "grid" ? "grid" : undefined}
@@ -56,38 +55,38 @@ function PricingDetailView() {
             <X className="size-5 text-ink" />
           </Link>
 
-          {/* Left Side Content Column */}
-          <div className="md:col-span-7 text-left">
+          {/* Left Side Content Column (Enlarged text and minimized padding gutters) */}
+          <div className="md:col-span-8 text-left pr-2 w-full">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FDF2F7] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#EC4899] mb-6">
               💎 Pricing Specs
             </span>
 
-            <h1 className="text-4xl sm:text-5xl font-black text-ink leading-tight tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tight">
               Keep it free, or unlock limits.
             </h1>
 
             <div className="mt-6">
               <p className="text-[#EA3323] text-xs font-black uppercase tracking-widest">TL;DR</p>
-              <p className="text-sm font-semibold text-ink/75 mt-1 leading-relaxed">
+              <p className="text-sm sm:text-base font-bold text-ink/75 mt-2 leading-relaxed">
                 Start with a powerful Free plan that covers up to 5 concurrent active alarms. Support the development with a one-time lifetime Premium purchase to unlock unlimited storage.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-8 pt-6 border-t-2 border-dashed border-ink/10">
-              <div className="border-2 border-ink rounded-2xl p-4 bg-canvas">
-                <p className="text-[10px] uppercase font-bold text-ink/50">Free Plan</p>
-                <p className="text-xl font-black text-ink mt-1">₹0 / Free</p>
-                <ul className="text-[11px] text-ink/70 font-semibold mt-3 space-y-1">
+            <div className="grid grid-cols-2 gap-6 mt-8 pt-6 border-t-2 border-dashed border-ink/10">
+              <div className="border-2 border-ink rounded-2xl p-6 bg-canvas shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                <p className="text-[10px] uppercase font-bold text-ink/50 tracking-wider">Free Plan</p>
+                <p className="text-2xl font-black text-ink mt-1">₹0 / Free</p>
+                <ul className="text-xs text-ink/75 font-bold mt-4 space-y-1.5">
                   <li>• 5 Active drops</li>
                   <li>• Voice & photo alarms</li>
                   <li>• Notification listeners</li>
                   <li>• SQLite database</li>
                 </ul>
               </div>
-              <div className="border-2 border-ink rounded-2xl p-4 bg-[#FDF2F7]">
-                <p className="text-[10px] uppercase font-bold text-[#EC4899]">Premium</p>
-                <p className="text-xl font-black text-ink mt-1">Lifetime</p>
-                <ul className="text-[11px] text-ink/70 font-semibold mt-3 space-y-1">
+              <div className="border-2 border-ink rounded-2xl p-6 bg-[#FDF2F7] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                <p className="text-[10px] uppercase font-bold text-[#EC4899] tracking-wider">Premium</p>
+                <p className="text-2xl font-black text-ink mt-1">Lifetime</p>
+                <ul className="text-xs text-ink/75 font-bold mt-4 space-y-1.5">
                   <li>• Unlimited active drops</li>
                   <li>• Google Drive Sync</li>
                   <li>• Custom theme packs</li>
@@ -98,13 +97,13 @@ function PricingDetailView() {
           </div>
 
           {/* Right Side Graphics Column */}
-          <div className="md:col-span-5 flex justify-center items-center">
+          <div className="md:col-span-4 flex justify-center items-center">
             <motion.div
               animate={{ rotate: [-8, 8, -8], y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="size-48 md:size-60 bg-[#FDF2F7] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
+              className="size-48 md:size-64 bg-[#FDF2F7] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
             >
-              <Sparkles className="size-20 md:size-24 text-ink stroke-[2.5px]" />
+              <Sparkles className="size-24 md:size-28 text-ink stroke-[2.5px]" />
             </motion.div>
           </div>
         </motion.div>

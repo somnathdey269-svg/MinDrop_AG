@@ -64,14 +64,13 @@ function FaqDetailView() {
         </Link>
       </header>
 
-      {/* Main Centered Showcase Card */}
-      <main className="flex-1 flex items-center justify-center relative w-full my-4">
+      {/* Main Centered Showcase Card (Optimized constraints to remove empty space) */}
+      <main className="flex-1 flex items-center justify-center relative w-full my-2">
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 15 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[80vh] overflow-y-auto"
+          className="w-full max-w-6xl bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[85vh] min-h-[70vh] overflow-y-auto"
         >
-          {/* Close Button X linking back to homepage */}
           <Link
             to="/"
             hash={from === "grid" ? "grid" : undefined}
@@ -81,31 +80,31 @@ function FaqDetailView() {
             <X className="size-5 text-ink" />
           </Link>
 
-          {/* Left Side Content Column */}
-          <div className="md:col-span-7 text-left w-full">
+          {/* Left Side Content Column (Enlarged text and minimized padding gutters) */}
+          <div className="md:col-span-8 text-left pr-2 w-full">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#F0FDF4] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#22C55E] mb-6">
               🛡️ Help Center
             </span>
 
-            <h1 className="text-4xl sm:text-5xl font-black text-ink leading-tight tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tight">
               Get answers to key questions.
             </h1>
 
-            {/* Accordion panel inside detailed view */}
-            <div className="mt-8 space-y-3.5 max-h-[45vh] overflow-y-auto pr-2 no-scrollbar">
+            {/* Accordion panel inside detailed view (Expanded height bounds) */}
+            <div className="mt-8 space-y-3.5 max-h-[50vh] overflow-y-auto pr-2 no-scrollbar">
               {faqData.map((faq, index) => {
                 const isOpen = activeFaq === index;
                 return (
                   <div key={index} className="bg-canvas rounded-2xl border-2 border-ink overflow-hidden transition-all duration-200">
                     <button
                       onClick={() => setActiveFaq(isOpen ? null : index)}
-                      className="w-full flex items-center justify-between p-4 text-left font-black text-ink cursor-pointer hover:bg-ink/[0.01] text-xs md:text-sm"
+                      className="w-full flex items-center justify-between p-4.5 text-left font-black text-ink cursor-pointer hover:bg-ink/[0.02] text-xs sm:text-sm md:text-base"
                     >
                       <span>{faq.q}</span>
                       <ChevronDown className={`size-4 text-ink/50 transition-transform duration-200 shrink-0 ml-4 ${isOpen ? "rotate-180" : ""}`} />
                     </button>
                     {isOpen && (
-                      <div className="px-4 pb-4 pt-1 border-t-2 border-ink text-ink/75 t-body-sm leading-relaxed text-xs font-semibold">
+                      <div className="px-5 pb-5 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm font-semibold">
                         {faq.a}
                       </div>
                     )}
@@ -116,13 +115,13 @@ function FaqDetailView() {
           </div>
 
           {/* Right Side Graphics Column */}
-          <div className="md:col-span-5 flex justify-center items-center">
+          <div className="md:col-span-4 flex justify-center items-center">
             <motion.div
               animate={{ rotateZ: [-5, 5, -5], y: [0, -8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="size-48 md:size-60 bg-[#F0FDF4] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
+              className="size-48 md:size-64 bg-[#F0FDF4] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
             >
-              <ShieldCheck className="size-20 md:size-24 text-ink stroke-[2.5px]" />
+              <ShieldCheck className="size-24 md:size-28 text-ink stroke-[2.5px]" />
             </motion.div>
           </div>
         </motion.div>
