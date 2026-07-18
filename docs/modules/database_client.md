@@ -26,3 +26,5 @@ This module handles connections to Supabase, client initialization, and global q
   * **Change**: Executed requirements: 'Commit final safe index route client redirect logic with hydration mismatch prevention'
 - **2026-07-14 14:56:38** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Removed cloud memory database sync mirroring.'
+- **2026-07-19 00:45:29** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Redesign onboarding splash screen in src/routes/splash.tsx with crisp, engaging copy and premium framer-motion micro-animations for all slide visuals (logo, later, notify, places, privacy, quote) and sequential text entrance animations.'

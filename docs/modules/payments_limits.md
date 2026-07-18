@@ -18,3 +18,5 @@ Manages pricing structures, active user limits, stripe/payment gateways, and lim
   * **Change**: Initial documentation setup.
 - **2026-07-11 22:20:33** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Configure the database connection keys and check the payment subscriptions'
+- **2026-07-19 00:45:29** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Redesign onboarding splash screen in src/routes/splash.tsx with crisp, engaging copy and premium framer-motion micro-animations for all slide visuals (logo, later, notify, places, privacy, quote) and sequential text entrance animations.'

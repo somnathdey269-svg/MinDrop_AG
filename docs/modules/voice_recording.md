@@ -14,3 +14,5 @@ Handles voice and audio recordings via native plugins.
 ## 4. Version & Modification Ledger
 - **2026-07-11 22:15:00** | System Initializer
   * **Change**: Initial documentation setup.
+- **2026-07-19 00:45:29** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Redesign onboarding splash screen in src/routes/splash.tsx with crisp, engaging copy and premium framer-motion micro-animations for all slide visuals (logo, later, notify, places, privacy, quote) and sequential text entrance animations.'
