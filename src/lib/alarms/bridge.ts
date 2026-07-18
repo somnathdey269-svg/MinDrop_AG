@@ -62,6 +62,7 @@ interface AlarmsBridgePlugin {
   getStoppedAlarms(): Promise<{ stoppedIds: string[]; snoozed?: { id: string; minutes: number }[] }>;
   clearStoppedAlarms(): Promise<void>;
   setSnoozeIntervals(opts: { intervals: string[] }): Promise<void>;
+  setSnoozeEnabled(opts: { enabled: boolean }): Promise<void>;
   addListener(
     event: "alarmFired",
     cb: (ev: { id: string; extra?: string }) => void,
@@ -171,6 +172,10 @@ export const AlarmsBridge = {
 
   async setSnoozeIntervals(intervals: string[]) {
     if (hasPlugin()) { try { await native.setSnoozeIntervals({ intervals }); } catch {} }
+  },
+
+  async setSnoozeEnabled(enabled: boolean) {
+    if (hasPlugin()) { try { await native.setSnoozeEnabled({ enabled }); } catch {} }
   },
 
   onFired(cb: (ev: { id: string; extra?: string }) => void): () => void {

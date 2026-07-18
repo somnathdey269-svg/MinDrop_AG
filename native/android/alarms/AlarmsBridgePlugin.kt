@@ -262,6 +262,24 @@ class AlarmsBridgePlugin : Plugin() {
     }
 
     @PluginMethod
+    fun setSnoozeEnabled(call: PluginCall) {
+        val enabled = call.getBoolean("enabled") ?: true
+        val prefs = context.getSharedPreferences("mindrop_alarms_prefs", android.content.Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("snooze_enabled", enabled).apply()
+        call.resolve()
+    }
+
+    @PluginMethod
+    fun setSnoozeIntervals(call: PluginCall) {
+        val intervals = call.getArray("intervals")
+        if (intervals != null) {
+            val prefs = context.getSharedPreferences("mindrop_alarms_prefs", android.content.Context.MODE_PRIVATE)
+            prefs.edit().putString("snooze_intervals", intervals.toString()).apply()
+        }
+        call.resolve()
+    }
+
+    @PluginMethod
     fun getPending(call: PluginCall) {
         val arr = com.getcapacitor.JSArray()
         AlarmStore.readAll(context).forEach {

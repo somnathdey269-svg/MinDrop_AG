@@ -11,6 +11,7 @@ import { AlarmsBridge } from "@/lib/alarms/bridge";
 export function AlarmSheet() {
   const [queue, setQueue] = useState<Memory[]>([]);
   const [snoozeOpen, setSnoozeOpen] = useState(false);
+  const [snoozeEnabled, setSnoozeEnabled] = useState(true);
   const current = queue[0];
   const isLoud = current?.notify === "alarm";
   const { tier, limits } = useTier();
@@ -26,6 +27,10 @@ export function AlarmSheet() {
 
     // 2. Check if an alarm is already ringing on app launch/resume
     const checkActiveAlarm = () => {
+      try {
+        const savedEnabled = window.localStorage.getItem("mindrop.alarm.snoozeEnabled");
+        setSnoozeEnabled(savedEnabled !== "0");
+      } catch {}
       AlarmsBridge.getActiveAlarm()
         .then((active) => {
           if (active && active.id) {
@@ -136,17 +141,19 @@ export function AlarmSheet() {
               {current.date && (
                 <p className="t-meta text-ink/70 mb-6">{current.date}</p>
               )}
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => setSnoozeOpen(true)}
-                  className="t-button bg-canvas border border-ink/15 text-ink py-3.5 rounded-2xl inline-flex items-center justify-center gap-2 active:bg-ink/[0.04]"
-                  aria-label="Snooze alarm"
-                >
-                  <Clock className="size-4" /> Snooze
-                </button>
+              <div className={snoozeEnabled ? "grid grid-cols-2 gap-2" : "flex w-full"}>
+                {snoozeEnabled && (
+                  <button
+                    onClick={() => setSnoozeOpen(true)}
+                    className="t-button bg-canvas border border-ink/15 text-ink py-3.5 rounded-2xl inline-flex items-center justify-center gap-2 active:bg-ink/[0.04]"
+                    aria-label="Snooze alarm"
+                  >
+                    <Clock className="size-4" /> Snooze
+                  </button>
+                )}
                 <button
                   onClick={handleStop}
-                  className="t-button bg-ink text-canvas py-3.5 rounded-2xl inline-flex items-center justify-center gap-2"
+                  className="t-button bg-ink text-canvas py-3.5 rounded-2xl inline-flex items-center justify-center gap-2 flex-1"
                   aria-label="Stop alarm"
                 >
                   <X className="size-4" /> Stop

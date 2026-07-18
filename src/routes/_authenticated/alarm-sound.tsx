@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/alarm-sound")({
 function AlarmSoundSettings() {
   const [tone, setTone] = useState<ToneId>("classic");
   const [vibrate, setVibrate] = useState(true);
+  const [snoozeEnabled, setSnoozeEnabled] = useState(true);
   const [snoozeIntervals, setSnoozeIntervals] = useState<string[]>(["5", "15", "30"]);
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -31,6 +32,9 @@ function AlarmSoundSettings() {
     setTone(getDefaultTone());
     setVibrate(getVibrationEnabled());
     try {
+      const savedEnabled = window.localStorage.getItem("mindrop.alarm.snoozeEnabled");
+      setSnoozeEnabled(savedEnabled !== "0");
+
       const saved = window.localStorage.getItem("mindrop.alarm.snoozeIntervals");
       if (saved) {
         setSnoozeIntervals(JSON.parse(saved));
@@ -46,6 +50,12 @@ function AlarmSoundSettings() {
     const next = !vibrate;
     setVibrate(next);
     setVibrationEnabled(next);
+  }
+  function onToggleSnoozeEnabled() {
+    const next = !snoozeEnabled;
+    setSnoozeEnabled(next);
+    window.localStorage.setItem("mindrop.alarm.snoozeEnabled", next ? "1" : "0");
+    AlarmsBridge.setSnoozeEnabled(next).catch(() => {});
   }
 
   function handleToggleInterval(id: string) {
@@ -123,34 +133,37 @@ function AlarmSoundSettings() {
                   <span className="block t-body text-ink font-semibold">Active Snooze Options</span>
                   <span className="block t-meta text-ink/55">Select options to show when your alarm rings</span>
                 </div>
+                <Switch checked={snoozeEnabled} onCheckedChange={onToggleSnoozeEnabled} style={{ "--switch-accent": "color-mix(in oklab, #06038D 65%, #fff)" } as React.CSSProperties} />
               </div>
 
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {[
-                  { id: "5", label: "5 Min" },
-                  { id: "15", label: "15 Min" },
-                  { id: "30", label: "30 Min" },
-                  { id: "60", label: "1 Hour" },
-                  { id: "180", label: "3 Hours" },
-                  { id: "custom", label: "Custom…" },
-                ].map((opt) => {
-                  const isActive = snoozeIntervals.includes(opt.id);
-                  return (
-                    <button
-                      key={opt.id}
-                      onClick={() => handleToggleInterval(opt.id)}
-                      style={{
-                        backgroundColor: isActive ? "color-mix(in oklab, #06038D 12%, #fff)" : "rgba(0,0,0,0.03)",
-                        color: isActive ? "#06038D" : "var(--ink)",
-                        borderColor: isActive ? "rgba(6, 3, 141, 0.15)" : "rgba(0,0,0,0.08)"
-                      }}
-                      className="px-2 py-3.5 rounded-2xl border text-center t-meta font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-sm"
-                    >
-                      {opt.label}
-                    </button>
-                  );
-                })}
-              </div>
+              {snoozeEnabled && (
+                <div className="grid grid-cols-3 gap-2 mt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                  {[
+                    { id: "5", label: "5 Min" },
+                    { id: "15", label: "15 Min" },
+                    { id: "30", label: "30 Min" },
+                    { id: "60", label: "1 Hour" },
+                    { id: "180", label: "3 Hours" },
+                    { id: "custom", label: "Custom…" },
+                  ].map((opt) => {
+                    const isActive = snoozeIntervals.includes(opt.id);
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => handleToggleInterval(opt.id)}
+                        style={{
+                          backgroundColor: isActive ? "color-mix(in oklab, #06038D 12%, #fff)" : "rgba(0,0,0,0.03)",
+                          color: isActive ? "#06038D" : "var(--ink)",
+                          borderColor: isActive ? "rgba(6, 3, 141, 0.15)" : "rgba(0,0,0,0.08)"
+                        }}
+                        className="px-2 py-3.5 rounded-2xl border text-center t-meta font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-sm"
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </section>
 

@@ -31,6 +31,10 @@ class AlarmReceiver : BroadcastReceiver() {
                 stopAlarm(context, id, removeEntry = true)
                 return
             }
+            ACTION_SNOOZE -> {
+                val mins = intent.getIntExtra("minutes", 5)
+                return snoozeAndStop(context, intent, mins)
+            }
             ACTION_SNOOZE_5 -> return snoozeAndStop(context, intent, 5)
             ACTION_SNOOZE_30 -> return snoozeAndStop(context, intent, 30)
             ACTION_SNOOZE_60 -> return snoozeAndStop(context, intent, 60)
@@ -178,6 +182,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_STOP      = "app.getmindrop.alarms.STOP"
+        const val ACTION_SNOOZE    = "app.getmindrop.alarms.SNOOZE"
         const val ACTION_SNOOZE_5  = "app.getmindrop.alarms.SNOOZE_5"
         const val ACTION_SNOOZE_30 = "app.getmindrop.alarms.SNOOZE_30"
         const val ACTION_SNOOZE_60 = "app.getmindrop.alarms.SNOOZE_60"

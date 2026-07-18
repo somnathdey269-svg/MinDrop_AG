@@ -20,6 +20,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.core.app.NotificationCompat
+import org.json.JSONArray
 
 /**
  * AlarmRingService — foreground service that plays the alarm tone on the ALARM
@@ -116,8 +117,43 @@ class AlarmRingService : Service() {
             builder.setCategory(NotificationCompat.CATEGORY_ALARM)
             contentIntent?.let { builder.setFullScreenIntent(it, true) }
             builder.addAction(0, "Stop", actionPI(this, alarmId, AlarmReceiver.ACTION_STOP))
-            builder.addAction(0, "5m",   actionPI(this, alarmId, AlarmReceiver.ACTION_SNOOZE_5))
-            builder.addAction(0, "30m",  actionPI(this, alarmId, AlarmReceiver.ACTION_SNOOZE_30))
+
+            val prefs = getSharedPreferences("mindrop_alarms_prefs", Context.MODE_PRIVATE)
+            val snoozeEnabled = prefs.getBoolean("snooze_enabled", true)
+            if (snoozeEnabled) {
+                val savedJson = prefs.getString("snooze_intervals", null)
+                val intervals = ArrayList<Int>()
+                if (savedJson != null) {
+                    try {
+                        val arr = JSONArray(savedJson)
+                        for (i in 0 until arr.length()) {
+                            val v = arr.optString(i)
+                            if (v != "custom") {
+                                val mins = v.toIntOrNull()
+                                if (mins != null) {
+                                    intervals.add(mins)
+                                }
+                            }
+                        }
+                    } catch (e: Throwable) {
+                        intervals.add(5)
+                        intervals.add(30)
+                    }
+                } else {
+                    intervals.add(5)
+                    intervals.add(30)
+                }
+
+                intervals.take(2).forEach { mins ->
+                    val label = if (mins >= 60) {
+                        val hrs = mins / 60
+                        if (hrs == 1) "1h" else "${hrs}h"
+                    } else {
+                        "${mins}m"
+                    }
+                    builder.addAction(0, label, actionPI(this, alarmId, AlarmReceiver.ACTION_SNOOZE, mins))
+                }
+            }
         } else {
             builder.setPriority(NotificationCompat.PRIORITY_LOW)
         }
@@ -137,12 +173,15 @@ class AlarmRingService : Service() {
         }
     }
 
-    private fun actionPI(ctx: Context, id: String, action: String): PendingIntent {
+    private fun actionPI(ctx: Context, id: String, action: String, minutes: Int = 0): PendingIntent {
         val i = Intent(ctx, AlarmReceiver::class.java).apply {
             this.action = action
             putExtra("id", id)
+            if (minutes > 0) {
+                putExtra("minutes", minutes)
+            }
         }
-        val rc = (AlarmStore.requestCode(id) xor action.hashCode()) and 0x7fffffff
+        val rc = (AlarmStore.requestCode(id) xor action.hashCode() xor minutes) and 0x7fffffff
         return PendingIntent.getBroadcast(
             ctx, rc, i,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
