@@ -404,7 +404,7 @@ function ShowcaseDeckPage() {
 
   const handleShowMe = () => {
     const card = DECK_CARDS[activeIdx];
-    navigate({ to: card.to, search: { from: "deck" } });
+    navigate({ to: card.to, search: { from: "deck" }, viewTransition: true });
   };
 
   const currentCard = DECK_CARDS[activeIdx];
@@ -586,6 +586,7 @@ function ShowcaseDeckPage() {
                   exit={{ x: -400, rotate: -18, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
+                  style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
                   className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-5 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   <div className="shrink-0">
@@ -668,6 +669,8 @@ function ShowcaseDeckPage() {
                     key={card.id}
                     to={card.to}
                     search={{ from: "grid" }}
+                    viewTransition
+                    style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
                     className={`rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between h-[360px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
                   >
                     <div className="shrink-0 h-[110px] sm:h-[120px] flex flex-col justify-start">

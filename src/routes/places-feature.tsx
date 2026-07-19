@@ -33,6 +33,7 @@ function PlacesDetailView() {
         <Link
           to="/"
           hash={from === "grid" ? "grid" : undefined}
+          viewTransition
           className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
         >
           View Deck
@@ -44,11 +45,13 @@ function PlacesDetailView() {
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 15 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
+          style={{ viewTransitionName: 'card-places' } as React.CSSProperties}
           className="w-full max-w-6xl bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[85vh] min-h-[70vh] overflow-y-auto"
         >
           <Link
             to="/"
             hash={from === "grid" ? "grid" : undefined}
+            viewTransition
             className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
             aria-label="Close"
           >
