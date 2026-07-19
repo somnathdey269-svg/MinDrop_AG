@@ -59,7 +59,12 @@ function PlacesDetailView() {
           </Link>
 
           {/* Left Side Content Column (Enlarged text and minimized padding gutters) */}
-          <div className="md:col-span-8 text-left pr-2">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18, duration: 0.35, ease: "easeOut" }}
+            className="md:col-span-8 text-left pr-2"
+          >
             <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#F5F3FF] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#8B5CF6] mb-6">
               📍 Places Mapping
             </span>
@@ -93,10 +98,15 @@ function PlacesDetailView() {
                 <span>On-device SQLite storage ensures location histories remain confidential.</span>
               </li>
             </ul>
-          </div>
+          </motion.div>
 
           {/* Right Side Graphics Column */}
-          <div className="md:col-span-4 flex justify-center items-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.14, duration: 0.35, ease: "easeOut" }}
+            className="md:col-span-4 flex justify-center items-center"
+          >
             <motion.div
               animate={{ y: [0, -12, 0], scale: [1, 1.03, 1] }}
               transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
@@ -104,7 +114,7 @@ function PlacesDetailView() {
             >
               <Navigation className="size-24 md:size-28 text-ink stroke-[2.5px]" />
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </main>
 

@@ -84,7 +84,12 @@ function FaqDetailView() {
           </Link>
 
           {/* Left Side Content Column (Enlarged text and minimized padding gutters) */}
-          <div className="md:col-span-8 text-left pr-2 w-full">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18, duration: 0.35, ease: "easeOut" }}
+            className="md:col-span-8 text-left pr-2 w-full"
+          >
             <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#F0FDF4] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#22C55E] mb-6">
               🛡️ Help Center
             </span>
@@ -115,10 +120,15 @@ function FaqDetailView() {
                 );
               })}
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Side Graphics Column */}
-          <div className="md:col-span-4 flex justify-center items-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.14, duration: 0.35, ease: "easeOut" }}
+            className="md:col-span-4 flex justify-center items-center"
+          >
             <motion.div
               animate={{ rotateZ: [-5, 5, -5], y: [0, -8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -126,7 +136,7 @@ function FaqDetailView() {
             >
               <ShieldCheck className="size-24 md:size-28 text-ink stroke-[2.5px]" />
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </main>
 
