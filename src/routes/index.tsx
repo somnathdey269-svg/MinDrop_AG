@@ -536,7 +536,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[310px] sm:w-[360px] md:w-[480px] lg:w-[520px] h-[390px] sm:h-[450px] md:h-[520px] lg:h-[560px] flex items-center justify-center z-10">
+            <div className="relative w-[340px] sm:w-[390px] md:w-[480px] lg:w-[520px] h-[460px] sm:h-[490px] md:h-[520px] lg:h-[560px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
@@ -554,7 +554,7 @@ function ShowcaseDeckPage() {
                 >
                   <div className="shrink-0">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-ink mt-3 sm:mt-6 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-6 leading-tight">{nextCard.title}</h3>
                   </div>
 
                   {/* Behind card illustration preview */}
@@ -596,11 +596,11 @@ function ShowcaseDeckPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-6 leading-tight tracking-tight">
+                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink mt-3 sm:mt-6 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-[12px] sm:text-[15px] md:text-base text-ink/80 font-bold mt-2.5 sm:mt-4 leading-relaxed">
+                    <p className="text-[15px] sm:text-lg md:text-xl text-ink/80 font-bold mt-3 sm:mt-6 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -638,7 +638,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* Mobile-only control row below the card stack (Google style) */}
-            <div className="flex justify-between items-center w-full max-w-[310px] sm:max-w-[360px] mt-6 md:hidden z-30">
+            <div className="flex justify-between items-center w-full max-w-[340px] sm:max-w-[390px] mt-6 md:hidden z-30">
               <button
                 onClick={handleNext}
                 className="text-sm font-black text-ink border-b-2 border-ink pb-0.5 cursor-pointer active:scale-95 transition-transform"
@@ -671,14 +671,14 @@ function ShowcaseDeckPage() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between h-[390px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between h-[420px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
                   >
-                    <div className="shrink-0 h-[125px] sm:h-[135px] flex flex-col justify-start">
+                    <div className="shrink-0 h-[145px] sm:h-[155px] flex flex-col justify-start">
                       <span className="text-[9px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full self-start">
                         {card.tag}
                       </span>
-                      <h3 className="text-2xl font-black text-ink mt-2 leading-tight tracking-tight">{card.title}</h3>
-                      <p className="text-[12px] sm:text-[13px] text-ink/70 font-bold mt-1.5 leading-relaxed">
+                      <h3 className="text-3xl font-black text-ink mt-2 leading-tight tracking-tight">{card.title}</h3>
+                      <p className="text-[14px] text-ink/70 font-bold mt-2 leading-relaxed">
                         {card.description}
                       </p>
                     </div>
