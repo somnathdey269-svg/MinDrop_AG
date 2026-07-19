@@ -668,13 +668,16 @@ function ShowcaseDeckPage() {
                     key={card.id}
                     to={card.to}
                     search={{ from: "grid" }}
-                    className={`rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between h-[340px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between h-[380px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
                   >
                     <div className="shrink-0">
                       <span className="text-[9px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full">
                         {card.tag}
                       </span>
                       <h3 className="text-xl font-black text-ink mt-2.5 leading-tight tracking-tight">{card.title}</h3>
+                      <p className="text-[11px] text-ink/70 font-bold mt-2 leading-relaxed">
+                        {card.description}
+                      </p>
                     </div>
 
                     {/* Centered Live Vector Illustration scaled to 88% */}
