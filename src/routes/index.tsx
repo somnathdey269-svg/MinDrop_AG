@@ -600,7 +600,7 @@ function ShowcaseDeckPage() {
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-[15px] sm:text-lg md:text-xl text-ink/80 font-bold mt-3 sm:mt-6 leading-relaxed line-clamp-3">
+                    <p className="text-[15px] sm:text-lg md:text-xl text-ink/80 font-bold mt-3 sm:mt-6 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -678,7 +678,7 @@ function ShowcaseDeckPage() {
                         {card.tag}
                       </span>
                       <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black text-ink mt-2 leading-tight tracking-tight line-clamp-1">{card.title}</h3>
-                      <p className="text-xs sm:text-sm md:text-base lg:text-[17px] text-ink/70 font-bold mt-1.5 leading-relaxed line-clamp-3">
+                      <p className="text-xs sm:text-sm md:text-base lg:text-[17px] text-ink/70 font-bold mt-1.5 leading-relaxed">
                         {card.description}
                       </p>
                     </div>
