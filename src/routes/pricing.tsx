@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Sparkles, Check, X } from "lucide-react";
+import { Sparkles, Check, X, ArrowRight, ShieldAlert, Play, BadgeAlert, Layers } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/pricing")({
@@ -21,10 +21,10 @@ function PricingDetailView() {
   const { from } = Route.useSearch();
 
   return (
-    <div className="fixed inset-0 bg-[#FDF2F7] flex flex-col justify-between p-6 overflow-hidden h-[100dvh] w-screen select-none">
+    <div className="min-h-screen w-full bg-[#FDF2F7] flex flex-col justify-between p-6 select-none overflow-y-auto">
       
       {/* Top Header Sync */}
-      <header className="flex justify-between items-center w-full z-10 shrink-0">
+      <header className="flex justify-between items-center w-full z-10 shrink-0 mb-8">
         <span className="text-xs uppercase tracking-wider font-black text-ink/40">Spec Sheet</span>
         <div className="flex items-center gap-2">
           <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
@@ -40,14 +40,15 @@ function PricingDetailView() {
         </Link>
       </header>
 
-      {/* Main Centered Showcase Card (Optimized constraints to remove empty space) */}
-      <main className="flex-1 flex items-center justify-center relative w-full my-2">
+      {/* Main Container */}
+      <main className="flex-1 flex items-center justify-center relative w-full mb-12">
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 15 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           style={{ viewTransitionName: 'card-pricing' } as React.CSSProperties}
-          className="w-full max-w-6xl bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative grid md:grid-cols-12 gap-8 items-center max-h-[85vh] min-h-[70vh] overflow-y-auto"
+          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-6 sm:p-10 md:p-14 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative flex flex-col gap-10"
         >
+          {/* Close button inside card */}
           <Link
             to="/"
             hash={from === "grid" ? "grid" : undefined}
@@ -58,72 +59,214 @@ function PricingDetailView() {
             <X className="size-5 text-ink" />
           </Link>
 
-          {/* Left Side Content Column (Enlarged text and minimized padding gutters) */}
+          {/* Hero Row */}
+          <div className="flex flex-col md:flex-row justify-between gap-8 items-start md:items-center mt-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.12 }}
+              className="flex-1 text-left"
+            >
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FDF2F7] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#EC4899] mb-4">
+                💎 Pricing Specs
+              </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-ink leading-tight tracking-tight">
+                Keep it free, or unlock limits.
+              </h1>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className="shrink-0 self-center md:self-auto"
+            >
+              <motion.div
+                animate={{ rotate: [-8, 8, -8], y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="size-36 md:size-48 bg-[#FDF2F7] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
+              >
+                <Sparkles className="size-16 md:size-22 text-ink stroke-[2.5px]" />
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Process Flow Diagram */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.18, duration: 0.35, ease: "easeOut" }}
-            className="md:col-span-8 text-left pr-2 w-full"
+            transition={{ delay: 0.16 }}
+            className="border-3 border-ink rounded-[2rem] p-6 sm:p-8 bg-[#F9F7F2] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           >
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FDF2F7] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#EC4899] mb-6">
-              💎 Pricing Specs
-            </span>
-
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tight">
-              Keep it free, or unlock limits.
-            </h1>
-
-            <div className="mt-6">
-              <p className="text-[#EA3323] text-xs font-black uppercase tracking-widest">TL;DR</p>
-              <p className="text-sm sm:text-base font-bold text-ink/75 mt-2 leading-relaxed">
-                Start with a powerful Free plan that covers up to 5 concurrent active alarms. Support the development with a one-time lifetime Premium purchase to unlock unlimited storage.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6 mt-8 pt-6 border-t-2 border-dashed border-ink/10">
-              <div className="border-2 border-ink rounded-2xl p-6 bg-canvas shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                <p className="text-[10px] uppercase font-bold text-ink/50 tracking-wider">Free Plan</p>
-                <p className="text-2xl font-black text-ink mt-1">₹0 / Free</p>
-                <ul className="text-xs text-ink/75 font-bold mt-4 space-y-1.5">
-                  <li>• 5 Active drops</li>
-                  <li>• Voice & photo alarms</li>
-                  <li>• Notification listeners</li>
-                  <li>• SQLite database</li>
-                </ul>
+            <h3 className="font-black text-ink mb-6 uppercase tracking-wider text-xs sm:text-sm border-b-2 border-ink/10 pb-3 flex items-center gap-2">
+              <Sparkles className="size-4.5 text-[#EC4899]" />
+              Process Flow Diagram
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center">
+              {/* Step 1 */}
+              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
+                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">01 / Install</span>
+                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">Free Download</h4>
+                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Download and run offline on client device</p>
               </div>
-              <div className="border-2 border-ink rounded-2xl p-6 bg-[#FDF2F7] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                <p className="text-[10px] uppercase font-bold text-[#EC4899] tracking-wider">Premium</p>
-                <p className="text-2xl font-black text-ink mt-1">Lifetime</p>
-                <ul className="text-xs text-ink/75 font-bold mt-4 space-y-1.5">
-                  <li>• Unlimited active drops</li>
-                  <li>• Google Drive Sync</li>
-                  <li>• Custom theme packs</li>
-                  <li>• Priority support</li>
-                </ul>
+
+              {/* Arrow 1 */}
+              <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1 md:py-0">
+                <ArrowRight className="size-6 shrink-0" />
+              </div>
+
+              {/* Step 2 */}
+              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
+                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">02 / Setup</span>
+                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">5 Basic Drops</h4>
+                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Schedule persistent loop alarms for free</p>
+              </div>
+
+              {/* Arrow 2 */}
+              <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1 md:py-0">
+                <ArrowRight className="size-6 shrink-0" />
+              </div>
+
+              {/* Step 3 */}
+              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
+                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">03 / Upgrade</span>
+                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">One-Time Buy</h4>
+                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Purchase lifetime key with zero subscriptions</p>
+              </div>
+
+              {/* Arrow 3 */}
+              <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1 md:py-0">
+                <ArrowRight className="size-6 shrink-0" />
+              </div>
+
+              {/* Step 4 */}
+              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
+                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">04 / Unlock</span>
+                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">Infinite Slots</h4>
+                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Unlock unlimited active drops & GDrive sync</p>
               </div>
             </div>
           </motion.div>
 
-          {/* Right Side Graphics Column */}
+          {/* Interactive Pricing Tier Box */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.14, duration: 0.35, ease: "easeOut" }}
-            className="md:col-span-4 flex justify-center items-center"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2"
           >
-            <motion.div
-              animate={{ rotate: [-8, 8, -8], y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="size-48 md:size-64 bg-[#FDF2F7] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
-            >
-              <Sparkles className="size-24 md:size-28 text-ink stroke-[2.5px]" />
-            </motion.div>
+            <div className="border-3 border-ink rounded-3xl p-6 sm:p-8 bg-[#F9F7F2] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col justify-between">
+              <div>
+                <p className="text-xs uppercase font-black text-ink/50 tracking-wider">Free Tier</p>
+                <p className="text-3xl sm:text-4xl font-black text-ink mt-2">₹0 / Free Forever</p>
+                <ul className="text-xs sm:text-sm text-ink/85 font-bold mt-6 space-y-2 border-t border-dashed border-ink/20 pt-4">
+                  <li className="flex items-center gap-2">• Up to 5 Active concurrent drops</li>
+                  <li className="flex items-center gap-2">• Local voice capture & photo storage</li>
+                  <li className="flex items-center gap-2">• Offline SQLite data sweeps logic</li>
+                  <li className="flex items-center gap-2">• DND/Silent notification listener</li>
+                </ul>
+              </div>
+            </div>
+            <div className="border-3 border-ink rounded-3xl p-6 sm:p-8 bg-[#FDF2F7] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col justify-between">
+              <div>
+                <p className="text-xs uppercase font-black text-[#EC4899] tracking-wider">Lifetime Premium</p>
+                <p className="text-3xl sm:text-4xl font-black text-ink mt-2">₹199 / One-Time</p>
+                <ul className="text-xs sm:text-sm text-ink/85 font-bold mt-6 space-y-2 border-t border-dashed border-ink/20 pt-4">
+                  <li className="flex items-center gap-2">• Infinite concurrent active drops</li>
+                  <li className="flex items-center gap-2">• Private Google Drive backup cloud sync</li>
+                  <li className="flex items-center gap-2">• Neo-Brutalist visual theme packs</li>
+                  <li className="flex items-center gap-2">• Priority developer ticket channel</li>
+                </ul>
+              </div>
+            </div>
           </motion.div>
+
+          {/* Structured Context Blocks */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* The Pain */}
+            <motion.div
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2.5"
+            >
+              <h3 className="font-black text-[#EA3323] text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
+                <ShieldAlert className="size-4.5 shrink-0" />
+                The Pain Point
+              </h3>
+              <p className="text-sm font-bold text-ink/80 leading-relaxed">
+                App subscription fatigue has reached an all-time high. Users are forced into recurring monthly charges for simple toolsets, or have their personal usage data tracked and sold to advertising servers.
+              </p>
+            </motion.div>
+
+            {/* The Engine */}
+            <motion.div
+              initial={{ opacity: 0, x: 15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.22 }}
+              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2.5"
+            >
+              <h3 className="font-black text-brand text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
+                <Play className="size-4.5 shrink-0" />
+                Under the Hood
+              </h3>
+              <p className="text-sm font-bold text-ink/80 leading-relaxed">
+                Purchase validation is processed offline utilizing encrypted local configuration keys. Cloud sync utilizes user-controlled private sandboxed directories on Google Drive via native REST endpoints.
+              </p>
+            </motion.div>
+
+            {/* The Help */}
+            <motion.div
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.24 }}
+              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2.5"
+            >
+              <h3 className="font-black text-[#10B981] text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="size-4.5 shrink-0" />
+                How It Helps You
+              </h3>
+              <p className="text-sm font-bold text-ink/80 leading-relaxed">
+                Secure 100% ad-free software. Pay once for a lifetime of premium features, retaining complete ownership of alarm triggers without ever worrying about monthly bills or trackers.
+              </p>
+            </motion.div>
+
+            {/* Core Capabilities */}
+            <motion.div
+              initial={{ opacity: 0, x: 15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.26 }}
+              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left"
+            >
+              <h3 className="font-black text-ink text-xs sm:text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                <Layers className="size-4.5 shrink-0" />
+                Key Specifications
+              </h3>
+              <ul className="space-y-3.5">
+                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
+                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
+                  <span>No recurring charges or advertising banners</span>
+                </li>
+                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
+                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
+                  <span>Encrypted Google Drive cloud synchronization</span>
+                </li>
+                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
+                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
+                  <span>Customizable Neo-Brutalist themes & skins pack</span>
+                </li>
+                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
+                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
+                  <span>Offline client-first billing sweeps logic</span>
+                </li>
+              </ul>
+            </motion.div>
+          </div>
         </motion.div>
       </main>
 
       {/* Bottom Footer Sync */}
-      <footer className="flex justify-between items-center w-full z-10 shrink-0">
+      <footer className="flex justify-between items-center w-full z-10 shrink-0 mt-4">
         <span className="text-xs font-black uppercase tracking-wider text-ink/40">India · Purchase Options</span>
         <Link
           to="/privacy"
