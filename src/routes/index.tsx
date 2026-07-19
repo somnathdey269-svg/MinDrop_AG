@@ -671,14 +671,14 @@ function ShowcaseDeckPage() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between h-[420px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
+                    className={`rounded-[2.5rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between h-[450px] sm:h-[480px] md:h-[510px] lg:h-[540px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
                   >
-                    <div className="shrink-0 h-[145px] sm:h-[155px] flex flex-col justify-start">
-                      <span className="text-[9px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full self-start">
+                    <div className="shrink-0 h-[150px] sm:h-[165px] md:h-[185px] lg:h-[205px] flex flex-col justify-start">
+                      <span className="text-[10px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full self-start">
                         {card.tag}
                       </span>
-                      <h3 className="text-3xl font-black text-ink mt-2 leading-tight tracking-tight">{card.title}</h3>
-                      <p className="text-[14px] text-ink/70 font-bold mt-2 leading-relaxed">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-black text-ink mt-3 leading-tight tracking-tight">{card.title}</h3>
+                      <p className="text-xs sm:text-base md:text-lg lg:text-[19px] text-ink/70 font-bold mt-2 sm:mt-3 leading-relaxed">
                         {card.description}
                       </p>
                     </div>
