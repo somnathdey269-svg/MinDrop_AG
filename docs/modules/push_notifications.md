@@ -68,3 +68,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Add scroll wheel (trackpad) navigation and Grid View/Deck View toggle pill in index.tsx. Ensure subpage close buttons in later-feature, notify-feature, places-feature, pricing, faq, download preserve the previous hash mode.'
 - **2026-07-19 12:16:03** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Push finalized aligned card layouts and copy updates'
+- **2026-07-19 17:36:36** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Push View Transitions for card detail modals'
