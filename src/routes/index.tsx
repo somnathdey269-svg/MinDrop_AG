@@ -36,8 +36,8 @@ const DECK_CARDS: ShowcaseCard[] = [
   {
     id: "later",
     slug: "later-feature",
-    title: "Looping task alarms.",
-    description: "Alarms ring continuously like a phone call until checked, surviving restarts.",
+    title: "Looping Task Alarms",
+    description: "Ordinary phone notifications are easily ignored. These alarms ring continuously like a phone call until you mark them as done. They remain active even if your device restarts.",
     bgClass: "bg-[#E2F5EC] border-[#10B981]",
     bgColor: "#E2F5EC",
     tag: "⏰ Later alarm",
@@ -47,8 +47,8 @@ const DECK_CARDS: ShowcaseCard[] = [
   {
     id: "notify",
     slug: "notify-feature",
-    title: "Filter messy pings.",
-    description: "Build rules matching Slack alerts or UPI receipts to trigger loop rings.",
+    title: "Smart Notification Filters",
+    description: "Avoid getting distracted by daily spam alerts. Create custom filters to monitor text notifications from Slack, WhatsApp, or SMS. Only matching alerts will trigger urgent alarms.",
     bgClass: "bg-[#FFFBEB] border-[#F59E0B]",
     bgColor: "#FFFBEB",
     tag: "🔔 Smart filters",
@@ -58,8 +58,8 @@ const DECK_CARDS: ShowcaseCard[] = [
   {
     id: "places",
     slug: "places-feature",
-    title: "Reminders near locations.",
-    description: "Define coordinates and trigger active checklists when stepping inside perimeters.",
+    title: "Location-Based Reminders",
+    description: "Set reminders that trigger only when you arrive at specific locations like pharmacies or offices. This monitors zones locally to prevent draining your battery.",
     bgClass: "bg-[#F5F3FF] border-[#8B5CF6]",
     bgColor: "#F5F3FF",
     tag: "📍 Places mapping",
@@ -69,8 +69,8 @@ const DECK_CARDS: ShowcaseCard[] = [
   {
     id: "pricing",
     slug: "pricing",
-    title: "Free, or unlock limits.",
-    description: "Start free with up to 5 active drops, or support us for unlimited storage.",
+    title: "Pricing & Lifetime Plans",
+    description: "MinDrop starts completely free with up to 5 concurrent active alarms. If you need more slots, a single one-time purchase unlocks infinite alarms and private Google Drive backups.",
     bgClass: "bg-[#FDF2F7] border-[#EC4899]",
     bgColor: "#FDF2F7",
     tag: "💎 Affordable pricing",
@@ -80,8 +80,8 @@ const DECK_CARDS: ShowcaseCard[] = [
   {
     id: "faq",
     slug: "faq",
-    title: "Get answers to key questions.",
-    description: "Find details on SQLite database, permission settings, and background sweeps.",
+    title: "FAQ & Help Center",
+    description: "Find quick answers regarding location geofencing, notification filters, and battery performance. MinDrop is fully offline and serverless, keeping all your data secure.",
     bgClass: "bg-[#F0FDF4] border-[#22C55E]",
     bgColor: "#F0FDF4",
     tag: "❔ FAQ Help",
@@ -554,7 +554,7 @@ function ShowcaseDeckPage() {
                 >
                   <div className="shrink-0">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-6 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-6 leading-tight line-clamp-1">{nextCard.title}</h3>
                   </div>
 
                   {/* Behind card illustration preview */}
@@ -596,11 +596,11 @@ function ShowcaseDeckPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink mt-3 sm:mt-6 leading-tight tracking-tight">
+                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink mt-3 sm:mt-6 leading-tight tracking-tight line-clamp-1">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-[15px] sm:text-lg md:text-xl text-ink/80 font-bold mt-3 sm:mt-6 leading-relaxed">
+                    <p className="text-[15px] sm:text-lg md:text-xl text-ink/80 font-bold mt-3 sm:mt-6 leading-relaxed line-clamp-3">
                       {currentCard.description}
                     </p>
                   </div>
@@ -677,8 +677,8 @@ function ShowcaseDeckPage() {
                       <span className="text-[10px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full self-start">
                         {card.tag}
                       </span>
-                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black text-ink mt-2 leading-tight tracking-tight">{card.title}</h3>
-                      <p className="text-xs sm:text-sm md:text-base lg:text-[17px] text-ink/70 font-bold mt-1.5 leading-relaxed">
+                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black text-ink mt-2 leading-tight tracking-tight line-clamp-1">{card.title}</h3>
+                      <p className="text-xs sm:text-sm md:text-base lg:text-[17px] text-ink/70 font-bold mt-1.5 leading-relaxed line-clamp-3">
                         {card.description}
                       </p>
                     </div>
