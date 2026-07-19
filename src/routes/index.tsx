@@ -37,7 +37,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     id: "later",
     slug: "later-feature",
     title: "Looping Task Alarms",
-    description: "Ordinary phone notifications are easily ignored. These alarms ring continuously like a phone call until you mark them as done. They remain active even if your device restarts.",
+    description: "Ordinary alerts are easy to ignore. MinDrop alarms ring continuously like a phone call until checked, surviving system restarts.",
     bgClass: "bg-[#E2F5EC] border-[#10B981]",
     bgColor: "#E2F5EC",
     tag: "⏰ Later alarm",
@@ -48,7 +48,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     id: "notify",
     slug: "notify-feature",
     title: "Smart Notification Filters",
-    description: "Avoid getting distracted by daily spam alerts. Create custom filters to monitor text notifications from Slack, WhatsApp, or SMS. Only matching alerts will trigger urgent alarms.",
+    description: "Avoid notification distraction. Set custom rules to scan Slack, WhatsApp, or SMS alerts and trigger loop rings only for matches.",
     bgClass: "bg-[#FFFBEB] border-[#F59E0B]",
     bgColor: "#FFFBEB",
     tag: "🔔 Smart filters",
@@ -59,7 +59,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     id: "places",
     slug: "places-feature",
     title: "Location-Based Reminders",
-    description: "Set reminders that trigger only when you arrive at specific locations like pharmacies or offices. This monitors zones locally to prevent draining your battery.",
+    description: "Set reminders that trigger when you enter specific boundaries. Passive network tower checks avoid continuous GPS battery drain.",
     bgClass: "bg-[#F5F3FF] border-[#8B5CF6]",
     bgColor: "#F5F3FF",
     tag: "📍 Places mapping",
@@ -70,7 +70,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     id: "pricing",
     slug: "pricing",
     title: "Pricing & Lifetime Plans",
-    description: "MinDrop starts completely free with up to 5 concurrent active alarms. If you need more slots, a single one-time purchase unlocks infinite alarms and private Google Drive backups.",
+    description: "MinDrop is free for up to five active alarms. A single lifetime purchase unlocks infinite slots and Google Drive backups sync.",
     bgClass: "bg-[#FDF2F7] border-[#EC4899]",
     bgColor: "#FDF2F7",
     tag: "💎 Affordable pricing",
@@ -81,7 +81,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     id: "faq",
     slug: "faq",
     title: "FAQ & Help Center",
-    description: "Find quick answers regarding location geofencing, notification filters, and battery performance. MinDrop is fully offline and serverless, keeping all your data secure.",
+    description: "Get answers on local geofencing permissions and SQLite database. MinDrop runs fully serverless to keep your data private.",
     bgClass: "bg-[#F0FDF4] border-[#22C55E]",
     bgColor: "#F0FDF4",
     tag: "❔ FAQ Help",
@@ -536,7 +536,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[340px] sm:w-[390px] md:w-[480px] lg:w-[520px] h-[460px] sm:h-[490px] md:h-[520px] lg:h-[560px] flex items-center justify-center z-10">
+            <div className="relative w-[340px] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[400px] sm:h-[420px] md:h-[450px] lg:h-[480px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
@@ -600,7 +600,7 @@ function ShowcaseDeckPage() {
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-[15px] sm:text-lg md:text-xl text-ink/80 font-bold mt-3 sm:mt-6 leading-relaxed">
+                    <p className="text-[14px] sm:text-base md:text-lg text-ink/75 font-medium mt-3 sm:mt-5 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -671,14 +671,14 @@ function ShowcaseDeckPage() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.5rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between min-h-[460px] sm:min-h-[480px] md:min-h-[510px] lg:min-h-[540px] h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
+                    className={`rounded-[2.5rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between min-h-[380px] sm:min-h-[410px] md:min-h-[430px] lg:min-h-[450px] h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
                   >
                     <div className="flex flex-col justify-start gap-2 mb-4">
                       <span className="text-[10px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full self-start">
                         {card.tag}
                       </span>
                       <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black text-ink mt-2 leading-tight tracking-tight line-clamp-1">{card.title}</h3>
-                      <p className="text-xs sm:text-sm md:text-base lg:text-[17px] text-ink/70 font-bold mt-1.5 leading-relaxed">
+                      <p className="text-xs sm:text-sm md:text-base lg:text-[15px] text-ink/75 font-medium mt-1.5 leading-relaxed">
                         {card.description}
                       </p>
                     </div>
