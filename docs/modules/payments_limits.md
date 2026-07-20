@@ -11,6 +11,7 @@ Manages pricing structures, active user limits, stripe/payment gateways, and lim
 * Supabase profiles/plans tables
 
 ## 3. Rules & Gotchas
+* Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
 * Ensure validation is processed server-side (using server functions) rather than purely client-side to prevent bypasses.
 
 ## 4. Version & Modification Ledger
@@ -24,3 +25,5 @@ Manages pricing structures, active user limits, stripe/payment gateways, and lim
   * **Change**: Executed requirements: 'Revamp the public marketing website to Path A (Modern Product Landing Page) by making src/routes/index.tsx, notify-feature.tsx, places-feature.tsx, pricing.tsx static React pages instead of database CMS pages. Add a new static route later-feature.tsx for Later module details, and update links in MarketingLayout.tsx. Make the content crisp, modern, explaining later alarms, notify rule filters, places geofencing, memory recall, and weekly summaries. Ensure fully responsive layout for all screens.'
 - **2026-07-20 17:39:16** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Configure free limits to 3 limits, set default fallback price to 999, expand compliance document content blocks, balance showcase cards grid columns, and fix scroll-up trackpad logic'
+- **2026-07-20 17:39:27** | Self-Healed Learning Loop
+  * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.

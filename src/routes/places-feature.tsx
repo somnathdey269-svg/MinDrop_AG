@@ -619,7 +619,7 @@ function PlacesDetailView() {
         {current > 0 && (
           <button
             onClick={() => goTo(current - 1)}
-            className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+            className="absolute top-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
           >
             <ChevronDown className={`size-3.5 rotate-180 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#DDD6FE]/30 group-hover:text-white" : "text-[#7C3AED]/30 group-hover:text-[#4C1D95]"}`} />
             <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#DDD6FE]/30 group-hover:text-white" : "text-[#7C3AED]/30 group-hover:text-[#4C1D95]"}`}>
@@ -645,7 +645,7 @@ function PlacesDetailView() {
         {current < TOTAL - 1 && (
           <button
             onClick={() => goTo(current + 1)}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
           >
             <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#DDD6FE]/20 group-hover:text-white" : "text-[#7C3AED]/20 group-hover:text-[#4C1D95]"}`}>
               scroll or ↓
@@ -655,7 +655,7 @@ function PlacesDetailView() {
         )}
 
         {/* ── Right Dot Navigation ── */}
-        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
+        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-30">
           {slides.map((_, i) => (
             <button key={i} onClick={() => goTo(i)}
               className={`rounded-full transition-all duration-300 cursor-pointer ${

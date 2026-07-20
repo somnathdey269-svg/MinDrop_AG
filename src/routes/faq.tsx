@@ -405,7 +405,7 @@ function FaqDetailView() {
         {current > 0 && (
           <button
             onClick={() => goTo(current - 1)}
-            className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-[#047857]/30 hover:text-[#064E3B]"
+            className="absolute top-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-[#047857]/30 hover:text-[#064E3B]"
           >
             <ChevronDown className="size-3.5 rotate-180 transition group-hover:-translate-y-0.5" />
             <span className="text-[9px] font-black uppercase tracking-widest">
@@ -431,7 +431,7 @@ function FaqDetailView() {
         {current < TOTAL - 1 && (
           <button
             onClick={() => goTo(current + 1)}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-[#047857]/30 hover:text-[#064E3B]"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-[#047857]/30 hover:text-[#064E3B]"
           >
             <span className="text-[9px] font-black uppercase tracking-widest">
               scroll or ↓
@@ -441,7 +441,7 @@ function FaqDetailView() {
         )}
 
         {/* ── Right Dot Navigation ── */}
-        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
+        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-30">
           {slides.map((_, i) => (
             <button key={i} onClick={() => goTo(i)}
               className={`rounded-full transition-all duration-300 cursor-pointer ${

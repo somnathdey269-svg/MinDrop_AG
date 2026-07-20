@@ -317,6 +317,7 @@ function ShowcaseDeckPage() {
   // Track active hover zones
   const [hoverZone, setHoverZone] = useState<"center" | "left" | "right">("center");
   const scrollCooldown = useRef(false);
+  const touchStartX = useRef(0);
 
   // Safely check if the view is on a mobile device to bypass desktop mouse offsets
   const [isMobile, setIsMobile] = useState(false);
@@ -456,6 +457,19 @@ function ShowcaseDeckPage() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onWheel={handleWheel}
+      onTouchStart={(e) => {
+        touchStartX.current = e.touches[0].clientX;
+      }}
+      onTouchEnd={(e) => {
+        const delta = touchStartX.current - e.changedTouches[0].clientX;
+        if (Math.abs(delta) > 50) {
+          if (delta > 0) {
+            handleNext();
+          } else {
+            handlePrev();
+          }
+        }
+      }}
       style={{
         backgroundColor: activeBgColor,
         transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
@@ -553,7 +567,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[340px] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[400px] sm:h-[420px] md:h-[450px] lg:h-[480px] flex items-center justify-center z-10">
+            <div className="relative w-[88vw] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[60vh] max-h-[460px] min-h-[380px] sm:h-[420px] md:h-[450px] lg:h-[480px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
@@ -567,11 +581,11 @@ function ShowcaseDeckPage() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-5 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-ink mt-3 sm:mt-6 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-xl sm:text-3xl lg:text-4xl font-black text-ink mt-2 sm:mt-6 leading-tight">{nextCard.title}</h3>
                   </div>
 
                   {/* Behind card illustration preview */}
@@ -604,7 +618,7 @@ function ShowcaseDeckPage() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-5 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   <div className="shrink-0">
                     <div className="flex justify-between items-center">
@@ -613,11 +627,11 @@ function ShowcaseDeckPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-6 leading-tight tracking-tight">
+                    <h3 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-2 sm:mt-6 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-[14px] sm:text-base md:text-lg text-ink/75 font-medium mt-3 sm:mt-5 leading-relaxed">
+                    <p className="text-xs sm:text-base md:text-lg text-ink/75 font-medium mt-1.5 sm:mt-5 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -654,21 +668,7 @@ function ShowcaseDeckPage() {
               </button>
             </div>
 
-            {/* Mobile-only control row below the card stack (Google style) */}
-            <div className="flex justify-between items-center w-full max-w-[340px] sm:max-w-[390px] mt-6 md:hidden z-30">
-              <button
-                onClick={handleNext}
-                className="text-sm font-black text-ink border-b-2 border-ink pb-0.5 cursor-pointer active:scale-95 transition-transform"
-              >
-                Next card
-              </button>
-              <button
-                onClick={handleShowMe}
-                className="text-sm font-black text-ink border-b-2 border-ink pb-0.5 cursor-pointer active:scale-95 transition-transform"
-              >
-                Show me!
-              </button>
-            </div>
+
 
           </div>
         ) : (
@@ -738,7 +738,6 @@ function ShowcaseDeckPage() {
             About
           </button>
         </div>
-        <div className="sm:hidden" />
 
         {/* Dynamic Pill Switcher Grid/Deck Controls */}
         <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
