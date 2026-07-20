@@ -544,7 +544,7 @@ function PlacesDetailView() {
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
     const now = Date.now();
-    if (now - lastScrollTime.current < 1100) return;
+    if (now - lastScrollTime.current < 850) return;
     lastScrollTime.current = now;
     setCurrent(idx);
   };
@@ -554,7 +554,7 @@ function PlacesDetailView() {
     if (!el) return;
     const handler = (e: WheelEvent) => {
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 35) return;
+      if (Math.abs(e.deltaY) < 12) return;
       if (e.deltaY > 0) goTo(current + 1);
       else if (e.deltaY < 0) goTo(current - 1);
     };
