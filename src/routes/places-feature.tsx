@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   MapPin, Check, X, Navigation, ChevronDown, ChevronLeft, ChevronRight,
-  ShoppingCart, Stethoscope, GraduationCap, Briefcase, Home
+  ShoppingCart, Stethoscope, GraduationCap, Briefcase, Home, Volume2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -18,6 +18,83 @@ export const Route = createFileRoute("/places-feature")({
   }),
   component: PlacesDetailView,
 });
+
+/* ──────────────────────────────────────────────
+   SUBTLE STEP ILLUSTRATIONS
+────────────────────────────────────────────── */
+function SavePlace() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ y: [-12, 0, -12] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        className="text-[#8B5CF6] z-10"
+      >
+        <MapPin className="size-16 stroke-[2.5px] fill-[#DDD6FE]" />
+      </motion.div>
+      <motion.div
+        animate={{ scale: [0.6, 1.2, 0.6], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-4 size-10 bg-[#8B5CF6]/20 rounded-full blur-sm"
+      />
+    </div>
+  );
+}
+
+function CellMonitor() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <div className="size-20 sm:size-24 bg-white border-3 border-[#8B5CF6] rounded-3xl grid place-items-center shadow-lg text-[#8B5CF6] relative z-10">
+        <Navigation className="size-10 stroke-[2.5px] rotate-45"/>
+      </div>
+      {[1, 2, 3].map((i) => (
+        <motion.div
+          key={i}
+          animate={{ scale: [1, 2.2], opacity: [0.35, 0] }}
+          transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.8, ease: "easeOut" }}
+          className="absolute size-24 border border-[#8B5CF6] rounded-full"
+        />
+      ))}
+    </div>
+  );
+}
+
+function GPSConfirm() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <div className="size-24 border-3 border-dashed border-[#8B5CF6] rounded-full animate-[spin_12s_linear_infinite] absolute" />
+      <motion.div
+        animate={{ scale: [0.95, 1.05, 0.95] }}
+        transition={{ duration: 1.6, repeat: Infinity }}
+        className="size-16 bg-[#8B5CF6] border-2 border-white rounded-full grid place-items-center shadow-md z-10 text-white"
+      >
+        <Navigation className="size-8 stroke-[2.5px]"/>
+      </motion.div>
+    </div>
+  );
+}
+
+function ArriveAlarm() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ rotate: [-6, 6, -6], scale: [1, 1.05, 1] }}
+        transition={{ duration: 0.15, repeat: Infinity, repeatType: "reverse" }}
+        className="size-20 sm:size-24 bg-[#8B5CF6] border-3 border-[#4C1D95] rounded-3xl grid place-items-center z-10 shadow-[0_0_30px_rgba(139,92,246,0.3)] text-white"
+      >
+        <Volume2 className="size-10 stroke-[2.5px]"/>
+      </motion.div>
+      {[1, 2].map((i) => (
+        <motion.div
+          key={i}
+          animate={{ scale: [1, 2.0], opacity: [0.4, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.6 }}
+          className="absolute size-28 border border-[#8B5CF6] rounded-full"
+        />
+      ))}
+    </div>
+  );
+}
 
 /* ─── Animated Map Pin ─── */
 function AnimatedMap() {
@@ -168,13 +245,6 @@ function SlideOpening() {
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#4C1D95] leading-none tracking-tighter">
         You remembered at home.
       </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2 }}
-        className="mt-12 sm:mt-16 flex flex-col items-center gap-2 text-[#7C3AED]/30">
-        <p className="text-[10px] font-black uppercase tracking-widest">Scroll to continue</p>
-        <ChevronDown className="size-5 animate-bounce" />
-      </motion.div>
     </div>
   );
 }
@@ -278,28 +348,46 @@ function SlideStep({ step, stepNum, title, detail, color }: {
   step: string; stepNum: number; title: string; detail: string; color: string;
 }) {
   const TOTAL_STEPS = 4;
+
+  const renderIllustration = (num: number) => {
+    switch (num) {
+      case 1: return <SavePlace />;
+      case 2: return <CellMonitor />;
+      case 3: return <GPSConfirm />;
+      case 4: return <ArriveAlarm />;
+      default: return null;
+    }
+  };
+
   return (
     <div className={`h-full ${color} flex items-center justify-center px-6 relative overflow-hidden`}>
       <div className="absolute left-0 top-1/2 -translate-y-1/2 text-[240px] sm:text-[340px] md:text-[440px] lg:text-[540px] font-black text-[#8B5CF6]/5 leading-none select-none pointer-events-none pl-4">
         {step}
       </div>
 
-      <div className="w-[95%] mx-auto max-w-4xl relative z-10">
-        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4C1D95]/40 mb-5 sm:mb-7">
-          Step {stepNum} of {TOTAL_STEPS} · How It Works
-        </p>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#4C1D95] leading-tight mb-6 sm:mb-8 tracking-tight">
-          {title}
-        </h2>
-        <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-[#4C1D95]/70 leading-relaxed max-w-3xl">
-          {detail}
-        </p>
+      <div className="w-[95%] mx-auto max-w-6xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <div className="flex-1 text-left">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4C1D95]/40 mb-4 sm:mb-5">
+            Step {stepNum} of {TOTAL_STEPS} · How It Works
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#4C1D95] leading-tight mb-4 sm:mb-6 tracking-tight">
+            {title}
+          </h2>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-[#4C1D95]/70 leading-relaxed">
+            {detail}
+          </p>
 
-        <div className="flex gap-2.5 mt-10 sm:mt-16">
-          {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-            <div key={i}
-              className={`h-1.5 rounded-full transition-all ${i === stepNum - 1 ? "w-14 bg-[#8B5CF6]" : "w-4 bg-[#8B5CF6]/20"}`}/>
-          ))}
+          <div className="flex gap-2.5 mt-8 sm:mt-12">
+            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+              <div key={i}
+                className={`h-1.5 rounded-full transition-all ${i === stepNum - 1 ? "w-14 bg-[#8B5CF6]" : "w-4 bg-[#8B5CF6]/20"}`}/>
+            ))}
+          </div>
+        </div>
+
+        {/* Subtle Animated Illustration */}
+        <div className="shrink-0 flex items-center justify-center size-52 sm:size-64 rounded-[2rem] border-3 border-ink bg-white/40 shadow-lg">
+          {renderIllustration(stepNum)}
         </div>
       </div>
     </div>
@@ -527,6 +615,19 @@ function PlacesDetailView() {
           }
         }}
       >
+        {/* ── Top hint (Scroll Up) ── */}
+        {current > 0 && (
+          <button
+            onClick={() => goTo(current - 1)}
+            className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+          >
+            <ChevronDown className={`size-3.5 rotate-180 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#DDD6FE]/30 group-hover:text-white" : "text-[#7C3AED]/30 group-hover:text-[#4C1D95]"}`} />
+            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#DDD6FE]/30 group-hover:text-white" : "text-[#7C3AED]/30 group-hover:text-[#4C1D95]"}`}>
+              scroll or ↑
+            </span>
+          </button>
+        )}
+
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -539,6 +640,19 @@ function PlacesDetailView() {
             {slides[current]}
           </motion.div>
         </AnimatePresence>
+
+        {/* ── Bottom hint (Scroll Down) ── */}
+        {current < TOTAL - 1 && (
+          <button
+            onClick={() => goTo(current + 1)}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+          >
+            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#DDD6FE]/20 group-hover:text-white" : "text-[#7C3AED]/20 group-hover:text-[#4C1D95]"}`}>
+              scroll or ↓
+            </span>
+            <ChevronDown className={`size-3.5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#DDD6FE]/20 group-hover:text-white" : "text-[#7C3AED]/20 group-hover:text-[#4C1D95]"}`} />
+          </button>
+        )}
 
         {/* ── Right Dot Navigation ── */}
         <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
@@ -557,15 +671,6 @@ function PlacesDetailView() {
             {current + 1}/{TOTAL}
           </p>
         </div>
-
-        {/* ── Bottom hint ── */}
-        {current < TOTAL - 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-20 pointer-events-none">
-            <p className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#DDD6FE]/20" : "text-[#7C3AED]/20"}`}>
-              scroll or ↓
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

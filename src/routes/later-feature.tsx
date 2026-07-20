@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   AlarmClock, Check, X, Volume2, RotateCcw, Bell,
-  MapPin, Pill, Phone, Flame, ChevronDown, ChevronLeft, ChevronRight
+  MapPin, Pill, Phone, Flame, ChevronDown, ChevronLeft, ChevronRight, Pencil
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -18,6 +18,91 @@ export const Route = createFileRoute("/later-feature")({
   }),
   component: LaterDetailView,
 });
+
+/* ──────────────────────────────────────────────
+   SUBTLE STEP ILLUSTRATIONS
+────────────────────────────────────────────── */
+function PencilNotepad() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <div className="absolute inset-0 border-3 border-ink bg-white rounded-2xl shadow-[4px_4px_0px_0px_rgba(16,185,129,0.3)] p-5 flex flex-col gap-2.5 justify-center">
+        <div className="h-2.5 w-16 bg-[#10B981]/25 rounded-full"/>
+        <div className="h-2.5 w-24 bg-[#10B981]/15 rounded-full"/>
+        <div className="h-2.5 w-20 bg-[#10B981]/15 rounded-full"/>
+      </div>
+      <motion.div
+        animate={{ x: [-15, 15, -15], y: [-8, 8, -8] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-4 right-4 text-[#10B981]"
+      >
+        <Pencil className="size-12 stroke-[2.5px]" />
+      </motion.div>
+    </div>
+  );
+}
+
+function SafeBackground() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ scale: [1, 1.08, 1] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="size-20 sm:size-24 bg-[#D1FAE5] border-3 border-[#10B981] rounded-full grid place-items-center relative z-10 shadow-md"
+      >
+        <AlarmClock className="size-10 text-[#047857] stroke-[2px]" />
+      </motion.div>
+      {[1, 2].map((i) => (
+        <motion.div
+          key={i}
+          animate={{ scale: [1, 2.2], opacity: [0.35, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: i * 1.0, ease: "easeOut" }}
+          className="absolute size-24 border-2 border-[#10B981] rounded-full"
+        />
+      ))}
+    </div>
+  );
+}
+
+function RingingAlarmIcon() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ rotate: [-6, 6, -6], scale: [1, 1.05, 1] }}
+        transition={{ duration: 0.15, repeat: Infinity, repeatType: "reverse" }}
+        className="size-20 sm:size-24 bg-[#10B981] border-3 border-ink rounded-3xl grid place-items-center z-10 shadow-[0_0_30px_rgba(16,185,129,0.3)] text-white"
+      >
+        <Volume2 className="size-10 stroke-[2.5px]"/>
+      </motion.div>
+      {[1, 2].map((i) => (
+        <motion.div
+          key={i}
+          animate={{ scale: [1, 2.0], opacity: [0.4, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.6 }}
+          className="absolute size-28 border border-[#10B981] rounded-full"
+        />
+      ))}
+    </div>
+  );
+}
+
+function DoneCheck() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ y: [-8, 0, -8] }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+        className="size-20 sm:size-24 bg-white border-3 border-[#10B981] rounded-full grid place-items-center shadow-lg relative z-10"
+      >
+        <Check className="size-12 text-[#10B981] stroke-[4px]"/>
+      </motion.div>
+      <motion.div
+        animate={{ scale: [0.85, 1.1, 0.85], opacity: [0.15, 0.35, 0.15] }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-4 w-20 h-2 bg-ink/10 rounded-full blur-sm"
+      />
+    </div>
+  );
+}
 
 /* ──────────────────────────────────────────────
    SHARED: Compact Alarm Playground
@@ -194,13 +279,6 @@ function SlideOpening() {
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#064E3B] leading-none tracking-tighter">
         You forgot your medication.
       </motion.p>
-
-      <motion.div
-        initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2.4}}
-        className="mt-12 sm:mt-16 flex flex-col items-center gap-2 text-[#047857]/30">
-        <p className="text-[10px] font-black uppercase tracking-widest">Scroll to continue</p>
-        <ChevronDown className="size-5 animate-bounce"/>
-      </motion.div>
     </div>
   );
 }
@@ -313,6 +391,17 @@ function SlideStep({ step, stepNum, title, detail, color }: {
   step: string; stepNum: number; title: string; detail: string; color: string;
 }) {
   const TOTAL_STEPS = 4;
+
+  const renderIllustration = (num: number) => {
+    switch (num) {
+      case 1: return <PencilNotepad />;
+      case 2: return <SafeBackground />;
+      case 3: return <RingingAlarmIcon />;
+      case 4: return <DoneCheck />;
+      default: return null;
+    }
+  };
+
   return (
     <div className={`h-full ${color} flex items-center justify-center px-6 relative overflow-hidden`}>
       {/* Giant watermark step number */}
@@ -320,23 +409,30 @@ function SlideStep({ step, stepNum, title, detail, color }: {
         {step}
       </div>
 
-      <div className="w-[95%] mx-auto max-w-4xl relative z-10">
-        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857]/40 mb-5 sm:mb-7">
-          Step {stepNum} of {TOTAL_STEPS} · How It Works
-        </p>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#064E3B] leading-tight mb-6 sm:mb-8 tracking-tight">
-          {title}
-        </h2>
-        <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-[#047857]/70 leading-relaxed max-w-3xl">
-          {detail}
-        </p>
+      <div className="w-[95%] mx-auto max-w-6xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <div className="flex-1 text-left">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857]/40 mb-4 sm:mb-5">
+            Step {stepNum} of {TOTAL_STEPS} · How It Works
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#064E3B] leading-tight mb-4 sm:mb-6 tracking-tight">
+            {title}
+          </h2>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-[#047857]/70 leading-relaxed">
+            {detail}
+          </p>
 
-        {/* Step progress bar */}
-        <div className="flex gap-2.5 mt-10 sm:mt-16">
-          {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-            <div key={i}
-              className={`h-1.5 rounded-full transition-all ${i === stepNum - 1 ? "w-14 bg-[#10B981]" : "w-4 bg-[#10B981]/20"}`}/>
-          ))}
+          {/* Step progress bar */}
+          <div className="flex gap-2.5 mt-8 sm:mt-12">
+            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+              <div key={i}
+                className={`h-1.5 rounded-full transition-all ${i === stepNum - 1 ? "w-14 bg-[#10B981]" : "w-4 bg-[#10B981]/20"}`}/>
+            ))}
+          </div>
+        </div>
+
+        {/* Subtle Animated Illustration */}
+        <div className="shrink-0 flex items-center justify-center size-52 sm:size-64 rounded-[2rem] border-3 border-ink bg-white/40 shadow-lg">
+          {renderIllustration(stepNum)}
         </div>
       </div>
     </div>
@@ -589,6 +685,19 @@ function LaterDetailView() {
           }
         }}
       >
+        {/* ── Top hint (Scroll Up) ── */}
+        {current > 0 && (
+          <button
+            onClick={() => goTo(current - 1)}
+            className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+          >
+            <ChevronDown className={`size-3.5 rotate-180 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#A7F3D0]/30 group-hover:text-white" : "text-[#047857]/30 group-hover:text-[#064E3B]"}`} />
+            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#A7F3D0]/30 group-hover:text-white" : "text-[#047857]/30 group-hover:text-[#064E3B]"}`}>
+              scroll or ↑
+            </span>
+          </button>
+        )}
+
         {/* Slide Content */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -602,6 +711,19 @@ function LaterDetailView() {
             {slides[current]}
           </motion.div>
         </AnimatePresence>
+
+        {/* ── Bottom hint (Scroll Down) ── */}
+        {current < TOTAL - 1 && (
+          <button
+            onClick={() => goTo(current + 1)}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+          >
+            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#A7F3D0]/30 group-hover:text-white" : "text-[#047857]/30 group-hover:text-[#064E3B]"}`}>
+              scroll or ↓
+            </span>
+            <ChevronDown className={`size-3.5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#A7F3D0]/30 group-hover:text-white" : "text-[#047857]/30 group-hover:text-[#064E3B]"}`} />
+          </button>
+        )}
 
         {/* ── Right Dot Navigation ── */}
         <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
@@ -620,15 +742,6 @@ function LaterDetailView() {
             {current + 1}/{TOTAL}
           </p>
         </div>
-
-        {/* ── Bottom hint ── */}
-        {current < TOTAL - 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-20 pointer-events-none">
-            <p className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#A7F3D0]/20" : "text-[#047857]/20"}`}>
-              scroll or ↓
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

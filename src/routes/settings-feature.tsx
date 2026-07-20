@@ -103,7 +103,7 @@ function SettingsPlayground() {
           </div>
           <button onClick={() => setDnd(d => !d)}
             className={`relative w-12 h-6 rounded-full border-2 border-ink transition-colors cursor-pointer ${dnd ? "bg-[#EA580C]" : "bg-white"}`}>
-            <motion.div animate={{ x: dark ? 22 : 2 }}
+            <motion.div animate={{ x: dnd ? 22 : 2 }}
               className="absolute top-0.5 size-4 bg-ink rounded-full shadow" />
           </button>
         </div>
@@ -146,13 +146,6 @@ function SlideOpening() {
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#7C2D12] leading-none tracking-tighter">
         MinDrop works your way.
       </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2 }}
-        className="mt-12 sm:mt-16 flex flex-col items-center gap-2 text-[#C2410C]/30">
-        <p className="text-[10px] font-black uppercase tracking-widest">Scroll to continue</p>
-        <ChevronDown className="size-5 animate-bounce" />
-      </motion.div>
     </div>
   );
 }
@@ -454,6 +447,19 @@ function SettingsDetailView() {
           }
         }}
       >
+        {/* ── Top hint (Scroll Up) ── */}
+        {current > 0 && (
+          <button
+            onClick={() => goTo(current - 1)}
+            className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+          >
+            <ChevronDown className={`size-3.5 rotate-180 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#FFEDD5]/30 group-hover:text-white" : "text-[#C2410C]/30 group-hover:text-[#7C2D12]"}`} />
+            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#FFEDD5]/30 group-hover:text-white" : "text-[#C2410C]/30 group-hover:text-[#7C2D12]"}`}>
+              scroll or ↑
+            </span>
+          </button>
+        )}
+
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -466,6 +472,19 @@ function SettingsDetailView() {
             {slides[current]}
           </motion.div>
         </AnimatePresence>
+
+        {/* ── Bottom hint (Scroll Down) ── */}
+        {current < TOTAL - 1 && (
+          <button
+            onClick={() => goTo(current + 1)}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+          >
+            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#FFEDD5]/20 group-hover:text-white" : "text-[#C2410C]/20 group-hover:text-[#7C2D12]"}`}>
+              scroll or ↓
+            </span>
+            <ChevronDown className={`size-3.5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#FFEDD5]/20 group-hover:text-white" : "text-[#C2410C]/20 group-hover:text-[#7C2D12]"}`} />
+          </button>
+        )}
 
         {/* ── Right Dot Navigation ── */}
         <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
@@ -484,15 +503,6 @@ function SettingsDetailView() {
             {current + 1}/{TOTAL}
           </p>
         </div>
-
-        {/* ── Bottom hint ── */}
-        {current < TOTAL - 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-20 pointer-events-none">
-            <p className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#FFEDD5]/20" : "text-[#C2410C]/20"}`}>
-              scroll or ↓
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
