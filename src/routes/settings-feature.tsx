@@ -29,61 +29,61 @@ function SettingsPlayground() {
   const dark = theme === "dark";
 
   return (
-    <div className={`w-full max-w-sm rounded-[2rem] border-3 border-ink overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-colors duration-500 ${dark ? "bg-[#1e140f]" : "bg-white"}`}>
+    <div className={`w-full max-w-md rounded-[2rem] border-3 border-ink overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-colors duration-500 ${dark ? "bg-[#1e140f]" : "bg-white"}`}>
       {/* Phone top bar */}
-      <div className={`flex justify-between items-center px-5 py-3 border-b-2 ${dark ? "border-[#FFEDD5]/10" : "border-ink/10"}`}>
+      <div className={`flex justify-between items-center px-5 py-3.5 border-b-2 ${dark ? "border-[#FFEDD5]/10" : "border-ink/10"}`}>
         <span className={`text-[10px] font-black uppercase tracking-widest ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>MinDrop Settings</span>
-        <Settings className={`size-4 ${dark ? "text-[#FFEDD5]/40" : "text-ink/40"}`} />
+        <Settings className={`size-5 ${dark ? "text-[#FFEDD5]/40" : "text-ink/40"}`} />
       </div>
 
-      <div className="flex flex-col gap-0 p-4 sm:p-5">
+      <div className="flex flex-col gap-0 p-5 sm:p-6">
         {/* Theme Toggle */}
-        <div className={`flex items-center justify-between py-3 border-b ${dark ? "border-[#FFEDD5]/8" : "border-ink/8"}`}>
+        <div className={`flex items-center justify-between py-4 border-b ${dark ? "border-[#FFEDD5]/8" : "border-ink/8"}`}>
           <div className="flex items-center gap-3">
-            {dark ? <Moon className="size-4 text-[#FDBA74]" /> : <Sun className="size-4 text-[#EA580C]" />}
+            {dark ? <Moon className="size-5 text-[#FDBA74]" /> : <Sun className="size-5 text-[#EA580C]" />}
             <div>
-              <p className={`text-xs font-black ${dark ? "text-white" : "text-ink"}`}>App Theme</p>
-              <p className={`text-[9px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>{dark ? "Dark" : "Light"} mode is on</p>
+              <p className={`text-sm font-black ${dark ? "text-white" : "text-ink"}`}>App Theme</p>
+              <p className={`text-[10px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>{dark ? "Dark" : "Light"} mode is on</p>
             </div>
           </div>
           <button onClick={() => setTheme(t => t === "light" ? "dark" : "light")}
-            className={`relative w-11 h-5.5 rounded-full border-2 border-ink transition-colors cursor-pointer ${dark ? "bg-[#FDBA74]" : "bg-white"}`}>
-            <motion.div animate={{ x: dark ? 20 : 2 }}
-              className="absolute top-0.5 size-3.5 bg-ink rounded-full shadow" />
+            className={`relative w-12 h-6 rounded-full border-2 border-ink transition-colors cursor-pointer ${dark ? "bg-[#FDBA74]" : "bg-white"}`}>
+            <motion.div animate={{ x: dark ? 22 : 2 }}
+              className="absolute top-0.5 size-4 bg-ink rounded-full shadow" />
           </button>
         </div>
 
         {/* Snooze Time */}
-        <div className={`flex items-center justify-between py-3 border-b ${dark ? "border-[#FFEDD5]/8" : "border-ink/8"}`}>
+        <div className={`flex items-center justify-between py-4 border-b ${dark ? "border-[#FFEDD5]/8" : "border-ink/8"}`}>
           <div className="flex items-center gap-3">
-            <RefreshCw className={`size-4 ${dark ? "text-[#FDBA74]" : "text-[#EA580C]"}`} />
+            <RefreshCw className={`size-5 ${dark ? "text-[#FDBA74]" : "text-[#EA580C]"}`} />
             <div>
-              <p className={`text-xs font-black ${dark ? "text-white" : "text-ink"}`}>Snooze Duration</p>
-              <p className={`text-[9px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>Rings again after {snooze} min</p>
+              <p className={`text-sm font-black ${dark ? "text-white" : "text-ink"}`}>Snooze Duration</p>
+              <p className={`text-[10px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>Rings again after {snooze} min</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <button onClick={() => setSnooze(s => Math.max(1, s - 1))}
-              className={`size-6 rounded-lg border-2 border-ink font-black text-xs grid place-items-center cursor-pointer transition ${dark ? "bg-[#FFEDD5]/10 text-white" : "bg-white text-ink"}`}>−</button>
-            <span className={`text-xs font-black w-5 text-center ${dark ? "text-white" : "text-ink"}`}>{snooze}</span>
+              className={`size-7 rounded-lg border-2 border-ink font-black text-sm grid place-items-center cursor-pointer transition ${dark ? "bg-[#FFEDD5]/10 text-white" : "bg-white text-ink"}`}>−</button>
+            <span className={`text-sm font-black w-6 text-center ${dark ? "text-white" : "text-ink"}`}>{snooze}</span>
             <button onClick={() => setSnooze(s => Math.min(30, s + 1))}
-              className={`size-6 rounded-lg border-2 border-ink font-black text-xs grid place-items-center cursor-pointer transition ${dark ? "bg-[#FFEDD5]/10 text-white" : "bg-white text-ink"}`}>+</button>
+              className={`size-7 rounded-lg border-2 border-ink font-black text-sm grid place-items-center cursor-pointer transition ${dark ? "bg-[#FFEDD5]/10 text-white" : "bg-white text-ink"}`}>+</button>
           </div>
         </div>
 
         {/* Ringtone */}
-        <div className={`flex items-center justify-between py-3 border-b ${dark ? "border-[#FFEDD5]/8" : "border-ink/8"}`}>
+        <div className={`flex items-center justify-between py-4 border-b ${dark ? "border-[#FFEDD5]/8" : "border-ink/8"}`}>
           <div className="flex items-center gap-3">
-            <Bell className={`size-4 text-[#EA580C]`} />
+            <Bell className={`size-5 text-[#EA580C]`} />
             <div>
-              <p className={`text-xs font-black ${dark ? "text-white" : "text-ink"}`}>Alarm Sound</p>
-              <p className={`text-[9px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>Sound: {ringtone}</p>
+              <p className={`text-sm font-black ${dark ? "text-white" : "text-ink"}`}>Alarm Sound</p>
+              <p className={`text-[10px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>Sound: {ringtone}</p>
             </div>
           </div>
-          <div className="flex gap-1">
+          <div className="flex gap-1.5">
             {["Classic", "Loud", "Soft"].map(r => (
               <button key={r} onClick={() => setRingtone(r)}
-                className={`text-[9px] font-black px-1.5 py-0.5 rounded-lg border-2 cursor-pointer transition ${
+                className={`text-[10px] font-black px-2 py-1 rounded-lg border-2 cursor-pointer transition ${
                   ringtone === r
                     ? "border-[#EA580C] bg-[#EA580C] text-white"
                     : `border-ink/20 ${dark ? "text-white/50" : "text-ink/40"}`
@@ -93,18 +93,18 @@ function SettingsPlayground() {
         </div>
 
         {/* DND Bypass */}
-        <div className="flex items-center justify-between py-3">
+        <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            <Shield className={`size-4 ${dark ? "text-[#FDBA74]" : "text-[#EA580C]"}`} />
+            <Shield className={`size-5 ${dark ? "text-[#FDBA74]" : "text-[#EA580C]"}`} />
             <div>
-              <p className={`text-xs font-black ${dark ? "text-white" : "text-ink"}`}>Break Through Silent</p>
-              <p className={`text-[9px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>{dnd ? "Bypasses Silent mode" : "Blocked by Silent"}</p>
+              <p className={`text-sm font-black ${dark ? "text-white" : "text-ink"}`}>Break Through Silent</p>
+              <p className={`text-[10px] font-semibold ${dark ? "text-[#FFEDD5]/30" : "text-ink/30"}`}>{dnd ? "Bypasses Silent mode" : "Blocked by Silent"}</p>
             </div>
           </div>
           <button onClick={() => setDnd(d => !d)}
-            className={`relative w-11 h-5.5 rounded-full border-2 border-ink transition-colors cursor-pointer ${dnd ? "bg-[#EA580C]" : "bg-white"}`}>
-            <motion.div animate={{ x: dnd ? 20 : 2 }}
-              className="absolute top-0.5 size-3.5 bg-ink rounded-full shadow" />
+            className={`relative w-12 h-6 rounded-full border-2 border-ink transition-colors cursor-pointer ${dnd ? "bg-[#EA580C]" : "bg-white"}`}>
+            <motion.div animate={{ x: dark ? 22 : 2 }}
+              className="absolute top-0.5 size-4 bg-ink rounded-full shadow" />
           </button>
         </div>
       </div>
@@ -123,11 +123,11 @@ function SlideOpening() {
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="inline-flex items-center gap-1.5 rounded-full border border-[#EA580C]/20 bg-[#FFEDD5] px-4 py-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#C2410C] mb-6 sm:mb-8">
+        className="inline-flex items-center gap-2 rounded-full border border-[#EA580C]/20 bg-[#FFEDD5] px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#C2410C] mb-8 sm:mb-12">
         ⚙️ Your Settings
       </motion.span>
 
-      <div className="flex flex-col gap-1.5 sm:gap-2 mb-5 sm:mb-7">
+      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
         {[
           "No two people are the same.",
           "Some sleep lightly and a soft alarm is enough.",
@@ -135,7 +135,7 @@ function SlideOpening() {
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-            className="text-lg sm:text-2xl md:text-3xl font-black text-[#C2410C]/40 leading-tight">
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#C2410C]/45 leading-tight tracking-tight">
             {line}
           </motion.p>
         ))}
@@ -143,15 +143,15 @@ function SlideOpening() {
 
       <motion.p
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#7C2D12] leading-tight tracking-tight">
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#7C2D12] leading-none tracking-tighter">
         MinDrop works your way.
       </motion.p>
 
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2 }}
-        className="mt-8 sm:mt-12 flex flex-col items-center gap-1.5 text-[#C2410C]/30">
-        <p className="text-[9px] font-black uppercase tracking-widest">Scroll to continue</p>
-        <ChevronDown className="size-4 animate-bounce" />
+        className="mt-12 sm:mt-16 flex flex-col items-center gap-2 text-[#C2410C]/30">
+        <p className="text-[10px] font-black uppercase tracking-widest">Scroll to continue</p>
+        <ChevronDown className="size-5 animate-bounce" />
       </motion.div>
     </div>
   );
@@ -160,29 +160,29 @@ function SlideOpening() {
 /* Slide 2: The Problem */
 function SlideProblem() {
   return (
-    <div className="h-full bg-[#431407] flex items-center justify-center px-5">
-      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-14 max-w-5xl">
+    <div className="h-full bg-[#431407] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
-          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FDBA74]/30 mb-3">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDBA74]/30 mb-4">
             Why most apps get this wrong
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-4 sm:mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 sm:mb-8 tracking-tight">
             Most apps decide for you.<br />
             <span className="text-[#FDBA74]">MinDrop asks you.</span>
           </h2>
-          <p className="text-xs sm:text-sm font-semibold text-[#FFEDD5]/60 leading-relaxed max-w-lg">
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#FFEDD5]/60 leading-relaxed max-w-lg">
             Other reminder apps have one look, one ringtone, one way of doing things. If it does not match how you live, that's your problem. MinDrop believes your phone should work the way you think.
           </p>
         </div>
-        <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto">
+        <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full lg:w-auto">
           {[
             { n: "1", label: "Ringtone style option given. Take it or leave it." },
             { n: "Fixed", label: "Snooze intervals. Locked down by developers." },
             { n: "None", label: "Options to scale alert bypass behaviors." },
           ].map(({ n, label }) => (
-            <div key={n} className="bg-white/5 border border-[#EA580C]/20 rounded-xl p-4 text-left">
-              <p className="text-xl sm:text-2xl font-black text-[#FDBA74]">{n}</p>
-              <p className="text-[10px] font-semibold text-[#FFEDD5]/40 mt-1 leading-snug">{label}</p>
+            <div key={n} className="bg-white/5 border border-[#EA580C]/25 rounded-2xl p-5 text-left">
+              <p className="text-2xl sm:text-3xl font-black text-[#FDBA74]">{n}</p>
+              <p className="text-xs font-semibold text-[#FFEDD5]/40 mt-2 leading-relaxed">{label}</p>
             </div>
           ))}
         </div>
@@ -194,32 +194,32 @@ function SlideProblem() {
 /* Slide 3: The Playground */
 function SlidePlayground() {
   return (
-    <div className="h-full bg-[#FFF7ED] flex items-center justify-center px-5">
-      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-16 max-w-4xl">
+    <div className="h-full bg-[#FFF7ED] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-20 max-w-6xl">
         <div className="flex-1 text-left">
-          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#EA580C] mb-3">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#EA580C] mb-4">
             Interactive playground
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#7C2D12] leading-tight mb-3 sm:mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#7C2D12] leading-tight mb-4 sm:mb-6 tracking-tight">
             Every setting is yours to change.
           </h2>
-          <p className="text-xs sm:text-sm font-semibold text-[#EA580C]/75 leading-relaxed mb-4 sm:mb-5 max-w-sm">
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#EA580C]/75 leading-relaxed mb-6 sm:mb-8 max-w-md">
             Toggle the theme. Adjust the snooze. Try ringtones. Bypass DND. These controls are fully simulated — feel free to tap away!
           </p>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3.5">
             {[
               "Switch between dark and light screens.",
               "Adjust precise snooze cooldown window.",
               "Select different ringtone loudness levels.",
             ].map((s, i) => (
-              <div key={i} className="flex items-center gap-2.5">
-                <div className="size-5 rounded-full bg-[#EA580C] text-white grid place-items-center shrink-0 text-[9px] font-black">{i+1}</div>
-                <p className="text-xs sm:text-sm font-bold text-[#7C2D12]/80 leading-relaxed">{s}</p>
+              <div key={i} className="flex items-center gap-3.5">
+                <div className="size-6 sm:size-7 rounded-full bg-[#EA580C] text-white grid place-items-center shrink-0 text-xs font-black">{i+1}</div>
+                <p className="text-sm sm:text-base md:text-lg font-bold text-[#7C2D12]/80 leading-relaxed">{s}</p>
               </div>
             ))}
           </div>
         </div>
-        <div className="shrink-0 w-full lg:w-auto flex justify-center">
+        <div className="shrink-0">
           <SettingsPlayground />
         </div>
       </div>
@@ -230,27 +230,27 @@ function SlidePlayground() {
 /* Slide 4: Everything You Can Adjust */
 function SlideDifference() {
   return (
-    <div className="h-full bg-[#FFEDD5] flex items-center justify-center px-5">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-4xl">
+    <div className="h-full bg-[#FFEDD5] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
-          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#C2410C] mb-3">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#C2410C] mb-4">
             Tailored preferences
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#7C2D12] leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#7C2D12] leading-tight tracking-tight">
             Comprehensive setup control.<br />
             <span className="text-[#EA580C]">Customize exactly</span> how reminders behave.
           </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 w-full">
           {[
             { icon: Bell, color: "bg-[#FFF7ED]", title: "Alarm Sound", body: "Pick between soft hums, standard rings, or intense loops. Pick the sound profile that works best." },
             { icon: RefreshCw, color: "bg-[#FFEDD5]", title: "Snooze Control", body: "Change snooze delays dynamically between 1 and 30 minutes to match your routines." },
             { icon: Shield, color: "bg-[#FFF7ED]", title: "Silent Override", body: "Establish whitelist bypasses so critical medication reminders break through silent modes." },
           ].map(({ icon: Icon, color, title, body }) => (
-            <div key={title} className={`${color} border-3 border-[#EA580C] rounded-[1.5rem] p-5 sm:p-6 shadow-[4px_4px_0px_0px_rgba(124,45,18,0.15)] text-left flex flex-col gap-2`}>
-              <Icon className="size-5.5 text-ink shrink-0" />
-              <h3 className="text-sm sm:text-base font-black text-[#7C2D12]">{title}</h3>
-              <p className="text-xs sm:text-sm font-semibold text-[#7C2D12]/70 leading-relaxed">{body}</p>
+            <div key={title} className={`${color} border-3 border-[#EA580C] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(124,45,18,0.15)] text-left flex flex-col gap-3`}>
+              <Icon className="size-7 text-ink shrink-0" />
+              <h3 className="text-base sm:text-lg md:text-xl font-black text-[#7C2D12]">{title}</h3>
+              <p className="text-xs sm:text-sm md:text-base font-semibold text-[#7C2D12]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -275,13 +275,13 @@ function SlideScenarios() {
   const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
 
   return (
-    <div className="h-full bg-[#431407] flex items-center justify-center px-5">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-5 sm:gap-6 max-w-2xl">
+    <div className="h-full bg-[#431407] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-3xl">
         <div className="text-center">
-          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FFEDD5]/30 mb-3">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FFEDD5]/30 mb-4">
             Made for different lives
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
             Whether you are a light sleeper or a heavy one.
           </h2>
         </div>
@@ -294,31 +294,31 @@ function SlideScenarios() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`w-full rounded-[1.75rem] border-3 border-[#EA580C] p-6 sm:p-7 shadow-[5px_5px_0px_0px_rgba(124,45,18,0.4)] ${scenarios[cardIdx].color} flex flex-col gap-4`}>
-              <span className="text-3xl">{scenarios[cardIdx].emoji}</span>
+              className={`w-full rounded-[2rem] border-3 border-[#EA580C] p-8 sm:p-10 shadow-[8px_8px_0px_0px_rgba(124,45,18,0.4)] ${scenarios[cardIdx].color} flex flex-col gap-6`}>
+              <span className="text-4xl">{scenarios[cardIdx].emoji}</span>
               <div>
-                <p className="text-[10px] font-black text-[#EA580C] uppercase tracking-wider mb-1.5">{scenarios[cardIdx].title}</p>
-                <p className="text-sm sm:text-base font-black text-[#7C2D12] leading-snug">{scenarios[cardIdx].desc}</p>
+                <p className="text-xs sm:text-sm font-black text-[#EA580C] uppercase tracking-wider mb-2">{scenarios[cardIdx].title}</p>
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-[#7C2D12] leading-snug tracking-tight">{scenarios[cardIdx].desc}</p>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           <button onClick={prev} disabled={cardIdx === 0}
-            className="size-9 rounded-full border-2 border-[#EA580C]/30 bg-white/5 grid place-items-center text-[#FFEDD5]/60 hover:text-white hover:bg-white/10 disabled:opacity-25 transition cursor-pointer">
-            <ChevronLeft className="size-4"/>
+            className="size-11 sm:size-12 rounded-full border-2 border-[#EA580C]/30 bg-white/5 grid place-items-center text-[#FFEDD5]/60 hover:text-white hover:bg-white/10 disabled:opacity-25 transition cursor-pointer">
+            <ChevronLeft className="size-5"/>
           </button>
-          <div className="flex gap-2">
+          <div className="flex gap-2.5">
             {scenarios.map((_, i) => (
               <button key={i} onClick={() => setCardIdx(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-6 h-2 bg-[#EA580C]" : "size-2 bg-[#FFEDD5]/30 hover:bg-white/50"}`}/>
+                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-8 h-2 bg-[#EA580C]" : "size-2.5 bg-[#FFEDD5]/30 hover:bg-white/50"}`}/>
             ))}
           </div>
           <button onClick={next} disabled={cardIdx === scenarios.length - 1}
-            className="size-9 rounded-full border-2 border-[#EA580C]/30 bg-white/5 grid place-items-center text-[#FFEDD5]/60 hover:text-white hover:bg-white/10 disabled:opacity-25 transition cursor-pointer">
-            <ChevronRight className="size-4"/>
+            className="size-11 sm:size-12 rounded-full border-2 border-[#EA580C]/30 bg-white/5 grid place-items-center text-[#FFEDD5]/60 hover:text-white hover:bg-white/10 disabled:opacity-25 transition cursor-pointer">
+            <ChevronRight className="size-5"/>
           </button>
         </div>
       </div>
@@ -329,24 +329,24 @@ function SlideScenarios() {
 /* Slide 6: Closer */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
-    <div className="h-full bg-[#FFF7ED] flex items-center justify-center px-5 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-5 sm:gap-6 max-w-3xl">
-        <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#EA580C]/45">
+    <div className="h-full bg-[#FFF7ED] flex items-center justify-center px-6 text-center">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
+        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#EA580C]/45">
           An app that adapts to you
         </p>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#7C2D12] leading-tight">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#7C2D12] leading-none tracking-tighter">
           Set it up once. It works your way — forever.
         </h2>
-        <p className="text-base sm:text-lg font-semibold text-[#EA580C]/60 leading-relaxed max-w-xl">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#EA580C]/60 leading-relaxed max-w-2xl">
           MinDrop remembers all your preferences. Once you set it the way you like, you never have to touch it again. It just works, quietly and reliably, exactly how you need it to.
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto mt-2">
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
           <Link to="/download"
-            className="px-8 sm:px-10 py-3.5 bg-ink text-white font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#EA580C] hover:border-[#EA580C] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#EA580C] hover:border-[#EA580C] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
             Download MinDrop — Free
           </Link>
           <Link to="/" hash={backHash} viewTransition
-            className="px-8 sm:px-10 py-3.5 bg-white text-ink font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFEDD5] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFEDD5] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
             See All Features
           </Link>
         </div>
@@ -475,8 +475,8 @@ function SettingsDetailView() {
                 i === current
                   ? "w-1.5 h-7 bg-[#EA580C]"
                   : isDark
-                    ? "size-1.5 bg-[#FFEDD5]/20 hover:bg-[#FFEDD5]/60"
-                    : "size-1.5 bg-[#C2410C]/20 hover:bg-[#C2410C]/50"
+                    ? "size-1.5 bg-[#FFEDD5]/25 hover:bg-[#FFEDD5]/60"
+                    : "size-1.5 bg-[#C2410C]/25 hover:bg-[#C2410C]/50"
               }`}
             />
           ))}
