@@ -84,13 +84,21 @@ function rowsToSettings(rows: { key: string; value: string | null }[]): AllSetti
 // whitelist of non-sensitive branding/pricing keys is ever projected out.
 // The underlying table is restricted to superadmins at the RLS level.
 export const getPublicSettings = createServerFn({ method: "GET" }).handler(async () => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin
-    .from("platform_settings")
-    .select("key, value")
-    .in("key", KEYS as unknown as string[]);
-  if (error) throw new Error(error.message);
-  return rowsToSettings((data ?? []) as { key: string; value: string | null }[]);
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("platform_settings")
+      .select("key, value")
+      .in("key", KEYS as unknown as string[]);
+    if (error) {
+      console.warn("Failed to fetch settings from DB, using defaults:", error.message);
+      return rowsToSettings([]);
+    }
+    return rowsToSettings((data ?? []) as { key: string; value: string | null }[]);
+  } catch (err: any) {
+    console.warn("Failed to query settings, falling back to defaults:", err?.message || err);
+    return rowsToSettings([]);
+  }
 });
 
 const updateSchema = z.object({
