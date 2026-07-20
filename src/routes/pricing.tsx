@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Sparkles, Check, X, ArrowRight, ShieldAlert, Play, BadgeAlert, Layers } from "lucide-react";
-import { motion } from "framer-motion";
+import { Sparkles, Check, X, ArrowRight, ShieldAlert, Play, Layers, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { getPublicSettings, type CurrencyPrice } from "@/lib/platformSettings.functions";
 
 export const Route = createFileRoute("/pricing")({
   validateSearch: (search: Record<string, unknown>) => {
-    return {
-      from: (search.from as string) || undefined,
-    };
+    return { from: (search.from as string) || undefined };
   },
   head: () => ({
     meta: [
@@ -17,264 +17,418 @@ export const Route = createFileRoute("/pricing")({
   component: PricingDetailView,
 });
 
-function PricingDetailView() {
-  const { from } = Route.useSearch();
+function detectPreferredCurrency(available: string[]): string {
+  if (typeof navigator === "undefined") return "INR";
+  try {
+    const locale = navigator.language || "en-IN";
+    const region = new Intl.Locale(locale).maximize().region || "IN";
+    const map: Record<string, string> = {
+      IN: "INR", US: "USD", GB: "GBP", AU: "AUD", CA: "CAD",
+      SG: "SGD", AE: "AED", JP: "JPY",
+    };
+    const euroCountries = ["DE","FR","IT","ES","NL","BE","AT","IE","PT","FI","GR","LU","SK","SI","EE","LV","LT","MT","CY"];
+    if (euroCountries.includes(region)) return available.includes("EUR") ? "EUR" : "INR";
+    const guess = map[region] || "INR";
+    return available.includes(guess) ? guess : (available.includes("INR") ? "INR" : available[0] || "INR");
+  } catch { return "INR"; }
+}
+
+/* ══════════════════════════════════════════════
+   SLIDES
+══════════════════════════════════════════════ */
+
+/* Slide 1: Opening Hero */
+function SlideOpening() {
+  return (
+    <div className="h-full bg-[#FFF2F7] flex flex-col items-center justify-center text-center px-5">
+      <motion.span
+        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="inline-flex items-center gap-2 rounded-full border border-[#EC4899]/20 bg-[#FCE7F3] px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-8 sm:mb-12">
+        💎 Lifetime Premium
+      </motion.span>
+
+      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
+        {[
+          "App subscriptions are tiring.",
+          "MinDrop is built as a utility.",
+          "Pay once, use forever.",
+        ].map((line, i) => (
+          <motion.p key={i}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#DB2777]/45 leading-tight tracking-tight">
+            {line}
+          </motion.p>
+        ))}
+      </div>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#831843] leading-none tracking-tighter">
+        Keep it free, or unlock limits.
+      </motion.p>
+    </div>
+  );
+}
+
+/* Slide 2: Tiers (Free vs Premium) */
+interface SlideTiersProps {
+  prices: Record<string, CurrencyPrice>;
+  currency: string;
+  setCurrency: (c: string) => void;
+  availableCurrencies: string[];
+}
+function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: SlideTiersProps) {
+  const selected = prices[currency];
+  const priceDisplay = selected ? `${selected.symbol}${selected.displayed}` : "₹199";
 
   return (
-    <div className="min-h-screen w-full bg-[#FDF2F7] flex flex-col justify-between p-6 select-none overflow-y-auto">
-      
-      {/* Top Header Sync */}
-      <header className="flex justify-between items-center w-full z-10 shrink-0 mb-8">
-        <span className="text-xs uppercase tracking-wider font-black text-ink/40">Spec Sheet</span>
-        <div className="flex items-center gap-2">
-          <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
-          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink/80">MinDrop Specs</span>
+    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-6xl">
+        <div>
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-3">
+            Specs & plans
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#831843] leading-tight tracking-tight">
+            One-time purchase. Unlimited potential.
+          </h2>
+
+          {/* Currency Switcher */}
+          {availableCurrencies.length > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <span className="text-[10px] font-black text-[#DB2777]/60 uppercase tracking-widest">Select Currency:</span>
+              <div className="flex gap-1">
+                {availableCurrencies.map(c => (
+                  <button key={c} onClick={() => setCurrency(c)}
+                    className={`px-2 py-0.5 text-[10px] font-black rounded border-2 transition cursor-pointer ${
+                      currency === c
+                        ? "bg-[#EC4899] border-[#EC4899] text-white"
+                        : "bg-white border-ink/10 text-ink/50"
+                    }`}>{c}</button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-        <Link
-          to="/"
-          hash={from === "grid" ? "grid" : undefined}
-          viewTransition
-          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
-        >
-          View Deck
-        </Link>
-      </header>
 
-      {/* Main Container */}
-      <main className="flex-1 flex items-center justify-center relative w-full mb-12">
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 15 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          style={{ viewTransitionName: 'card-pricing' } as React.CSSProperties}
-          className="w-full max-w-5xl bg-white border-3 border-ink rounded-[2.5rem] p-6 sm:p-10 md:p-14 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative flex flex-col gap-10"
-        >
-          {/* Close button inside card */}
-          <Link
-            to="/"
-            hash={from === "grid" ? "grid" : undefined}
-            viewTransition
-            className="absolute top-6 right-6 size-10 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition z-20 cursor-pointer active:scale-95"
-            aria-label="Close"
-          >
-            <X className="size-5 text-ink" />
-          </Link>
-
-          {/* Hero Row */}
-          <div className="flex flex-col md:flex-row justify-between gap-8 items-start md:items-center mt-4">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.12 }}
-              className="flex-1 text-left"
-            >
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FDF2F7] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#EC4899] mb-4">
-                💎 Pricing Specs
-              </span>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-ink leading-tight tracking-tight">
-                Keep it free, or unlock limits.
-              </h1>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 }}
-              className="shrink-0 self-center md:self-auto"
-            >
-              <motion.div
-                animate={{ rotate: [-8, 8, -8], y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="size-36 md:size-48 bg-[#FDF2F7] border-3 border-ink rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative"
-              >
-                <Sparkles className="size-16 md:size-22 text-ink stroke-[2.5px]" />
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* Process Flow Diagram */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.16 }}
-            className="border-3 border-ink rounded-[2rem] p-6 sm:p-8 bg-[#F9F7F2] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-          >
-            <h3 className="font-black text-ink mb-6 uppercase tracking-wider text-xs sm:text-sm border-b-2 border-ink/10 pb-3 flex items-center gap-2">
-              <Sparkles className="size-4.5 text-[#EC4899]" />
-              Process Flow Diagram
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center">
-              {/* Step 1 */}
-              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
-                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">01 / Install</span>
-                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">Free Download</h4>
-                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Download and run offline on client device</p>
-              </div>
-
-              {/* Arrow 1 */}
-              <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1 md:py-0">
-                <ArrowRight className="size-6 shrink-0" />
-              </div>
-
-              {/* Step 2 */}
-              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
-                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">02 / Setup</span>
-                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">5 Basic Drops</h4>
-                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Schedule persistent loop alarms for free</p>
-              </div>
-
-              {/* Arrow 2 */}
-              <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1 md:py-0">
-                <ArrowRight className="size-6 shrink-0" />
-              </div>
-
-              {/* Step 3 */}
-              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
-                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">03 / Upgrade</span>
-                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">One-Time Buy</h4>
-                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Purchase lifetime key with zero subscriptions</p>
-              </div>
-
-              {/* Arrow 3 */}
-              <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1 md:py-0">
-                <ArrowRight className="size-6 shrink-0" />
-              </div>
-
-              {/* Step 4 */}
-              <div className="border-2 border-ink bg-white p-4.5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
-                <span className="text-[10px] font-black text-[#EC4899] uppercase tracking-wider">04 / Unlock</span>
-                <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">Infinite Slots</h4>
-                <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Unlock unlimited active drops & GDrive sync</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Interactive Pricing Tier Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.18 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2"
-          >
-            <div className="border-3 border-ink rounded-3xl p-6 sm:p-8 bg-[#F9F7F2] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col justify-between">
-              <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl text-left">
+          {/* Free Tier */}
+          <div className="border-3 border-ink rounded-[2rem] p-6 sm:p-8 bg-white shadow-[6px_6px_0px_0px_rgba(131,24,67,0.15)] flex flex-col justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🌱</span>
                 <p className="text-xs uppercase font-black text-ink/50 tracking-wider">Free Tier</p>
-                <p className="text-3xl sm:text-4xl font-black text-ink mt-2">₹0 / Free Forever</p>
-                <ul className="text-xs sm:text-sm text-ink/85 font-bold mt-6 space-y-2 border-t border-dashed border-ink/20 pt-4">
-                  <li className="flex items-center gap-2">• Up to 5 Active concurrent drops</li>
-                  <li className="flex items-center gap-2">• Local voice capture & photo storage</li>
-                  <li className="flex items-center gap-2">• Offline SQLite data sweeps logic</li>
-                  <li className="flex items-center gap-2">• DND/Silent notification listener</li>
-                </ul>
               </div>
-            </div>
-            <div className="border-3 border-ink rounded-3xl p-6 sm:p-8 bg-[#FDF2F7] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col justify-between">
-              <div>
-                <p className="text-xs uppercase font-black text-[#EC4899] tracking-wider">Lifetime Premium</p>
-                <p className="text-3xl sm:text-4xl font-black text-ink mt-2">₹199 / One-Time</p>
-                <ul className="text-xs sm:text-sm text-ink/85 font-bold mt-6 space-y-2 border-t border-dashed border-ink/20 pt-4">
-                  <li className="flex items-center gap-2">• Infinite concurrent active drops</li>
-                  <li className="flex items-center gap-2">• Private Google Drive backup cloud sync</li>
-                  <li className="flex items-center gap-2">• Neo-Brutalist visual theme packs</li>
-                  <li className="flex items-center gap-2">• Priority developer ticket channel</li>
-                </ul>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Structured Context Blocks */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {/* The Pain */}
-            <motion.div
-              initial={{ opacity: 0, x: -15 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2.5"
-            >
-              <h3 className="font-black text-[#EA3323] text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
-                <ShieldAlert className="size-4.5 shrink-0" />
-                The Pain Point
-              </h3>
-              <p className="text-sm font-bold text-ink/80 leading-relaxed">
-                App subscription fatigue has reached an all-time high. Users are forced into recurring monthly charges for simple toolsets, or have their personal usage data tracked and sold to advertising servers.
-              </p>
-            </motion.div>
-
-            {/* The Engine */}
-            <motion.div
-              initial={{ opacity: 0, x: 15 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.22 }}
-              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2.5"
-            >
-              <h3 className="font-black text-brand text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
-                <Play className="size-4.5 shrink-0" />
-                Under the Hood
-              </h3>
-              <p className="text-sm font-bold text-ink/80 leading-relaxed">
-                Purchase validation is processed offline utilizing encrypted local configuration keys. Cloud sync utilizes user-controlled private sandboxed directories on Google Drive via native REST endpoints.
-              </p>
-            </motion.div>
-
-            {/* The Help */}
-            <motion.div
-              initial={{ opacity: 0, x: -15 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.24 }}
-              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2.5"
-            >
-              <h3 className="font-black text-[#10B981] text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
-                <Sparkles className="size-4.5 shrink-0" />
-                How It Helps You
-              </h3>
-              <p className="text-sm font-bold text-ink/80 leading-relaxed">
-                Secure 100% ad-free software. Pay once for a lifetime of premium features, retaining complete ownership of alarm triggers without ever worrying about monthly bills or trackers.
-              </p>
-            </motion.div>
-
-            {/* Core Capabilities */}
-            <motion.div
-              initial={{ opacity: 0, x: 15 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.26 }}
-              className="border-3 border-ink p-6.5 sm:p-8 rounded-[2rem] bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left"
-            >
-              <h3 className="font-black text-ink text-xs sm:text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
-                <Layers className="size-4.5 shrink-0" />
-                Key Specifications
-              </h3>
-              <ul className="space-y-3.5">
-                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
-                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
-                  <span>No recurring charges or advertising banners</span>
+              <p className="text-3xl sm:text-4xl font-black text-ink mt-3">Free Forever</p>
+              <ul className="text-xs sm:text-sm text-ink/80 font-bold mt-6 space-y-3 border-t border-dashed border-ink/20 pt-4">
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-4.5 text-[#10B981] stroke-[3px] shrink-0" />
+                  <span>Up to 5 concurrent active drops</span>
                 </li>
-                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
-                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
-                  <span>Encrypted Google Drive cloud synchronization</span>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-4.5 text-[#10B981] stroke-[3px] shrink-0" />
+                  <span>Voice capture & offline photo storage</span>
                 </li>
-                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
-                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
-                  <span>Customizable Neo-Brutalist themes & skins pack</span>
-                </li>
-                <li className="flex items-start gap-3 text-xs sm:text-sm font-bold text-ink">
-                  <Check className="size-5 text-[#EC4899] shrink-0 stroke-[3.5px] mt-0.5" />
-                  <span>Offline client-first billing sweeps logic</span>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-4.5 text-[#10B981] stroke-[3px] shrink-0" />
+                  <span>All triggers (Time, Location, Filters)</span>
                 </li>
               </ul>
-            </motion.div>
+            </div>
+            <p className="text-[10px] text-ink/40 font-black uppercase tracking-wider">Default setup ready offline</p>
           </div>
-        </motion.div>
-      </main>
 
-      {/* Bottom Footer Sync */}
-      <footer className="flex justify-between items-center w-full z-10 shrink-0 mt-4">
-        <span className="text-xs font-black uppercase tracking-wider text-ink/40">India · Purchase Options</span>
-        <Link
-          to="/privacy"
-          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
-        >
-          Privacy Promise
-        </Link>
-      </footer>
+          {/* Premium Tier */}
+          <div className="border-3 border-ink rounded-[2rem] p-6 sm:p-8 bg-[#FFF2F7] shadow-[6px_6px_0px_0px_rgba(131,24,67,0.15)] flex flex-col justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">💎</span>
+                <p className="text-xs uppercase font-black text-[#DB2777] tracking-wider">Lifetime Premium</p>
+              </div>
+              <p className="text-3xl sm:text-4xl font-black text-ink mt-3">{priceDisplay} / One-Time</p>
+              <ul className="text-xs sm:text-sm text-ink/80 font-bold mt-6 space-y-3 border-t border-dashed border-ink/20 pt-4">
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-4.5 text-[#EC4899] stroke-[3px] shrink-0" />
+                  <span className="text-[#831843]">Infinite concurrent active drops</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-4.5 text-[#EC4899] stroke-[3px] shrink-0" />
+                  <span className="text-[#831843]">Private Google Drive cloud backup sync</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-4.5 text-[#EC4899] stroke-[3px] shrink-0" />
+                  <span className="text-[#831843]">Neo-Brutalist visual theme packs</span>
+                </li>
+              </ul>
+            </div>
+            <p className="text-[10px] text-[#DB2777]/50 font-black uppercase tracking-wider">Linked to superadmin configs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 3: Flow diagram */
+function SlideFlow() {
+  return (
+    <div className="h-full bg-[#FCE7F3] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-4xl">
+        <div>
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-3">
+            Upgrade flow
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-black text-[#831843] leading-tight tracking-tight">
+            How your upgrade works
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center w-full">
+          {/* Step 1 */}
+          <div className="border-2 border-ink bg-white p-5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center md:col-span-2">
+            <span className="text-[10px] font-black text-[#DB2777] uppercase tracking-wider">01 / Download</span>
+            <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">Get Free App</h4>
+            <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Runs 100% offline right on your device</p>
+          </div>
+
+          <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1">
+            <ArrowRight className="size-6 shrink-0" />
+          </div>
+
+          {/* Step 2 */}
+          <div className="border-2 border-ink bg-white p-5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center md:col-span-2">
+            <span className="text-[10px] font-black text-[#DB2777] uppercase tracking-wider">02 / Purchase</span>
+            <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">One-Time Buy</h4>
+            <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Unlock key inside settings tab in 10 seconds</p>
+          </div>
+
+          <div className="flex justify-center text-ink/30 rotate-90 md:rotate-0 py-1">
+            <ArrowRight className="size-6 shrink-0" />
+          </div>
+
+          {/* Step 3 */}
+          <div className="border-2 border-ink bg-white p-5 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center md:col-span-2">
+            <span className="text-[10px] font-black text-[#DB2777] uppercase tracking-wider">03 / Lifetime</span>
+            <h4 className="text-xs sm:text-sm font-black text-ink mt-1.5 leading-snug">Infinite Slots</h4>
+            <p className="text-[11px] text-ink/60 font-semibold mt-1 leading-normal">Enjoy unlimited geofence pins and cloud sync</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 4: Specs closer */
+function SlideCloser({ backHash }: { backHash?: string }) {
+  return (
+    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-5xl">
+        <div>
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-4">
+            Under the hood specs
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#831843] leading-none tracking-tighter">
+            An engine built to last.
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full text-left">
+          {[
+            { icon: ShieldAlert, color: "text-[#EF4444]", title: "Subscription Fatigue", desc: "No monthly trackers, auto-renewals, or bill jumps. Just complete ownership." },
+            { icon: Play, color: "text-[#EC4899]", title: "Offline Verification", desc: "Payment checks are stored locally on-device. No query delays or server calls." },
+            { icon: Layers, color: "text-[#10B981]", title: "Privacy Sync", desc: "Backup loops directly through your Google Drive. We never see your data." },
+          ].map(({ icon: Icon, color, title, desc }) => (
+            <div key={title} className="bg-white border-3 border-[#EC4899] rounded-[2rem] p-6 shadow-[5px_5px_0px_0px_rgba(131,24,67,0.15)] flex flex-col gap-3">
+              <Icon className={`size-7 ${color} shrink-0`} />
+              <h3 className="text-base font-black text-[#831843]">{title}</h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#DB2777]/70 leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4 justify-center">
+          <Link to="/download"
+            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#EC4899] hover:border-[#EC4899] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            Download MinDrop
+          </Link>
+          <Link to="/" hash={backHash} viewTransition
+            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FCE7F3] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            Back to Deck
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   MAIN — Full-Page Fade Scroll Controller
+══════════════════════════════════════════════ */
+function PricingDetailView() {
+  const { from } = Route.useSearch();
+  const backHash = from === "grid" ? "grid" : undefined;
+
+  const [current, setCurrent] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartY = useRef(0);
+  const lastScrollTime = useRef(0);
+
+  const [prices, setPrices] = useState<Record<string, CurrencyPrice>>({});
+  const [currency, setCurrency] = useState<string>("INR");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const s = await getPublicSettings();
+        if (cancelled) return;
+        setPrices(s.displayPrices || {});
+        setCurrency(detectPreferredCurrency(Object.keys(s.displayPrices || { INR: {} })));
+      } catch (e) {
+        console.error("Failed loading superadmin settings", e);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const availableCurrencies = useMemo(() => Object.keys(prices).sort(), [prices]);
+
+  const slides = [
+    <SlideOpening />,
+    <SlideTiers prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} />,
+    <SlideFlow />,
+    <SlideCloser backHash={backHash} />,
+  ];
+  const TOTAL = slides.length;
+
+  const goTo = (idx: number) => {
+    if (idx < 0 || idx >= TOTAL) return;
+    const now = Date.now();
+    if (now - lastScrollTime.current < 850) return;
+    lastScrollTime.current = now;
+    setCurrent(idx);
+  };
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 12) return;
+      if (e.deltaY > 0) goTo(current + 1);
+      else if (e.deltaY < 0) goTo(current - 1);
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, [current]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [current]);
+
+  return (
+    <div
+      className="h-[100dvh] flex flex-col overflow-hidden"
+      style={{ viewTransitionName: "card-pricing" } as React.CSSProperties}
+    >
+      {/* ── Header ── */}
+      <header className="shrink-0 border-b-2 border-[#EC4899]/10 z-50 bg-[#FFF2F7]/95 backdrop-blur-[12px] transition-colors duration-300">
+        <div className="w-[95%] mx-auto h-14 flex items-center justify-between">
+          <Link to="/" hash={backHash} viewTransition
+            className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition text-[#DB2777]/60 hover:text-[#831843]">
+            <X className="size-3.5"/> Close
+          </Link>
+          <div className="flex items-center gap-2">
+            <div className="size-7 relative grid place-items-center shrink-0">
+              <motion.div animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }} transition={{ duration: 3, repeat: Infinity }}
+                className="absolute inset-0 rounded-full border border-[#EC4899]/30" />
+              <motion.div animate={{ y: [0, -2, 0] }} transition={{ duration: 3, repeat: Infinity }}
+                className="size-5 rounded-md bg-gradient-to-tr from-[#EC4899] to-[#FCE7F3] grid place-items-center relative">
+                <span className="text-white font-black text-[9px]">m</span>
+              </motion.div>
+            </div>
+            <span className="text-xs font-black uppercase tracking-wider hidden sm:block text-[#DB2777]/70">MinDrop</span>
+          </div>
+          <Link to="/download"
+            className="text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 bg-ink text-white border-ink hover:bg-[#EC4899] hover:border-[#EC4899] transition">
+            Get App
+          </Link>
+        </div>
+      </header>
+
+      {/* ── Slide Stage ── */}
+      <div
+        ref={containerRef}
+        className="flex-1 relative overflow-hidden"
+        onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
+        onTouchEnd={(e) => {
+          const delta = touchStartY.current - e.changedTouches[0].clientY;
+          if (Math.abs(delta) > 50) {
+            if (delta > 0) goTo(current + 1);
+            else goTo(current - 1);
+          }
+        }}
+      >
+        {/* ── Top hint (Scroll Up) ── */}
+        {current > 0 && (
+          <button
+            onClick={() => goTo(current - 1)}
+            className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-[#DB2777]/30 hover:text-[#831843]"
+          >
+            <ChevronDown className="size-3.5 rotate-180 transition group-hover:-translate-y-0.5" />
+            <span className="text-[9px] font-black uppercase tracking-widest">
+              scroll or ↑
+            </span>
+          </button>
+        )}
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            {slides[current]}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* ── Bottom hint (Scroll Down) ── */}
+        {current < TOTAL - 1 && (
+          <button
+            onClick={() => goTo(current + 1)}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-[#DB2777]/30 hover:text-[#831843]"
+          >
+            <span className="text-[9px] font-black uppercase tracking-widest">
+              scroll or ↓
+            </span>
+            <ChevronDown className="size-3.5 transition group-hover:translate-y-0.5" />
+          </button>
+        )}
+
+        {/* ── Right Dot Navigation ── */}
+        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)}
+              className={`rounded-full transition-all duration-300 cursor-pointer ${
+                i === current
+                  ? "w-1.5 h-7 bg-[#EC4899]"
+                  : "size-1.5 bg-[#DB2777]/25 hover:bg-[#DB2777]/50"
+              }`}
+            />
+          ))}
+          <p className="text-[9px] font-black mt-1 tabular-nums text-[#DB2777]/30">
+            {current + 1}/{TOTAL}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
