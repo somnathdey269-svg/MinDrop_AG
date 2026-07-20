@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ShieldCheck, Check, X, ChevronDown, ArrowRight, ShieldAlert, Play, Sparkles, HelpCircle } from "lucide-react";
+import { ShieldCheck, Check, X, ChevronDown, ArrowRight, ShieldAlert, Play, Sparkles, HelpCircle, MapPin, Volume2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -16,6 +16,86 @@ export const Route = createFileRoute("/faq")({
   component: FaqDetailView,
 });
 
+/* ──────────────────────────────────────────────
+   SUBTLE STEP ILLUSTRATIONS
+────────────────────────────────────────────── */
+function HelpIllustration() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ y: [-12, 12, -12], rotate: [-6, 6, -6] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="size-24 sm:size-28 md:size-32 bg-[#D1FAE5] border-3 border-[#10B981] rounded-[2rem] grid place-items-center shadow-lg text-[#047857]"
+      >
+        <HelpCircle className="size-14 sm:size-16 stroke-[2px]" />
+      </motion.div>
+    </div>
+  );
+}
+
+function PrivacyIllustration() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ scale: [1, 1.08, 1] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="size-24 sm:size-28 md:size-32 bg-white border-3 border-[#10B981] rounded-[2rem] grid place-items-center shadow-lg text-[#10B981]"
+      >
+        <ShieldCheck className="size-14 sm:size-16 stroke-[2px]" />
+      </motion.div>
+      {[1, 2].map((i) => (
+        <motion.div
+          key={i}
+          animate={{ scale: [1, 2.0], opacity: [0.3, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: i * 1.25 }}
+          className="absolute size-24 border-2 border-[#10B981] rounded-full"
+        />
+      ))}
+    </div>
+  );
+}
+
+function BatteryIllustration() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ y: [-10, 10, -10] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="size-24 sm:size-28 md:size-32 bg-[#D1FAE5] border-3 border-[#10B981] rounded-[2rem] grid place-items-center shadow-lg text-[#047857]"
+      >
+        <MapPin className="size-14 sm:size-16 stroke-[2px] fill-[#A7F3D0]" />
+      </motion.div>
+      <motion.div
+        animate={{ scale: [0.7, 1.3, 0.7], opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-4 w-16 h-2 bg-ink/10 rounded-full blur-sm"
+      />
+    </div>
+  );
+}
+
+function AlarmIllustration() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ rotate: [-6, 6, -6], scale: [1, 1.05, 1] }}
+        transition={{ duration: 0.15, repeat: Infinity, repeatType: "reverse" }}
+        className="size-24 sm:size-28 md:size-32 bg-[#10B981] border-3 border-ink rounded-[2rem] grid place-items-center shadow-lg text-white"
+      >
+        <Volume2 className="size-14 sm:size-16 stroke-[2.5px]" />
+      </motion.div>
+      {[1, 2].map((i) => (
+        <motion.div
+          key={i}
+          animate={{ scale: [1, 1.8], opacity: [0.4, 0] }}
+          transition={{ duration: 2, repeat: Infinity, delay: i * 0.8 }}
+          className="absolute size-24 border border-[#10B981] rounded-full"
+        />
+      ))}
+    </div>
+  );
+}
+
 /* ══════════════════════════════════════════════
    SLIDES
 ══════════════════════════════════════════════ */
@@ -23,33 +103,41 @@ export const Route = createFileRoute("/faq")({
 /* Slide 1: Help Hero */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#E2F5EC] flex flex-col items-center justify-center text-center px-5">
-      <motion.span
-        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-[#D1FAE5] px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-8 sm:mb-12">
-        🛡️ Help Center
-      </motion.span>
+    <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto max-w-6xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <div className="flex-1 text-left">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-[#D1FAE5] px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-6 sm:mb-8">
+            🛡️ Help Center
+          </motion.span>
 
-      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
-        {[
-          "Have questions about MinDrop?",
-          "How location works offline?",
-          "How data stays on your phone?",
-        ].map((line, i) => (
-          <motion.p key={i}
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#047857]/45 leading-tight tracking-tight">
-            {line}
+          <div className="flex flex-col gap-3 sm:gap-4 mb-6">
+            {[
+              "Have questions about MinDrop?",
+              "How location works offline?",
+              "How data stays on your phone?",
+            ].map((line, i) => (
+              <motion.p key={i}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#047857]/45 leading-tight tracking-tight">
+                {line}
+              </motion.p>
+            ))}
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#064E3B] leading-none tracking-tighter">
+            Get answers instantly.
           </motion.p>
-        ))}
-      </div>
+        </div>
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
-        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#064E3B] leading-none tracking-tighter">
-        Get answers instantly.
-      </motion.p>
+        <div className="shrink-0">
+          <HelpIllustration />
+        </div>
+      </div>
     </div>
   );
 }
@@ -73,23 +161,29 @@ function SlidePrivacyFAQ() {
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-3">01 / Privacy & Storage</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#064E3B] leading-tight mb-5 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#064E3B] leading-tight mb-5 tracking-tight">
             Your personal life belongs only to you.
           </h2>
-          <p className="text-sm sm:text-base font-semibold text-[#047857]/70 leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#047857]/70 leading-relaxed mb-6">
             MinDrop is designed to run entirely client-side. There are no tracking scripts, analytics cookies, or backend servers scanning your tasks.
           </p>
+          <div className="hidden lg:block">
+            <PrivacyIllustration />
+          </div>
         </div>
-        <div className="flex-1 w-full flex flex-col gap-3">
+        <div className="flex-1 w-full flex flex-col gap-4">
+          <div className="block lg:hidden mb-2">
+            <PrivacyIllustration />
+          </div>
           {data.map((faq, idx) => (
-            <div key={idx} className="bg-white border-2 border-ink rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_rgba(2,44,34,0.1)]">
+            <div key={idx} className="bg-white border-3 border-ink rounded-[2rem] overflow-hidden shadow-[4px_4px_0px_0px_rgba(2,44,34,0.1)]">
               <button onClick={() => setActive(active === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-5 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
+                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
                 <span>{faq.q}</span>
-                <ChevronDown className={`size-4 text-ink/50 transition-transform ${active === idx ? "rotate-180" : ""}`} />
+                <ChevronDown className={`size-4 text-ink/50 transition-transform shrink-0 ml-4 ${active === idx ? "rotate-180" : ""}`} />
               </button>
               {active === idx && (
-                <div className="px-5 pb-5 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm font-semibold">
+                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm md:text-base font-semibold">
                   {faq.a}
                 </div>
               )}
@@ -120,23 +214,29 @@ function SlideBatteryFAQ() {
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-3">02 / Location & Battery</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#064E3B] leading-tight mb-5 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#064E3B] leading-tight mb-5 tracking-tight">
             Background tracking with zero battery drain.
           </h2>
-          <p className="text-sm sm:text-base font-semibold text-[#047857]/70 leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#047857]/70 leading-relaxed mb-6">
             By delegating zone checks to native system micro-listeners, MinDrop avoids keeping your CPU active in the background.
           </p>
+          <div className="hidden lg:block">
+            <BatteryIllustration />
+          </div>
         </div>
-        <div className="flex-1 w-full flex flex-col gap-3">
+        <div className="flex-1 w-full flex flex-col gap-4">
+          <div className="block lg:hidden mb-2">
+            <BatteryIllustration />
+          </div>
           {data.map((faq, idx) => (
-            <div key={idx} className="bg-white border-2 border-ink rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_rgba(2,44,34,0.1)]">
+            <div key={idx} className="bg-white border-3 border-ink rounded-[2rem] overflow-hidden shadow-[4px_4px_0px_0px_rgba(2,44,34,0.1)]">
               <button onClick={() => setActive(active === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-5 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
+                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
                 <span>{faq.q}</span>
-                <ChevronDown className={`size-4 text-ink/50 transition-transform ${active === idx ? "rotate-180" : ""}`} />
+                <ChevronDown className={`size-4 text-ink/50 transition-transform shrink-0 ml-4 ${active === idx ? "rotate-180" : ""}`} />
               </button>
               {active === idx && (
-                <div className="px-5 pb-5 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm font-semibold">
+                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm md:text-base font-semibold">
                   {faq.a}
                 </div>
               )}
@@ -167,30 +267,36 @@ function SlideAlarmsFAQ({ backHash }: { backHash?: string }) {
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-3">03 / Alarms & Filters</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#064E3B] leading-tight mb-5 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#064E3B] leading-tight mb-5 tracking-tight">
             Reliable alerts that survive reboots.
           </h2>
-          <div className="flex flex-col sm:flex-row gap-4 w-full mt-6">
+          <div className="hidden lg:block mb-6">
+            <AlarmIllustration />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 w-full mt-4">
             <Link to="/download"
-              className="px-8 py-4 bg-ink text-white font-black text-xs uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#10B981] hover:border-[#10B981] transition text-center cursor-pointer">
+              className="px-10 py-4.5 bg-ink text-white font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#10B981] hover:border-[#10B981] transition text-center cursor-pointer">
               Download App
             </Link>
             <Link to="/" hash={backHash} viewTransition
-              className="px-8 py-4 bg-white text-ink font-black text-xs uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D1FAE5] transition text-center cursor-pointer">
+              className="px-10 py-4.5 bg-white text-ink font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D1FAE5] transition text-center cursor-pointer">
               Back to Deck
             </Link>
           </div>
         </div>
-        <div className="flex-1 w-full flex flex-col gap-3">
+        <div className="flex-1 w-full flex flex-col gap-4">
+          <div className="block lg:hidden mb-2">
+            <AlarmIllustration />
+          </div>
           {data.map((faq, idx) => (
-            <div key={idx} className="bg-white border-2 border-ink rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_rgba(2,44,34,0.1)]">
+            <div key={idx} className="bg-white border-3 border-ink rounded-[2rem] overflow-hidden shadow-[4px_4px_0px_0px_rgba(2,44,34,0.1)]">
               <button onClick={() => setActive(active === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-5 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
+                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
                 <span>{faq.q}</span>
-                <ChevronDown className={`size-4 text-ink/50 transition-transform ${active === idx ? "rotate-180" : ""}`} />
+                <ChevronDown className={`size-4 text-ink/50 transition-transform shrink-0 ml-4 ${active === idx ? "rotate-180" : ""}`} />
               </button>
               {active === idx && (
-                <div className="px-5 pb-5 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm font-semibold">
+                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm md:text-base font-semibold">
                   {faq.a}
                 </div>
               )}

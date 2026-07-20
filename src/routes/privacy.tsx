@@ -30,6 +30,23 @@ export const Route = createFileRoute("/privacy")({
   component: Privacy,
 });
 
+/* ──────────────────────────────────────────────
+   SUBTLE STEP ILLUSTRATIONS
+────────────────────────────────────────────── */
+function ShieldIllustration() {
+  return (
+    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+      <motion.div
+        animate={{ y: [-12, 12, -12], rotate: [-4, 4, -4] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+        className="size-24 sm:size-28 md:size-32 bg-slate-200 border-3 border-slate-700 rounded-[2rem] grid place-items-center shadow-lg text-slate-700"
+      >
+        <Shield className="size-14 sm:size-16 stroke-[2px]" />
+      </motion.div>
+    </div>
+  );
+}
+
 /* ══════════════════════════════════════════════
    SLIDES
 ══════════════════════════════════════════════ */
@@ -37,33 +54,41 @@ export const Route = createFileRoute("/privacy")({
 /* Slide 1: Core Philosophy */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#F1F5F9] flex flex-col items-center justify-center text-center px-5">
-      <motion.span
-        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="inline-flex items-center gap-2 rounded-full border border-slate-350 bg-slate-200 px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-slate-600 mb-8 sm:mb-12">
-        🛡️ Privacy Promise
-      </motion.span>
+    <div className="h-full bg-[#F1F5F9] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto max-w-6xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <div className="flex-1 text-left">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center gap-2 rounded-full border border-slate-350 bg-slate-200 px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-slate-650 mb-6 sm:mb-8">
+            🛡️ Privacy Promise
+          </motion.span>
 
-      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
-        {[
-          "We do not track your clicks.",
-          "We do not read your notes.",
-          "Your data is yours alone.",
-        ].map((line, i) => (
-          <motion.p key={i}
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-500/50 leading-tight tracking-tight">
-            {line}
+          <div className="flex flex-col gap-3 sm:gap-4 mb-6">
+            {[
+              "We do not track your clicks.",
+              "We do not read your notes.",
+              "Your data is yours alone.",
+            ].map((line, i) => (
+              <motion.p key={i}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-500/50 leading-tight tracking-tight">
+                {line}
+              </motion.p>
+            ))}
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 leading-none tracking-tighter">
+            Zero servers. Zero trackers.
           </motion.p>
-        ))}
-      </div>
+        </div>
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
-        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-slate-800 leading-none tracking-tighter">
-        Zero servers. Zero trackers.
-      </motion.p>
+        <div className="shrink-0">
+          <ShieldIllustration />
+        </div>
+      </div>
     </div>
   );
 }
@@ -72,12 +97,12 @@ function SlideOpening() {
 function SlideSummary() {
   return (
     <div className="h-full bg-[#E2E8F0] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-6xl">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-6xl">
         <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-500 mb-3">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-500 mb-2 sm:mb-3">
             layman terms
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 leading-tight tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 leading-tight tracking-tight">
             Our privacy rules, explained simply.
           </h2>
         </div>
@@ -91,7 +116,7 @@ function SlideSummary() {
             <div key={title} className="bg-white border-3 border-slate-700 rounded-[2rem] p-6 sm:p-8 shadow-[5px_5px_0px_0px_rgba(30,41,59,0.15)] text-left flex flex-col gap-3">
               <Icon className="size-8 text-slate-600 shrink-0" />
               <h3 className="text-base sm:text-lg md:text-xl font-black text-slate-800">{title}</h3>
-              <p className="text-xs sm:text-sm font-semibold text-slate-600/80 leading-relaxed">{body}</p>
+              <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-600/80 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -100,45 +125,44 @@ function SlideSummary() {
   );
 }
 
-/* Slide 3: Full Legal Document Viewer */
+/* Slide 3: Full Legal Document Viewer (Made fully scrollable scroll pane) */
 function SlideLegalDoc() {
   return (
-    <div className="h-full bg-[#F1F5F9] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-6 max-w-4xl h-[76vh]">
+    <div className="h-full bg-[#F1F5F9] overflow-y-auto py-16 px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-6 max-w-4xl">
         <div className="text-center">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-500">
             For compliance
           </p>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-800 mt-1">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-800 mt-1">
             Official Privacy Policy
           </h2>
         </div>
 
-        {/* Scrollable document box */}
-        <div className="flex-1 w-full border-3 border-slate-800 bg-white rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(30,41,59,0.15)] overflow-y-auto text-left">
-          <div className="space-y-6 text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">
+        <div className="w-full border-3 border-slate-800 bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(30,41,59,0.15)] text-left">
+          <div className="space-y-6 text-sm font-semibold text-slate-700 leading-relaxed">
             <p className="font-bold text-slate-900 border-b-2 border-dashed border-slate-200 pb-4">
               This Privacy Policy describes how MinDrop ("MinDrop", "we", "us", "our") collects, uses, discloses, retains, and protects personal data when you use the MinDrop mobile application. DPDP Act, 2023 Compliant. Last updated: {LAST_UPDATED}.
             </p>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">1. Scope</h3>
-              <p>This Policy applies strictly to the MinDrop application. MinDrop acts as a data fiduciary on-device. It does not apply to any third-party services you choose to connect (like Google Drive), which are governed by their respective owners.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">1. Scope</h3>
+              <p className="font-medium text-slate-600">This Policy applies strictly to the MinDrop application. MinDrop acts as a data fiduciary on-device. It does not apply to any third-party services you choose to connect (like Google Drive), which are governed by their respective owners.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">2. Data Storage & Architecture</h3>
-              <p>Your notes, lists, voice recordings, pictures, and coordinates are saved inside a sandboxed SQLite database configuration. This data never travels across a server unless you trigger manual backup sync mechanisms directly into your authorized Google Drive.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">2. Data Storage & Architecture</h3>
+              <p className="font-medium text-slate-600">Your notes, lists, voice recordings, pictures, and coordinates are saved inside a sandboxed SQLite database configuration. This data never travels across a server unless you trigger manual backup sync mechanisms directly into your authorized Google Drive.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">3. Required Permissions</h3>
-              <p>To run offline, MinDrop requests: (a) Notification Listener Access to scan for filter rules, (b) Background Location access to monitor geofences, and (c) Battery optimization exclusions to avoid background CPU execution locks. These run locally on-device.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">3. Required Permissions</h3>
+              <p className="font-medium text-slate-600">To run offline, MinDrop requests: (a) Notification Listener Access to scan for filter rules, (b) Background Location access to monitor geofences, and (c) Battery optimization exclusions to avoid background CPU execution locks. These run locally on-device.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">4. Contact Information</h3>
-              <p>For any queries about DPDP Act compliance or your data rights, contact us at security@getmindrop.app.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">4. Contact Information</h3>
+              <p className="font-medium text-slate-600">For any queries about DPDP Act compliance or your data rights, contact us at security@getmindrop.app.</p>
             </div>
           </div>
         </div>
@@ -176,9 +200,8 @@ function Privacy() {
     const el = containerRef.current;
     if (!el) return;
     const handler = (e: WheelEvent) => {
-      // Allow scrolling inside the legal document scrollbox
-      const isScrollDoc = (e.target as HTMLElement).closest(".overflow-y-auto");
-      if (isScrollDoc) return;
+      // If we are on the legal document slide (index 2), do not intercept or prevent default scrolling
+      if (current === 2) return;
 
       e.preventDefault();
       if (Math.abs(e.deltaY) < 12) return;
@@ -232,12 +255,12 @@ function Privacy() {
       <div
         ref={containerRef}
         className="flex-1 relative overflow-hidden"
-        onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
+        onTouchStart={(e) => {
+          if (current === 2) return;
+          touchStartY.current = e.touches[0].clientY;
+        }}
         onTouchEnd={(e) => {
-          // Allow swiping inside inner document scrollbox
-          const isScrollDoc = (e.target as HTMLElement).closest(".overflow-y-auto");
-          if (isScrollDoc) return;
-
+          if (current === 2) return;
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           if (Math.abs(delta) > 50) {
             if (delta > 0) goTo(current + 1);

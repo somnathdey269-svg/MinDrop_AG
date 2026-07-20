@@ -53,3 +53,5 @@ Coordinates platform compiles, package manifests, podfiles, and build automation
   * **Change**: Executed requirements: 'Gracefully fallback to default settings when database queries throw exceptions during static builds'
 - **2026-07-20 15:13:45** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Rebuild later-feature as immersive storytelling landing page with scroll narrative, interactive alarm playground, and real-life scenarios'
+- **2026-07-20 17:16:53** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Correct pricing to yearly subscription, fix upgrade flow layout wrap, and enable native scrolling on legal document slides'
