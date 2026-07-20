@@ -23,11 +23,11 @@ export const Route = createFileRoute("/notify-feature")({
 function NotificationFlood() {
   const [visible, setVisible] = useState<number[]>([]);
   const notifs = [
-    { icon: "💬", app: "WhatsApp Group", text: "Rahul sent a meme 😂", color: "bg-green-50 border-green-200" },
-    { icon: "🛒", app: "Swiggy Offer", text: "60% off your next order!", color: "bg-orange-50 border-orange-200" },
-    { icon: "🏦", app: "HDFC Bank", text: "₹15,000 debited from your account", color: "bg-red-50 border-red-200", important: true },
-    { icon: "📱", app: "Instagram", text: "Priya liked your photo", color: "bg-pink-50 border-pink-200" },
-    { icon: "🛍️", app: "Amazon Sale", text: "Today only — 80% off!", color: "bg-yellow-50 border-yellow-200" },
+    { icon: "💬", app: "WhatsApp Group", text: "Rahul sent a meme 😂", color: "bg-[#FFFDF5] border-[#F59E0B]/20" },
+    { icon: "🛒", app: "Swiggy Offer", text: "60% off your next order!", color: "bg-[#FEF3C7]/40 border-[#F59E0B]/20" },
+    { icon: "🏦", app: "HDFC Bank", text: "₹15,000 debited from your account", color: "bg-[#FEF3C7] border-[#F59E0B]/40", important: true },
+    { icon: "📱", app: "Instagram", text: "Priya liked your photo", color: "bg-[#FFFDF5] border-[#F59E0B]/20" },
+    { icon: "🛍️", app: "Amazon Sale", text: "Today only — 80% off!", color: "bg-[#FDE68A]/30 border-[#F59E0B]/30" },
   ];
 
   useEffect(() => {
@@ -46,15 +46,15 @@ function NotificationFlood() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ type: "spring", stiffness: 220, damping: 20 }}
-              className={`flex items-center gap-3 border rounded-2xl px-4 py-2 sm:py-3 ${n.color} ${n.important ? "ring-2 ring-amber-400" : ""}`}>
+              className={`flex items-center gap-3 border rounded-2xl px-4 py-2 sm:py-3 ${n.color} ${n.important ? "ring-2 ring-[#F59E0B]" : ""}`}>
               <span className="text-lg sm:text-xl">{n.icon}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-[9px] font-black text-black/50 uppercase tracking-wide">{n.app}</p>
-                <p className={`text-[11px] sm:text-xs font-bold leading-snug truncate ${n.important ? "text-red-700" : "text-black/60"}`}>{n.text}</p>
+                <p className="text-[9px] font-black text-[#78350F]/50 uppercase tracking-wide">{n.app}</p>
+                <p className={`text-[11px] sm:text-xs font-bold leading-snug truncate ${n.important ? "text-[#78350F]" : "text-[#78350F]/70"}`}>{n.text}</p>
               </div>
               {n.important && (
                 <motion.span animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1, repeat: Infinity }}
-                  className="text-[8px] font-black text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-full shrink-0">
+                  className="text-[8px] font-black text-[#78350F] bg-[#FEF3C7] px-1.5 py-0.5 rounded-full shrink-0">
                   IMPORTANT
                 </motion.span>
               )}
@@ -81,7 +81,7 @@ function FilterSimulator() {
 
   return (
     <div className="w-full max-w-sm flex flex-col gap-3">
-      <p className="text-[10px] font-black uppercase tracking-widest text-ink/40">
+      <p className="text-[10px] font-black uppercase tracking-widest text-[#78350F]/40">
         Which alerts should wake you up?
       </p>
       <div className="flex flex-col gap-1.5">
@@ -89,17 +89,17 @@ function FilterSimulator() {
           <button key={r.id} onClick={() => toggle(r.id)}
             className={`flex items-center gap-3 px-3 py-2 sm:py-2.5 rounded-xl border-2 text-left transition cursor-pointer ${
               active.includes(r.id)
-                ? "border-[#F59E0B] bg-amber-50 shadow-[2px_2px_0px_0px_rgba(245,158,11,0.3)]"
-                : "border-ink/15 bg-white"
+                ? "border-[#F59E0B] bg-[#FEF3C7] shadow-[2px_2px_0px_0px_rgba(245,158,11,0.3)]"
+                : "border-[#F59E0B]/20 bg-white"
             }`}>
             <span className="text-lg">{r.emoji}</span>
-            <p className={`flex-1 text-xs font-bold ${active.includes(r.id) ? "text-ink" : "text-ink/40"}`}>{r.label}</p>
-            {active.includes(r.id) && <Volume2 className="size-3.5 text-amber-500 shrink-0" />}
+            <p className={`flex-1 text-xs font-bold ${active.includes(r.id) ? "text-[#78350F]" : "text-[#78350F]/40"}`}>{r.label}</p>
+            {active.includes(r.id) && <Volume2 className="size-3.5 text-[#F59E0B] shrink-0" />}
           </button>
         ))}
       </div>
-      <div className={`rounded-xl border-2 px-3 py-2 transition-all ${active.length > 0 ? "border-amber-400 bg-amber-50" : "border-ink/10 bg-white"}`}>
-        <p className="text-[11px] font-black text-amber-700 leading-tight">
+      <div className={`rounded-xl border-2 px-3 py-2 transition-all ${active.length > 0 ? "border-[#F59E0B]/40 bg-[#FFFBEB]" : "border-[#F59E0B]/10 bg-white"}`}>
+        <p className="text-[11px] font-black text-[#78350F] leading-tight">
           {active.length === 0
             ? "No filters active. All alerts behave normally."
             : `${active.length} filter${active.length > 1 ? "s" : ""} active. Those will ring as a looping alarm.`}
@@ -116,11 +116,11 @@ function FilterSimulator() {
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#FFFDF5] flex flex-col items-center justify-center text-center px-5">
+    <div className="h-full bg-[#FFFBEB] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-amber-100 px-4 py-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-6 sm:mb-8">
+        className="inline-flex items-center gap-1.5 rounded-full border border-[#F59E0B]/20 bg-[#FEF3C7] px-4 py-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-6 sm:mb-8">
         🔔 Smart Filters
       </motion.span>
 
@@ -131,7 +131,7 @@ function SlideOpening() {
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-            className="text-lg sm:text-2xl md:text-3xl font-black text-ink/35 leading-tight">
+            className="text-lg sm:text-2xl md:text-3xl font-black text-[#D97706]/40 leading-tight">
             {line}
           </motion.p>
         ))}
@@ -139,13 +139,13 @@ function SlideOpening() {
 
       <motion.p
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink leading-tight tracking-tight">
+        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#78350F] leading-tight tracking-tight">
         You saw it 4 hours later.
       </motion.p>
 
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
-        className="mt-8 sm:mt-12 flex flex-col items-center gap-1.5 text-ink/20">
+        className="mt-8 sm:mt-12 flex flex-col items-center gap-1.5 text-[#D97706]/30">
         <p className="text-[9px] font-black uppercase tracking-widest">Scroll to continue</p>
         <ChevronDown className="size-4 animate-bounce" />
       </motion.div>
@@ -156,23 +156,23 @@ function SlideOpening() {
 /* Slide 2: The Noise Problem */
 function SlideProblem() {
   return (
-    <div className="h-full bg-[#1C1917] flex items-center justify-center px-5">
+    <div className="h-full bg-[#451A03] flex items-center justify-center px-5">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-14 max-w-5xl">
         <div className="flex-1 text-left">
-          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">
+          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FDE68A]/30 mb-3">
             Why everything gets lost in your phone
           </p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-4 sm:mb-6">
             Every app shouts.<br />
             <span className="text-[#F59E0B]">The important ones get lost</span> in the crowd.
           </h2>
-          <p className="text-xs sm:text-sm font-semibold text-white/50 leading-relaxed max-w-lg">
+          <p className="text-xs sm:text-sm font-semibold text-[#FEF3C7]/60 leading-relaxed max-w-lg">
             Sales offers, group chats, likes, reminders, cricket scores — they all arrive looking exactly the same. Your brain tunes them all out. Including the one that actually needed your attention.
           </p>
         </div>
         <div className="shrink-0 flex flex-col items-center gap-2">
           <NotificationFlood />
-          <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">All alerts look identical</p>
+          <p className="text-[9px] font-black text-[#FEF3C7]/20 uppercase tracking-widest">All alerts look identical</p>
         </div>
       </div>
     </div>
@@ -182,13 +182,13 @@ function SlideProblem() {
 /* Slide 3: What MinDrop Does */
 function SlideDifference() {
   return (
-    <div className="h-full bg-[#FFFDF5] flex items-center justify-center px-5">
+    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-5">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-4xl">
         <div>
           <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-3">
             How MinDrop handles this
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#78350F] leading-tight">
             MinDrop watches your alerts.<br />
             <span className="text-[#F59E0B]">The important ones</span> become an alarm.
           </h2>
@@ -199,10 +199,10 @@ function SlideDifference() {
             { icon: "📴", title: "Bypasses Silent Mode", body: "When your phone is on silent, important alerts still ring through. Nothing slips past unnoticed." },
             { icon: "🔒", title: "Stays on Your Phone", body: "MinDrop reads your alerts right there on your phone. Nothing is sent to any server. Your messages stay private." },
           ].map(({ icon, title, body }) => (
-            <div key={title} className="bg-white border-3 border-ink rounded-[1.5rem] p-5 sm:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2">
+            <div key={title} className="bg-white border-3 border-[#F59E0B] rounded-[1.5rem] p-5 sm:p-6 shadow-[4px_4px_0px_0px_rgba(120,53,15,0.15)] text-left flex flex-col gap-2">
               <span className="text-2xl">{icon}</span>
-              <h3 className="text-sm sm:text-base font-black text-ink">{title}</h3>
-              <p className="text-xs sm:text-sm font-semibold text-ink/55 leading-relaxed">{body}</p>
+              <h3 className="text-sm sm:text-base font-black text-[#78350F]">{title}</h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#78350F]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -214,16 +214,16 @@ function SlideDifference() {
 /* Slide 4: Build Your Filter */
 function SlidePlayground() {
   return (
-    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-5">
+    <div className="h-full bg-[#FEF3C7] flex items-center justify-center px-5">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-16 max-w-4xl">
         <div className="flex-1 text-left">
           <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-3">
             Build your filter rules
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-ink leading-tight mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#78350F] leading-tight mb-3 sm:mb-4">
             Set it once. Then forget it.
           </h2>
-          <p className="text-xs sm:text-sm font-semibold text-ink/55 leading-relaxed mb-4 sm:mb-5 max-w-sm">
+          <p className="text-xs sm:text-sm font-semibold text-[#78350F]/75 leading-relaxed mb-4 sm:mb-5 max-w-sm">
             Pick the types of alerts that should never be missed. MinDrop takes care of the rest. Toggle the options to see rule changes.
           </p>
           <div className="flex flex-col gap-2">
@@ -234,7 +234,7 @@ function SlidePlayground() {
             ].map((s, i) => (
               <div key={i} className="flex items-center gap-2.5">
                 <div className="size-5 rounded-full bg-[#F59E0B] text-white grid place-items-center shrink-0 text-[9px] font-black">{i+1}</div>
-                <p className="text-xs sm:text-sm font-bold text-ink/65 leading-relaxed">{s}</p>
+                <p className="text-xs sm:text-sm font-bold text-[#78350F]/80 leading-relaxed">{s}</p>
               </div>
             ))}
           </div>
@@ -254,25 +254,25 @@ function SlideStep({ step, stepNum, title, detail, color }: {
   const TOTAL_STEPS = 4;
   return (
     <div className={`h-full ${color} flex items-center justify-center px-5 relative overflow-hidden`}>
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 text-[180px] sm:text-[240px] font-black text-ink/5 leading-none select-none pointer-events-none pl-4">
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 text-[180px] sm:text-[240px] font-black text-[#F59E0B]/5 leading-none select-none pointer-events-none pl-4">
         {step}
       </div>
 
       <div className="w-[95%] mx-auto max-w-3xl relative z-10">
-        <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-ink/30 mb-4 sm:mb-5">
+        <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#78350F]/40 mb-4 sm:mb-5">
           Step {stepNum} of {TOTAL_STEPS} · How It Works
         </p>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink leading-tight mb-4 sm:mb-6">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#78350F] leading-tight mb-4 sm:mb-6">
           {title}
         </h2>
-        <p className="text-base sm:text-lg md:text-xl font-semibold text-ink/55 leading-relaxed max-w-2xl">
+        <p className="text-base sm:text-lg md:text-xl font-semibold text-[#78350F]/70 leading-relaxed max-w-2xl">
           {detail}
         </p>
 
         <div className="flex gap-2 mt-8 sm:mt-12">
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
             <div key={i}
-              className={`h-1 rounded-full transition-all ${i === stepNum - 1 ? "w-10 bg-[#F59E0B]" : "w-3 bg-ink/15"}`}/>
+              className={`h-1 rounded-full transition-all ${i === stepNum - 1 ? "w-10 bg-[#F59E0B]" : "w-3 bg-[#F59E0B]/20"}`}/>
           ))}
         </div>
       </div>
@@ -285,21 +285,21 @@ function SlideScenarios() {
   const [cardIdx, setCardIdx] = useState(0);
 
   const scenarios = [
-    { icon: Banknote, title: "Money Movement", scene: "₹18,000 was just taken from your account. You need to know this the moment it happens.", color: "bg-red-50" },
-    { icon: CreditCard, title: "UPI Payment", scene: "Someone sent you money via UPI. Or charged your card. Either way, this cannot sit unread.", color: "bg-green-50" },
-    { icon: MessageSquare, title: "That One Person", scene: "Your child messaged you. Your doctor sent a reply. Not every message is equal — and now they won't be treated equally.", color: "bg-blue-50" },
-    { icon: ShoppingBag, title: "Order Going Wrong", scene: "Your delivery was cancelled. Your return was rejected. These need your attention right now, not tomorrow.", color: "bg-purple-50" },
-    { icon: Bell, title: "Any Alert You Choose", scene: "You are not limited to our list. Add any keyword, any app name, any amount. You are in full control.", color: "bg-amber-50" },
+    { icon: Banknote, title: "Money Movement", scene: "₹18,000 was just taken from your account. You need to know this the moment it happens.", color: "bg-[#FFFBEB]" },
+    { icon: CreditCard, title: "UPI Payment", scene: "Someone sent you money via UPI. Or charged your card. Either way, this cannot sit unread.", color: "bg-[#FEF3C7]" },
+    { icon: MessageSquare, title: "That One Person", scene: "Your child messaged you. Your doctor sent a reply. Not every message is equal — and now they won't be treated equally.", color: "bg-[#FDE68A]/60" },
+    { icon: ShoppingBag, title: "Order Going Wrong", scene: "Your delivery was cancelled. Your return was rejected. These need your attention right now, not tomorrow.", color: "bg-[#FFFBEB]" },
+    { icon: Bell, title: "Any Alert You Choose", scene: "You are not limited to our list. Add any keyword, any app name, any amount. You are in full control.", color: "bg-[#FEF3C7]" },
   ];
 
   const prev = () => setCardIdx(i => Math.max(0, i - 1));
   const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
 
   return (
-    <div className="h-full bg-[#1C1917] flex items-center justify-center px-5">
+    <div className="h-full bg-[#451A03] flex items-center justify-center px-5">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-5 sm:gap-6 max-w-2xl">
         <div className="text-center">
-          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">
+          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FEF3C7]/30 mb-3">
             Moments this saves you
           </p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight">
@@ -315,13 +315,13 @@ function SlideScenarios() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`w-full rounded-[1.75rem] border-3 border-ink p-6 sm:p-7 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] ${scenarios[cardIdx].color} flex flex-col gap-4`}>
-              <div className="size-12 bg-white border-2 border-ink rounded-xl grid place-items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                {(() => { const Icon = scenarios[cardIdx].icon; return <Icon className="size-6 text-ink"/>; })()}
+              className={`w-full rounded-[1.75rem] border-3 border-[#F59E0B] p-6 sm:p-7 shadow-[5px_5px_0px_0px_rgba(120,53,15,0.4)] ${scenarios[cardIdx].color} flex flex-col gap-4`}>
+              <div className="size-12 bg-white border-2 border-[#F59E0B] rounded-xl grid place-items-center shadow-[3px_3px_0px_0px_rgba(245,158,11,0.2)]">
+                {(() => { const Icon = scenarios[cardIdx].icon; return <Icon className="size-6 text-[#78350F]"/>; })()}
               </div>
               <div>
-                <p className="text-[10px] font-black text-ink/40 uppercase tracking-wider mb-1.5">{scenarios[cardIdx].title}</p>
-                <p className="text-sm sm:text-base font-black text-ink leading-snug">{scenarios[cardIdx].scene}</p>
+                <p className="text-[10px] font-black text-[#78350F] uppercase tracking-wider mb-1.5">{scenarios[cardIdx].title}</p>
+                <p className="text-sm sm:text-base font-black text-[#78350F] leading-snug">{scenarios[cardIdx].scene}</p>
               </div>
             </motion.div>
           </AnimatePresence>
@@ -330,17 +330,17 @@ function SlideScenarios() {
         {/* Navigation */}
         <div className="flex items-center gap-4">
           <button onClick={prev} disabled={cardIdx === 0}
-            className="size-9 rounded-full border-2 border-white/20 bg-white/8 grid place-items-center text-white/50 hover:text-white hover:bg-white/20 disabled:opacity-25 transition cursor-pointer">
+            className="size-9 rounded-full border-2 border-[#F59E0B]/30 bg-white/5 grid place-items-center text-[#FEF3C7]/60 hover:text-white hover:bg-white/10 disabled:opacity-25 transition cursor-pointer">
             <ChevronLeft className="size-4"/>
           </button>
           <div className="flex gap-2">
             {scenarios.map((_, i) => (
               <button key={i} onClick={() => setCardIdx(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-6 h-2 bg-white" : "size-2 bg-white/30 hover:bg-white/50"}`}/>
+                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-6 h-2 bg-[#F59E0B]" : "size-2 bg-[#FEF3C7]/30 hover:bg-white/50"}`}/>
             ))}
           </div>
           <button onClick={next} disabled={cardIdx === scenarios.length - 1}
-            className="size-9 rounded-full border-2 border-white/20 bg-white/8 grid place-items-center text-white/50 hover:text-white hover:bg-white/20 disabled:opacity-25 transition cursor-pointer">
+            className="size-9 rounded-full border-2 border-[#F59E0B]/30 bg-white/5 grid place-items-center text-[#FEF3C7]/60 hover:text-white hover:bg-white/10 disabled:opacity-25 transition cursor-pointer">
             <ChevronRight className="size-4"/>
           </button>
         </div>
@@ -352,15 +352,15 @@ function SlideScenarios() {
 /* Slide 10: Closer */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
-    <div className="h-full bg-[#FFFDF5] flex items-center justify-center px-5 text-center">
+    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-5 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-5 sm:gap-6 max-w-3xl">
-        <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-ink/25">
+        <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#78350F]/45">
           Stop treating all alerts the same
         </p>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink leading-tight">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#78350F] leading-tight">
           Some things demand your attention. Others don't.
         </h2>
-        <p className="text-base sm:text-lg font-semibold text-ink/45 leading-relaxed max-w-xl">
+        <p className="text-base sm:text-lg font-semibold text-[#78350F]/60 leading-relaxed max-w-xl">
           MinDrop gives your truly important alerts a voice loud enough to be heard — and keeps everything else quiet, just the way you like it.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto mt-2">
@@ -369,7 +369,7 @@ function SlideCloser({ backHash }: { backHash?: string }) {
             Download MinDrop — Free
           </Link>
           <Link to="/" hash={backHash} viewTransition
-            className="px-8 sm:px-10 py-3.5 bg-white text-ink font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-amber-50 transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            className="px-8 sm:px-10 py-3.5 bg-white text-ink font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FEF3C7] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
             See All Features
           </Link>
         </div>
@@ -386,10 +386,9 @@ function NotifyDetailView() {
   const backHash = from === "grid" ? "grid" : undefined;
 
   const [current, setCurrent] = useState(0);
-  const currentRef = useRef(0);
-  const lockedRef  = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
+  const lastScrollTime = useRef(0);
 
   const STEPS = [
     {
@@ -398,7 +397,7 @@ function NotifyDetailView() {
       detail: "This could be anything — a WhatsApp message, a bank SMS, an Instagram like. It arrives the same way it always does.",
     },
     {
-      step: "02", stepNum: 2, color: "bg-[#FFF7ED]",
+      step: "02", stepNum: 2, color: "bg-[#FEF3C7]/40",
       title: "MinDrop checks if it matches your filters.",
       detail: "In less than a second, MinDrop reads the alert and checks if it matches the types you said matter to you. This all happens right on your phone — nothing leaves it.",
     },
@@ -408,7 +407,7 @@ function NotifyDetailView() {
       detail: "Instead of a quiet banner, your phone starts ringing — just like a phone call. It does not stop until you see it and decide what to do.",
     },
     {
-      step: "04", stepNum: 4, color: "bg-[#FFF7ED]",
+      step: "04", stepNum: 4, color: "bg-[#FEF3C7]/40",
       title: "If it does not match, nothing changes.",
       detail: "Promos, chats, random updates — they behave exactly as they always did. Silent when you want silence. MinDrop only acts on what you told it to watch.",
     },
@@ -429,11 +428,11 @@ function NotifyDetailView() {
   const isDark = DARK_SLIDES.includes(current);
 
   const goTo = (idx: number) => {
-    if (lockedRef.current || idx < 0 || idx >= TOTAL) return;
-    lockedRef.current = true;
-    currentRef.current = idx;
+    if (idx < 0 || idx >= TOTAL) return;
+    const now = Date.now();
+    if (now - lastScrollTime.current < 1100) return;
+    lastScrollTime.current = now;
     setCurrent(idx);
-    setTimeout(() => { lockedRef.current = false; }, 750);
   };
 
   useEffect(() => {
@@ -441,22 +440,22 @@ function NotifyDetailView() {
     if (!el) return;
     const handler = (e: WheelEvent) => {
       e.preventDefault();
-      if (lockedRef.current) return;
-      if (e.deltaY > 0) goTo(currentRef.current + 1);
-      else if (e.deltaY < 0) goTo(currentRef.current - 1);
+      if (Math.abs(e.deltaY) < 35) return;
+      if (e.deltaY > 0) goTo(current + 1);
+      else if (e.deltaY < 0) goTo(current - 1);
     };
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
-  }, []);
+  }, [current]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(currentRef.current + 1); }
-      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(currentRef.current - 1); }
+      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [current]);
 
   return (
     <div
@@ -464,11 +463,11 @@ function NotifyDetailView() {
       style={{ viewTransitionName: "card-notify" } as React.CSSProperties}
     >
       {/* ── Header ── */}
-      <header className="shrink-0 border-b-2 border-ink/8 z-50"
-        style={{ backgroundColor: isDark ? "rgba(28,25,23,0.96)" : "rgba(255,253,245,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
+      <header className="shrink-0 border-b-2 border-[#F59E0B]/10 z-50"
+        style={{ backgroundColor: isDark ? "rgba(69,26,3,0.96)" : "rgba(255,251,235,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
         <div className="w-[95%] mx-auto h-14 flex items-center justify-between">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition ${isDark ? "text-white/50 hover:text-white" : "text-ink/50 hover:text-ink"}`}>
+            className={`flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition ${isDark ? "text-[#FEF3C7]/60 hover:text-white" : "text-[#D97706]/60 hover:text-[#78350F]"}`}>
             <X className="size-3.5"/> Close
           </Link>
           <div className="flex items-center gap-2">
@@ -476,11 +475,11 @@ function NotifyDetailView() {
               <motion.div animate={{scale:[1,1.5,1],opacity:[0.2,0,0.2]}} transition={{duration:3,repeat:Infinity}}
                 className="absolute inset-0 rounded-full border border-[#F59E0B]/30"/>
               <motion.div animate={{y:[0,-2,0]}} transition={{duration:3,repeat:Infinity}}
-                className="size-5 rounded-md bg-gradient-to-tr from-[#F59E0B] to-[#FCD34D] grid place-items-center relative">
+                className="size-5 rounded-md bg-gradient-to-tr from-[#F59E0B] to-[#FEF3C7] grid place-items-center relative">
                 <span className="text-white font-black text-[9px]">m</span>
               </motion.div>
             </div>
-            <span className={`text-xs font-black uppercase tracking-wider hidden sm:block transition ${isDark ? "text-white/60" : "text-ink/60"}`}>MinDrop</span>
+            <span className={`text-xs font-black uppercase tracking-wider hidden sm:block transition ${isDark ? "text-[#FEF3C7]/70" : "text-[#D97706]/70"}`}>MinDrop</span>
           </div>
           <Link to="/download"
             className={`text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 transition ${isDark ? "bg-white text-ink border-white hover:bg-[#F59E0B] hover:text-white hover:border-[#F59E0B]" : "bg-ink text-white border-ink hover:bg-[#F59E0B] hover:border-[#F59E0B]"}`}>
@@ -497,8 +496,8 @@ function NotifyDetailView() {
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           if (Math.abs(delta) > 50) {
-            if (delta > 0) goTo(currentRef.current + 1);
-            else goTo(currentRef.current - 1);
+            if (delta > 0) goTo(current + 1);
+            else goTo(current - 1);
           }
         }}
       >
@@ -523,12 +522,12 @@ function NotifyDetailView() {
                 i === current
                   ? "w-1.5 h-7 bg-[#F59E0B]"
                   : isDark
-                    ? "size-1.5 bg-white/25 hover:bg-white/60"
-                    : "size-1.5 bg-ink/20 hover:bg-ink/50"
+                    ? "size-1.5 bg-[#FEF3C7]/20 hover:bg-[#FEF3C7]/60"
+                    : "size-1.5 bg-[#D97706]/20 hover:bg-[#D97706]/50"
               }`}
             />
           ))}
-          <p className={`text-[9px] font-black mt-1 tabular-nums transition ${isDark ? "text-white/25" : "text-ink/25"}`}>
+          <p className={`text-[9px] font-black mt-1 tabular-nums transition ${isDark ? "text-[#FEF3C7]/30" : "text-[#D97706]/30"}`}>
             {current + 1}/{TOTAL}
           </p>
         </div>
@@ -536,7 +535,7 @@ function NotifyDetailView() {
         {/* ── Bottom hint ── */}
         {current < TOTAL - 1 && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-20 pointer-events-none">
-            <p className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-white/15" : "text-ink/15"}`}>
+            <p className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#FEF3C7]/20" : "text-[#D97706]/20"}`}>
               scroll or ↓
             </p>
           </div>
