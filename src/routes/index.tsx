@@ -489,23 +489,40 @@ function ShowcaseDeckPage() {
 
       {/* 1. Header Corners */}
       <header className="flex justify-between items-center w-full z-30 shrink-0">
-        <button
-          onClick={() => setAboutOpen(true)}
-          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 cursor-pointer hover:border-[#FF671F]"
+        <Link
+          to="/terms"
+          viewTransition
+          style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
+          className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
         >
-          About
-        </button>
+          Terms
+        </Link>
         
-        <div className="flex items-center gap-2">
-          <span className="inline-grid place-items-center size-8 rounded-lg bg-[#FF671F] text-white font-black border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">M</span>
+        <div className="flex items-center gap-2 select-none">
+          <div className="size-8 relative grid place-items-center shrink-0">
+            <motion.div
+              animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0, 0.2] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 rounded-full border border-[#FF671F]/30"
+            />
+            <motion.div
+              animate={{ y: [0, -2, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="size-6 rounded-lg bg-gradient-to-tr from-[#FF671F] to-[#FFA06E] shadow-md grid place-items-center relative border border-white/10"
+            >
+              <span className="text-white font-black text-xs font-sans">m</span>
+            </motion.div>
+          </div>
           <span className="text-xs font-black uppercase tracking-wider hidden sm:inline text-ink">MinDrop</span>
         </div>
 
         <Link
-          to="/download"
+          to="/privacy"
+          viewTransition
+          style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
           className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
         >
-          Get App
+          Privacy
         </Link>
       </header>
 
@@ -709,8 +726,13 @@ function ShowcaseDeckPage() {
 
       {/* 3. Footer Corners */}
       <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
-        <div className="justify-self-start text-xs font-black uppercase tracking-wider text-ink/50 hidden sm:block">
-          MinDrop for Mobile (Offline)
+        <div className="justify-self-start">
+          <button
+            onClick={() => setAboutOpen(true)}
+            className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 cursor-pointer hover:border-[#FF671F]"
+          >
+            About
+          </button>
         </div>
         <div className="sm:hidden" />
 
@@ -738,10 +760,10 @@ function ShowcaseDeckPage() {
 
         <div className="justify-self-end">
           <Link
-            to="/privacy"
+            to="/download"
             className="text-xs uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
           >
-            Privacy
+            Get App
           </Link>
         </div>
       </footer>
