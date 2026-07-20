@@ -52,7 +52,7 @@ export const refreshPremiumFxRates = createServerFn({ method: "POST" })
       .select("value")
       .eq("key", "premium_price_inr")
       .maybeSingle();
-    const priceInr = Number(priceRow?.value || 499);
+    const priceInr = Number(priceRow?.value || 999);
 
     const rates = await fetchRates();
     const map: Record<string, { raw: number; displayed: number; symbol: string }> = {

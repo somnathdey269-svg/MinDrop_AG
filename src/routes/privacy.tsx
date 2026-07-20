@@ -60,7 +60,7 @@ function SlideOpening() {
           <motion.span
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-350 bg-slate-200 px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-slate-650 mb-6 sm:mb-8">
+            className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-slate-200 px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-slate-650 mb-6 sm:mb-8">
             🛡️ Privacy Promise
           </motion.span>
 
@@ -80,7 +80,7 @@ function SlideOpening() {
 
           <motion.p
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 leading-none tracking-tighter">
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-slate-800 leading-none tracking-tighter">
             Zero servers. Zero trackers.
           </motion.p>
         </div>
@@ -102,7 +102,7 @@ function SlideSummary() {
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-500 mb-2 sm:mb-3">
             layman terms
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 leading-tight tracking-tight">
             Our privacy rules, explained simply.
           </h2>
         </div>
@@ -125,8 +125,13 @@ function SlideSummary() {
   );
 }
 
-/* Slide 3: Full Legal Document Viewer (Made fully scrollable scroll pane) */
-function SlideLegalDoc() {
+/* Slide 3: Full Legal Document Viewer (Verbatim content from original compliance page) */
+interface SlideLegalDocProps {
+  officer: string;
+  officerEmail: string;
+  address: string;
+}
+function SlideLegalDoc({ officer, officerEmail, address }: SlideLegalDocProps) {
   return (
     <div className="h-full bg-[#F1F5F9] overflow-y-auto py-16 px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-6 max-w-4xl">
@@ -140,29 +145,95 @@ function SlideLegalDoc() {
         </div>
 
         <div className="w-full border-3 border-slate-800 bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(30,41,59,0.15)] text-left">
-          <div className="space-y-6 text-sm font-semibold text-slate-700 leading-relaxed">
+          <div className="space-y-6 text-xs sm:text-sm md:text-[15px] font-semibold text-slate-700 leading-relaxed">
             <p className="font-bold text-slate-900 border-b-2 border-dashed border-slate-200 pb-4">
               This Privacy Policy describes how MinDrop ("MinDrop", "we", "us", "our") collects, uses, discloses, retains, and protects personal data when you use the MinDrop mobile application. DPDP Act, 2023 Compliant. Last updated: {LAST_UPDATED}.
             </p>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">1. Scope</h3>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">1. Scope</h3>
               <p className="font-medium text-slate-600">This Policy applies strictly to the MinDrop application. MinDrop acts as a data fiduciary on-device. It does not apply to any third-party services you choose to connect (like Google Drive), which are governed by their respective owners.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">2. Data Storage & Architecture</h3>
-              <p className="font-medium text-slate-600">Your notes, lists, voice recordings, pictures, and coordinates are saved inside a sandboxed SQLite database configuration. This data never travels across a server unless you trigger manual backup sync mechanisms directly into your authorized Google Drive.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">2. Personal Data We Collect</h3>
+              <ul className="list-disc pl-5 space-y-2 mt-2 font-medium text-slate-600">
+                <li><strong>Account data:</strong> Name, email address, avatar (from your sign-in provider or supplied by you).</li>
+                <li><strong>User content:</strong> Memories, notes, tags, reminders, notification rules, saved places, and any other content you submit.</li>
+                <li><strong>Device & technical data:</strong> Device identifier, operating system, app version, timezone, language, push notification token (FCM).</li>
+                <li><strong>Usage data:</strong> Feature interactions, session information, crash reports, diagnostic logs.</li>
+                <li><strong>Payment data:</strong> We do not collect or store your card, UPI, or bank account details. We store only the transaction identifier, amount, currency, and status.</li>
+                <li><strong>Location data:</strong> If and only if you grant permission, we process approximate device location strictly to trigger place-based reminders. Location data is not shared with third parties for advertising.</li>
+                <li><strong>Communications:</strong> When you email us for support, we retain the correspondence for the period necessary to resolve your query.</li>
+              </ul>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">3. Required Permissions</h3>
-              <p className="font-medium text-slate-600">To run offline, MinDrop requests: (a) Notification Listener Access to scan for filter rules, (b) Background Location access to monitor geofences, and (c) Battery optimization exclusions to avoid background CPU execution locks. These run locally on-device.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">3. Purposes of Processing</h3>
+              <p className="font-medium text-slate-600">We process your personal data to: (a) provide, operate, maintain, and secure the Service; (b) authenticate you and prevent unauthorised access; (c) deliver notifications and reminders you have configured; (d) process payments and manage your Premium plan; (e) back up your data and enable optional Google Drive backup; (f) detect, investigate, and prevent fraud, abuse, and violations of our Terms; (g) provide customer support; (h) improve the Service, including product analytics and crash diagnostics; (i) comply with applicable law; and (j) enforce our legal rights.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">4. Contact Information</h3>
-              <p className="font-medium text-slate-600">For any queries about DPDP Act compliance or your data rights, contact us at security@getmindrop.app.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">4. Legal Basis</h3>
+              <p className="font-medium text-slate-600">We process your personal data on the basis of your consent (obtained at the time of account creation and at each relevant permission prompt) and on the basis of legitimate uses permitted under the DPDP Act, including the performance of contract, compliance with law, and reasonable purposes such as fraud prevention and information security.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">5. How We Share Your Data</h3>
+              <p className="font-medium text-slate-600">We do not sell your personal data. We share personal data only with Cashfree Payments (for processing payments), Google (Sign-in and Drive backup), Firebase Cloud Messaging (to deliver push notifications), and edge hosting providers.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">6. International Transfers</h3>
+              <p className="font-medium text-slate-600">Our processors may store and process personal data outside India in jurisdictions permitted under the DPDP Act. By using the Service, you consent to such cross-border transfer where necessary to provide the Service.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">7. Retention</h3>
+              <p className="font-medium text-slate-600">We retain personal data for as long as your account is active and for a further period of up to three (3) years thereafter for legal, audit, tax, dispute-resolution, and enforcement purposes.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">8. Security</h3>
+              <p className="font-medium text-slate-600">We employ commercially reasonable technical, administrative, and organisational safeguards, including encryption in transit (TLS), row-level access controls, secret management, and least-privilege access.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">9. Your Rights</h3>
+              <p className="font-medium text-slate-600">Subject to applicable law, you have the right to: (a) access the personal data we hold about you; (b) request correction of inaccurate data; (c) request erasure of your personal data; (d) withdraw consent; and (e) nominate another person to exercise your rights in the event of death.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">10. Children</h3>
+              <p className="font-medium text-slate-600">The Service is not directed at persons under the age of eighteen (18). We do not knowingly collect personal data from children without verifiable parental consent.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">11. Cookies & Local Storage</h3>
+              <p className="font-medium text-slate-600">We use cookies, local storage, and similar technologies to keep you signed in, remember your preferences, and gather anonymous usage statistics.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">12. Third-Party Links</h3>
+              <p className="font-medium text-slate-600">The Service may contain links to third-party websites. We are not responsible for their privacy practices.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">13. Changes to this Policy</h3>
+              <p className="font-medium text-slate-600">We may amend this Policy from time to time. The revised Policy will be effective when posted at this URL.</p>
+            </div>
+
+            <div className="border-t border-dashed border-slate-200 pt-4">
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">14. Grievance Officer</h3>
+              <ul className="mt-2 space-y-1 font-medium text-slate-600">
+                <li><strong>Name:</strong> {officer}</li>
+                <li>
+                  <strong>Email:</strong>{" "}
+                  <a href={`mailto:${officerEmail}`} className="underline font-black text-slate-800">{officerEmail}</a>
+                </li>
+                <li><strong>Address:</strong> {address}</li>
+              </ul>
+              <p className="text-xs text-slate-400 mt-2 font-bold">Complaints acknowledged within 48 hours and resolved within 15 days.</p>
             </div>
           </div>
         </div>
@@ -184,7 +255,7 @@ function Privacy() {
   const slides = [
     <SlideOpening />,
     <SlideSummary />,
-    <SlideLegalDoc />,
+    <SlideLegalDoc officer={s.grievanceOfficerName} officerEmail={s.grievanceOfficerEmail} address={s.companyAddress} />,
   ];
   const TOTAL = slides.length;
 
@@ -200,8 +271,19 @@ function Privacy() {
     const el = containerRef.current;
     if (!el) return;
     const handler = (e: WheelEvent) => {
-      // If we are on the legal document slide (index 2), do not intercept or prevent default scrolling
-      if (current === 2) return;
+      // If we are on Slide 3 (index 2), check if we should allow native scrolling or navigate back
+      if (current === 2) {
+        const scrollContainer = el.querySelector(".overflow-y-auto");
+        if (scrollContainer) {
+          const scrollTop = scrollContainer.scrollTop;
+          // If we scroll up and we are already at the top, go back to slide 1
+          if (e.deltaY < 0 && scrollTop <= 0) {
+            e.preventDefault();
+            goTo(current - 1);
+          }
+          return; // Allow native scrolling inside the container
+        }
+      }
 
       e.preventDefault();
       if (Math.abs(e.deltaY) < 12) return;
@@ -256,11 +338,24 @@ function Privacy() {
         ref={containerRef}
         className="flex-1 relative overflow-hidden"
         onTouchStart={(e) => {
-          if (current === 2) return;
+          if (current === 2) {
+            touchStartY.current = e.touches[0].clientY;
+            return;
+          }
           touchStartY.current = e.touches[0].clientY;
         }}
         onTouchEnd={(e) => {
-          if (current === 2) return;
+          if (current === 2) {
+            const scrollContainer = (e.currentTarget as HTMLElement).querySelector(".overflow-y-auto");
+            if (scrollContainer) {
+              const scrollTop = scrollContainer.scrollTop;
+              const delta = touchStartY.current - e.changedTouches[0].clientY;
+              if (delta < -50 && scrollTop <= 0) {
+                goTo(current - 1);
+              }
+            }
+            return;
+          }
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           if (Math.abs(delta) > 50) {
             if (delta > 0) goTo(current + 1);

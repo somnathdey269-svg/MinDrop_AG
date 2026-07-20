@@ -25,7 +25,7 @@ export const createCashfreeOrder = createServerFn({ method: "POST" })
       .select("key, value")
       .in("key", ["premium_price_inr", "premium_display_prices"]);
     const m = new Map((rows ?? []).map((r) => [r.key, r.value]));
-    const priceInr = Number(m.get("premium_price_inr") || 499);
+    const priceInr = Number(m.get("premium_price_inr") || 999);
     let prices: Record<string, { displayed: number; symbol: string }> = {
       INR: { displayed: priceInr, symbol: "₹" },
     };

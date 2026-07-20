@@ -70,7 +70,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     id: "pricing",
     slug: "pricing",
     title: "Pricing Plans",
-    description: "MinDrop is free for up to five active alarms. A single lifetime purchase unlocks infinite slots and Google Drive backups sync.",
+    description: "MinDrop is free for up to 3 alarms, 3 notify rules, and 3 locations. A yearly subscription unlocks infinite slots and Google Drive backups sync.",
     bgClass: "bg-[#FDF2F7] border-[#EC4899]",
     bgColor: "#FDF2F7",
     tag: "💎 Affordable pricing",
@@ -237,7 +237,7 @@ function PricingTierIllustration() {
       <div className="flex-1 border border-ink bg-white rounded-xl p-2 h-[75px] sm:h-[90px] flex flex-col justify-between shadow-[1px_1px_0px_rgba(0,0,0,1)] opacity-70">
         <div>
           <div className="text-[6px] font-black uppercase text-ink/40">Free</div>
-          <div className="text-[8px] font-black mt-0.5">5 active drops</div>
+          <div className="text-[8px] font-black mt-0.5">3 active alarms</div>
         </div>
         <div className="w-full bg-ink/10 h-1 rounded-full overflow-hidden border border-ink/20">
           <div className="bg-[#EC4899] h-full w-[80%]" />
@@ -672,15 +672,19 @@ function ShowcaseDeckPage() {
 
           </div>
         ) : (
-          /* GRID VIEW MODE CATALOG (Live illustrations integrated inside h-[350px] catalog cards) */
           <div className="w-full max-w-6xl mx-auto px-4 z-10">
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 justify-center items-stretch"
+              className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 justify-center items-stretch"
             >
-              {DECK_CARDS.map((card) => {
+              {DECK_CARDS.map((card, idx) => {
                 const Icon = card.illustrator;
+                const colSpanClass = idx === 4 
+                  ? "sm:col-span-2 lg:col-span-3" 
+                  : idx === 3 
+                    ? "lg:col-span-3" 
+                    : "lg:col-span-2";
                 return (
                   <Link
                     key={card.id}
@@ -688,7 +692,7 @@ function ShowcaseDeckPage() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.5rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between min-h-[380px] sm:min-h-[410px] md:min-h-[430px] lg:min-h-[450px] h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass}`}
+                    className={`rounded-[2.5rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between min-h-[380px] sm:min-h-[410px] md:min-h-[430px] lg:min-h-[450px] h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass} ${colSpanClass}`}
                   >
                     <div className="flex flex-col justify-start gap-2 mb-4">
                       <span className="text-[10px] uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full self-start">

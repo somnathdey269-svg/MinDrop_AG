@@ -18,7 +18,7 @@ function PricingAdmin() {
   const [err, setErr] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
 
-  const [priceInr, setPriceInr] = useState<number>(499);
+  const [priceInr, setPriceInr] = useState<number>(999);
   const [prices, setPrices] = useState<PriceMap>({});
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
 

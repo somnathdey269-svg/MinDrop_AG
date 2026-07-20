@@ -60,7 +60,7 @@ function SlideOpening() {
           <motion.span
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-350 bg-slate-200 px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-slate-650 mb-6 sm:mb-8">
+            className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-slate-200 px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-slate-650 mb-6 sm:mb-8">
             📜 Terms of Service
           </motion.span>
 
@@ -80,7 +80,7 @@ function SlideOpening() {
 
           <motion.p
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 leading-none tracking-tighter">
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-slate-800 leading-none tracking-tighter">
             Simple rules, no tricks.
           </motion.p>
         </div>
@@ -102,7 +102,7 @@ function SlideSummary() {
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-500 mb-2 sm:mb-3">
             layman terms
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 leading-tight tracking-tight">
             Our terms of use, explained simply.
           </h2>
         </div>
@@ -125,8 +125,13 @@ function SlideSummary() {
   );
 }
 
-/* Slide 3: Full Terms Document Viewer (Made fully scrollable scroll pane) */
-function SlideLegalDoc({ company, jur }: { company: string; jur: string }) {
+/* Slide 3: Full Terms Document Viewer (Verbatim content from original compliance page) */
+interface SlideLegalDocProps {
+  company: string;
+  jur: string;
+  supportEmail: string;
+}
+function SlideLegalDoc({ company, jur, supportEmail }: SlideLegalDocProps) {
   return (
     <div className="h-full bg-[#F8FAFC] overflow-y-auto py-16 px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-6 max-w-4xl">
@@ -140,29 +145,118 @@ function SlideLegalDoc({ company, jur }: { company: string; jur: string }) {
         </div>
 
         <div className="w-full border-3 border-slate-800 bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(30,41,59,0.15)] text-left">
-          <div className="space-y-6 text-sm font-semibold text-slate-700 leading-relaxed">
+          <div className="space-y-6 text-xs sm:text-sm md:text-[15px] font-semibold text-slate-700 leading-relaxed">
             <p className="font-bold text-slate-900 border-b-2 border-dashed border-slate-200 pb-4">
               These Terms & Conditions constitute a legally binding agreement between you and {company} ("MinDrop", "we", "us", "our"), operator of MinDrop. Last updated: {LAST_UPDATED}.
             </p>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">1. Eligibility</h3>
-              <p className="font-medium text-slate-600">You represent and warrant that you are at least eighteen (18) years of age and have the legal capacity to enter into a contract, or are using the Service under parental/guardian supervision. You further warrant that you are not barred under the laws of India or any other jurisdiction.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">1. Eligibility</h3>
+              <p className="font-medium text-slate-600">You represent and warrant that you are at least eighteen (18) years of age and have the legal capacity to enter into a binding contract, or that you are using the Service under the supervision and with the express consent of a parent or legal guardian who accepts these Terms on your behalf. You further warrant that you are not barred from receiving the Service under the laws of India or any other applicable jurisdiction.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">2. Acceptable Use</h3>
-              <p className="font-medium text-slate-600">You agree not to use the Service to: (a) violate any laws or regulations; (b) reverse engineer, decompile, disassemble, or extract codebase properties; (c) bypass local billing checks or share license keys; or (d) interfere with local OS geofencing or alarm handlers.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">2. Account & Security</h3>
+              <p className="font-medium text-slate-600">You are solely and exclusively responsible for maintaining the confidentiality of your login credentials and for every activity, act, or omission that occurs under your account, whether or not authorised by you. You agree to immediately notify us of any unauthorised access. We are not liable for any loss, damage, cost, or expense arising from your failure to safeguard your credentials.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">3. Governing Law</h3>
-              <p className="font-medium text-slate-600">These Terms shall be governed by, construed, and enforced in accordance with the laws of India. Any disputes arising out of your use of the application shall be subject to the exclusive jurisdiction of the competent courts in {jur}.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">3. Licence to Use the Service</h3>
+              <p className="font-medium text-slate-600">Subject to your continuing compliance with these Terms, we grant you a personal, limited, revocable, non-exclusive, non-transferable, non-sublicensable licence to install and use the Service on devices you own or control, solely for your personal, non-commercial use. All right, title, and interest in and to the Service, including all intellectual property rights, remain the exclusive property of MinDrop and its licensors.</p>
             </div>
 
             <div>
-              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">4. Contact Information</h3>
-              <p className="font-medium text-slate-600">If you have any questions about these Terms, please contact us at support@getmindrop.app.</p>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">4. Acceptable Use</h3>
+              <p className="font-medium text-slate-600">You agree that you will not, directly or indirectly: (a) copy, modify, adapt, translate, reverse engineer, decompile, disassemble, or create derivative works based on the Service; (b) rent, lease, lend, sell, resell, sublicense, distribute, or otherwise commercially exploit the Service; (c) use any automated system, bot, spider, scraper, or crawler to access the Service; (d) attempt to gain unauthorised access to any portion of the Service, servers, or infrastructure; (e) use the Service to store, transmit, or trigger reminders that are unlawful, defamatory, obscene, harassing, or that infringe any third-party right; (f) use the Service in any manner that violates any applicable law or regulation; or (g) interfere with or disrupt the integrity or performance of the Service.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">5. User Content & Licence to MinDrop</h3>
+              <p className="font-medium text-slate-600">You retain ownership of the memories, notes, reminders, tags, places, photos, and other content you submit to the Service ("User Content"). By submitting User Content, you grant MinDrop a worldwide, perpetual, irrevocable (for the retention period stated in our Privacy Policy), royalty-free, transferable, sublicensable licence to host, store, reproduce, process, transmit, back up, cache, display, and otherwise use such User Content solely for the purposes of operating, providing, securing, and improving the Service.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">6. Third-Party Services</h3>
+              <p className="font-medium text-slate-600">The Service may integrate with third-party services including but not limited to Google Sign-in, Google Drive backup, Firebase Cloud Messaging, and Cashfree Payments. Your use of any third-party service is governed by that third party's own terms and privacy policy, and is at your sole risk.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">7. Paid Plans</h3>
+              <p className="font-medium text-slate-600">MinDrop offers a paid "Premium" plan for a term of one (1) year from the date of successful payment ("Premium Term"). Pricing is displayed at checkout and may be changed at any time on a prospective basis; changes will not affect an active Premium Term.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">8. Payments</h3>
+              <p className="font-medium text-slate-600">All payments are processed by Cashfree Payments Services Private Limited or another payment processor designated by us. MinDrop does not store your card, UPI, or bank account credentials on its own servers. You warrant that any payment instrument used is valid.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">9. No Auto-Renewal</h3>
+              <p className="font-medium text-slate-600">The Premium plan does <strong>not</strong> auto-renew. On expiry of the Premium Term, your account will automatically revert to the free tier and any paid features will cease to be available until you elect to pay for a new Premium Term.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">10. Notifications & Communications</h3>
+              <p className="font-medium text-slate-600">By using the Service, you expressly consent to receive service-related and transactional communications from MinDrop, including but not limited to push notifications, reminder notifications, email, and, where applicable, SMS.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">11. Reminder Accuracy — No Warranty</h3>
+              <p className="font-medium text-slate-600">The Service is a best-effort personal reminder utility. Reminders may be delayed, delivered out of order, duplicated, or fail to deliver entirely. <strong>You are solely responsible for acting on any reminder, and you agree that MinDrop is not a substitute for professional medical, legal, financial, or safety advice.</strong> MinDrop disclaims all liability for any missed or late notification.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">12. Disclaimers</h3>
+              <p className="font-medium text-slate-650">THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTY OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE. TO THE MAXIMUM EXTENT PERMITTED BY LAW, MINDROP DISCLAIMS ALL WARRANTIES, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, UNINTERRUPTED OR ERROR-FREE OPERATION, ACCURACY, AND SECURITY.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">13. Indemnification</h3>
+              <p className="font-medium text-slate-600">You agree to indemnify, defend, and hold harmless MinDrop and its officers from and against any claims, liabilities, damages, losses, and expenses arising out of your access to or use of the Service or your violation of these Terms.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">14. Limitation of Liability</h3>
+              <p className="font-medium text-slate-650">TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL MINDROP OR ITS PROVIDERS BE LIABLE FOR ANY INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, ARISING OUT OF OR IN CONNECTION WITH THESE TERMS.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">15. Termination</h3>
+              <p className="font-medium text-slate-600">We may suspend or terminate your account or access to the Service at any time, with or without cause, in our sole discretion. Upon termination, your right to use the Service will immediately cease.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">16. Modification of Terms</h3>
+              <p className="font-medium text-slate-600">MinDrop may modify these Terms at any time. The revised Terms will be effective when posted at this URL. Your continued use of the Service after the effective date constitutes your acceptance of the revised Terms.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">17. Governing Law & Jurisdiction</h3>
+              <p className="font-medium text-slate-600">These Terms are governed by and construed in accordance with the laws of India. Subject to the arbitration clause below, the courts at {jur} shall have exclusive jurisdiction over any dispute arising out of or relating to these Terms.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">18. Dispute Resolution & Arbitration</h3>
+              <p className="font-medium text-slate-600">The parties shall first attempt to resolve any dispute amicably through good-faith negotiations. If not resolved, the dispute shall be finally settled by arbitration under the Arbitration and Conciliation Act, 1996 (as amended) by a sole arbitrator appointed by MinDrop. The seat of arbitration shall be {jur}.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">19. Force Majeure</h3>
+              <p className="font-medium text-slate-600">MinDrop shall not be liable for any failure or delay in performance caused by circumstances beyond its reasonable control, including acts of God, war, terrorism, utility failures, or failures of third-party providers.</p>
+            </div>
+
+            <div>
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide">20. General</h3>
+              <p className="font-medium text-slate-600">These Terms, together with our Privacy Policy, constitute the entire agreement between you and MinDrop. If any provision is held invalid, the remaining provisions shall continue in full force. You may not assign or transfer your rights under these Terms.</p>
+            </div>
+
+            <div className="border-t border-dashed border-slate-200 pt-4">
+              <h3 className="font-black text-slate-900 mb-1.5 uppercase tracking-wide text-base">21. Contact</h3>
+              <p className="font-medium text-slate-600">
+                Questions about these Terms may be sent to{" "}
+                <a href={`mailto:${supportEmail}`} className="underline font-black text-slate-800">{supportEmail}</a>{" "}
+                or to the address listed on our <a href="/contact" className="underline font-black text-slate-800">Contact</a> page.
+              </p>
             </div>
           </div>
         </div>
@@ -187,7 +281,7 @@ function Terms() {
   const slides = [
     <SlideOpening />,
     <SlideSummary />,
-    <SlideLegalDoc company={company} jur={jur} />,
+    <SlideLegalDoc company={company} jur={jur} supportEmail={s.supportEmail} />,
   ];
   const TOTAL = slides.length;
 
@@ -203,8 +297,19 @@ function Terms() {
     const el = containerRef.current;
     if (!el) return;
     const handler = (e: WheelEvent) => {
-      // If we are on the legal document slide (index 2), do not intercept or prevent default scrolling
-      if (current === 2) return;
+      // If we are on Slide 3 (index 2), check if we should allow native scrolling or navigate back
+      if (current === 2) {
+        const scrollContainer = el.querySelector(".overflow-y-auto");
+        if (scrollContainer) {
+          const scrollTop = scrollContainer.scrollTop;
+          // If we scroll up and we are already at the top, go back to slide 1
+          if (e.deltaY < 0 && scrollTop <= 0) {
+            e.preventDefault();
+            goTo(current - 1);
+          }
+          return; // Allow native scrolling inside the container
+        }
+      }
 
       e.preventDefault();
       if (Math.abs(e.deltaY) < 12) return;
@@ -259,11 +364,24 @@ function Terms() {
         ref={containerRef}
         className="flex-1 relative overflow-hidden"
         onTouchStart={(e) => {
-          if (current === 2) return;
+          if (current === 2) {
+            touchStartY.current = e.touches[0].clientY;
+            return;
+          }
           touchStartY.current = e.touches[0].clientY;
         }}
         onTouchEnd={(e) => {
-          if (current === 2) return;
+          if (current === 2) {
+            const scrollContainer = (e.currentTarget as HTMLElement).querySelector(".overflow-y-auto");
+            if (scrollContainer) {
+              const scrollTop = scrollContainer.scrollTop;
+              const delta = touchStartY.current - e.changedTouches[0].clientY;
+              if (delta < -50 && scrollTop <= 0) {
+                goTo(current - 1);
+              }
+            }
+            return;
+          }
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           if (Math.abs(delta) > 50) {
             if (delta > 0) goTo(current + 1);

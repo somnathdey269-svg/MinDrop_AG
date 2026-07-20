@@ -35,8 +35,8 @@ const DEFAULTS: AllSettings = {
   companyLegalName: "Proprietor Somnath Dey",
   companyAddress: "Earth Allysum, Vasna Bhayli Road, Vadodara, 391410, India",
   companyJurisdiction: "Vadodara, Gujarat, India",
-  priceInr: 499,
-  displayPrices: { INR: { raw: 499, displayed: 499, symbol: "₹" } },
+  priceInr: 999,
+  displayPrices: { INR: { raw: 999, displayed: 999, symbol: "₹" } },
   currencyUpdatedAt: null,
 };
 

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing & Plans — MinDrop" },
-      { name: "description", content: "Compare MinDrop's Free Plan with the Premium Plan. Unlimited active drops and private Google Drive backup sync." },
+      { name: "description", content: "Compare MinDrop's Free Plan with the Premium Plan. Unlimited active alarms, notifications, and location rules." },
     ],
   }),
   component: PricingDetailView,
@@ -38,13 +38,13 @@ function detectPreferredCurrency(available: string[]): string {
 ────────────────────────────────────────────── */
 function FloatingGem() {
   return (
-    <div className="relative size-32 sm:size-40 md:size-48 flex items-center justify-center">
+    <div className="relative size-32 sm:size-40 md:size-48 lg:size-56 flex items-center justify-center">
       <motion.div
-        animate={{ y: [-12, 12, -12], rotate: [0, 12, -12, 0] }}
+        animate={{ y: [-15, 15, -15], rotate: [0, 15, -15, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="size-24 sm:size-28 md:size-32 bg-[#FCE7F3] border-3 border-[#EC4899] rounded-[2rem] grid place-items-center shadow-lg text-[#EC4899]"
+        className="size-24 sm:size-32 md:size-36 lg:size-40 bg-[#FCE7F3] border-3 border-[#EC4899] rounded-[2rem] grid place-items-center shadow-lg text-[#EC4899]"
       >
-        <Sparkles className="size-14 sm:size-16 stroke-[2px]" />
+        <Sparkles className="size-14 sm:size-18 md:size-20 stroke-[2px]" />
       </motion.div>
     </div>
   );
@@ -57,8 +57,8 @@ function FloatingGem() {
 /* Slide 1: Opening Hero */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto max-w-6xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10 lg:px-16">
+      <div className="w-[95%] mx-auto max-w-7xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
         <div className="flex-1 text-left">
           <motion.span
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
@@ -67,7 +67,7 @@ function SlideOpening() {
             💎 Premium Plans
           </motion.span>
 
-          <div className="flex flex-col gap-3 sm:gap-4 mb-6">
+          <div className="flex flex-col gap-3 sm:gap-5 mb-6 sm:mb-8">
             {[
               "App subscriptions are tiring.",
               "MinDrop is built as a utility.",
@@ -75,7 +75,7 @@ function SlideOpening() {
             ].map((line, i) => (
               <motion.p key={i}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#DB2777]/45 leading-tight tracking-tight">
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-[#DB2777]/45 leading-tight tracking-tight">
                 {line}
               </motion.p>
             ))}
@@ -83,7 +83,7 @@ function SlideOpening() {
 
           <motion.p
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-none tracking-tighter">
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#831843] leading-none tracking-tighter">
             Keep it free, or unlock limits.
           </motion.p>
         </div>
@@ -108,13 +108,13 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
   const priceDisplay = selected ? `${selected.symbol}${selected.displayed}` : "₹999";
 
   return (
-    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-6xl">
+    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-10 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2 sm:mb-3">
             Specs & plans
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#831843] leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-tight tracking-tight">
             Clear pricing. Simple structure.
           </h2>
 
@@ -136,57 +136,65 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-5xl text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 w-full max-w-6xl text-left">
           {/* Free Tier */}
-          <div className="border-3 border-ink rounded-[2rem] p-6 sm:p-8 bg-white shadow-[6px_6px_0px_0px_rgba(131,24,67,0.15)] flex flex-col justify-between gap-6">
+          <div className="border-3 border-ink rounded-[2rem] p-6 sm:p-10 bg-white shadow-[8px_8px_0px_0px_rgba(131,24,67,0.15)] flex flex-col justify-between gap-6">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🌱</span>
-                <p className="text-xs uppercase font-black text-ink/50 tracking-wider">Free Tier</p>
+                <span className="text-2xl sm:text-3xl">🌱</span>
+                <p className="text-xs sm:text-sm uppercase font-black text-ink/50 tracking-wider">Free Tier</p>
               </div>
-              <p className="text-3xl sm:text-4xl font-black text-ink mt-3">Free Forever</p>
-              <ul className="text-xs sm:text-sm md:text-base text-ink/80 font-bold mt-6 space-y-3 border-t border-dashed border-ink/20 pt-4">
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">Free Forever</p>
+              <ul className="text-xs sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
                 <li className="flex items-center gap-2.5">
-                  <Check className="size-4.5 text-[#10B981] stroke-[3px] shrink-0" />
-                  <span>Up to 5 concurrent active drops</span>
+                  <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
+                  <span>Up to 3 active alarms</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check className="size-4.5 text-[#10B981] stroke-[3px] shrink-0" />
+                  <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
+                  <span>Up to 3 notification filter rules</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
+                  <span>Up to 3 saved places / locations</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
                   <span>Voice capture & offline photo storage</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="size-4.5 text-[#10B981] stroke-[3px] shrink-0" />
-                  <span>All triggers (Time, Location, Filters)</span>
                 </li>
               </ul>
             </div>
-            <p className="text-[10px] text-ink/40 font-black uppercase tracking-wider">Default setup ready offline</p>
+            <p className="text-[10px] sm:text-xs text-ink/40 font-black uppercase tracking-wider">Default setup ready offline</p>
           </div>
 
           {/* Premium Tier */}
-          <div className="border-3 border-ink rounded-[2rem] p-6 sm:p-8 bg-[#FFF2F7] shadow-[6px_6px_0px_0px_rgba(131,24,67,0.15)] flex flex-col justify-between gap-6">
+          <div className="border-3 border-ink rounded-[2rem] p-6 sm:p-10 bg-[#FFF2F7] shadow-[8px_8px_0px_0px_rgba(131,24,67,0.15)] flex flex-col justify-between gap-6">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">💎</span>
-                <p className="text-xs uppercase font-black text-[#DB2777] tracking-wider">Premium Plan</p>
+                <span className="text-2xl sm:text-3xl">💎</span>
+                <p className="text-xs sm:text-sm uppercase font-black text-[#DB2777] tracking-wider">Premium Plan</p>
               </div>
-              <p className="text-3xl sm:text-4xl font-black text-ink mt-3">{priceDisplay} / Year</p>
-              <ul className="text-xs sm:text-sm md:text-base text-ink/80 font-bold mt-6 space-y-3 border-t border-dashed border-ink/20 pt-4">
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">{priceDisplay} / Year</p>
+              <ul className="text-xs sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
                 <li className="flex items-center gap-2.5">
-                  <Check className="size-4.5 text-[#EC4899] stroke-[3px] shrink-0" />
-                  <span className="text-[#831843]">Infinite concurrent active drops</span>
+                  <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
+                  <span className="text-[#831843]">Infinite active alarms</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check className="size-4.5 text-[#EC4899] stroke-[3px] shrink-0" />
+                  <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
+                  <span className="text-[#831843]">Infinite notification filter rules</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
+                  <span className="text-[#831843]">Infinite saved places / locations</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
                   <span className="text-[#831843]">Private Google Drive cloud backup sync</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="size-4.5 text-[#EC4899] stroke-[3px] shrink-0" />
-                  <span className="text-[#831843]">Neo-Brutalist visual theme packs</span>
                 </li>
               </ul>
             </div>
-            <p className="text-[10px] text-[#DB2777]/50 font-black uppercase tracking-wider">Linked to superadmin configs</p>
+            <p className="text-[10px] sm:text-xs text-[#DB2777]/50 font-black uppercase tracking-wider">Linked to superadmin configs</p>
           </div>
         </div>
       </div>
@@ -197,42 +205,42 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
 /* Slide 3: Flow diagram */
 function SlideFlow() {
   return (
-    <div className="h-full bg-[#FCE7F3] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-5xl">
+    <div className="h-full bg-[#FCE7F3] flex items-center justify-center px-6 sm:px-10">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-7xl">
         <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2 sm:mb-3">
             Upgrade flow
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#831843] leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-tight tracking-tight">
             How your upgrade works
           </h2>
         </div>
 
-        {/* Responsive Flex row for step indicators */}
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 w-full">
+        {/* Responsive Flex row for step indicators with responsive sizes */}
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 w-full max-w-6xl">
           {/* Step 1 */}
-          <div className="border-3 border-ink bg-white p-6 rounded-[2rem] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full max-w-sm">
-            <span className="text-[10px] font-black text-[#DB2777] uppercase tracking-wider">01 / Download</span>
-            <h4 className="text-sm sm:text-base font-black text-ink mt-2 leading-snug">Get Free App</h4>
-            <p className="text-xs text-ink/60 font-semibold mt-1.5 leading-normal">Runs 100% offline right on your device</p>
+          <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
+            <span className="text-[11px] sm:text-xs font-black text-[#DB2777] uppercase tracking-wider">01 / Download</span>
+            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Get Free App</h4>
+            <p className="text-xs sm:text-sm md:text-base text-ink/60 font-bold mt-2 leading-relaxed">Runs offline. Set up to 3 alarms, filters, & locations.</p>
           </div>
 
-          <ArrowRight className="size-6 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
+          <ArrowRight className="size-8 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
 
           {/* Step 2 */}
-          <div className="border-3 border-ink bg-white p-6 rounded-[2rem] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full max-w-sm">
-            <span className="text-[10px] font-black text-[#DB2777] uppercase tracking-wider">02 / Subscribe</span>
-            <h4 className="text-sm sm:text-base font-black text-ink mt-2 leading-snug">Yearly Plan</h4>
-            <p className="text-xs text-ink/60 font-semibold mt-1.5 leading-normal">Unlock settings via in-app dashboard securely</p>
+          <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
+            <span className="text-[11px] sm:text-xs font-black text-[#DB2777] uppercase tracking-wider">02 / Subscribe</span>
+            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Yearly Plan</h4>
+            <p className="text-xs sm:text-sm md:text-base text-ink/60 font-bold mt-2 leading-relaxed">Unlock settings securely via in-app dashboard.</p>
           </div>
 
-          <ArrowRight className="size-6 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
+          <ArrowRight className="size-8 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
 
           {/* Step 3 */}
-          <div className="border-3 border-ink bg-white p-6 rounded-[2rem] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full max-w-sm">
-            <span className="text-[10px] font-black text-[#DB2777] uppercase tracking-wider">03 / Enjoy</span>
-            <h4 className="text-sm sm:text-base font-black text-ink mt-2 leading-snug">Unlimited Slots</h4>
-            <p className="text-xs text-ink/60 font-semibold mt-1.5 leading-normal">Enjoy geofences and cloud sync instantly</p>
+          <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
+            <span className="text-[11px] sm:text-xs font-black text-[#DB2777] uppercase tracking-wider">03 / Enjoy</span>
+            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Unlimited Slots</h4>
+            <p className="text-xs sm:text-sm md:text-base text-ink/60 font-bold mt-2 leading-relaxed">Enjoy geofences and cloud sync instantly.</p>
           </div>
         </div>
       </div>
@@ -243,26 +251,26 @@ function SlideFlow() {
 /* Slide 4: Specs closer */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
-    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-6xl">
+    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-10 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-3">
             Under the hood specs
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#831843] leading-none tracking-tighter">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-none tracking-tighter">
             An engine built to last.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 w-full text-left">
           {[
             { icon: ShieldAlert, color: "text-[#EF4444]", title: "Subscription Simplicity", desc: "Clearly visible terms with zero hidden fees. Complete control of plan adjustments." },
             { icon: Play, color: "text-[#EC4899]", title: "Offline Verification", desc: "Settings checks are stored locally on-device. No query delays or server locks." },
             { icon: Layers, color: "text-[#10B981]", title: "Privacy Sync", desc: "Backup loops directly through your Google Drive. We never see your data." },
           ].map(({ icon: Icon, color, title, desc }) => (
-            <div key={title} className="bg-white border-3 border-[#EC4899] rounded-[2rem] p-6 shadow-[5px_5px_0px_0px_rgba(131,24,67,0.15)] flex flex-col gap-3">
-              <Icon className={`size-7 ${color} shrink-0`} />
-              <h3 className="text-base font-black text-[#831843]">{title}</h3>
+            <div key={title} className="bg-white border-3 border-[#EC4899] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(131,24,67,0.15)] flex flex-col gap-3">
+              <Icon className={`size-8 ${color} shrink-0`} />
+              <h3 className="text-base sm:text-lg md:text-xl font-black text-[#831843]">{title}</h3>
               <p className="text-xs sm:text-sm md:text-base font-semibold text-[#DB2777]/70 leading-relaxed">{desc}</p>
             </div>
           ))}
