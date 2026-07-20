@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   BellRing, Check, X, Filter, Volume2, Bell,
-  ChevronDown, CreditCard, MessageSquare, ShoppingBag, Banknote
+  ChevronDown, CreditCard, MessageSquare, ShoppingBag, Banknote, ChevronLeft, ChevronRight
 } from "lucide-react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/notify-feature")({
@@ -19,29 +19,9 @@ export const Route = createFileRoute("/notify-feature")({
   component: NotifyDetailView,
 });
 
-/* ─── Fade in on scroll ─── */
-function FadeUp({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px 0px" });
-  return (
-    <motion.div ref={ref}
-      initial={{ opacity: 0, y: 28 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
-      className={className}>
-      {children}
-    </motion.div>
-  );
-}
-
 /* ─── Notification flood demo ─── */
 function NotificationFlood() {
   const [visible, setVisible] = useState<number[]>([]);
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
-
   const notifs = [
     { icon: "💬", app: "WhatsApp Group", text: "Rahul sent a meme 😂", color: "bg-green-50 border-green-200" },
     { icon: "🛒", app: "Swiggy Offer", text: "60% off your next order!", color: "bg-orange-50 border-orange-200" },
@@ -51,14 +31,14 @@ function NotificationFlood() {
   ];
 
   useEffect(() => {
-    if (!inView) return;
+    setVisible([]);
     notifs.forEach((_, i) => {
       setTimeout(() => setVisible(v => [...v, i]), i * 400 + 300);
     });
-  }, [inView]);
+  }, []);
 
   return (
-    <div ref={ref} className="flex flex-col gap-2 w-full max-w-sm">
+    <div className="flex flex-col gap-2 w-full max-w-sm">
       {notifs.map((n, i) => (
         <AnimatePresence key={i}>
           {visible.includes(i) && (
@@ -66,15 +46,15 @@ function NotificationFlood() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ type: "spring", stiffness: 220, damping: 20 }}
-              className={`flex items-center gap-3 border rounded-2xl px-4 py-3 ${n.color} ${n.important ? "ring-2 ring-amber-400" : ""}`}>
-              <span className="text-xl">{n.icon}</span>
+              className={`flex items-center gap-3 border rounded-2xl px-4 py-2 sm:py-3 ${n.color} ${n.important ? "ring-2 ring-amber-400" : ""}`}>
+              <span className="text-lg sm:text-xl">{n.icon}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-black text-black/50 uppercase tracking-wide">{n.app}</p>
-                <p className={`text-xs font-bold leading-snug truncate ${n.important ? "text-red-700" : "text-black/60"}`}>{n.text}</p>
+                <p className="text-[9px] font-black text-black/50 uppercase tracking-wide">{n.app}</p>
+                <p className={`text-[11px] sm:text-xs font-bold leading-snug truncate ${n.important ? "text-red-700" : "text-black/60"}`}>{n.text}</p>
               </div>
               {n.important && (
-                <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}
-                  className="text-[9px] font-black text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full shrink-0">
+                <motion.span animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1, repeat: Infinity }}
+                  className="text-[8px] font-black text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-full shrink-0">
                   IMPORTANT
                 </motion.span>
               )}
@@ -89,345 +69,479 @@ function NotificationFlood() {
 /* ─── Filter Simulator ─── */
 function FilterSimulator() {
   const rules = [
-    { id: "bank", label: "Bank alerts (debit / credit)", emoji: "🏦", matched: true },
-    { id: "upi", label: "UPI payment messages", emoji: "💳", matched: true },
-    { id: "promo", label: "Sale and discount offers", emoji: "🛒", matched: false },
-    { id: "social", label: "Likes, comments, follows", emoji: "📱", matched: false },
-    { id: "chat", label: "Group chat messages", emoji: "💬", matched: false },
+    { id: "bank", label: "Bank alerts (debit / credit)", emoji: "🏦" },
+    { id: "upi", label: "UPI payment messages", emoji: "💳" },
+    { id: "promo", label: "Sale and discount offers", emoji: "🛒" },
+    { id: "social", label: "Likes, comments, follows", emoji: "📱" },
   ];
 
   const [active, setActive] = useState<string[]>(["bank", "upi"]);
-
   const toggle = (id: string) =>
     setActive(a => a.includes(id) ? a.filter(x => x !== id) : [...a, id]);
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      <p className="text-xs font-black uppercase tracking-widest text-ink/40">
-        Which types of alerts should wake you up?
+    <div className="w-full max-w-sm flex flex-col gap-3">
+      <p className="text-[10px] font-black uppercase tracking-widest text-ink/40">
+        Which alerts should wake you up?
       </p>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1.5">
         {rules.map(r => (
           <button key={r.id} onClick={() => toggle(r.id)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 text-left transition cursor-pointer ${
+            className={`flex items-center gap-3 px-3 py-2 sm:py-2.5 rounded-xl border-2 text-left transition cursor-pointer ${
               active.includes(r.id)
-                ? "border-[#F59E0B] bg-amber-50 shadow-[3px_3px_0px_0px_rgba(245,158,11,0.3)]"
+                ? "border-[#F59E0B] bg-amber-50 shadow-[2px_2px_0px_0px_rgba(245,158,11,0.3)]"
                 : "border-ink/15 bg-white"
             }`}>
-            <span className="text-xl">{r.emoji}</span>
-            <p className={`flex-1 text-sm font-bold ${active.includes(r.id) ? "text-ink" : "text-ink/40"}`}>{r.label}</p>
-            {active.includes(r.id) && <Volume2 className="size-4 text-amber-500 shrink-0" />}
+            <span className="text-lg">{r.emoji}</span>
+            <p className={`flex-1 text-xs font-bold ${active.includes(r.id) ? "text-ink" : "text-ink/40"}`}>{r.label}</p>
+            {active.includes(r.id) && <Volume2 className="size-3.5 text-amber-500 shrink-0" />}
           </button>
         ))}
       </div>
-      <div className={`rounded-2xl border-2 px-4 py-3 transition-all ${active.length > 0 ? "border-amber-400 bg-amber-50" : "border-ink/10 bg-white"}`}>
-        <p className="text-xs font-black text-amber-700">
+      <div className={`rounded-xl border-2 px-3 py-2 transition-all ${active.length > 0 ? "border-amber-400 bg-amber-50" : "border-ink/10 bg-white"}`}>
+        <p className="text-[11px] font-black text-amber-700 leading-tight">
           {active.length === 0
-            ? "No filters active. All alerts will behave normally."
-            : `${active.length} filter${active.length > 1 ? "s" : ""} active. Those alerts will ring as a looping alarm.`}
+            ? "No filters active. All alerts behave normally."
+            : `${active.length} filter${active.length > 1 ? "s" : ""} active. Those will ring as a looping alarm.`}
         </p>
       </div>
     </div>
   );
 }
 
-/* ─── Main Page ─── */
+/* ══════════════════════════════════════════════
+   SLIDES
+══════════════════════════════════════════════ */
+
+/* Slide 1: Opening */
+function SlideOpening() {
+  return (
+    <div className="h-full bg-[#FFFDF5] flex flex-col items-center justify-center text-center px-5">
+      <motion.span
+        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-amber-100 px-4 py-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-6 sm:mb-8">
+        🔔 Smart Filters
+      </motion.span>
+
+      <div className="flex flex-col gap-1.5 sm:gap-2 mb-5 sm:mb-7">
+        {[
+          "Your phone got 47 notifications today.",
+          "One said ₹18,000 was debited.",
+        ].map((line, i) => (
+          <motion.p key={i}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
+            className="text-lg sm:text-2xl md:text-3xl font-black text-ink/35 leading-tight">
+            {line}
+          </motion.p>
+        ))}
+      </div>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
+        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink leading-tight tracking-tight">
+        You saw it 4 hours later.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+        className="mt-8 sm:mt-12 flex flex-col items-center gap-1.5 text-ink/20">
+        <p className="text-[9px] font-black uppercase tracking-widest">Scroll to continue</p>
+        <ChevronDown className="size-4 animate-bounce" />
+      </motion.div>
+    </div>
+  );
+}
+
+/* Slide 2: The Noise Problem */
+function SlideProblem() {
+  return (
+    <div className="h-full bg-[#1C1917] flex items-center justify-center px-5">
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-14 max-w-5xl">
+        <div className="flex-1 text-left">
+          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">
+            Why everything gets lost in your phone
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-4 sm:mb-6">
+            Every app shouts.<br />
+            <span className="text-[#F59E0B]">The important ones get lost</span> in the crowd.
+          </h2>
+          <p className="text-xs sm:text-sm font-semibold text-white/50 leading-relaxed max-w-lg">
+            Sales offers, group chats, likes, reminders, cricket scores — they all arrive looking exactly the same. Your brain tunes them all out. Including the one that actually needed your attention.
+          </p>
+        </div>
+        <div className="shrink-0 flex flex-col items-center gap-2">
+          <NotificationFlood />
+          <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">All alerts look identical</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 3: What MinDrop Does */
+function SlideDifference() {
+  return (
+    <div className="h-full bg-[#FFFDF5] flex items-center justify-center px-5">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-4xl">
+        <div>
+          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-3">
+            How MinDrop handles this
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink leading-tight">
+            MinDrop watches your alerts.<br />
+            <span className="text-[#F59E0B]">The important ones</span> become an alarm.
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 w-full">
+          {[
+            { icon: "🎯", title: "You Decide What Matters", body: "Choose which types of messages wake you up. Sales offers stay silent. Your bank alerts ring loudly." },
+            { icon: "📴", title: "Bypasses Silent Mode", body: "When your phone is on silent, important alerts still ring through. Nothing slips past unnoticed." },
+            { icon: "🔒", title: "Stays on Your Phone", body: "MinDrop reads your alerts right there on your phone. Nothing is sent to any server. Your messages stay private." },
+          ].map(({ icon, title, body }) => (
+            <div key={title} className="bg-white border-3 border-ink rounded-[1.5rem] p-5 sm:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-2">
+              <span className="text-2xl">{icon}</span>
+              <h3 className="text-sm sm:text-base font-black text-ink">{title}</h3>
+              <p className="text-xs sm:text-sm font-semibold text-ink/55 leading-relaxed">{body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 4: Build Your Filter */
+function SlidePlayground() {
+  return (
+    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-5">
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-16 max-w-4xl">
+        <div className="flex-1 text-left">
+          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-3">
+            Build your filter rules
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-ink leading-tight mb-3 sm:mb-4">
+            Set it once. Then forget it.
+          </h2>
+          <p className="text-xs sm:text-sm font-semibold text-ink/55 leading-relaxed mb-4 sm:mb-5 max-w-sm">
+            Pick the types of alerts that should never be missed. MinDrop takes care of the rest. Toggle the options to see rule changes.
+          </p>
+          <div className="flex flex-col gap-2">
+            {[
+              "Toggle on alerts you want to hear.",
+              "MinDrop watches for matching notifications.",
+              "Urgent alerts trigger a looping phone ring.",
+            ].map((s, i) => (
+              <div key={i} className="flex items-center gap-2.5">
+                <div className="size-5 rounded-full bg-[#F59E0B] text-white grid place-items-center shrink-0 text-[9px] font-black">{i+1}</div>
+                <p className="text-xs sm:text-sm font-bold text-ink/65 leading-relaxed">{s}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="shrink-0 w-full lg:w-auto flex justify-center">
+          <FilterSimulator />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slides 5–8: How It Works — one step per slide */
+function SlideStep({ step, stepNum, title, detail, color }: {
+  step: string; stepNum: number; title: string; detail: string; color: string;
+}) {
+  const TOTAL_STEPS = 4;
+  return (
+    <div className={`h-full ${color} flex items-center justify-center px-5 relative overflow-hidden`}>
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 text-[180px] sm:text-[240px] font-black text-ink/5 leading-none select-none pointer-events-none pl-4">
+        {step}
+      </div>
+
+      <div className="w-[95%] mx-auto max-w-3xl relative z-10">
+        <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-ink/30 mb-4 sm:mb-5">
+          Step {stepNum} of {TOTAL_STEPS} · How It Works
+        </p>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink leading-tight mb-4 sm:mb-6">
+          {title}
+        </h2>
+        <p className="text-base sm:text-lg md:text-xl font-semibold text-ink/55 leading-relaxed max-w-2xl">
+          {detail}
+        </p>
+
+        <div className="flex gap-2 mt-8 sm:mt-12">
+          {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+            <div key={i}
+              className={`h-1 rounded-full transition-all ${i === stepNum - 1 ? "w-10 bg-[#F59E0B]" : "w-3 bg-ink/15"}`}/>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 9: Scenario Carousel */
+function SlideScenarios() {
+  const [cardIdx, setCardIdx] = useState(0);
+
+  const scenarios = [
+    { icon: Banknote, title: "Money Movement", scene: "₹18,000 was just taken from your account. You need to know this the moment it happens.", color: "bg-red-50" },
+    { icon: CreditCard, title: "UPI Payment", scene: "Someone sent you money via UPI. Or charged your card. Either way, this cannot sit unread.", color: "bg-green-50" },
+    { icon: MessageSquare, title: "That One Person", scene: "Your child messaged you. Your doctor sent a reply. Not every message is equal — and now they won't be treated equally.", color: "bg-blue-50" },
+    { icon: ShoppingBag, title: "Order Going Wrong", scene: "Your delivery was cancelled. Your return was rejected. These need your attention right now, not tomorrow.", color: "bg-purple-50" },
+    { icon: Bell, title: "Any Alert You Choose", scene: "You are not limited to our list. Add any keyword, any app name, any amount. You are in full control.", color: "bg-amber-50" },
+  ];
+
+  const prev = () => setCardIdx(i => Math.max(0, i - 1));
+  const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
+
+  return (
+    <div className="h-full bg-[#1C1917] flex items-center justify-center px-5">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-5 sm:gap-6 max-w-2xl">
+        <div className="text-center">
+          <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">
+            Moments this saves you
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight">
+            These are the alerts that cannot wait.
+          </h2>
+        </div>
+
+        {/* Card */}
+        <div className="w-full">
+          <AnimatePresence mode="wait">
+            <motion.div key={cardIdx}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className={`w-full rounded-[1.75rem] border-3 border-ink p-6 sm:p-7 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] ${scenarios[cardIdx].color} flex flex-col gap-4`}>
+              <div className="size-12 bg-white border-2 border-ink rounded-xl grid place-items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                {(() => { const Icon = scenarios[cardIdx].icon; return <Icon className="size-6 text-ink"/>; })()}
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-ink/40 uppercase tracking-wider mb-1.5">{scenarios[cardIdx].title}</p>
+                <p className="text-sm sm:text-base font-black text-ink leading-snug">{scenarios[cardIdx].scene}</p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center gap-4">
+          <button onClick={prev} disabled={cardIdx === 0}
+            className="size-9 rounded-full border-2 border-white/20 bg-white/8 grid place-items-center text-white/50 hover:text-white hover:bg-white/20 disabled:opacity-25 transition cursor-pointer">
+            <ChevronLeft className="size-4"/>
+          </button>
+          <div className="flex gap-2">
+            {scenarios.map((_, i) => (
+              <button key={i} onClick={() => setCardIdx(i)}
+                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-6 h-2 bg-white" : "size-2 bg-white/30 hover:bg-white/50"}`}/>
+            ))}
+          </div>
+          <button onClick={next} disabled={cardIdx === scenarios.length - 1}
+            className="size-9 rounded-full border-2 border-white/20 bg-white/8 grid place-items-center text-white/50 hover:text-white hover:bg-white/20 disabled:opacity-25 transition cursor-pointer">
+            <ChevronRight className="size-4"/>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 10: Closer */
+function SlideCloser({ backHash }: { backHash?: string }) {
+  return (
+    <div className="h-full bg-[#FFFDF5] flex items-center justify-center px-5 text-center">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-5 sm:gap-6 max-w-3xl">
+        <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-ink/25">
+          Stop treating all alerts the same
+        </p>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink leading-tight">
+          Some things demand your attention. Others don't.
+        </h2>
+        <p className="text-base sm:text-lg font-semibold text-ink/45 leading-relaxed max-w-xl">
+          MinDrop gives your truly important alerts a voice loud enough to be heard — and keeps everything else quiet, just the way you like it.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto mt-2">
+          <Link to="/download"
+            className="px-8 sm:px-10 py-3.5 bg-ink text-white font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#F59E0B] hover:border-[#F59E0B] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            Download MinDrop — Free
+          </Link>
+          <Link to="/" hash={backHash} viewTransition
+            className="px-8 sm:px-10 py-3.5 bg-white text-ink font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-amber-50 transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            See All Features
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   MAIN — Full-Page Fade Scroll Controller
+══════════════════════════════════════════════ */
 function NotifyDetailView() {
   const { from } = Route.useSearch();
   const backHash = from === "grid" ? "grid" : undefined;
 
-  return (
-    <div className="w-full min-h-screen bg-[#FFFDF5] text-ink font-sans overflow-x-hidden">
+  const [current, setCurrent] = useState(0);
+  const currentRef = useRef(0);
+  const lockedRef  = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartY = useRef(0);
 
-      {/* ── Sticky Nav ── */}
-      <header className="sticky top-0 z-50 bg-[#FFFDF5]/92 backdrop-blur-md border-b-2 border-ink/8">
+  const STEPS = [
+    {
+      step: "01", stepNum: 1, color: "bg-[#FFFBEB]",
+      title: "An alert arrives on your phone.",
+      detail: "This could be anything — a WhatsApp message, a bank SMS, an Instagram like. It arrives the same way it always does.",
+    },
+    {
+      step: "02", stepNum: 2, color: "bg-[#FFF7ED]",
+      title: "MinDrop checks if it matches your filters.",
+      detail: "In less than a second, MinDrop reads the alert and checks if it matches the types you said matter to you. This all happens right on your phone — nothing leaves it.",
+    },
+    {
+      step: "03", stepNum: 3, color: "bg-[#FFFBEB]",
+      title: "If it matches, the alarm rings.",
+      detail: "Instead of a quiet banner, your phone starts ringing — just like a phone call. It does not stop until you see it and decide what to do.",
+    },
+    {
+      step: "04", stepNum: 4, color: "bg-[#FFF7ED]",
+      title: "If it does not match, nothing changes.",
+      detail: "Promos, chats, random updates — they behave exactly as they always did. Silent when you want silence. MinDrop only acts on what you told it to watch.",
+    },
+  ];
+
+  const slides = [
+    <SlideOpening />,
+    <SlideProblem />,
+    <SlideDifference />,
+    <SlidePlayground />,
+    ...STEPS.map(s => <SlideStep key={s.step} {...s} />),
+    <SlideScenarios />,
+    <SlideCloser backHash={backHash} />,
+  ];
+  const TOTAL = slides.length;
+
+  const DARK_SLIDES = [1, 8];
+  const isDark = DARK_SLIDES.includes(current);
+
+  const goTo = (idx: number) => {
+    if (lockedRef.current || idx < 0 || idx >= TOTAL) return;
+    lockedRef.current = true;
+    currentRef.current = idx;
+    setCurrent(idx);
+    setTimeout(() => { lockedRef.current = false; }, 750);
+  };
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      if (lockedRef.current) return;
+      if (e.deltaY > 0) goTo(currentRef.current + 1);
+      else if (e.deltaY < 0) goTo(currentRef.current - 1);
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(currentRef.current + 1); }
+      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(currentRef.current - 1); }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  return (
+    <div
+      className="h-[100dvh] flex flex-col overflow-hidden"
+      style={{ viewTransitionName: "card-notify" } as React.CSSProperties}
+    >
+      {/* ── Header ── */}
+      <header className="shrink-0 border-b-2 border-ink/8 z-50"
+        style={{ backgroundColor: isDark ? "rgba(28,25,23,0.96)" : "rgba(255,253,245,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
         <div className="w-[95%] mx-auto h-14 flex items-center justify-between">
           <Link to="/" hash={backHash} viewTransition
-            className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-ink/50 hover:text-ink transition">
-            <X className="size-3.5" /> Close
+            className={`flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition ${isDark ? "text-white/50 hover:text-white" : "text-ink/50 hover:text-ink"}`}>
+            <X className="size-3.5"/> Close
           </Link>
           <div className="flex items-center gap-2">
             <div className="size-7 relative grid place-items-center shrink-0">
-              <motion.div animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute inset-0 rounded-full border border-[#F59E0B]/30" />
-              <motion.div animate={{ y: [0, -2, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
+              <motion.div animate={{scale:[1,1.5,1],opacity:[0.2,0,0.2]}} transition={{duration:3,repeat:Infinity}}
+                className="absolute inset-0 rounded-full border border-[#F59E0B]/30"/>
+              <motion.div animate={{y:[0,-2,0]}} transition={{duration:3,repeat:Infinity}}
                 className="size-5 rounded-md bg-gradient-to-tr from-[#F59E0B] to-[#FCD34D] grid place-items-center relative">
                 <span className="text-white font-black text-[9px]">m</span>
               </motion.div>
             </div>
-            <span className="text-xs font-black uppercase tracking-wider text-ink/60 hidden sm:block">MinDrop</span>
+            <span className={`text-xs font-black uppercase tracking-wider hidden sm:block transition ${isDark ? "text-white/60" : "text-ink/60"}`}>MinDrop</span>
           </div>
           <Link to="/download"
-            className="text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl bg-ink text-white border-2 border-ink hover:bg-[#F59E0B] hover:border-[#F59E0B] transition">
+            className={`text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 transition ${isDark ? "bg-white text-ink border-white hover:bg-[#F59E0B] hover:text-white hover:border-[#F59E0B]" : "bg-ink text-white border-ink hover:bg-[#F59E0B] hover:border-[#F59E0B]"}`}>
             Get App
           </Link>
         </div>
       </header>
 
-      {/* ══════════════════════════════════════════
-          SECTION 1 — Opening Scene
-      ══════════════════════════════════════════ */}
-      <section
-        className="min-h-[90vh] flex flex-col items-center justify-center text-center py-16 sm:py-24"
-        style={{ viewTransitionName: 'card-notify' } as React.CSSProperties}
+      {/* ── Slide Stage ── */}
+      <div
+        ref={containerRef}
+        className="flex-1 relative overflow-hidden"
+        onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
+        onTouchEnd={(e) => {
+          const delta = touchStartY.current - e.changedTouches[0].clientY;
+          if (Math.abs(delta) > 50) {
+            if (delta > 0) goTo(currentRef.current + 1);
+            else goTo(currentRef.current - 1);
+          }
+        }}
       >
-        <div className="w-[95%] mx-auto flex flex-col items-center">
-          <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-amber-100 px-4 py-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-8">
-            🔔 Smart Filters
-          </motion.span>
-
-          <motion.p initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-ink/35 leading-relaxed tracking-tight">
-            Your phone got 47 notifications today.
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-ink/35 leading-relaxed tracking-tight mt-1 sm:mt-2">
-            One of them said ₹18,000 was taken from your account.
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.8 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-ink leading-tight tracking-tight mt-5 sm:mt-7">
-            You saw it 4 hours later.
-          </motion.p>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.0 }}
-            className="mt-12 sm:mt-16 flex flex-col items-center gap-2 text-ink/20">
-            <p className="text-[10px] font-black uppercase tracking-widest">Your important alerts deserve better</p>
-            <ChevronDown className="size-5 animate-bounce" />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            {slides[current]}
           </motion.div>
-        </div>
-      </section>
+        </AnimatePresence>
 
-      {/* ══════════════════════════════════════════
-          SECTION 2 — The Noise Problem
-      ══════════════════════════════════════════ */}
-      <section className="bg-[#1C1917] text-white py-16 sm:py-24">
-        <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          <FadeUp className="flex-1 text-left">
-            <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-white/25 mb-4">
-              Why everything gets lost in your phone
-            </p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-6">
-              Every app shouts.<br />
-              <span className="text-[#F59E0B]">The important ones get lost</span><br />
-              in the crowd.
-            </h2>
-            <p className="text-base sm:text-lg font-semibold text-white/50 leading-relaxed max-w-lg">
-              Sales offers, group chats, likes, reminders, cricket scores — they all arrive looking exactly the same. Your brain tunes them all out. Including the one that actually needed your attention.
-            </p>
-          </FadeUp>
-
-          <FadeUp delay={0.1} className="shrink-0 w-full lg:w-auto flex justify-center">
-            <NotificationFlood />
-          </FadeUp>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 3 — What MinDrop Does
-      ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 bg-[#FFFDF5]">
-        <div className="w-[95%] mx-auto flex flex-col items-center gap-10 sm:gap-14 text-center">
-          <FadeUp className="max-w-3xl">
-            <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-4">
-              How MinDrop handles this
-            </p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink leading-tight">
-              MinDrop watches your alerts.<br />
-              <span className="text-[#F59E0B]">The important ones</span> get turned into a ringing alarm.
-            </h2>
-          </FadeUp>
-
-          <FadeUp delay={0.08} className="max-w-2xl">
-            <p className="text-base sm:text-lg md:text-xl font-semibold text-ink/55 leading-relaxed">
-              You tell MinDrop what matters to you — bank alerts, payment messages, anything else you choose. When those arrive, instead of showing a silent banner, MinDrop rings your phone loudly until you look at it.
-            </p>
-          </FadeUp>
-
-          {/* Three pillars */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 w-full mt-2">
-            {[
-              { icon: "🎯", title: "You Decide What Matters", body: "Choose which types of messages should wake you up. Sales offers stay silent. Your bank alert rings." },
-              { icon: "📴", title: "Works Even in Silent Mode", body: "When your phone is on silent, important alerts still ring through. Nothing slips past unnoticed." },
-              { icon: "🔒", title: "Stays on Your Phone Only", body: "MinDrop reads your alerts right there on your phone. Nothing is sent to any server. Your messages stay private." },
-            ].map(({ icon, title, body }) => (
-              <FadeUp key={title}>
-                <div className="bg-white border-3 border-ink rounded-[1.75rem] p-6 sm:p-7 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-3 h-full">
-                  <span className="text-3xl">{icon}</span>
-                  <h3 className="text-base sm:text-lg font-black text-ink">{title}</h3>
-                  <p className="text-sm font-semibold text-ink/55 leading-relaxed">{body}</p>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 4 — Build Your Filter
-      ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 bg-amber-50">
-        <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
-          <div className="flex-1 w-full">
-            <FadeUp>
-              <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] mb-4">
-                You are in control
-              </p>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-ink leading-tight mb-4 sm:mb-5">
-                Set it once. Then forget it.
-              </h2>
-              <p className="text-base sm:text-lg font-semibold text-ink/55 leading-relaxed mb-7 max-w-lg">
-                Pick the types of alerts that should never be missed. MinDrop takes care of the rest. Toggle the ones that matter to you below.
-              </p>
-            </FadeUp>
-          </div>
-
-          <FadeUp delay={0.1} className="w-full lg:w-[420px] shrink-0">
-            <FilterSimulator />
-          </FadeUp>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 5 — How It Works
-      ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 bg-[#FFFDF5]">
-        <div className="w-[95%] mx-auto">
-          <FadeUp className="text-center mb-10 sm:mb-14">
-            <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-ink/25 mb-4">How it works</p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-ink leading-tight max-w-2xl mx-auto">
-              What happens from the moment<br />an alert arrives on your phone.
-            </h2>
-          </FadeUp>
-
-          <div className="flex flex-col w-full">
-            {[
-              {
-                step: "01", color: "bg-[#FFFBEB]",
-                title: "An alert arrives on your phone.",
-                detail: "This could be anything — a WhatsApp message, a bank SMS, an Instagram like. It arrives the same way it always does.",
-              },
-              {
-                step: "02", color: "bg-[#FFF7ED]",
-                title: "MinDrop checks if it matches your filters.",
-                detail: "In less than a second, MinDrop reads the alert and checks if it matches the types you said matter to you. This all happens right on your phone — nothing leaves it.",
-              },
-              {
-                step: "03", color: "bg-[#FFFBEB]",
-                title: "If it matches, the alarm rings.",
-                detail: "Instead of a quiet banner, your phone starts ringing — just like a phone call. It does not stop until you see it and decide what to do.",
-              },
-              {
-                step: "04", color: "bg-[#FFF7ED]",
-                title: "If it does not match, nothing changes.",
-                detail: "Promos, chats, random updates — they behave exactly as they always did. Silent when you want silence. MinDrop only acts on what you told it to watch.",
-              },
-            ].map(({ step, title, detail, color }, i, arr) => (
-              <FadeUp key={step} delay={i * 0.06}>
-                <div className={`
-                  flex flex-col sm:flex-row gap-5 sm:gap-8 items-start p-6 sm:p-8 md:p-10 border-x-3 border-t-3 border-ink
-                  ${i === 0 ? "rounded-t-[2rem]" : ""}
-                  ${i === arr.length - 1 ? "border-b-3 rounded-b-[2rem]" : ""}
-                  ${color}
-                `}>
-                  <span className="text-4xl sm:text-5xl font-black text-ink/10 shrink-0">{step}</span>
-                  <div>
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-black text-ink mb-2">{title}</h3>
-                    <p className="text-sm sm:text-base font-semibold text-ink/50 leading-relaxed">{detail}</p>
-                  </div>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 6 — Real Moments
-      ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 bg-[#1C1917] overflow-hidden">
-        <div className="w-[95%] mx-auto mb-10 sm:mb-14 text-center">
-          <FadeUp>
-            <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-white/25 mb-4">
-              Moments this saves you
-            </p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight max-w-2xl mx-auto">
-              These are the alerts that cannot wait.
-            </h2>
-          </FadeUp>
-        </div>
-
-        <div className="flex gap-4 sm:gap-5 overflow-x-auto pl-[2.5%] pr-[2.5%] pb-4 snap-x snap-mandatory"
-          style={{ scrollbarWidth: "none" }}>
-          {[
-            { icon: Banknote, title: "Money Movement", scene: "₹18,000 was just taken from your account. You need to know this the moment it happens.", color: "bg-red-50" },
-            { icon: CreditCard, title: "UPI Payment", scene: "Someone sent you money via UPI. Or charged your card. Either way, this cannot sit unread.", color: "bg-green-50" },
-            { icon: MessageSquare, title: "That One Person", scene: "Your child messaged you. Your doctor sent a reply. Not every message is equal — and now they won't be treated equally.", color: "bg-blue-50" },
-            { icon: ShoppingBag, title: "Order Going Wrong", scene: "Your delivery was cancelled. Your return was rejected. These need your attention right now, not tomorrow.", color: "bg-purple-50" },
-            { icon: Bell, title: "Any Alert You Choose", scene: "You are not limited to our list. Add any keyword, any app name, any amount. You are in full control.", color: "bg-amber-50" },
-          ].map(({ icon: Icon, title, scene, color }) => (
-            <div key={title} className="snap-start shrink-0 w-60 sm:w-72">
-              <div className={`rounded-[1.75rem] border-3 border-ink p-5 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] ${color} flex flex-col gap-4`}>
-                <div className="size-11 bg-white border-2 border-ink rounded-xl grid place-items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  <Icon className="size-5 text-ink" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black text-ink/40 uppercase tracking-wider mb-1">{title}</p>
-                  <p className="text-sm sm:text-base font-black text-ink leading-snug">{scene}</p>
-                </div>
-              </div>
-            </div>
+        {/* ── Right Dot Navigation ── */}
+        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)}
+              className={`rounded-full transition-all duration-300 cursor-pointer ${
+                i === current
+                  ? "w-1.5 h-7 bg-[#F59E0B]"
+                  : isDark
+                    ? "size-1.5 bg-white/25 hover:bg-white/60"
+                    : "size-1.5 bg-ink/20 hover:bg-ink/50"
+              }`}
+            />
           ))}
+          <p className={`text-[9px] font-black mt-1 tabular-nums transition ${isDark ? "text-white/25" : "text-ink/25"}`}>
+            {current + 1}/{TOTAL}
+          </p>
         </div>
-      </section>
 
-      {/* ══════════════════════════════════════════
-          SECTION 7 — Closer
-      ══════════════════════════════════════════ */}
-      <section className="py-24 sm:py-32 bg-[#FFFDF5] text-center">
-        <div className="w-[95%] mx-auto flex flex-col items-center gap-7 sm:gap-8">
-          <FadeUp>
-            <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-ink/25 mb-4 sm:mb-6">
-              Stop treating all alerts the same
+        {/* ── Bottom hint ── */}
+        {current < TOTAL - 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-20 pointer-events-none">
+            <p className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-white/15" : "text-ink/15"}`}>
+              scroll or ↓
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink leading-tight max-w-3xl mx-auto">
-              Some things demand your attention. Others don't.
-            </h2>
-          </FadeUp>
-          <FadeUp delay={0.1} className="max-w-xl">
-            <p className="text-base sm:text-lg md:text-xl font-semibold text-ink/45 leading-relaxed">
-              MinDrop gives your truly important alerts a voice loud enough to be heard — and keeps everything else quiet, just the way you like it.
-            </p>
-          </FadeUp>
-          <FadeUp delay={0.18} className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2 sm:mt-4 w-full sm:w-auto">
-            <Link to="/download"
-              className="px-8 sm:px-10 py-4 bg-ink text-white font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#F59E0B] hover:border-[#F59E0B] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-              Download MinDrop — It's Free
-            </Link>
-            <Link to="/" hash={backHash} viewTransition
-              className="px-8 sm:px-10 py-4 bg-white text-ink font-black text-sm uppercase tracking-wider rounded-xl border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-amber-50 transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-              See All Features
-            </Link>
-          </FadeUp>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="border-t-2 border-ink/10 bg-amber-50 py-5 sm:py-6">
-        <div className="w-[95%] mx-auto flex flex-wrap justify-between items-center gap-3">
-          <span className="text-xs font-black uppercase tracking-wider text-ink/25">MinDrop · Filters · Private by Design</span>
-          <div className="flex gap-4 sm:gap-5">
-            <Link to="/privacy" className="text-xs font-black text-ink/35 hover:text-ink transition">Privacy</Link>
-            <Link to="/terms" className="text-xs font-black text-ink/35 hover:text-ink transition">Terms</Link>
           </div>
-        </div>
-      </footer>
+        )}
+      </div>
     </div>
   );
 }

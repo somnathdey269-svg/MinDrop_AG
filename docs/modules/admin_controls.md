@@ -24,3 +24,5 @@ Coordinates platform overview charts, user controls, plan modifications, and dia
   * **Change**: Executed requirements: 'Revamp the public marketing website to Path A (Modern Product Landing Page) by making src/routes/index.tsx, notify-feature.tsx, places-feature.tsx, pricing.tsx static React pages instead of database CMS pages. Add a new static route later-feature.tsx for Later module details, and update links in MarketingLayout.tsx. Make the content crisp, modern, explaining later alarms, notify rule filters, places geofencing, memory recall, and weekly summaries. Ensure fully responsive layout for all screens.'
 - **2026-07-19 02:42:52** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Fix mobile layout overlaps in index.tsx. Reposition Next Card and Show Me controls below the card stack on mobile viewports. Apply responsive scaling for cards and clean up footer overlaps.'
+- **2026-07-20 16:04:58** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Convert all 4 feature pages to full-page fade-based presentation layout with dot navigation, wheel controls, and touch support'
