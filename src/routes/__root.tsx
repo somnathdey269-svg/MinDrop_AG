@@ -25,21 +25,19 @@ import { installNativeApiForwarder } from "../lib/platform";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#FFFBEB] p-6 text-center">
+      <div className="bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md w-full flex flex-col items-center">
+        <span className="text-5xl mb-3">📍</span>
+        <h1 className="text-3xl font-black text-ink">Page Not Found</h1>
+        <p className="mt-2 text-sm font-semibold text-ink/75 leading-relaxed">
+          The page you're looking for was moved or doesn't exist.
         </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
+        <Link
+          to="/"
+          className="mt-6 px-8 py-3.5 bg-ink text-white font-black text-xs uppercase tracking-wider rounded-xl border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FF671F] hover:border-[#FF671F] transition cursor-pointer"
+        >
+          Return to Home Deck
+        </Link>
       </div>
     </div>
   );
@@ -53,29 +51,34 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#FFFBEB] p-6 text-center">
+      <div className="bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md w-full flex flex-col items-center">
+        <span className="text-5xl mb-3">⚡</span>
+        <h1 className="text-2xl sm:text-3xl font-black text-ink leading-tight">
+          MinDrop Deck Reload
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <p className="mt-2 text-sm font-semibold text-ink/75 leading-relaxed">
+          A temporary network update occurred. Click below to reload the deck seamlessly.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-col sm:flex-row gap-3 w-full">
           <button
             onClick={() => {
-              router.invalidate();
-              reset();
+              if (typeof window !== "undefined") {
+                window.location.href = "/";
+              } else {
+                router.invalidate();
+                reset();
+              }
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="flex-1 px-6 py-3.5 bg-ink text-white font-black text-xs uppercase tracking-wider rounded-xl border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#10B981] hover:border-[#10B981] transition cursor-pointer"
           >
-            Try again
+            Reload Deck
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="flex-1 px-6 py-3.5 bg-white text-ink font-black text-xs uppercase tracking-wider rounded-xl border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-100 transition text-center"
           >
-            Go home
+            Back Home
           </a>
         </div>
       </div>
