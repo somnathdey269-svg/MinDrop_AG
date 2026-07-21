@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Layers, LayoutGrid, X, ArrowRight } from "lucide-react";
+import { Layers, LayoutGrid, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { 
   DECK_CARDS, 
@@ -132,12 +132,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Concept A: Google Showcase / Apple Wallet Deck Mode */}
+      {/* 2. Compact Sleek Mobile Showcase (No Heavy Bottom Row) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
-          /* CONCEPT A: 3D STACKED GOOGLE SHOWCASE DECK */
+          /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[380px] h-[480px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[380px] h-[395px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -153,7 +153,7 @@ export function MobileShowcase() {
                     <span className="text-xs font-mono font-bold text-ink/30">0{((activeIdx + 1) % DECK_CARDS.length) + 1}/05</span>
                   </div>
 
-                  <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/60 border-2 border-ink rounded-2xl py-4 opacity-40">
+                  <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/60 border-2 border-ink rounded-2xl py-3 opacity-40">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -166,15 +166,16 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Concept A: Google Showcase Edition) */}
+                {/* Active Front Hero Card (Compact Sleek Height) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 220, rotate: -12, scale: 0.88, opacity: 0 }}
                   animate={{ x: 0, rotate: -2, scale: 1, opacity: 1 }}
                   exit={{ x: -280, rotate: -16, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 110, damping: 16 }}
+                  onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Top Bar inside Card */}
                   <div className="flex justify-between items-center shrink-0">
@@ -186,9 +187,9 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  {/* Top 50% Visual Hero Showcase Canvas */}
-                  <div className="my-2.5 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-5 shadow-sm relative">
-                    <div className="scale-110 transform-gpu origin-center">
+                  {/* Visual Hero Showcase Canvas */}
+                  <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-4 shadow-sm relative">
+                    <div className="scale-105 transform-gpu origin-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -197,36 +198,23 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Bottom 50% Editorial Text & Action */}
+                  {/* Editorial Text */}
                   <div className="shrink-0">
-                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1">
                       {currentCard.title}
                     </h3>
                     <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
-                  </div>
-
-                  {/* Integrated Organic CTA Row (Replaces Heavy Black Bar) */}
-                  <button
-                    onClick={handleShowMe}
-                    className="w-full flex items-center justify-between pt-3 mt-1 border-t-2 border-ink/15 group cursor-pointer"
-                  >
-                    <div className="text-left">
-                      <span className="text-xs font-black uppercase tracking-wider text-ink group-hover:text-[#FF671F] transition-colors block">
-                        Explore feature →
-                      </span>
-                      <span className="text-[10px] font-bold text-ink/50 block">Tap to view specifications</span>
-                    </div>
-                    <span className="inline-grid place-items-center size-10 rounded-2xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:bg-ink group-hover:text-canvas transition shrink-0">
-                      <ArrowRight className="size-5 text-ink group-hover:text-canvas transition-colors" />
+                    <span className="text-[11px] uppercase font-bold tracking-wider text-ink/40 mt-2.5 block text-right">
+                      Tap card for details ↗
                     </span>
-                  </button>
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Sleek Progress Line Indicator (Concept A) */}
+            {/* Sleek Progress Line Indicator */}
             <div className="w-44 mx-auto h-1.5 bg-ink/15 rounded-full overflow-hidden mt-4 relative z-30">
               <motion.div
                 className="h-full bg-ink rounded-full"
@@ -239,14 +227,18 @@ export function MobileShowcase() {
             </div>
           </div>
         ) : (
-          /* CONCEPT A: GRID / FEED MODE */
+          /* GRID / FEED MODE */
           <div className="w-full max-w-[400px] mx-auto py-1 no-scrollbar z-20">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-5 pb-16">
               {DECK_CARDS.map((card, idx) => {
                 return (
-                  <div
+                  <Link
                     key={card.id}
-                    className={`rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] ${card.bgClass}`}
+                    to={card.to}
+                    search={{ from: "grid" }}
+                    viewTransition
+                    style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
+                    className={`rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${card.bgClass}`}
                   >
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
@@ -255,7 +247,7 @@ export function MobileShowcase() {
                       <span className="text-xs font-mono font-bold text-ink/50">0{idx + 1}/05</span>
                     </div>
 
-                    <div className="my-2.5 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-5 shadow-sm relative pointer-events-none">
+                    <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-4 shadow-sm relative pointer-events-none">
                       <div className="scale-105 transform-gpu origin-center">
                         {card.id === "later" && <LaterAlarmIllustration />}
                         {card.id === "notify" && <SmartFiltersIllustration />}
@@ -266,28 +258,15 @@ export function MobileShowcase() {
                     </div>
 
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1">{card.title}</h3>
                       <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
                         {card.description}
                       </p>
-                    </div>
-
-                    <Link
-                      to={card.to}
-                      search={{ from: "grid" }}
-                      className="w-full flex items-center justify-between pt-3.5 mt-2 border-t-2 border-ink/15 group cursor-pointer"
-                    >
-                      <div className="text-left">
-                        <span className="text-xs font-black uppercase tracking-wider text-ink group-hover:text-[#FF671F] transition-colors block">
-                          Explore feature →
-                        </span>
-                        <span className="text-[10px] font-bold text-ink/50 block">Tap to view specifications</span>
-                      </div>
-                      <span className="inline-grid place-items-center size-10 rounded-2xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:bg-ink group-hover:text-canvas transition shrink-0">
-                        <ArrowRight className="size-5 text-ink group-hover:text-canvas transition-colors" />
+                      <span className="text-[11px] uppercase font-bold tracking-wider text-ink/40 mt-2.5 block text-right">
+                        Tap card for details ↗
                       </span>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                 );
               })}
             </motion.div>
