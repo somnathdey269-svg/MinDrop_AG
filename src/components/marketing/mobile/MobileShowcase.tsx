@@ -135,12 +135,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Large Bold Typography, Zero Bottom Blank Space) */}
+      {/* 2. Mobile Showcase (Large Bold Typography & Hero Graphics, Small Bottom Padding) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[340px] h-[350px] xs:h-[370px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[360px] h-[380px] xs:h-[400px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout" custom={swipeDirection}>
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -149,7 +149,7 @@ export function MobileShowcase() {
                   animate={{ scale: 0.94, y: 6, rotate: 5, opacity: 0.95 }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 200, damping: 22 }}
-                  className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-start bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 xs:p-6 flex flex-col justify-start bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="flex justify-between items-center shrink-0 mb-2">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-3 py-0.5 rounded-full border border-ink/10">
@@ -195,13 +195,13 @@ export function MobileShowcase() {
                   className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 xs:p-6 flex flex-col justify-start shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Top Bar inside Card (Header Tag) */}
-                  <div className="flex justify-between items-center shrink-0 mb-2.5">
+                  <div className="flex justify-between items-center shrink-0 mb-2">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Graphic Illustration (1 space below header tag, 1 space above content) */}
+                  {/* Hero Graphic Illustration */}
                   <div className="my-2 flex items-center justify-center overflow-visible w-full relative shrink-0">
                     {currentCard.id === "later" && <LaterAlarmIllustration />}
                     {currentCard.id === "notify" && <SmartFiltersIllustration />}
@@ -212,7 +212,7 @@ export function MobileShowcase() {
 
                   {/* Prominent Large Content (Title & Description) */}
                   <div className="shrink-0 mt-1">
-                    <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-tight tracking-tight mb-2">
+                    <h3 className="text-3xl xs:text-[34px] font-black text-ink leading-tight tracking-tight mb-2">
                       {currentCard.title}
                     </h3>
                     <p className="text-base xs:text-lg text-ink/85 font-normal leading-relaxed">
@@ -235,9 +235,9 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-start shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${card.bgClass}`}
+                    className={`rounded-[2.25rem] border-3 border-ink p-5 xs:p-6 flex flex-col justify-start shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${card.bgClass}`}
                   >
-                    <div className="flex justify-between items-center mb-2.5">
+                    <div className="flex justify-between items-center mb-2">
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
@@ -254,7 +254,7 @@ export function MobileShowcase() {
 
                     {/* Content in LOWER Section */}
                     <div className="mt-1">
-                      <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
+                      <h3 className="text-3xl xs:text-[34px] font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
                       <p className="text-base xs:text-lg text-ink/85 font-normal leading-relaxed">
                         {card.description}
                       </p>

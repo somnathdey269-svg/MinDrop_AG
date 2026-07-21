@@ -227,7 +227,7 @@ export function DesktopShowcase() {
       <div ref={containerRef} className="flex-1 w-full min-h-0 my-2 no-scrollbar z-10 flex flex-col justify-center items-center overflow-y-auto">
         {viewMode === "deck" ? (
           /* DECK STACK MODE */
-          <div className="w-full h-full max-h-[420px] flex items-center justify-center relative">
+          <div className="w-full h-full max-h-[460px] flex items-center justify-center relative">
             {/* Left Hover Zone */}
             <div 
               onClick={handlePrev} 
@@ -243,8 +243,8 @@ export function DesktopShowcase() {
               </div>
             </div>
 
-            {/* Large Typography Card Stack */}
-            <div className="relative w-[390px] lg:w-[410px] h-[375px] lg:h-[395px] flex items-center justify-center">
+            {/* Rich, Bold Filled Card Stack with Small Bottom Padding */}
+            <div className="relative w-[410px] lg:w-[430px] h-[410px] lg:h-[430px] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -257,7 +257,7 @@ export function DesktopShowcase() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-start bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-start bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0 mb-2">
                     <span className="text-xs uppercase font-bold tracking-wider text-ink/40">{nextCard.tag}</span>
@@ -276,7 +276,7 @@ export function DesktopShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Card (Large Bold Title & Description) */}
+                {/* Active Front Card (Large Graphics, Bold 44px Title, Rich Description, Small Bottom Padding) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -290,16 +290,16 @@ export function DesktopShowcase() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-start shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-start shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   {/* Top Bar inside Card (Header Tag) */}
-                  <div className="shrink-0 flex justify-between items-center mb-2.5">
+                  <div className="shrink-0 flex justify-between items-center mb-2">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink/80 bg-white/70 border border-ink/15 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Graphic Illustration (1 clean space below header tag, 1 clean space above content) */}
+                  {/* Large Hero Graphic Illustration */}
                   <div className="my-2 flex items-center justify-center overflow-visible w-full relative shrink-0">
                     <div className="scale-100 transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
@@ -310,9 +310,9 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Prominent Large Content (Title & Description) */}
+                  {/* Prominent Large Content (Title & Description) Filling Card Naturally */}
                   <div className="shrink-0 mt-1">
-                    <h3 className="text-3xl lg:text-[38px] font-black text-ink leading-tight tracking-tight mb-2">
+                    <h3 className="text-4xl lg:text-[44px] font-black text-ink leading-tight tracking-tight mb-2">
                       {currentCard.title}
                     </h3>
                     <p className="text-base lg:text-lg text-ink/85 font-normal leading-relaxed">
@@ -351,9 +351,9 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-start shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[350px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-start shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[380px] ${card.bgClass}`}
                   >
-                    <div className="flex justify-between items-center mb-2.5">
+                    <div className="flex justify-between items-center mb-2">
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
@@ -370,7 +370,7 @@ export function DesktopShowcase() {
 
                     {/* Content in LOWER Section */}
                     <div className="mt-1">
-                      <h3 className="text-3xl lg:text-[34px] font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
+                      <h3 className="text-3xl lg:text-[38px] font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
                       <p className="text-base lg:text-lg text-ink/85 font-normal leading-relaxed">
                         {card.description}
                       </p>
