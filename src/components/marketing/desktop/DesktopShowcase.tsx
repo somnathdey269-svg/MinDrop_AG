@@ -226,7 +226,7 @@ export function DesktopShowcase() {
       {/* 2. Main Desktop Stage */}
       <div ref={containerRef} className="flex-1 w-full min-h-0 my-2 no-scrollbar z-10 flex flex-col justify-center items-center overflow-y-auto">
         {viewMode === "deck" ? (
-          /* DECK STACK MODE */
+          /* DECK STACK MODE (NORMAL VIEW) */
           <div className="w-full h-full max-h-[min(725px,84vh)] flex items-center justify-center relative">
             {/* Left Hover Zone */}
             <div 
@@ -272,11 +272,13 @@ export function DesktopShowcase() {
                   </div>
 
                   <div className="shrink-0 mt-2">
-                    <h3 className="text-[clamp(24px,2.2vw,34px)] font-black text-ink leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-[clamp(20px,1.8vw,30px)] font-black text-ink leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
+                      {nextCard.title}
+                    </h3>
                   </div>
                 </motion.div>
 
-                {/* Active Front Card */}
+                {/* Active Front Card (1-Line Header Title) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -299,7 +301,7 @@ export function DesktopShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Centered Hero Graphic (With Generous Top Spacing) */}
+                  {/* Section 2: Centered Hero Graphic */}
                   <div className="my-auto pt-4 pb-2 flex items-center justify-center overflow-visible w-full relative shrink-0">
                     <div className="scale-[clamp(1.1,1.25vh,1.4)] transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
@@ -310,12 +312,12 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Prominent Content */}
+                  {/* Section 3: Prominent Content with Single-Line Card Header */}
                   <div className="shrink-0 mt-3">
-                    <h3 className="text-[clamp(34px,2.8vw+0.5rem,54px)] font-black text-ink leading-tight tracking-tight mb-2">
+                    <h3 className="text-[clamp(22px,2.0vw+0.2rem,36px)] font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-[clamp(16.5px,1.15vw+0.25rem,21.5px)] text-ink/85 font-normal leading-relaxed">
+                    <p className="text-[clamp(16px,1.1vw+0.2rem,20.5px)] text-ink/85 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -339,7 +341,7 @@ export function DesktopShowcase() {
             </div>
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (NO OPEN CARD FOOTER OR ICON) */
+          /* RESPONSIVE GRID VIEW MODE */
           <div className="w-full max-w-6xl mx-auto px-6 pt-12 pb-24 z-20 h-full overflow-y-auto no-scrollbar">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
@@ -363,7 +365,7 @@ export function DesktopShowcase() {
                       </span>
                     </div>
 
-                    {/* Centered Graphic Illustration Section (With Generous Top Spacing) */}
+                    {/* Centered Graphic Illustration Section */}
                     <div className="my-auto pt-3 pb-1 flex items-center justify-center overflow-visible w-full pointer-events-none scale-85 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
@@ -372,9 +374,11 @@ export function DesktopShowcase() {
                       {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
 
-                    {/* Content Section (2-Word Title & Description, No Open Card Footer) */}
+                    {/* Content Section (Single-Line Card Header) */}
                     <div className="shrink-0 mt-2">
-                      <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                        {card.title}
+                      </h3>
                       <p className="text-xs lg:text-sm text-ink/85 font-normal leading-relaxed line-clamp-3">
                         {card.description}
                       </p>
