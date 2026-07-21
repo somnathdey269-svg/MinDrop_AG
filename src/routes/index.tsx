@@ -502,7 +502,7 @@ function ShowcaseDeckPage() {
         backgroundColor: activeBgColor,
         transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
       }}
-      className={`fixed inset-0 text-ink font-sans flex flex-col justify-between p-4 xs:p-5 sm:p-6 select-none ${viewMode === 'grid' ? 'overflow-y-auto no-scrollbar bg-[#FFD043]' : 'overflow-hidden'} h-[100dvh] w-screen`}
+      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-4 xs:p-5 sm:p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
       
       {/* Dynamic Background Circles */}
@@ -570,10 +570,10 @@ function ShowcaseDeckPage() {
 
       {/* 2. Main content area depending on mode (Centered block grid to enable smooth mobile overflows) */}
       <div 
-        className={`flex-1 w-full my-1 sm:my-2 no-scrollbar z-10 ${
+        className={`flex-1 w-full min-h-0 my-1 sm:my-2 no-scrollbar z-10 ${
           viewMode === "deck" 
             ? "flex items-center justify-center relative overflow-hidden" 
-            : "block py-6"
+            : "block overflow-y-auto no-scrollbar py-2"
         }`}
       >
         
