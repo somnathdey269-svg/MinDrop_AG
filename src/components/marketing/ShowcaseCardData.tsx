@@ -65,7 +65,7 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
 ];
 
-// Unclustered, Borderless Organic Visual Hero Graphics with Fluid Responsive Scale
+// Unclustered, Borderless Organic Visual Hero Graphics with 1.25x Scaled Badge
 export function LaterAlarmIllustration() {
   return (
     <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
@@ -74,18 +74,18 @@ export function LaterAlarmIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-[clamp(0.5rem,0.9vw,0.95rem)] rounded-full bg-[#10B981]/25 border-2 border-[#10B981]/40 pointer-events-none"
+          className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#10B981]/25 border-2 border-[#10B981]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
         <motion.div 
           animate={{ scale: [1, 1.05, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-[clamp(4.4rem,6.2vw,6.2rem)] rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <AlarmClock className="size-[clamp(2.3rem,3.2vw,3.1rem)] text-[#10B981]" />
+          <AlarmClock className="size-[clamp(2.7rem,3.8vw,3.7rem)] text-[#10B981]" />
         </motion.div>
       </div>
-      <span className="text-[clamp(11px,0.9vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-2.5 relative z-10">
+      <span className="text-[clamp(12px,1vw,15px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3 relative z-10">
         🔔 Continuous Ringing
       </span>
     </div>
@@ -100,18 +100,18 @@ export function SmartFiltersIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-[clamp(0.5rem,0.9vw,0.95rem)] rounded-full bg-[#F59E0B]/25 border-2 border-[#F59E0B]/40 pointer-events-none"
+          className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#F59E0B]/25 border-2 border-[#F59E0B]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
         <motion.div 
           animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-[clamp(4.4rem,6.2vw,6.2rem)] rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BellRing className="size-[clamp(2.3rem,3.2vw,3.1rem)] text-[#F59E0B]" />
+          <BellRing className="size-[clamp(2.7rem,3.8vw,3.7rem)] text-[#F59E0B]" />
         </motion.div>
       </div>
-      <span className="text-[clamp(11px,0.9vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-2.5 relative z-10">
+      <span className="text-[clamp(12px,1vw,15px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3 relative z-10">
         ✨ Keyword Match Filter
       </span>
     </div>
@@ -126,18 +126,18 @@ export function PlacesMappingIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.3, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-[clamp(0.5rem,0.9vw,0.95rem)] rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50 pointer-events-none"
+          className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
         <motion.div 
           animate={{ scale: [1, 1.05, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-[clamp(4.4rem,6.2vw,6.2rem)] rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Navigation className="size-[clamp(2.3rem,3.2vw,3.1rem)] text-[#8B5CF6] transform rotate-45" />
+          <Navigation className="size-[clamp(2.7rem,3.8vw,3.7rem)] text-[#8B5CF6] transform rotate-45" />
         </motion.div>
       </div>
-      <span className="text-[clamp(11px,0.9vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-2.5 relative z-10">
+      <span className="text-[clamp(12px,1vw,15px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3 relative z-10">
         📍 500m Geofence Boundary
       </span>
     </div>
@@ -152,18 +152,18 @@ export function PricingTierIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-[clamp(0.5rem,0.9vw,0.95rem)] rounded-full bg-[#EC4899]/25 border-2 border-[#EC4899]/40 pointer-events-none"
+          className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#EC4899]/25 border-2 border-[#EC4899]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
         <motion.div 
           animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-[clamp(4.4rem,6.2vw,6.2rem)] rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Sparkles className="size-[clamp(2.3rem,3.2vw,3.1rem)] text-[#EC4899]" />
+          <Sparkles className="size-[clamp(2.7rem,3.8vw,3.7rem)] text-[#EC4899]" />
         </motion.div>
       </div>
-      <span className="text-[clamp(11px,0.9vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-2.5 relative z-10">
+      <span className="text-[clamp(12px,1vw,15px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3 relative z-10">
         💎 Free Tier • Yearly Pro
       </span>
     </div>
@@ -178,18 +178,18 @@ export function FAQHelpIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-[clamp(0.5rem,0.9vw,0.95rem)] rounded-full bg-[#0284C7]/25 border-2 border-[#0284C7]/40 pointer-events-none"
+          className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#0284C7]/25 border-2 border-[#0284C7]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
         <motion.div 
           animate={{ scale: [1, 1.05, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-[clamp(4.4rem,6.2vw,6.2rem)] rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BrainCircuit className="size-[clamp(2.3rem,3.2vw,3.1rem)] text-[#0284C7]" />
+          <BrainCircuit className="size-[clamp(2.7rem,3.8vw,3.7rem)] text-[#0284C7]" />
         </motion.div>
       </div>
-      <span className="text-[clamp(11px,0.9vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-2.5 relative z-10">
+      <span className="text-[clamp(12px,1vw,15px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3 relative z-10">
         🔒 100% Offline SQLite
       </span>
     </div>
