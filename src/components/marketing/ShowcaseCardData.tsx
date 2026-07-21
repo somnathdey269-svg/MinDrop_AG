@@ -173,7 +173,7 @@ export function PricingTierIllustration() {
         </motion.div>
       </div>
       <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
-        💎 Free Plan • Lifetime Pro
+        💎 Free Tier • Yearly Pro
       </span>
     </div>
   );
