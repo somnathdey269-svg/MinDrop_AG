@@ -311,9 +311,20 @@ function ShowcaseDeckPage() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
-  const [viewMode, setViewMode] = useState<"deck" | "grid">("deck");
+  
+  // Initialize viewMode synchronously on first paint based on URL hash/query
+  const [viewMode, setViewMode] = useState<"deck" | "grid">(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash;
+      const search = window.location.search;
+      if (hash.includes("grid") || search.includes("grid")) {
+        return "grid";
+      }
+    }
+    return "deck";
+  });
 
-  // Sync viewMode safely on mount and window hashchange/popstate events
+  // Keep viewMode synced on hashchange and popstate events
   useEffect(() => {
     const syncViewMode = () => {
       if (typeof window !== "undefined") {
