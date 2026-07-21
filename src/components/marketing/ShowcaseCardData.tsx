@@ -18,7 +18,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     tag: "Chapter 01/05",
     title: "Looping Alarms",
     description: "Ordinary alerts are easy to ignore. MinDrop alarms ring continuously like a phone call until checked, surviving system restarts.",
-    to: "/later",
+    to: "/later-feature",
     bgColor: "#E0F2FE", // Soft Sky Blue
     bgClass: "bg-[#E0F2FE]",
     illustrator: AlarmClock,
@@ -28,7 +28,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     tag: "Chapter 02/05",
     title: "Smart Filters",
     description: "Silence low-priority chatter. Create keyword rules that convert essential notification streams into actionable tasks.",
-    to: "/notify",
+    to: "/notify-feature",
     bgColor: "#FEF3C7", // Soft Amber
     bgClass: "bg-[#FEF3C7]",
     illustrator: BellRing,
@@ -38,7 +38,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     tag: "Chapter 03/05",
     title: "Places & Sweeps",
     description: "Drop pins where items or tasks are bound. MinDrop runs background sweeps and triggers reminders as you enter or leave radii.",
-    to: "/places",
+    to: "/places-feature",
     bgColor: "#F3E8FF", // Soft Lavender
     bgClass: "bg-[#F3E8FF]",
     illustrator: Navigation,
