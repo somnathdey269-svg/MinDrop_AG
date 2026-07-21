@@ -86,3 +86,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Push user updated pricing description in ShowcaseCardData.tsx to git main'
 - **2026-07-21 23:20:08** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Update ShowcaseCardData titles to 2 words (Smart Notification, Location Reminder, Looping Alarm, Simple Pricing, Ask Me), fix 1-line graphic sub-pills, add vertical spacing between chapter tag and graphic, and remove Open Card footer/icon from grid view in DesktopShowcase.tsx'
+- **2026-07-21 23:51:20** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Replace old inline m logo header across all feature subpages (notify-feature, later-feature, places-feature, pricing, faq, terms, privacy, settings-feature) with animated MinDropHeaderLogo component'
