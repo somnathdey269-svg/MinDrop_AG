@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { Sparkles, Check, X, ArrowRight, ShieldAlert, Play, Layers, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -373,17 +374,7 @@ function PricingDetailView() {
             className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition text-[#DB2777]/60 hover:text-[#831843]">
             <X className="size-3.5"/> Close
           </Link>
-          <div className="flex items-center gap-2">
-            <div className="size-7 relative grid place-items-center shrink-0">
-              <motion.div animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }} transition={{ duration: 3, repeat: Infinity }}
-                className="absolute inset-0 rounded-full border border-[#EC4899]/30" />
-              <motion.div animate={{ y: [0, -2, 0] }} transition={{ duration: 3, repeat: Infinity }}
-                className="size-5 rounded-md bg-gradient-to-tr from-[#EC4899] to-[#FCE7F3] grid place-items-center relative">
-                <span className="text-white font-black text-[9px]">m</span>
-              </motion.div>
-            </div>
-            <span className="text-xs font-black uppercase tracking-wider hidden sm:block text-[#DB2777]/70">MinDrop</span>
-          </div>
+          <MinDropHeaderLogo className="text-xl sm:text-2xl" />
           <Link to="/download"
             className="text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 bg-ink text-white border-ink hover:bg-[#EC4899] hover:border-[#EC4899] transition">
             Get App

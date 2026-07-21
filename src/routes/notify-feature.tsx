@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import {
   BellRing, Check, X, Filter, Volume2, Bell,
   ChevronDown, CreditCard, MessageSquare, ShoppingBag, Banknote, ChevronLeft, ChevronRight
@@ -567,17 +568,7 @@ function NotifyDetailView() {
             className={`flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition ${isDark ? "text-[#FEF3C7]/60 hover:text-white" : "text-[#D97706]/60 hover:text-[#78350F]"}`}>
             <X className="size-3.5"/> Close
           </Link>
-          <div className="flex items-center gap-2">
-            <div className="size-7 relative grid place-items-center shrink-0">
-              <motion.div animate={{scale:[1,1.5,1],opacity:[0.2,0,0.2]}} transition={{duration:3,repeat:Infinity}}
-                className="absolute inset-0 rounded-full border border-[#F59E0B]/30"/>
-              <motion.div animate={{y:[0,-2,0]}} transition={{duration:3,repeat:Infinity}}
-                className="size-5 rounded-md bg-gradient-to-tr from-[#F59E0B] to-[#FEF3C7] grid place-items-center relative">
-                <span className="text-white font-black text-[9px]">m</span>
-              </motion.div>
-            </div>
-            <span className={`text-xs font-black uppercase tracking-wider hidden sm:block transition ${isDark ? "text-[#FEF3C7]/70" : "text-[#D97706]/70"}`}>MinDrop</span>
-          </div>
+          <MinDropHeaderLogo className="text-xl sm:text-2xl" isDarkBg={isDark} />
           <Link to="/download"
             className={`text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 transition ${isDark ? "bg-white text-ink border-white hover:bg-[#F59E0B] hover:text-white hover:border-[#F59E0B]" : "bg-ink text-white border-ink hover:bg-[#F59E0B] hover:border-[#F59E0B]"}`}>
             Get App

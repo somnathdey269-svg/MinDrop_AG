@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getPublicSettings } from "@/lib/platformSettings.functions";
 import { motion, AnimatePresence } from "framer-motion";
@@ -315,17 +316,7 @@ function Privacy() {
             className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition text-slate-500 hover:text-slate-900">
             <X className="size-3.5"/> Close
           </Link>
-          <div className="flex items-center gap-2">
-            <div className="size-7 relative grid place-items-center shrink-0">
-              <motion.div animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }} transition={{ duration: 3, repeat: Infinity }}
-                className="absolute inset-0 rounded-full border border-slate-400/30" />
-              <motion.div animate={{ y: [0, -2, 0] }} transition={{ duration: 3, repeat: Infinity }}
-                className="size-5 rounded-md bg-gradient-to-tr from-slate-500 to-slate-200 grid place-items-center relative">
-                <span className="text-white font-black text-[9px]">m</span>
-              </motion.div>
-            </div>
-            <span className="text-xs font-black uppercase tracking-wider hidden sm:block text-slate-550">MinDrop</span>
-          </div>
+          <MinDropHeaderLogo className="text-xl sm:text-2xl" />
           <Link to="/download"
             className="text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 bg-ink text-white border-ink hover:bg-slate-700 hover:border-slate-700 transition">
             Get App
