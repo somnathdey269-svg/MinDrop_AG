@@ -44,46 +44,13 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
-  const router = useRouter();
+  console.error("Root Error Boundary caught error:", error);
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
+    try { reset(); } catch {}
+  }, [error, reset]);
 
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#FFFBEB] p-6 text-center">
-      <div className="bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md w-full flex flex-col items-center">
-        <span className="text-5xl mb-3">⚡</span>
-        <h1 className="text-2xl sm:text-3xl font-black text-ink leading-tight">
-          MinDrop Deck Reload
-        </h1>
-        <p className="mt-2 text-sm font-semibold text-ink/75 leading-relaxed">
-          A temporary network update occurred. Click below to reload the deck seamlessly.
-        </p>
-        <div className="mt-6 flex flex-col sm:flex-row gap-3 w-full">
-          <button
-            onClick={() => {
-              if (typeof window !== "undefined") {
-                window.location.href = "/";
-              } else {
-                router.invalidate();
-                reset();
-              }
-            }}
-            className="flex-1 px-6 py-3.5 bg-ink text-white font-black text-xs uppercase tracking-wider rounded-xl border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#10B981] hover:border-[#10B981] transition cursor-pointer"
-          >
-            Reload Deck
-          </button>
-          <a
-            href="/"
-            className="flex-1 px-6 py-3.5 bg-white text-ink font-black text-xs uppercase tracking-wider rounded-xl border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-100 transition text-center"
-          >
-            Back Home
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+  return <Outlet />;
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({

@@ -626,18 +626,26 @@ function ShowcaseDeckPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-3xl xs:text-4xl sm:text-4xl md:text-5xl font-black text-ink mt-3 sm:mt-4 leading-tight tracking-tight">
+                    {/* Mobile-only Big Typography */}
+                    <h3 className="text-3xl xs:text-4xl sm:hidden font-black text-ink mt-2.5 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
+                    <p className="text-base xs:text-lg sm:hidden text-ink font-extrabold mt-2 leading-snug">
+                      {currentCard.description}
+                    </p>
 
-                    <p className="text-base xs:text-lg sm:text-xl text-ink font-extrabold mt-2.5 sm:mt-3 leading-relaxed">
+                    {/* Desktop & Tablet Typography (Restored Original Desktop Scale) */}
+                    <h3 className="hidden sm:block text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-4 leading-tight tracking-tight">
+                      {currentCard.title}
+                    </h3>
+                    <p className="hidden sm:block text-base md:text-lg text-ink/85 font-semibold mt-2 sm:mt-3 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
                   {/* Centered Premium Live Illustration Component */}
                   <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
-                    <div className="scale-110 sm:scale-100 transform-gpu origin-center flex items-center justify-center">
+                    <div className="scale-125 xs:scale-135 sm:scale-100 transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -646,7 +654,8 @@ function ShowcaseDeckPage() {
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-ink/15 flex justify-between items-center shrink-0">
+                  {/* Mobile Footer with Explore Callout */}
+                  <div className="flex md:hidden pt-2.5 border-t border-ink/15 justify-between items-center shrink-0">
                     <div className="flex items-center gap-2">
                       <span className="inline-grid place-items-center size-9 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         <CardIcon className="size-5 text-ink" />
@@ -656,6 +665,14 @@ function ShowcaseDeckPage() {
 
                     <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-ink bg-white/80 border-2 border-ink px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FF671F] hover:text-white transition">
                       Explore specs <span className="text-sm">→</span>
+                    </span>
+                  </div>
+
+                  {/* Desktop Footer (Restored Original Desktop Design) */}
+                  <div className="hidden md:flex justify-between items-end pt-3 sm:pt-4 shrink-0">
+                    <span className="text-xs sm:text-sm uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
+                    <span className="inline-grid place-items-center size-11 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                      <CardIcon className="size-6 sm:size-7 text-ink" />
                     </span>
                   </div>
                 </motion.div>
