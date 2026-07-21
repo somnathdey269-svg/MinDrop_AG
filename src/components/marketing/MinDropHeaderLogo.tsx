@@ -5,7 +5,7 @@ interface MinDropHeaderLogoProps {
   isDarkBg?: boolean;
 }
 
-export function MinDropHeaderLogo({ className = "", isDarkBg = false }: MinDropHeaderLogoProps) {
+export function MinDropHeaderLogo({ className = "text-xl sm:text-2xl", isDarkBg = false }: MinDropHeaderLogoProps) {
   const textColorClass = isDarkBg ? "text-white" : "text-ink";
 
   return (
