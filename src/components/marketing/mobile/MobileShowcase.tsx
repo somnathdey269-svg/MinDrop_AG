@@ -134,7 +134,7 @@ export function MobileShowcase() {
             onTouchEnd={handleTouchEnd}
             className="w-full h-full max-h-[84vh] flex flex-col items-center justify-center relative"
           >
-            {/* Mobile Card Container (1.25x Proportions) */}
+            {/* Mobile Card Container */}
             <div className="relative w-[min(90vw,360px)] h-[min(530px,74vh)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
@@ -164,7 +164,7 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: 1.25x Enlarged Hero Graphic (Fills Empty Space) */}
+                  {/* Section 2: Hero Graphic */}
                   <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full shrink-0">
                     <div className="scale-[1.55] sm:scale-[1.65] transform-gpu origin-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
@@ -175,7 +175,7 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: 1.25x Increased Header & Description Typography */}
+                  {/* Section 3: Header & Description Typography */}
                   <div className="shrink-0 mt-2">
                     <h3 className="text-3xl sm:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
@@ -201,7 +201,7 @@ export function MobileShowcase() {
             </div>
           </div>
         ) : (
-          /* GRID VIEW MODE */
+          /* GRID VIEW MODE (Dynamic min-h-[380px] to fit full graphics & text) */
           <div className="w-full h-full overflow-y-auto px-1 py-4 z-20 no-scrollbar">
             <div className="flex flex-col gap-5 pb-20">
               {DECK_CARDS.map((card) => {
@@ -212,7 +212,7 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-5.5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[350px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[380px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="flex justify-between items-center mb-1 shrink-0">
@@ -221,8 +221,8 @@ export function MobileShowcase() {
                       </span>
                     </div>
 
-                    {/* Graphic Section (1.25x Larger) */}
-                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-135 transform-gpu origin-center">
+                    {/* Graphic Section */}
+                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-125 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -230,12 +230,12 @@ export function MobileShowcase() {
                       {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
 
-                    {/* Content Section (1.25x Larger) */}
+                    {/* Content Section */}
                     <div className="shrink-0 mt-2">
                       <h3 className="text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-base text-ink/90 font-medium leading-relaxed line-clamp-3">
+                      <p className="text-base text-ink/90 font-medium leading-relaxed">
                         {card.description}
                       </p>
                     </div>

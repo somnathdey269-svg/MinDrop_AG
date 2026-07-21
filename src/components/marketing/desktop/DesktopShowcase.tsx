@@ -178,7 +178,7 @@ export function DesktopShowcase() {
         }}
       />
 
-      {/* 1. Desktop Header (No Underlines, Clean Bold Buttons) */}
+      {/* 1. Desktop Header */}
       <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-2">
         <Link
           to="/terms"
@@ -222,7 +222,7 @@ export function DesktopShowcase() {
               </div>
             </div>
 
-            {/* Web Card Container (1.25x Enlarged Proportions) */}
+            {/* Web Card Container */}
             <div className="relative w-[clamp(400px,32vw,520px)] h-[clamp(520px,68vh,700px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
@@ -259,7 +259,7 @@ export function DesktopShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Card (1.25x Larger Font Size & Graphic) */}
+                {/* Active Front Card */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -282,7 +282,7 @@ export function DesktopShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: 1.25x Larger Hero Graphic (Fills Card Center) */}
+                  {/* Section 2: Hero Graphic */}
                   <div className="my-auto pt-3 pb-1 flex items-center justify-center overflow-visible w-full relative shrink-0">
                     <div className="scale-[clamp(1.3,1.5vh+0.4vw,1.65)] transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
@@ -293,7 +293,7 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: 1.25x Increased Header & Description Typography */}
+                  {/* Section 3: Header & Description Typography */}
                   <div className="shrink-0 mt-3">
                     <h3 className="text-3xl lg:text-4xl xl:text-5xl font-black text-ink leading-tight tracking-tight mb-2.5 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
@@ -322,12 +322,12 @@ export function DesktopShowcase() {
             </div>
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (1.25x Typography & Graphics, No Link Underlines) */
-          <div className="w-full max-w-6xl mx-auto px-4 pt-10 pb-24 z-20 h-full overflow-y-auto no-scrollbar">
+          /* RESPONSIVE GRID VIEW MODE (Dynamic Clamp Height to fit enlarged cards without truncation) */
+          <div className="w-full max-w-6xl mx-auto px-4 pt-6 pb-28 z-20 h-full overflow-y-auto no-scrollbar">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
             >
               {DECK_CARDS.map((card) => {
                 return (
@@ -337,17 +337,17 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-7 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[390px] ${card.bgClass}`}
+                    className={`rounded-[2.2rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[clamp(440px,48vh,520px)] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="flex justify-between items-center mb-2 shrink-0">
-                      <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
+                      <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Centered Graphic Illustration Section (1.25x Larger) */}
-                    <div className="my-auto pt-2 pb-1 flex items-center justify-center overflow-visible w-full pointer-events-none scale-135 transform-gpu origin-center">
+                    {/* Centered Graphic Illustration Section */}
+                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-120 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -355,12 +355,12 @@ export function DesktopShowcase() {
                       {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
 
-                    {/* Content Section (1.25x Larger Typography) */}
-                    <div className="shrink-0 mt-2">
+                    {/* Content Section */}
+                    <div className="shrink-0 mt-3">
                       <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-base lg:text-lg text-ink/90 font-medium leading-relaxed line-clamp-3">
+                      <p className="text-base lg:text-lg text-ink/90 font-medium leading-relaxed">
                         {card.description}
                       </p>
                     </div>
@@ -372,7 +372,7 @@ export function DesktopShowcase() {
         )}
       </div>
 
-      {/* 3. Desktop Footer (No Underlines, Clean Bold Links) */}
+      {/* 3. Desktop Footer */}
       <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
         <div className="justify-self-start">
           <button
