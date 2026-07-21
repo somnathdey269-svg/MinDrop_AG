@@ -32,3 +32,5 @@ This module handles connections to Supabase, client initialization, and global q
   * **Change**: Executed requirements: 'Revamp the public marketing website to Path A (Modern Product Landing Page) by making src/routes/index.tsx, notify-feature.tsx, places-feature.tsx, pricing.tsx static React pages instead of database CMS pages. Add a new static route later-feature.tsx for Later module details, and update links in MarketingLayout.tsx. Make the content crisp, modern, explaining later alarms, notify rule filters, places geofencing, memory recall, and weekly summaries. Ensure fully responsive layout for all screens.'
 - **2026-07-20 14:44:08** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Gracefully fallback to default settings when database queries throw exceptions during static builds'
+- **2026-07-21 15:00:36** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Expand mobile deck height to 72vh, add safe promise catch handlers for Supabase auth sync in root component, and add Explore specs tap callout to mobile card'

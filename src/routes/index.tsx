@@ -566,7 +566,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[84vw] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[52vh] max-h-[410px] min-h-[340px] sm:h-[440px] md:h-[460px] lg:h-[480px] flex items-center justify-center z-10">
+            <div className="relative w-[88vw] max-w-[360px] xs:max-w-[385px] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[72vh] max-h-[560px] min-h-[420px] sm:h-[440px] md:h-[460px] lg:h-[480px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
@@ -580,15 +580,15 @@ function ShowcaseDeckPage() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.2rem] sm:rounded-[2.5rem] border-3 border-ink p-4 xs:p-5 sm:p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.2rem] sm:rounded-[2.5rem] border-3 border-ink p-5 xs:p-6 sm:p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-2xl sm:text-2xl lg:text-3xl font-black text-ink mt-1.5 sm:mt-4 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-2xl sm:text-2xl lg:text-3xl font-black text-ink mt-2 sm:mt-4 leading-tight">{nextCard.title}</h3>
                   </div>
 
                   {/* Behind card illustration preview */}
-                  <div className="flex-1 my-1 sm:my-2 flex items-center justify-center min-h-0 w-full opacity-40 pointer-events-none scale-90 sm:scale-95">
+                  <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full opacity-40 pointer-events-none scale-90 sm:scale-95">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -597,8 +597,8 @@ function ShowcaseDeckPage() {
                   </div>
 
                   <div className="flex justify-end pt-1 shrink-0">
-                    <span className="inline-grid place-items-center size-9 sm:size-12 rounded-2xl bg-canvas border-2 border-ink">
-                      <NextIcon className="size-4 sm:size-6 text-ink/40" />
+                    <span className="inline-grid place-items-center size-10 sm:size-12 rounded-2xl bg-canvas border-2 border-ink">
+                      <NextIcon className="size-5 sm:size-6 text-ink/40" />
                     </span>
                   </div>
                 </motion.div>
@@ -626,18 +626,18 @@ function ShowcaseDeckPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-3xl xs:text-4xl sm:text-4xl md:text-5xl font-black text-ink mt-2.5 sm:mt-4 leading-tight tracking-tight">
+                    <h3 className="text-3xl xs:text-4xl sm:text-4xl md:text-5xl font-black text-ink mt-3 sm:mt-4 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-base xs:text-lg sm:text-xl text-ink font-extrabold mt-2 sm:mt-3 leading-snug">
+                    <p className="text-base xs:text-lg sm:text-xl text-ink font-extrabold mt-2.5 sm:mt-3 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
                   {/* Centered Premium Live Illustration Component */}
-                  <div className="flex-1 my-1 sm:my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
-                    <div className="scale-100 sm:scale-100 transform-gpu origin-center flex items-center justify-center">
+                  <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
+                    <div className="scale-110 sm:scale-100 transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -646,10 +646,16 @@ function ShowcaseDeckPage() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-end pt-2 sm:pt-4 shrink-0">
-                    <span className="text-xs sm:text-sm uppercase font-black text-ink/50 tracking-wider">MinDrop Brain</span>
-                    <span className="inline-grid place-items-center size-10 xs:size-11 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                      <CardIcon className="size-5 xs:size-6 sm:size-7 text-ink" />
+                  <div className="pt-3 border-t border-ink/15 flex justify-between items-center shrink-0">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-grid place-items-center size-9 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        <CardIcon className="size-5 text-ink" />
+                      </span>
+                      <span className="text-xs uppercase font-black text-ink/70 tracking-wider">MinDrop Brain</span>
+                    </div>
+
+                    <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-ink bg-white/80 border-2 border-ink px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FF671F] hover:text-white transition">
+                      Explore specs <span className="text-sm">→</span>
                     </span>
                   </div>
                 </motion.div>

@@ -167,20 +167,27 @@ function RootComponent() {
       // Kick off sync if already signed in on load.
       supabase.auth.getSession().then(({ data }) => {
         const uid = data.session?.user?.id;
-        if (uid) startCloudSync(uid);
+        if (uid) {
+          try { startCloudSync(uid); } catch (e) { console.warn("Cloud sync init warning:", e); }
+        }
+      }).catch((err) => {
+        console.warn("Supabase session check skipped:", err);
       });
+
       const sub = supabase.auth.onAuthStateChange((event, session) => {
         if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
-        router.invalidate();
+        try { router.invalidate(); } catch {}
         if (event === "SIGNED_OUT") {
-          stopCloudSync({ wipeLocal: true });
+          try { stopCloudSync({ wipeLocal: true }); } catch {}
         } else if (session?.user?.id) {
-          startCloudSync(session.user.id);
-          queryClient.invalidateQueries();
+          try {
+            startCloudSync(session.user.id);
+            queryClient.invalidateQueries();
+          } catch {}
         }
       });
-      unsub = () => sub.data.subscription.unsubscribe();
-    });
+      unsub = () => { try { sub.data.subscription.unsubscribe(); } catch {} };
+    }).catch((e) => console.warn("Supabase import skipped on web:", e));
     return () => { if (unsub) unsub(); };
   }, [router, queryClient]);
 
