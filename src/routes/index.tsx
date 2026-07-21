@@ -502,7 +502,7 @@ function ShowcaseDeckPage() {
         backgroundColor: activeBgColor,
         transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
       }}
-      className={`fixed inset-0 text-ink font-sans flex flex-col justify-between p-4 xs:p-5 sm:p-6 select-none ${viewMode === 'grid' ? 'overflow-y-auto bg-[#FFD043]' : 'overflow-hidden'} h-[100dvh] w-screen`}
+      className={`fixed inset-0 text-ink font-sans flex flex-col justify-between p-4 xs:p-5 sm:p-6 select-none ${viewMode === 'grid' ? 'overflow-y-auto no-scrollbar bg-[#FFD043]' : 'overflow-hidden'} h-[100dvh] w-screen`}
     >
       
       {/* Dynamic Background Circles */}
@@ -573,7 +573,7 @@ function ShowcaseDeckPage() {
         className={`flex-1 w-full my-1 sm:my-2 no-scrollbar z-10 ${
           viewMode === "deck" 
             ? "flex items-center justify-center relative overflow-hidden" 
-            : "block overflow-y-auto py-6"
+            : "block py-6"
         }`}
       >
         
@@ -700,7 +700,7 @@ function ShowcaseDeckPage() {
           </div>
         ) : (
           /* GRID VIEW MODE */
-          <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 py-2 overflow-y-auto max-h-[calc(100vh-140px)] z-20">
+          <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 py-2 no-scrollbar z-20">
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pb-16">
               {DECK_CARDS.map((card) => {
                 const Icon = card.illustrator;
