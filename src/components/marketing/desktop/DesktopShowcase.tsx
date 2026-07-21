@@ -319,7 +319,7 @@ export function DesktopShowcase() {
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-lg text-ink/85 font-semibold mt-3 leading-relaxed">
+                    <p className="text-lg text-ink/80 font-normal mt-3 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
