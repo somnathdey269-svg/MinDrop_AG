@@ -95,7 +95,7 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Mobile Header */}
+      {/* 1. Mobile Header (Perfect Optical Baseline Alignment across Terms, MinDrop, Privacy) */}
       <header className="flex justify-between items-center w-full z-30 shrink-0 h-12 px-2">
         <div className="flex items-center h-full">
           <Link
@@ -164,9 +164,9 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Hero Graphic */}
-                  <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full shrink-0">
-                    <div className="scale-[1.55] sm:scale-[1.65] transform-gpu origin-center">
+                  {/* Section 2: Hero Graphic (With Explicit Top Clearance Below Tag Pill) */}
+                  <div className="my-auto pt-5 pb-2 flex items-center justify-center overflow-visible w-full shrink-0">
+                    <div className="scale-[1.50] sm:scale-[1.60] transform-gpu origin-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -175,7 +175,7 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Typography */}
+                  {/* Section 3: Header & Description Typography */}
                   <div className="shrink-0 mt-2">
                     <h3 className="text-3xl sm:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
@@ -201,7 +201,7 @@ export function MobileShowcase() {
             </div>
           </div>
         ) : (
-          /* GRID VIEW MODE (Generous pb-32 bottom clearance) */
+          /* GRID VIEW MODE */
           <div className="w-full h-full overflow-y-auto px-1 pt-2 pb-32 z-20 no-scrollbar">
             <div className="flex flex-col gap-5">
               {DECK_CARDS.map((card) => {
@@ -212,17 +212,17 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-5.5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[350px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[360px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
-                    <div className="flex justify-between items-center mb-1 shrink-0">
+                    <div className="flex justify-between items-center mb-3 shrink-0">
                       <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Graphic Section */}
-                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-125 transform-gpu origin-center">
+                    {/* Graphic Section (With Explicit Top Clearance) */}
+                    <div className="my-auto pt-5 pb-3 flex items-center justify-center overflow-visible w-full pointer-events-none scale-120 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -231,7 +231,7 @@ export function MobileShowcase() {
                     </div>
 
                     {/* Content Section */}
-                    <div className="shrink-0 mt-2">
+                    <div className="shrink-0 mt-3">
                       <h3 className="text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
