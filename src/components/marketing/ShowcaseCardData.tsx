@@ -77,7 +77,7 @@ export const DECK_CARDS: ShowcaseCard[] = [
 // Unclustered, Borderless Organic Visual Hero Graphics
 export function LaterAlarmIllustration() {
   return (
-    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
         <motion.div 
@@ -89,12 +89,12 @@ export function LaterAlarmIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.06, 1], rotate: [0, -3, 3, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-16 xs:size-18 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <AlarmClock className="size-10 text-[#10B981]" />
+          <AlarmClock className="size-8 xs:size-9 text-[#10B981]" />
         </motion.div>
       </div>
-      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+      <span className="text-[10px] xs:text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-2.5 py-0.5 rounded-full shadow-sm mt-1.5 relative z-10">
         🔔 Continuous Ringing
       </span>
     </div>
@@ -103,7 +103,7 @@ export function LaterAlarmIllustration() {
 
 export function SmartFiltersIllustration() {
   return (
-    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
         <motion.div 
@@ -115,12 +115,12 @@ export function SmartFiltersIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.06, 1], rotate: [0, 3, -3, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-16 xs:size-18 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BellRing className="size-10 text-[#F59E0B]" />
+          <BellRing className="size-8 xs:size-9 text-[#F59E0B]" />
         </motion.div>
       </div>
-      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+      <span className="text-[10px] xs:text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-2.5 py-0.5 rounded-full shadow-sm mt-1.5 relative z-10">
         ✨ Keyword Match Filter
       </span>
     </div>
@@ -129,24 +129,24 @@ export function SmartFiltersIllustration() {
 
 export function PlacesMappingIllustration() {
   return (
-    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Radar Ring */}
         <motion.div 
           animate={{ scale: [1, 1.45, 1], opacity: [0.4, 0.1, 0.4] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-6 rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50"
+          className="absolute inset-0 -m-5 rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50"
         />
         {/* Central Floating Icon Badge */}
         <motion.div 
           animate={{ scale: [1, 1.06, 1], rotate: [0, -3, 3, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-16 xs:size-18 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Navigation className="size-10 text-[#8B5CF6] transform rotate-45" />
+          <Navigation className="size-8 xs:size-9 text-[#8B5CF6] transform rotate-45" />
         </motion.div>
       </div>
-      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+      <span className="text-[10px] xs:text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-2.5 py-0.5 rounded-full shadow-sm mt-1.5 relative z-10">
         📍 500m Geofence Boundary
       </span>
     </div>
@@ -155,7 +155,7 @@ export function PlacesMappingIllustration() {
 
 export function PricingTierIllustration() {
   return (
-    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
         <motion.div 
@@ -167,12 +167,12 @@ export function PricingTierIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.06, 1], rotate: [0, 3, -3, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-16 xs:size-18 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Sparkles className="size-10 text-[#EC4899]" />
+          <Sparkles className="size-8 xs:size-9 text-[#EC4899]" />
         </motion.div>
       </div>
-      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+      <span className="text-[10px] xs:text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-2.5 py-0.5 rounded-full shadow-sm mt-1.5 relative z-10">
         💎 Free Tier • Yearly Pro
       </span>
     </div>
@@ -181,7 +181,7 @@ export function PricingTierIllustration() {
 
 export function FAQHelpIllustration() {
   return (
-    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
         <motion.div 
@@ -193,12 +193,12 @@ export function FAQHelpIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.06, 1], rotate: [0, -3, 3, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-16 xs:size-18 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BrainCircuit className="size-10 text-[#0284C7]" />
+          <BrainCircuit className="size-8 xs:size-9 text-[#0284C7]" />
         </motion.div>
       </div>
-      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+      <span className="text-[10px] xs:text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-2.5 py-0.5 rounded-full shadow-sm mt-1.5 relative z-10">
         🔒 100% Offline SQLite
       </span>
     </div>
