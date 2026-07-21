@@ -54,3 +54,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Storytelling rewrite of notify-feature, places-feature, settings-feature as full scrollable immersive pages with unique personalities, plain English, 95% responsive layout'
 - **2026-07-21 14:37:23** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Enlarge mobile typography to text-3xl and text-lg, disable automatic browser location permission prompts on website view, and verify clean routing'
+- **2026-07-21 20:36:35** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Place graphic on top and content in lower section across web deck, mobile deck, and grid views, ensuring graphics are uncut'
