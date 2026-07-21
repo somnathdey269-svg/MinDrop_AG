@@ -80,3 +80,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Push card header to 1 line and description to 3 lines clamp tweaks'
 - **2026-07-20 15:44:22** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Storytelling rewrite of notify-feature, places-feature, settings-feature as full scrollable immersive pages with unique personalities, plain English, 95% responsive layout'
+- **2026-07-21 22:19:19** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix 404 card navigation error by updating ShowcaseCardData.tsx target routes to /later-feature, /notify-feature, and /places-feature, and creating route aliases in src/routes'

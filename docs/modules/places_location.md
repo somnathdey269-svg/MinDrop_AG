@@ -56,3 +56,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Enlarge mobile typography to text-3xl and text-lg, disable automatic browser location permission prompts on website view, and verify clean routing'
 - **2026-07-21 20:36:35** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Place graphic on top and content in lower section across web deck, mobile deck, and grid views, ensuring graphics are uncut'
+- **2026-07-21 22:19:19** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix 404 card navigation error by updating ShowcaseCardData.tsx target routes to /later-feature, /notify-feature, and /places-feature, and creating route aliases in src/routes'

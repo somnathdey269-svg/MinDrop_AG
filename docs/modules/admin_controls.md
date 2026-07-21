@@ -26,3 +26,5 @@ Coordinates platform overview charts, user controls, plan modifications, and dia
   * **Change**: Executed requirements: 'Fix mobile layout overlaps in index.tsx. Reposition Next Card and Show Me controls below the card stack on mobile viewports. Apply responsive scaling for cards and clean up footer overlaps.'
 - **2026-07-20 16:04:58** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Convert all 4 feature pages to full-page fade-based presentation layout with dot navigation, wheel controls, and touch support'
+- **2026-07-21 22:19:19** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix 404 card navigation error by updating ShowcaseCardData.tsx target routes to /later-feature, /notify-feature, and /places-feature, and creating route aliases in src/routes'

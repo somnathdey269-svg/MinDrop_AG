@@ -27,3 +27,5 @@ Manages pricing structures, active user limits, stripe/payment gateways, and lim
   * **Change**: Executed requirements: 'Configure free limits to 3 limits, set default fallback price to 999, expand compliance document content blocks, balance showcase cards grid columns, and fix scroll-up trackpad logic'
 - **2026-07-20 17:39:27** | Self-Healed Learning Loop
   * **Rule Added**: Rule: Under Capacitor development, always configure VITE_WEB_ORIGIN and VITE_API_ORIGIN in .env to map to http://localhost:8080.
+- **2026-07-21 22:19:19** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix 404 card navigation error by updating ShowcaseCardData.tsx target routes to /later-feature, /notify-feature, and /places-feature, and creating route aliases in src/routes'

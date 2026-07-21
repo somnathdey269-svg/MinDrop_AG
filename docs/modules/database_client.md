@@ -34,3 +34,5 @@ This module handles connections to Supabase, client initialization, and global q
   * **Change**: Executed requirements: 'Gracefully fallback to default settings when database queries throw exceptions during static builds'
 - **2026-07-21 15:00:36** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Expand mobile deck height to 72vh, add safe promise catch handlers for Supabase auth sync in root component, and add Explore specs tap callout to mobile card'
+- **2026-07-21 22:19:19** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix 404 card navigation error by updating ShowcaseCardData.tsx target routes to /later-feature, /notify-feature, and /places-feature, and creating route aliases in src/routes'
