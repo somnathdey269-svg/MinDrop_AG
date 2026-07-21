@@ -71,13 +71,13 @@ export function LaterAlarmIllustration() {
     <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#10B981]/25 border-2 border-[#10B981]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.05, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
@@ -97,13 +97,13 @@ export function SmartFiltersIllustration() {
     <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#F59E0B]/25 border-2 border-[#F59E0B]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
@@ -123,13 +123,13 @@ export function PlacesMappingIllustration() {
     <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Radar Ring */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.3, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.05, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
@@ -149,13 +149,13 @@ export function PricingTierIllustration() {
     <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#EC4899]/25 border-2 border-[#EC4899]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
@@ -175,13 +175,13 @@ export function FAQHelpIllustration() {
     <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         {/* Pulsing Sonar Ring */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           className="absolute inset-0 -m-[clamp(0.6rem,1.1vw,1.15rem)] rounded-full bg-[#0284C7]/25 border-2 border-[#0284C7]/40 pointer-events-none"
         />
         {/* Central Floating Icon Badge */}
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.05, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-[clamp(5.2rem,7.2vw,7.2rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
