@@ -132,7 +132,7 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Sleek Mobile Showcase */}
+      {/* 2. Mobile Showcase (Clean Chapter Tag Pill, No Right Side Number Pill) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
@@ -149,8 +149,9 @@ export function MobileShowcase() {
                   className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="flex justify-between items-center shrink-0">
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-3 py-0.5 rounded-full border border-ink/10">Next Card</span>
-                    <span className="text-xs font-mono font-bold text-ink/30">0{((activeIdx + 1) % DECK_CARDS.length) + 1}/05</span>
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-3 py-0.5 rounded-full border border-ink/10">
+                      {nextCard.tag}
+                    </span>
                   </div>
 
                   <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/60 border-2 border-ink rounded-2xl py-3 opacity-40">
@@ -177,13 +178,10 @@ export function MobileShowcase() {
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
                   className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
-                  {/* Top Bar inside Card */}
+                  {/* Top Bar inside Card (Chapter Pill Only) */}
                   <div className="flex justify-between items-center shrink-0">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-ink/60 bg-white/60 border border-ink/10 px-2.5 py-0.5 rounded-full">
-                      0{activeIdx + 1}/05
                     </span>
                   </div>
 
@@ -215,7 +213,7 @@ export function MobileShowcase() {
           /* GRID / FEED MODE */
           <div className="w-full max-w-[400px] mx-auto py-1 no-scrollbar z-20">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-5 pb-16">
-              {DECK_CARDS.map((card, idx) => {
+              {DECK_CARDS.map((card) => {
                 return (
                   <Link
                     key={card.id}
@@ -229,7 +227,6 @@ export function MobileShowcase() {
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
-                      <span className="text-xs font-mono font-bold text-ink/50">0{idx + 1}/05</span>
                     </div>
 
                     <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-4 shadow-sm relative pointer-events-none">
