@@ -95,25 +95,25 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Mobile Header (Matching Screenshot 1 scale) */}
+      {/* 1. Mobile Header (Standardized Font Size & Perfect Alignment) */}
       <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-1">
         <Link
           to="/terms"
           viewTransition
           style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
-          className="text-xs font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
+          className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
         >
           Terms
         </Link>
         
-        {/* Animated MinDrop Header Logo (Uniform Screenshot 1 size) */}
+        {/* Animated MinDrop Header Logo */}
         <MinDropHeaderLogo className="text-xl sm:text-2xl" />
 
         <Link
           to="/privacy"
           viewTransition
           style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
-          className="text-xs font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
+          className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
         >
           Privacy
         </Link>
@@ -126,10 +126,10 @@ export function MobileShowcase() {
           <div 
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            className="w-full h-full max-h-[80vh] flex flex-col items-center justify-center relative"
+            className="w-full h-full max-h-[82vh] flex flex-col items-center justify-center relative"
           >
-            {/* Mobile Card Container (Fluid Clamp Sizing) */}
-            <div className="relative w-[min(90vw,360px)] h-[clamp(440px,68vh,560px)] flex items-center justify-center">
+            {/* Mobile Card Container (Snug Proportionate Dimensions) */}
+            <div className="relative w-[min(90vw,350px)] h-[min(510px,72vh)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -149,18 +149,18 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-5.5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
-                  <div className="shrink-0 flex justify-between items-center">
-                    <span className="text-[11px] uppercase font-black tracking-wider text-ink/80 bg-white/80 border border-ink/15 px-3 py-1 rounded-full shadow-sm">
+                  <div className="shrink-0 flex justify-between items-center mb-1">
+                    <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Dynamically Scaled Hero Graphic */}
-                  <div className="my-auto pt-3 pb-1 flex items-center justify-center overflow-visible w-full shrink-0">
-                    <div className="scale-[clamp(0.85,1.0vh+0.4vw,1.25)] transform-gpu origin-center">
+                  {/* Section 2: Bold, Room-Filling Hero Graphic */}
+                  <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full shrink-0">
+                    <div className="scale-[1.25] sm:scale-[1.35] transform-gpu origin-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -169,12 +169,12 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Prominent Content */}
-                  <div className="shrink-0">
-                    <h3 className="text-xl sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {/* Section 3: High-Legibility Senior-Accessible Content */}
+                  <div className="shrink-0 mt-2">
+                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-ink/85 font-normal leading-relaxed line-clamp-3">
+                    <p className="text-base sm:text-lg text-ink/90 font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -188,7 +188,7 @@ export function MobileShowcase() {
                 onClick={handleShowMe}
                 className="flex items-center gap-1 cursor-pointer group bg-transparent border-0"
               >
-                <span className="text-sm font-black text-ink underline decoration-2 underline-offset-4 group-hover:text-[#FF671F] transition">
+                <span className="text-xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
                   Show me!
                 </span>
               </button>
@@ -197,7 +197,7 @@ export function MobileShowcase() {
         ) : (
           /* GRID VIEW MODE */
           <div className="w-full h-full overflow-y-auto px-1 py-4 z-20 no-scrollbar">
-            <div className="flex flex-col gap-4 pb-20">
+            <div className="flex flex-col gap-5 pb-20">
               {DECK_CARDS.map((card) => {
                 return (
                   <Link
@@ -206,17 +206,17 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[320px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
-                    <div className="flex justify-between items-center mb-2 shrink-0">
-                      <span className="text-[10px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-2.5 py-0.5 rounded-full shadow-sm">
+                    <div className="flex justify-between items-center mb-1 shrink-0">
+                      <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
                     {/* Graphic Section */}
-                    <div className="my-3 flex items-center justify-center overflow-visible w-full pointer-events-none scale-90 transform-gpu origin-center">
+                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-110 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -225,11 +225,11 @@ export function MobileShowcase() {
                     </div>
 
                     {/* Content Section */}
-                    <div className="shrink-0">
-                      <h3 className="text-lg font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <div className="shrink-0 mt-2">
+                      <h3 className="text-xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-xs text-ink/85 font-normal leading-relaxed line-clamp-2">
+                      <p className="text-sm text-ink/90 font-medium leading-relaxed line-clamp-3">
                         {card.description}
                       </p>
                     </div>
@@ -246,7 +246,7 @@ export function MobileShowcase() {
         <div className="justify-self-start">
           <button
             onClick={() => setAboutOpen(true)}
-            className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all cursor-pointer"
+            className="text-xs sm:text-sm font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all cursor-pointer"
           >
             About
           </button>
@@ -276,7 +276,7 @@ export function MobileShowcase() {
         <div className="justify-self-end">
           <Link
             to="/download"
-            className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all"
+            className="text-xs sm:text-sm font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all"
           >
             Get App
           </Link>
@@ -311,10 +311,10 @@ export function MobileShowcase() {
                   💡 Project Info
                 </span>
                 <h3 className="text-2xl font-black text-ink leading-tight">About MinDrop</h3>
-                <p className="text-xs text-ink/75 font-semibold mt-3 leading-relaxed">
+                <p className="text-sm text-ink/85 font-semibold mt-3 leading-relaxed">
                   MinDrop is an offline second brain for immediate micro-actions—looping alarms for small tasks, location sweeps, and notification filters.
                 </p>
-                <p className="text-xs text-ink/65 font-medium mt-2 leading-relaxed">
+                <p className="text-xs text-ink/75 font-medium mt-2 leading-relaxed">
                   Engineered with zero cloud dependencies and built with local SQLite persistence for instant privacy.
                 </p>
                 <div className="mt-5 pt-3 border-t-2 border-ink/10 flex items-center justify-between">

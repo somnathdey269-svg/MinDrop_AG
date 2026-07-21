@@ -21,16 +21,9 @@ export function DesktopShowcase() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Sync View Mode with Hash/URL State
-  const [viewMode, setViewMode] = useState<"deck" | "grid">(() => {
-    if (typeof window !== "undefined") {
-      const hash = window.location.hash;
-      const search = window.location.search;
-      if (hash.includes("grid") || search.includes("grid")) {
-        return "grid";
-      }
-    }
-    return "deck";
-  });
+  const [viewMode, setViewMode] = useState<"deck" | "grid">(
+    () => typeof window !== "undefined" && (window.location.hash.includes("grid") || window.location.search.includes("grid")) ? "grid" : "deck"
+  );
 
   useEffect(() => {
     const syncViewMode = () => {
@@ -159,7 +152,7 @@ export function DesktopShowcase() {
         backgroundColor: activeBgColor,
         transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
       }}
-      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-[clamp(1rem,1.8vw,1.75rem)] select-none overflow-hidden h-[100dvh] w-screen"
+      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-5 lg:p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
       {/* Dynamic Background Circles */}
       <div 
@@ -185,52 +178,52 @@ export function DesktopShowcase() {
         }}
       />
 
-      {/* 1. Desktop Header (Uniform Font Size matching Screenshot 1) */}
-      <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-1">
+      {/* 1. Desktop Header */}
+      <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-2">
         <Link
           to="/terms"
           viewTransition
           style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
-          className="text-[clamp(11px,0.8vw,13px)] uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
+          className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
         >
           Terms
         </Link>
         
-        {/* Animated MinDrop Header Wordmark (Matching Screenshot 1 scale) */}
+        {/* Animated MinDrop Header Wordmark */}
         <MinDropHeaderLogo className="text-xl sm:text-2xl" />
 
         <Link
           to="/privacy"
           viewTransition
           style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
-          className="text-[clamp(11px,0.8vw,13px)] uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
+          className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
         >
           Privacy
         </Link>
       </header>
 
-      {/* 2. Main Desktop Stage with Fluid Clamp Scaling */}
+      {/* 2. Main Desktop Stage */}
       <div ref={containerRef} className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 flex flex-col justify-center items-center overflow-y-auto">
         {viewMode === "deck" ? (
           /* DECK STACK MODE (NORMAL VIEW) */
-          <div className="w-full h-full max-h-[min(700px,82vh)] flex items-center justify-center relative">
+          <div className="w-full h-full max-h-[min(720px,84vh)] flex items-center justify-center relative">
             {/* Left Hover Zone */}
             <div 
               onClick={handleNext} 
               className="absolute left-6 lg:left-12 z-30 flex cursor-pointer group"
             >
               <div className="flex flex-col items-center">
-                <span className="text-[clamp(10px,0.7vw,12px)] uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
+                <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
                   Cycle Deck
                 </span>
-                <span className="text-[clamp(18px,1.6vw,28px)] font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
+                <span className="text-2xl lg:text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
                   Next card
                 </span>
               </div>
             </div>
 
-            {/* Web Card Container (Fluid Screen-Adaptive Dimensions) */}
-            <div className="relative w-[clamp(340px,28vw,480px)] h-[clamp(460px,62vh,660px)] flex items-center justify-center">
+            {/* Web Card Container (Senior Legibility & Balanced Proportions) */}
+            <div className="relative w-[clamp(380px,30vw,500px)] h-[clamp(500px,65vh,680px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -243,14 +236,14 @@ export function DesktopShowcase() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[clamp(1.75rem,2.5vw,2.5rem)] border-3 border-ink p-[clamp(1.25rem,2.2vw,2.5rem)] flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-[clamp(1.5rem,2.5vw,2.75rem)] flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0 mb-1">
-                    <span className="text-[clamp(11px,0.85vw,14px)] uppercase font-bold tracking-wider text-ink/40">{nextCard.tag}</span>
+                    <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  <div className="my-auto py-1 flex items-center justify-center overflow-visible w-full opacity-40 pointer-events-none">
-                    <div className="scale-[clamp(0.85,1.0vh+0.4vw,1.35)] transform-gpu origin-center">
+                  <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full opacity-40 pointer-events-none">
+                    <div className="scale-[clamp(1.0,1.15vh+0.3vw,1.3)] transform-gpu origin-center">
                       {nextCard.id === "later" && <LaterAlarmIllustration />}
                       {nextCard.id === "notify" && <SmartFiltersIllustration />}
                       {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -260,7 +253,7 @@ export function DesktopShowcase() {
                   </div>
 
                   <div className="shrink-0 mt-1">
-                    <h3 className="text-[clamp(18px,1.5vw,28px)] font-black text-ink leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
                       {nextCard.title}
                     </h3>
                   </div>
@@ -280,18 +273,18 @@ export function DesktopShowcase() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[clamp(1.75rem,2.5vw,2.5rem)] border-3 border-ink p-[clamp(1.25rem,2.2vw,2.5rem)] flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-[clamp(1.5rem,2.5vw,2.75rem)] flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
                   <div className="shrink-0 flex justify-between items-center mb-2">
-                    <span className="text-[clamp(11px,0.85vw,15px)] uppercase font-extrabold tracking-wider text-ink/80 bg-white/80 border border-ink/15 px-[clamp(0.75rem,1.2vw,1.25rem)] py-[clamp(0.3rem,0.5vh,0.5rem)] rounded-full shadow-sm">
+                    <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Dynamically Scaled Hero Graphic */}
+                  {/* Section 2: Prominent Hero Graphic */}
                   <div className="my-auto pt-3 pb-1 flex items-center justify-center overflow-visible w-full relative shrink-0">
-                    <div className="scale-[clamp(0.9,1.1vh+0.4vw,1.35)] transform-gpu origin-center flex items-center justify-center">
+                    <div className="scale-[clamp(1.05,1.2vh+0.3vw,1.35)] transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -300,12 +293,12 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Fluid Prominent Content */}
-                  <div className="shrink-0 mt-2">
-                    <h3 className="text-[clamp(1.35rem,1.8vw,1.875rem)] font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {/* Section 3: High-Legibility Senior-Accessible Content */}
+                  <div className="shrink-0 mt-3">
+                    <h3 className="text-2xl lg:text-3xl xl:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-[clamp(0.875rem,1vw,1.05rem)] text-ink/85 font-normal leading-relaxed">
+                    <p className="text-base lg:text-lg text-ink/90 font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -319,10 +312,10 @@ export function DesktopShowcase() {
                 onClick={handleShowMe}
                 className="flex flex-col items-center cursor-pointer group bg-transparent border-0"
               >
-                <span className="text-[clamp(10px,0.7vw,12px)] uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
+                <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
                   Read Specs
                 </span>
-                <span className="text-[clamp(18px,1.6vw,28px)] font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
+                <span className="text-2xl lg:text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
                   Show me!
                 </span>
               </button>
@@ -334,7 +327,7 @@ export function DesktopShowcase() {
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[clamp(1rem,1.6vw,2rem)]"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {DECK_CARDS.map((card) => {
                 return (
@@ -344,17 +337,17 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-[clamp(1.2rem,1.8vw,1.8rem)] flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[clamp(290px,36vh,360px)] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[350px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
-                    <div className="flex justify-between items-center mb-1.5 shrink-0">
-                      <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
+                    <div className="flex justify-between items-center mb-2 shrink-0">
+                      <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
                     {/* Centered Graphic Illustration Section */}
-                    <div className="my-auto pt-2 pb-1 flex items-center justify-center overflow-visible w-full pointer-events-none scale-[clamp(0.85,0.95vh+0.3vw,1.1)] transform-gpu origin-center">
+                    <div className="my-auto pt-2 pb-1 flex items-center justify-center overflow-visible w-full pointer-events-none scale-110 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -363,11 +356,11 @@ export function DesktopShowcase() {
                     </div>
 
                     {/* Content Section */}
-                    <div className="shrink-0 mt-1.5">
-                      <h3 className="text-[clamp(1.15rem,1.4vw,1.5rem)] font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <div className="shrink-0 mt-2">
+                      <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-[clamp(0.75rem,0.85vw,0.875rem)] text-ink/85 font-normal leading-relaxed line-clamp-3">
+                      <p className="text-sm lg:text-base text-ink/90 font-medium leading-relaxed line-clamp-3">
                         {card.description}
                       </p>
                     </div>
@@ -379,12 +372,12 @@ export function DesktopShowcase() {
         )}
       </div>
 
-      {/* 3. Desktop Footer (Frozen Pinned) */}
+      {/* 3. Desktop Footer */}
       <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
         <div className="justify-self-start">
           <button
             onClick={() => setAboutOpen(true)}
-            className="text-[clamp(11px,0.8vw,13px)] uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 cursor-pointer hover:border-[#FF671F]"
+            className="text-xs lg:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 cursor-pointer hover:border-[#FF671F]"
           >
             About
           </button>
@@ -414,14 +407,14 @@ export function DesktopShowcase() {
         <div className="justify-self-end">
           <Link
             to="/download"
-            className="text-[clamp(11px,0.8vw,13px)] uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
+            className="text-xs lg:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 hover:border-[#FF671F]"
           >
             Get App
           </Link>
         </div>
       </footer>
 
-      {/* About Modal with Dynamic Constraints */}
+      {/* About Modal */}
       <AnimatePresence>
         {aboutOpen && (
           <>
@@ -437,22 +430,22 @@ export function DesktopShowcase() {
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                className="bg-white border-3 border-ink p-[clamp(1.5rem,3vw,2.5rem)] rounded-[clamp(1.5rem,2.5vw,2.5rem)] w-full max-w-[clamp(320px,85vw,480px)] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative"
+                className="bg-white border-3 border-ink p-8 rounded-[2.5rem] w-full max-w-md shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative"
               >
                 <button
                   onClick={() => setAboutOpen(false)}
-                  className="absolute top-5 right-5 cursor-pointer size-8 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition"
+                  className="absolute top-6 right-6 cursor-pointer size-8 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition"
                 >
                   <X className="size-4" />
                 </button>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FFFBEB] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F59E0B] mb-4">
                   💡 Project Info
                 </span>
-                <h3 className="text-[clamp(1.5rem,2.2vw,2rem)] font-black text-ink leading-tight">About MinDrop</h3>
-                <p className="text-xs sm:text-sm text-ink/75 font-semibold mt-3 leading-relaxed">
+                <h3 className="text-3xl font-black text-ink leading-tight">About MinDrop</h3>
+                <p className="text-sm text-ink/85 font-semibold mt-4 leading-relaxed">
                   MinDrop is an offline second brain for immediate micro-actions—looping alarms for small tasks, location sweeps, and notification filters.
                 </p>
-                <p className="text-xs sm:text-sm text-ink/65 font-medium mt-2 leading-relaxed">
+                <p className="text-xs text-ink/75 font-medium mt-3 leading-relaxed">
                   Engineered with zero cloud dependencies and built with local SQLite persistence for instant privacy.
                 </p>
                 <div className="mt-6 pt-4 border-t-2 border-ink/10 flex items-center justify-between">
