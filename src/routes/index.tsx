@@ -8,6 +8,9 @@ import {
 import { useState, useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    mode: (search.mode as "deck" | "grid") || undefined,
+  }),
   head: () => ({
     meta: [
       { title: "MinDrop — A Kind Second Brain" },
@@ -478,7 +481,7 @@ function ShowcaseDeckPage() {
         backgroundColor: activeBgColor,
         transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
       }}
-      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-4 xs:p-5 sm:p-6 select-none overflow-hidden h-[100dvh] w-screen"
+      className={`fixed inset-0 text-ink font-sans flex flex-col justify-between p-4 xs:p-5 sm:p-6 select-none ${viewMode === 'grid' ? 'overflow-y-auto bg-[#FFD043]' : 'overflow-hidden'} h-[100dvh] w-screen`}
     >
       
       {/* Dynamic Background Circles */}
