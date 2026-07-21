@@ -366,14 +366,14 @@ function FaqDetailView() {
     >
       {/* ── Header ── */}
       <header className="shrink-0 border-b-2 border-[#10B981]/10 z-50 bg-[#E2F5EC]/95 backdrop-blur-[12px] transition-colors duration-300">
-        <div className="w-[95%] mx-auto h-14 flex items-center justify-between">
+        <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
           <Link to="/" hash={backHash} viewTransition
-            className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition text-[#047857]/60 hover:text-[#064E3B]">
+            className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#047857]/70 hover:text-[#064E3B]">
             <X className="size-3.5"/> Close
           </Link>
-          <MinDropHeaderLogo className="text-xl sm:text-2xl" />
+          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
           <Link to="/download"
-            className="text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 bg-ink text-white border-ink hover:bg-[#10B981] hover:border-[#10B981] transition">
+            className="text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 bg-ink text-white border-ink hover:bg-[#10B981] hover:border-[#10B981] shrink-0 leading-none whitespace-nowrap shadow-sm transition">
             Get App
           </Link>
         </div>

@@ -188,17 +188,7 @@ export function MobileShowcase() {
               </AnimatePresence>
             </div>
 
-            {/* Read Specs Link */}
-            <div className="mt-4 z-30">
-              <button
-                onClick={handleShowMe}
-                className="flex items-center gap-1 cursor-pointer group bg-transparent border-0"
-              >
-                <span className="text-xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
-                  Show me!
-                </span>
-              </button>
-            </div>
+
           </div>
         ) : (
           /* GRID VIEW MODE */

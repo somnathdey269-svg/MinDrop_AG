@@ -311,14 +311,14 @@ function Privacy() {
     >
       {/* ── Header ── */}
       <header className="shrink-0 border-b-2 border-slate-300/40 z-50 bg-[#F1F5F9]/95 backdrop-blur-[12px]">
-        <div className="w-[95%] mx-auto h-14 flex items-center justify-between">
+        <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
           <Link to="/" viewTransition
-            className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition text-slate-500 hover:text-slate-900">
+            className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-slate-500 hover:text-slate-900">
             <X className="size-3.5"/> Close
           </Link>
-          <MinDropHeaderLogo className="text-xl sm:text-2xl" />
+          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
           <Link to="/download"
-            className="text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 bg-ink text-white border-ink hover:bg-slate-700 hover:border-slate-700 transition">
+            className="text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 bg-ink text-white border-ink hover:bg-slate-700 hover:border-slate-700 shrink-0 leading-none whitespace-nowrap shadow-sm transition">
             Get App
           </Link>
         </div>

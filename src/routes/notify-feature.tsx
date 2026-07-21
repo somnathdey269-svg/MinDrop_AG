@@ -563,14 +563,14 @@ function NotifyDetailView() {
       {/* ── Header ── */}
       <header className="shrink-0 border-b-2 border-[#F59E0B]/10 z-50"
         style={{ backgroundColor: isDark ? "rgba(69,26,3,0.96)" : "rgba(255,251,235,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
-        <div className="w-[95%] mx-auto h-14 flex items-center justify-between">
+        <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1.5 text-xs font-black uppercase tracking-wider transition ${isDark ? "text-[#FEF3C7]/60 hover:text-white" : "text-[#D97706]/60 hover:text-[#78350F]"}`}>
+            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
             <X className="size-3.5"/> Close
           </Link>
-          <MinDropHeaderLogo className="text-xl sm:text-2xl" isDarkBg={isDark} />
+          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           <Link to="/download"
-            className={`text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-xl border-2 transition ${isDark ? "bg-white text-ink border-white hover:bg-[#F59E0B] hover:text-white hover:border-[#F59E0B]" : "bg-ink text-white border-ink hover:bg-[#F59E0B] hover:border-[#F59E0B]"}`}>
+            className={`text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#F59E0B] hover:text-white hover:border-[#F59E0B]" : "bg-ink text-white border-ink hover:bg-[#F59E0B] hover:border-[#F59E0B]"}`}>
             Get App
           </Link>
         </div>
