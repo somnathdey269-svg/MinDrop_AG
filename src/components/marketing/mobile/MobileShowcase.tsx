@@ -170,7 +170,7 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Fluid Mobile Typography & Graphic Scale) */}
+                {/* Active Front Hero Card (Fluid Mobile Typography & Enlarged Graphic Scale) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   custom={swipeDirection}
@@ -203,7 +203,7 @@ export function MobileShowcase() {
 
                   {/* Centered Hero Graphic Illustration */}
                   <div className="my-auto py-1 flex items-center justify-center overflow-visible w-full relative shrink-0">
-                    <div className="scale-[clamp(0.9,1.05vh,1.15)] transform-gpu origin-center flex items-center justify-center">
+                    <div className="scale-[clamp(1.0,1.15vh,1.25)] transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
