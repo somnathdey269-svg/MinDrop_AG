@@ -135,12 +135,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Content-Hugging Compact Card, Header Tag -> 1 Space -> Graphic -> 1 Space -> Content, Zero Bottom Space) */}
+      {/* 2. Mobile Showcase (Large Bold Typography, Zero Bottom Blank Space) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[340px] h-[330px] xs:h-[345px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[340px] h-[350px] xs:h-[370px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout" custom={swipeDirection}>
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -210,12 +210,12 @@ export function MobileShowcase() {
                     {currentCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
 
-                  {/* Content below graphic (Title + Description with snug line spacing) */}
+                  {/* Prominent Large Content (Title & Description) */}
                   <div className="shrink-0 mt-1">
-                    <h3 className="text-2xl xs:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                    <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-tight tracking-tight mb-2">
                       {currentCard.title}
                     </h3>
-                    <p className="text-sm xs:text-base text-ink/85 font-normal leading-snug">
+                    <p className="text-base xs:text-lg text-ink/85 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -254,8 +254,8 @@ export function MobileShowcase() {
 
                     {/* Content in LOWER Section */}
                     <div className="mt-1">
-                      <h3 className="text-2xl xs:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
-                      <p className="text-sm xs:text-base text-ink/85 font-normal leading-snug">
+                      <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
+                      <p className="text-base xs:text-lg text-ink/85 font-normal leading-relaxed">
                         {card.description}
                       </p>
                     </div>
