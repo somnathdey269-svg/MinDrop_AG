@@ -91,15 +91,9 @@ function onPosition(pos: GeolocationPosition) {
 }
 
 function startWebWatch() {
-  if (typeof window === "undefined" || !("geolocation" in navigator)) return;
-  if (watchId != null) return;
-  try {
-    watchId = navigator.geolocation.watchPosition(onPosition, () => {}, {
-      enableHighAccuracy: true,
-      maximumAge: 15_000,
-      timeout: 20_000,
-    });
-  } catch { /* ignore */ }
+  // On web platform (website view), do NOT request or watch browser geolocation permissions.
+  // Geolocation features are handled natively in the mobile app.
+  return;
 }
 
 /* ─────────────────── Native (OS geofence) path ─────────────────── */

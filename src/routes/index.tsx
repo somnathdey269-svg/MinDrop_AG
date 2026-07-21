@@ -617,20 +617,20 @@ function ShowcaseDeckPage() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.2rem] sm:rounded-[2.5rem] border-3 border-ink p-4 xs:p-5 sm:p-7 md:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.2rem] sm:rounded-[2.5rem] border-3 border-ink p-5 xs:p-6 sm:p-7 md:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   <div className="shrink-0">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs sm:text-sm uppercase font-extrabold tracking-wider text-ink/80 bg-white/70 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
+                      <span className="text-xs sm:text-sm uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1.5 rounded-full shadow-sm">
                         {currentCard.tag}
                       </span>
                     </div>
 
-                    <h3 className="text-2xl xs:text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-2 sm:mt-4 leading-tight tracking-tight">
+                    <h3 className="text-3xl xs:text-4xl sm:text-4xl md:text-5xl font-black text-ink mt-2.5 sm:mt-4 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-sm xs:text-base md:text-lg text-ink/90 font-bold mt-1.5 sm:mt-3 leading-snug">
+                    <p className="text-base xs:text-lg sm:text-xl text-ink font-extrabold mt-2 sm:mt-3 leading-snug">
                       {currentCard.description}
                     </p>
                   </div>
@@ -647,8 +647,8 @@ function ShowcaseDeckPage() {
                   </div>
 
                   <div className="flex justify-between items-end pt-2 sm:pt-4 shrink-0">
-                    <span className="text-xs sm:text-sm uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
-                    <span className="inline-grid place-items-center size-9 xs:size-11 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                    <span className="text-xs sm:text-sm uppercase font-black text-ink/50 tracking-wider">MinDrop Brain</span>
+                    <span className="inline-grid place-items-center size-10 xs:size-11 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                       <CardIcon className="size-5 xs:size-6 sm:size-7 text-ink" />
                     </span>
                   </div>
@@ -668,24 +668,13 @@ function ShowcaseDeckPage() {
                 </span>
               </button>
             </div>
-
-
-
           </div>
         ) : (
-          <div className="w-full max-w-6xl mx-auto px-4 z-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 justify-center items-stretch"
-            >
-              {DECK_CARDS.map((card, idx) => {
+          /* GRID VIEW MODE */
+          <div className="max-w-6xl mx-auto px-4 py-2">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {DECK_CARDS.map((card) => {
                 const Icon = card.illustrator;
-                const colSpanClass = idx === 4 
-                  ? "sm:col-span-2 lg:col-span-3" 
-                  : idx === 3 
-                    ? "lg:col-span-3" 
-                    : "lg:col-span-2";
                 return (
                   <Link
                     key={card.id}
@@ -693,14 +682,14 @@ function ShowcaseDeckPage() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.5rem] border-3 border-ink p-6 sm:p-8 flex flex-col justify-between min-h-[380px] sm:min-h-[410px] md:min-h-[430px] lg:min-h-[450px] h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-200 cursor-pointer ${card.bgClass} ${colSpanClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[360px] ${card.bgClass}`}
                   >
-                    <div className="flex flex-col justify-start gap-2 mb-4">
-                      <span className="text-xs uppercase font-black text-ink/50 bg-white/40 border border-ink/10 px-2.5 py-0.5 rounded-full self-start">
+                    <div>
+                      <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
-                      <h3 className="text-2xl sm:text-2xl md:text-3xl lg:text-3xl font-black text-ink mt-2 leading-tight tracking-tight">{card.title}</h3>
-                      <p className="text-sm sm:text-sm md:text-base lg:text-[15px] text-ink/75 font-medium mt-1.5 leading-relaxed">
+                      <h3 className="text-2xl xs:text-3xl sm:text-3xl md:text-3xl font-black text-ink mt-3 leading-tight tracking-tight">{card.title}</h3>
+                      <p className="text-base sm:text-lg text-ink font-bold mt-2 leading-relaxed">
                         {card.description}
                       </p>
                     </div>
