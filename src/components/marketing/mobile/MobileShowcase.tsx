@@ -95,28 +95,34 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Mobile Header (Standardized Font Size & Perfect Alignment) */}
-      <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-1">
-        <Link
-          to="/terms"
-          viewTransition
-          style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
-          className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
-        >
-          Terms
-        </Link>
+      {/* 1. Mobile Header (Perfect Optical Baseline Alignment across Terms, MinDrop, Privacy) */}
+      <header className="flex justify-between items-center w-full z-30 shrink-0 h-12 px-2">
+        <div className="flex items-center h-full">
+          <Link
+            to="/terms"
+            viewTransition
+            style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
+            className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all flex items-center leading-none"
+          >
+            Terms
+          </Link>
+        </div>
         
         {/* Animated MinDrop Header Logo */}
-        <MinDropHeaderLogo className="text-xl sm:text-2xl" />
+        <div className="flex items-center h-full">
+          <MinDropHeaderLogo className="text-xl sm:text-2xl" />
+        </div>
 
-        <Link
-          to="/privacy"
-          viewTransition
-          style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
-          className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
-        >
-          Privacy
-        </Link>
+        <div className="flex items-center h-full">
+          <Link
+            to="/privacy"
+            viewTransition
+            style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
+            className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all flex items-center leading-none"
+          >
+            Privacy
+          </Link>
+        </div>
       </header>
 
       {/* 2. Mobile Main Stage */}
@@ -126,10 +132,10 @@ export function MobileShowcase() {
           <div 
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            className="w-full h-full max-h-[82vh] flex flex-col items-center justify-center relative"
+            className="w-full h-full max-h-[84vh] flex flex-col items-center justify-center relative"
           >
-            {/* Mobile Card Container (Snug Proportionate Dimensions) */}
-            <div className="relative w-[min(90vw,350px)] h-[min(510px,72vh)] flex items-center justify-center">
+            {/* Mobile Card Container (1.25x Proportions) */}
+            <div className="relative w-[min(90vw,360px)] h-[min(530px,74vh)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -149,7 +155,7 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-5.5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
                   <div className="shrink-0 flex justify-between items-center mb-1">
@@ -158,9 +164,9 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Bold, Room-Filling Hero Graphic */}
+                  {/* Section 2: 1.25x Enlarged Hero Graphic (Fills Empty Space) */}
                   <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full shrink-0">
-                    <div className="scale-[1.25] sm:scale-[1.35] transform-gpu origin-center">
+                    <div className="scale-[1.55] sm:scale-[1.65] transform-gpu origin-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -169,12 +175,12 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: High-Legibility Senior-Accessible Content */}
+                  {/* Section 3: 1.25x Increased Header & Description Typography */}
                   <div className="shrink-0 mt-2">
-                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h3 className="text-3xl sm:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base sm:text-lg text-ink/90 font-medium leading-relaxed">
+                    <p className="text-lg sm:text-xl text-ink/90 font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -206,17 +212,17 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[320px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-5.5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[350px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="flex justify-between items-center mb-1 shrink-0">
-                      <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
+                      <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Graphic Section */}
-                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-110 transform-gpu origin-center">
+                    {/* Graphic Section (1.25x Larger) */}
+                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-135 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -224,12 +230,12 @@ export function MobileShowcase() {
                       {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
 
-                    {/* Content Section */}
+                    {/* Content Section (1.25x Larger) */}
                     <div className="shrink-0 mt-2">
-                      <h3 className="text-xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                      <h3 className="text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-sm text-ink/90 font-medium leading-relaxed line-clamp-3">
+                      <p className="text-base text-ink/90 font-medium leading-relaxed line-clamp-3">
                         {card.description}
                       </p>
                     </div>
