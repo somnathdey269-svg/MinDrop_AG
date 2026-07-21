@@ -223,28 +223,28 @@ export function DesktopShowcase() {
         </Link>
       </header>
 
-      {/* 2. Main Desktop Stage */}
+      {/* 2. Main Desktop Stage with Dynamic Fluid Layout */}
       <div ref={containerRef} className="flex-1 w-full min-h-0 my-2 no-scrollbar z-10 flex flex-col justify-center items-center overflow-y-auto">
         {viewMode === "deck" ? (
           /* DECK STACK MODE */
-          <div className="w-full h-full max-h-[470px] flex items-center justify-center relative">
+          <div className="w-full h-full max-h-[min(540px,70vh)] flex items-center justify-center relative">
             {/* Left Hover Zone */}
             <div 
               onClick={handlePrev} 
-              className="absolute left-12 z-30 flex cursor-pointer group"
+              className="absolute left-8 lg:left-14 z-30 flex cursor-pointer group"
             >
               <div className="flex flex-col items-center">
                 <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
                   Cycle Deck
                 </span>
-                <span className="text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
+                <span className="text-2xl lg:text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
                   Next card
                 </span>
               </div>
             </div>
 
-            {/* Spacious, Expanded Card Stack with Generous Gaps Between Sections */}
-            <div className="relative w-[410px] lg:w-[430px] h-[420px] lg:h-[440px] flex items-center justify-center">
+            {/* Fully Dynamic Fluid Card Container (Scales automatically on 1080p, 1440p, 4K and small laptops) */}
+            <div className="relative w-[clamp(340px,28vw,460px)] h-[clamp(370px,46vh,480px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -257,10 +257,10 @@ export function DesktopShowcase() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-[clamp(1.2rem,2.2vw,2rem)] flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0">
-                    <span className="text-xs uppercase font-bold tracking-wider text-ink/40">{nextCard.tag}</span>
+                    <span className="text-[clamp(11px,0.8vw,14px)] uppercase font-bold tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
                   <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full opacity-40 pointer-events-none">
@@ -272,11 +272,11 @@ export function DesktopShowcase() {
                   </div>
 
                   <div className="shrink-0">
-                    <h3 className="text-2xl font-black text-ink leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-[clamp(20px,1.6vw,28px)] font-black text-ink leading-tight">{nextCard.title}</h3>
                   </div>
                 </motion.div>
 
-                {/* Active Front Card (Header Tag -> Gap 1 -> Graphic -> Gap 2 -> Content) */}
+                {/* Active Front Card (Fluid Typography & Dynamic Hero Graphic) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -290,18 +290,18 @@ export function DesktopShowcase() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-7 lg:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-[clamp(1.25rem,2.2vw,2rem)] flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
-                  {/* Section 1: Top Header Tag Pill */}
+                  {/* Section 1: Header Tag Pill */}
                   <div className="shrink-0 flex justify-between items-center">
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink/80 bg-white/80 border border-ink/15 px-3.5 py-1 rounded-full shadow-sm">
+                    <span className="text-[clamp(11px,0.8vw,14px)] uppercase font-extrabold tracking-wider text-ink/80 bg-white/80 border border-ink/15 px-[clamp(0.75rem,1.2vw,1.1rem)] py-[clamp(0.25rem,0.4vh,0.4rem)] rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Centered Hero Graphic with Generous Breathing Room Above & Below */}
-                  <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full relative shrink-0">
-                    <div className="scale-110 transform-gpu origin-center flex items-center justify-center">
+                  {/* Section 2: Centered Hero Graphic with Fluid Scale */}
+                  <div className="my-auto py-[clamp(0.25rem,1vh,1rem)] flex items-center justify-center overflow-visible w-full relative shrink-0">
+                    <div className="scale-[clamp(0.9,1.1vh,1.2)] transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -310,12 +310,12 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Bottom Content (Title & Description) */}
+                  {/* Section 3: Prominent Content (Fluid 28px-44px Title & 14px-18px Description) */}
                   <div className="shrink-0">
-                    <h3 className="text-4xl lg:text-[44px] font-black text-ink leading-tight tracking-tight mb-2">
+                    <h3 className="text-[clamp(26px,2.2vw+0.5rem,44px)] font-black text-ink leading-tight tracking-tight mb-[clamp(0.25rem,0.6vh,0.6rem)]">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base lg:text-lg text-ink/85 font-normal leading-relaxed">
+                    <p className="text-[clamp(14px,1vw+0.2rem,18px)] text-ink/85 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -324,7 +324,7 @@ export function DesktopShowcase() {
             </div>
 
             {/* Read Specs Trigger */}
-            <div className="absolute right-12 z-30 flex">
+            <div className="absolute right-8 lg:right-14 z-30 flex">
               <button
                 onClick={handleShowMe}
                 className="flex flex-col items-center cursor-pointer group bg-transparent border-0"
@@ -332,7 +332,7 @@ export function DesktopShowcase() {
                 <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
                   Read Specs
                 </span>
-                <span className="text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
+                <span className="text-2xl lg:text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
                   Show me!
                 </span>
               </button>
@@ -351,7 +351,7 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-7 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[390px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-[clamp(1.2rem,2vw,1.8rem)] flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[380px] ${card.bgClass}`}
                   >
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
@@ -370,8 +370,8 @@ export function DesktopShowcase() {
 
                     {/* Content in LOWER Section */}
                     <div>
-                      <h3 className="text-3xl lg:text-[38px] font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
-                      <p className="text-base lg:text-lg text-ink/85 font-normal leading-relaxed">
+                      <h3 className="text-[clamp(24px,2vw,36px)] font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
+                      <p className="text-[clamp(14px,0.9vw,17px)] text-ink/85 font-normal leading-relaxed">
                         {card.description}
                       </p>
                     </div>
