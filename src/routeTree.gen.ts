@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhyMindropRouteImport } from './routes/why-mindrop'
+import { Route as VisionRouteImport } from './routes/vision'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SplashRouteImport } from './routes/splash'
 import { Route as SigninRouteImport } from './routes/signin'
@@ -17,6 +18,7 @@ import { Route as SettingsFeatureRouteImport } from './routes/settings-feature'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RefundsRouteImport } from './routes/refunds'
 import { Route as RecoveryRouteImport } from './routes/recovery'
+import { Route as PrivacyFeatureRouteImport } from './routes/privacy-feature'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PlacesFeatureRouteImport } from './routes/places-feature'
@@ -24,12 +26,14 @@ import { Route as NotifyFeatureRouteImport } from './routes/notify-feature'
 import { Route as LaterFeatureRouteImport } from './routes/later-feature'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as FutureFeatureRouteImport } from './routes/future-feature'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DownloadRouteImport } from './routes/download'
 import { Route as CtrlVx9k2m7fq3zRouteImport } from './routes/ctrl-vx9k2m7fq3z'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CtrlVx9k2m7fq3zIndexRouteImport } from './routes/ctrl-vx9k2m7fq3z.index'
@@ -87,6 +91,11 @@ const WhyMindropRoute = WhyMindropRouteImport.update({
   path: '/why-mindrop',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VisionRoute = VisionRouteImport.update({
+  id: '/vision',
+  path: '/vision',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -120,6 +129,11 @@ const RefundsRoute = RefundsRouteImport.update({
 const RecoveryRoute = RecoveryRouteImport.update({
   id: '/recovery',
   path: '/recovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyFeatureRoute = PrivacyFeatureRouteImport.update({
+  id: '/privacy-feature',
+  path: '/privacy-feature',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -157,6 +171,11 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FutureFeatureRoute = FutureFeatureRouteImport.update({
+  id: '/future-feature',
+  path: '/future-feature',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FeaturesRoute = FeaturesRouteImport.update({
   id: '/features',
   path: '/features',
@@ -185,6 +204,11 @@ const ContactRoute = ContactRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -461,12 +485,14 @@ const AuthenticatedPacksCustomCustomIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/ctrl-vx9k2m7fq3z': typeof CtrlVx9k2m7fq3zRouteWithChildren
   '/download': typeof DownloadRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/future-feature': typeof FutureFeatureRoute
   '/home': typeof HomeRoute
   '/how-it-works': typeof HowItWorksRoute
   '/later-feature': typeof LaterFeatureRoute
@@ -474,6 +500,7 @@ export interface FileRoutesByFullPath {
   '/places-feature': typeof PlacesFeatureRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/privacy-feature': typeof PrivacyFeatureRoute
   '/recovery': typeof RecoveryRoute
   '/refunds': typeof RefundsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -481,6 +508,7 @@ export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/splash': typeof SplashRoute
   '/terms': typeof TermsRoute
+  '/vision': typeof VisionRoute
   '/why-mindrop': typeof WhyMindropRoute
   '/alarm-sound': typeof AuthenticatedAlarmSoundRoute
   '/archived': typeof AuthenticatedArchivedRoute
@@ -534,11 +562,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/download': typeof DownloadRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/future-feature': typeof FutureFeatureRoute
   '/home': typeof HomeRoute
   '/how-it-works': typeof HowItWorksRoute
   '/later-feature': typeof LaterFeatureRoute
@@ -546,6 +576,7 @@ export interface FileRoutesByTo {
   '/places-feature': typeof PlacesFeatureRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/privacy-feature': typeof PrivacyFeatureRoute
   '/recovery': typeof RecoveryRoute
   '/refunds': typeof RefundsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -553,6 +584,7 @@ export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/splash': typeof SplashRoute
   '/terms': typeof TermsRoute
+  '/vision': typeof VisionRoute
   '/why-mindrop': typeof WhyMindropRoute
   '/alarm-sound': typeof AuthenticatedAlarmSoundRoute
   '/archived': typeof AuthenticatedArchivedRoute
@@ -605,12 +637,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/ctrl-vx9k2m7fq3z': typeof CtrlVx9k2m7fq3zRouteWithChildren
   '/download': typeof DownloadRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/future-feature': typeof FutureFeatureRoute
   '/home': typeof HomeRoute
   '/how-it-works': typeof HowItWorksRoute
   '/later-feature': typeof LaterFeatureRoute
@@ -618,6 +652,7 @@ export interface FileRoutesById {
   '/places-feature': typeof PlacesFeatureRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/privacy-feature': typeof PrivacyFeatureRoute
   '/recovery': typeof RecoveryRoute
   '/refunds': typeof RefundsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -625,6 +660,7 @@ export interface FileRoutesById {
   '/signin': typeof SigninRoute
   '/splash': typeof SplashRoute
   '/terms': typeof TermsRoute
+  '/vision': typeof VisionRoute
   '/why-mindrop': typeof WhyMindropRoute
   '/_authenticated/alarm-sound': typeof AuthenticatedAlarmSoundRoute
   '/_authenticated/archived': typeof AuthenticatedArchivedRoute
@@ -680,12 +716,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/auth'
     | '/contact'
     | '/ctrl-vx9k2m7fq3z'
     | '/download'
     | '/faq'
     | '/features'
+    | '/future-feature'
     | '/home'
     | '/how-it-works'
     | '/later-feature'
@@ -693,6 +731,7 @@ export interface FileRouteTypes {
     | '/places-feature'
     | '/pricing'
     | '/privacy'
+    | '/privacy-feature'
     | '/recovery'
     | '/refunds'
     | '/reset-password'
@@ -700,6 +739,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/splash'
     | '/terms'
+    | '/vision'
     | '/why-mindrop'
     | '/alarm-sound'
     | '/archived'
@@ -753,11 +793,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/auth'
     | '/contact'
     | '/download'
     | '/faq'
     | '/features'
+    | '/future-feature'
     | '/home'
     | '/how-it-works'
     | '/later-feature'
@@ -765,6 +807,7 @@ export interface FileRouteTypes {
     | '/places-feature'
     | '/pricing'
     | '/privacy'
+    | '/privacy-feature'
     | '/recovery'
     | '/refunds'
     | '/reset-password'
@@ -772,6 +815,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/splash'
     | '/terms'
+    | '/vision'
     | '/why-mindrop'
     | '/alarm-sound'
     | '/archived'
@@ -823,12 +867,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
     | '/auth'
     | '/contact'
     | '/ctrl-vx9k2m7fq3z'
     | '/download'
     | '/faq'
     | '/features'
+    | '/future-feature'
     | '/home'
     | '/how-it-works'
     | '/later-feature'
@@ -836,6 +882,7 @@ export interface FileRouteTypes {
     | '/places-feature'
     | '/pricing'
     | '/privacy'
+    | '/privacy-feature'
     | '/recovery'
     | '/refunds'
     | '/reset-password'
@@ -843,6 +890,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/splash'
     | '/terms'
+    | '/vision'
     | '/why-mindrop'
     | '/_authenticated/alarm-sound'
     | '/_authenticated/archived'
@@ -898,12 +946,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRouteWithChildren
   ContactRoute: typeof ContactRoute
   CtrlVx9k2m7fq3zRoute: typeof CtrlVx9k2m7fq3zRouteWithChildren
   DownloadRoute: typeof DownloadRoute
   FaqRoute: typeof FaqRoute
   FeaturesRoute: typeof FeaturesRoute
+  FutureFeatureRoute: typeof FutureFeatureRoute
   HomeRoute: typeof HomeRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LaterFeatureRoute: typeof LaterFeatureRoute
@@ -911,6 +961,7 @@ export interface RootRouteChildren {
   PlacesFeatureRoute: typeof PlacesFeatureRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  PrivacyFeatureRoute: typeof PrivacyFeatureRoute
   RecoveryRoute: typeof RecoveryRoute
   RefundsRoute: typeof RefundsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -918,6 +969,7 @@ export interface RootRouteChildren {
   SigninRoute: typeof SigninRoute
   SplashRoute: typeof SplashRoute
   TermsRoute: typeof TermsRoute
+  VisionRoute: typeof VisionRoute
   WhyMindropRoute: typeof WhyMindropRoute
   ApiPublicCashfreeWebhookRoute: typeof ApiPublicCashfreeWebhookRoute
   ApiAuthDriveCallbackRoute: typeof ApiAuthDriveCallbackRoute
@@ -931,6 +983,13 @@ declare module '@tanstack/react-router' {
       path: '/why-mindrop'
       fullPath: '/why-mindrop'
       preLoaderRoute: typeof WhyMindropRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vision': {
+      id: '/vision'
+      path: '/vision'
+      fullPath: '/vision'
+      preLoaderRoute: typeof VisionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -982,6 +1041,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecoveryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-feature': {
+      id: '/privacy-feature'
+      path: '/privacy-feature'
+      fullPath: '/privacy-feature'
+      preLoaderRoute: typeof PrivacyFeatureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -1031,6 +1097,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/future-feature': {
+      id: '/future-feature'
+      path: '/future-feature'
+      fullPath: '/future-feature'
+      preLoaderRoute: typeof FutureFeatureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/features': {
       id: '/features'
       path: '/features'
@@ -1071,6 +1144,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -1582,12 +1662,14 @@ const CtrlVx9k2m7fq3zRouteWithChildren = CtrlVx9k2m7fq3zRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
   AuthRoute: AuthRouteWithChildren,
   ContactRoute: ContactRoute,
   CtrlVx9k2m7fq3zRoute: CtrlVx9k2m7fq3zRouteWithChildren,
   DownloadRoute: DownloadRoute,
   FaqRoute: FaqRoute,
   FeaturesRoute: FeaturesRoute,
+  FutureFeatureRoute: FutureFeatureRoute,
   HomeRoute: HomeRoute,
   HowItWorksRoute: HowItWorksRoute,
   LaterFeatureRoute: LaterFeatureRoute,
@@ -1595,6 +1677,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlacesFeatureRoute: PlacesFeatureRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  PrivacyFeatureRoute: PrivacyFeatureRoute,
   RecoveryRoute: RecoveryRoute,
   RefundsRoute: RefundsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -1602,6 +1685,7 @@ const rootRouteChildren: RootRouteChildren = {
   SigninRoute: SigninRoute,
   SplashRoute: SplashRoute,
   TermsRoute: TermsRoute,
+  VisionRoute: VisionRoute,
   WhyMindropRoute: WhyMindropRoute,
   ApiPublicCashfreeWebhookRoute: ApiPublicCashfreeWebhookRoute,
   ApiAuthDriveCallbackRoute: ApiAuthDriveCallbackRoute,

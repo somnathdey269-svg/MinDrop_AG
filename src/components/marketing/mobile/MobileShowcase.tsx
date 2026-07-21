@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Layers, LayoutGrid, X } from "lucide-react";
+import { Layers, LayoutGrid } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
@@ -8,7 +8,10 @@ import {
   LaterAlarmIllustration, 
   SmartFiltersIllustration, 
   PlacesMappingIllustration, 
+  FutureActionsIllustration,
+  PrivacyManifestoIllustration,
   PricingTierIllustration, 
+  ClosureVisionIllustration,
   FAQHelpIllustration 
 } from "../ShowcaseCardData";
 
@@ -16,7 +19,6 @@ export function MobileShowcase() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<"next" | "prev">("next");
-  const [aboutOpen, setAboutOpen] = useState(false);
   const touchStartX = useRef(0);
   
   // Sync View Mode with Hash/URL State
@@ -95,7 +97,7 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Mobile Header (Perfect Optical Baseline Alignment across Terms, MinDrop, Privacy) */}
+      {/* 1. Mobile Header */}
       <header className="flex justify-between items-center w-full z-30 shrink-0 h-12 px-2">
         <div className="flex items-center h-full">
           <Link
@@ -167,10 +169,13 @@ export function MobileShowcase() {
                   {/* Section 2: Hero Graphic */}
                   <div className="shrink-0 h-[210px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full">
                     <div className="scale-[1.50] sm:scale-[1.60] transform-gpu origin-center">
-                      {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
+                      {currentCard.id === "later" && <LaterAlarmIllustration />}
+                      {currentCard.id === "future" && <FutureActionsIllustration />}
+                      {currentCard.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
                       {currentCard.id === "pricing" && <PricingTierIllustration />}
+                      {currentCard.id === "vision" && <ClosureVisionIllustration />}
                       {currentCard.id === "faq" && <FAQHelpIllustration />}
                     </div>
                   </div>
@@ -187,8 +192,6 @@ export function MobileShowcase() {
                 </motion.div>
               </AnimatePresence>
             </div>
-
-
           </div>
         ) : (
           /* GRID VIEW MODE */
@@ -214,10 +217,13 @@ export function MobileShowcase() {
                     {/* Graphic Section */}
                     <div className="shrink-0 h-[200px] flex flex-col items-center justify-center pt-3 pb-1 overflow-visible w-full pointer-events-none">
                       <div className="scale-120 transform-gpu origin-center flex items-center justify-center">
-                        {card.id === "later" && <LaterAlarmIllustration />}
                         {card.id === "notify" && <SmartFiltersIllustration />}
                         {card.id === "places" && <PlacesMappingIllustration />}
+                        {card.id === "later" && <LaterAlarmIllustration />}
+                        {card.id === "future" && <FutureActionsIllustration />}
+                        {card.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
                         {card.id === "pricing" && <PricingTierIllustration />}
+                        {card.id === "vision" && <ClosureVisionIllustration />}
                         {card.id === "faq" && <FAQHelpIllustration />}
                       </div>
                     </div>
@@ -242,12 +248,14 @@ export function MobileShowcase() {
       {/* 3. Mobile Footer */}
       <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
         <div className="justify-self-start">
-          <button
-            onClick={() => setAboutOpen(false)}
+          <Link
+            to="/about"
+            viewTransition
+            style={{ viewTransitionName: 'card-[#about]' } as React.CSSProperties}
             className="text-xs sm:text-sm font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all cursor-pointer"
           >
             About
-          </button>
+          </Link>
         </div>
 
         <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] gap-1">
@@ -280,55 +288,6 @@ export function MobileShowcase() {
           </Link>
         </div>
       </footer>
-
-      {/* About Modal */}
-      <AnimatePresence>
-        {aboutOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setAboutOpen(false)}
-              className="fixed inset-0 bg-ink z-40"
-            />
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                className="bg-white border-3 border-ink p-6 rounded-[2rem] w-full max-w-sm shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative"
-              >
-                <button
-                  onClick={() => setAboutOpen(false)}
-                  className="absolute top-5 right-5 cursor-pointer size-7 rounded-full border-2 border-ink bg-white grid place-items-center"
-                >
-                  <X className="size-3.5" />
-                </button>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FFFBEB] px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#F59E0B] mb-3">
-                  💡 Project Info
-                </span>
-                <h3 className="text-2xl font-black text-ink leading-tight">About MinDrop</h3>
-                <p className="text-sm text-ink/85 font-semibold mt-3 leading-relaxed">
-                  MinDrop is an offline second brain for immediate micro-actions—looping alarms for small tasks, location sweeps, and notification filters.
-                </p>
-                <p className="text-xs text-ink/75 font-medium mt-2 leading-relaxed">
-                  Engineered with zero cloud dependencies and built with local SQLite persistence for instant privacy.
-                </p>
-                <div className="mt-5 pt-3 border-t-2 border-ink/10 flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-ink/40">Version 1.0.0</span>
-                  <button
-                    onClick={() => setAboutOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-[#000000] text-white font-black text-xs uppercase tracking-wider hover:bg-ink/90 transition cursor-pointer"
-                  >
-                    Close
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          </>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

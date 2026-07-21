@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Layers, LayoutGrid, X } from "lucide-react";
+import { Layers, LayoutGrid } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
@@ -8,14 +8,16 @@ import {
   LaterAlarmIllustration, 
   SmartFiltersIllustration, 
   PlacesMappingIllustration, 
+  FutureActionsIllustration,
+  PrivacyManifestoIllustration,
   PricingTierIllustration, 
+  ClosureVisionIllustration,
   FAQHelpIllustration 
 } from "../ShowcaseCardData";
 
 export function DesktopShowcase() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
-  const [aboutOpen, setAboutOpen] = useState(false);
   const [hoverZone, setHoverZone] = useState<"left" | "right" | "none">("none");
   const wheelLock = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -244,10 +246,13 @@ export function DesktopShowcase() {
 
                   <div className="shrink-0 h-[240px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full opacity-40 pointer-events-none">
                     <div className="scale-[clamp(1.3,1.5vh+0.4vw,1.65)] transform-gpu origin-center">
-                      {nextCard.id === "later" && <LaterAlarmIllustration />}
                       {nextCard.id === "notify" && <SmartFiltersIllustration />}
                       {nextCard.id === "places" && <PlacesMappingIllustration />}
+                      {nextCard.id === "later" && <LaterAlarmIllustration />}
+                      {nextCard.id === "future" && <FutureActionsIllustration />}
+                      {nextCard.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
                       {nextCard.id === "pricing" && <PricingTierIllustration />}
+                      {nextCard.id === "vision" && <ClosureVisionIllustration />}
                       {nextCard.id === "faq" && <FAQHelpIllustration />}
                     </div>
                   </div>
@@ -275,7 +280,7 @@ export function DesktopShowcase() {
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
                   className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-[clamp(1.75rem,2.8vw,3rem)] flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
-                  {/* Section 1: Header Tag Pill (Fixed Height) */}
+                  {/* Section 1: Header Tag Pill */}
                   <div className="shrink-0 flex justify-between items-center h-8 mb-2">
                     <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-4 py-1.5 rounded-full shadow-sm">
                       {currentCard.tag}
@@ -285,10 +290,13 @@ export function DesktopShowcase() {
                   {/* Section 2: Fixed Height Hero Graphic Area */}
                   <div className="shrink-0 h-[240px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full relative">
                     <div className="scale-[clamp(1.3,1.5vh+0.4vw,1.65)] transform-gpu origin-center flex items-center justify-center">
-                      {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
+                      {currentCard.id === "later" && <LaterAlarmIllustration />}
+                      {currentCard.id === "future" && <FutureActionsIllustration />}
+                      {currentCard.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
                       {currentCard.id === "pricing" && <PricingTierIllustration />}
+                      {currentCard.id === "vision" && <ClosureVisionIllustration />}
                       {currentCard.id === "faq" && <FAQHelpIllustration />}
                     </div>
                   </div>
@@ -322,12 +330,12 @@ export function DesktopShowcase() {
             </div>
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (Locked Fixed Graphic Height = 100% Identical Horizontal Title Baseline) */
-          <div className="w-full max-w-6xl mx-auto px-4 pt-4 pb-36 z-20 h-full overflow-y-auto no-scrollbar">
+          /* RESPONSIVE GRID VIEW MODE (4 Columns on Desktop for 7 Cards) */
+          <div className="w-full max-w-7xl mx-auto px-4 pt-4 pb-36 z-20 h-full overflow-y-auto no-scrollbar">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch"
             >
               {DECK_CARDS.map((card) => {
                 return (
@@ -337,32 +345,35 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.2rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-full min-h-[410px] ${card.bgClass}`}
+                    className={`rounded-[2.2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-full min-h-[410px] ${card.bgClass}`}
                   >
-                    {/* Top Chapter Tag Pill (Fixed 32px Height) */}
+                    {/* Top Chapter Tag Pill */}
                     <div className="shrink-0 flex items-center justify-between h-8 mb-2">
-                      <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
+                      <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Fixed Height Graphic Area (Guarantees Titles Align Horizontally Across Every Card) */}
+                    {/* Fixed Height Graphic Area */}
                     <div className="shrink-0 h-[210px] flex flex-col items-center justify-center pt-3 pb-1 overflow-visible w-full pointer-events-none">
                       <div className="scale-115 transform-gpu origin-center flex items-center justify-center">
-                        {card.id === "later" && <LaterAlarmIllustration />}
                         {card.id === "notify" && <SmartFiltersIllustration />}
                         {card.id === "places" && <PlacesMappingIllustration />}
+                        {card.id === "later" && <LaterAlarmIllustration />}
+                        {card.id === "future" && <FutureActionsIllustration />}
+                        {card.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
                         {card.id === "pricing" && <PricingTierIllustration />}
+                        {card.id === "vision" && <ClosureVisionIllustration />}
                         {card.id === "faq" && <FAQHelpIllustration />}
                       </div>
                     </div>
 
-                    {/* Content Section (Exact Baseline Offset) */}
+                    {/* Content Section */}
                     <div className="flex-1 flex flex-col justify-start mt-2">
-                      <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                      <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-base lg:text-lg text-ink/90 font-medium leading-relaxed">
+                      <p className="text-sm lg:text-base text-ink/90 font-medium leading-relaxed">
                         {card.description}
                       </p>
                     </div>
@@ -377,12 +388,14 @@ export function DesktopShowcase() {
       {/* 3. Desktop Footer */}
       <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
         <div className="justify-self-start">
-          <button
-            onClick={() => setAboutOpen(true)}
+          <Link
+            to="/about"
+            viewTransition
+            style={{ viewTransitionName: 'card-[#about]' } as React.CSSProperties}
             className="text-xs lg:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
           >
             About
-          </button>
+          </Link>
         </div>
 
         <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
@@ -415,55 +428,6 @@ export function DesktopShowcase() {
           </Link>
         </div>
       </footer>
-
-      {/* About Modal */}
-      <AnimatePresence>
-        {aboutOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setAboutOpen(false)}
-              className="fixed inset-0 bg-ink z-40"
-            />
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                className="bg-white border-3 border-ink p-8 rounded-[2.5rem] w-full max-w-md shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative"
-              >
-                <button
-                  onClick={() => setAboutOpen(false)}
-                  className="absolute top-6 right-6 cursor-pointer size-8 rounded-full border-2 border-ink bg-white grid place-items-center hover:bg-ink/5 transition"
-                >
-                  <X className="size-4" />
-                </button>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-[#FFFBEB] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F59E0B] mb-4">
-                  💡 Project Info
-                </span>
-                <h3 className="text-3xl font-black text-ink leading-tight">About MinDrop</h3>
-                <p className="text-sm text-ink/85 font-semibold mt-4 leading-relaxed">
-                  MinDrop is an offline second brain for immediate micro-actions—looping alarms for small tasks, location sweeps, and notification filters.
-                </p>
-                <p className="text-xs text-ink/75 font-medium mt-3 leading-relaxed">
-                  Engineered with zero cloud dependencies and built with local SQLite persistence for instant privacy.
-                </p>
-                <div className="mt-6 pt-4 border-t-2 border-ink/10 flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-ink/40">Version 1.0.0</span>
-                  <button
-                    onClick={() => setAboutOpen(false)}
-                    className="px-5 py-2.5 rounded-xl bg-[#000000] text-white font-black text-xs uppercase tracking-wider hover:bg-ink/90 transition cursor-pointer"
-                  >
-                    Close
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          </>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
