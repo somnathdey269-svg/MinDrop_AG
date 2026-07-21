@@ -195,23 +195,17 @@ export function DesktopShowcase() {
           Terms
         </Link>
         
-        <div className="flex items-center gap-2 select-none">
-          <div className="size-8 relative grid place-items-center shrink-0">
-            <motion.div
-              animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0, 0.2] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 rounded-full border border-[#FF671F]/30"
-            />
-            <motion.div
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="size-6 rounded-lg bg-gradient-to-tr from-[#FF671F] to-[#FFA06E] shadow-md grid place-items-center relative border border-white/10"
-            >
-              <span className="text-white font-black text-xs font-sans">m</span>
-            </motion.div>
-          </div>
-          <span className="text-sm font-black uppercase tracking-wider text-ink">MinDrop</span>
-        </div>
+        {/* Animated MinDrop Wordmark with Highlighted M & D */}
+        <motion.div 
+          animate={{ y: [0, -2, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="flex items-center select-none font-black uppercase tracking-widest text-lg md:text-xl cursor-default"
+        >
+          <span className="text-[#FF671F]">M</span>
+          <span className="text-ink">in</span>
+          <span className="text-[#FF671F]">D</span>
+          <span className="text-ink">rop</span>
+        </motion.div>
 
         <Link
           to="/privacy"
@@ -278,7 +272,7 @@ export function DesktopShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Card (1-Line Header Title) */}
+                {/* Active Front Card */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -374,7 +368,7 @@ export function DesktopShowcase() {
                       {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
 
-                    {/* Content Section (Single-Line Card Header) */}
+                    {/* Content Section */}
                     <div className="shrink-0 mt-2">
                       <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
@@ -471,7 +465,7 @@ export function DesktopShowcase() {
                   <span className="text-[10px] uppercase font-black tracking-wider text-ink/40">Version 1.0.0</span>
                   <button
                     onClick={() => setAboutOpen(false)}
-                    className="px-5 py-2.5 rounded-xl bg-ink text-canvas font-black text-xs uppercase tracking-wider hover:bg-ink/90 transition cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-[#000000] text-white font-black text-xs uppercase tracking-wider hover:bg-ink/90 transition cursor-pointer"
                   >
                     Close
                   </button>

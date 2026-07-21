@@ -105,7 +105,7 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Mobile Header (Sleek Aligned Pills, No Underlines) */}
+      {/* 1. Mobile Header (Animated MinDrop Wordmark with Highlighted M & D) */}
       <header className="flex justify-between items-center w-full z-30 shrink-0 py-1.5 px-1">
         <Link
           to="/terms"
@@ -116,14 +116,17 @@ export function MobileShowcase() {
           Terms
         </Link>
         
-        <div className="flex items-center gap-1.5 select-none">
-          <div className="size-7 relative grid place-items-center shrink-0">
-            <div className="size-6 rounded-lg bg-gradient-to-tr from-[#FF671F] to-[#FFA06E] shadow-sm grid place-items-center border border-white/20">
-              <span className="text-white font-black text-xs font-sans">m</span>
-            </div>
-          </div>
-          <span className="text-xs font-black uppercase tracking-wider text-ink">MinDrop</span>
-        </div>
+        {/* Animated MinDrop Wordmark with Highlighted M & D */}
+        <motion.div 
+          animate={{ y: [0, -1.5, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="flex items-center select-none font-black uppercase tracking-widest text-base sm:text-lg cursor-default"
+        >
+          <span className="text-[#FF671F]">M</span>
+          <span className="text-ink">in</span>
+          <span className="text-[#FF671F]">D</span>
+          <span className="text-ink">rop</span>
+        </motion.div>
 
         <Link
           to="/privacy"
