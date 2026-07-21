@@ -574,16 +574,16 @@ function PlacesDetailView() {
       style={{ viewTransitionName: "card-places" } as React.CSSProperties}
     >
       {/* ── Header ── */}
-      <header className="shrink-0 border-b-2 border-[#8B5CF6]/10 z-50"
-        style={{ backgroundColor: isDark ? "rgba(46,16,101,0.96)" : "rgba(245,243,255,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
-        <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
+      <header className="shrink-0 border-b-2 border-[#8B5CF6]/10 z-50 py-2.5 px-3 sm:px-6"
+        style={{ backgroundColor: isDark ? "rgba(76,29,149,0.96)" : "rgba(245,243,255,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
+        <div className="w-[95%] max-w-7xl mx-auto flex items-center justify-between gap-2">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#DDD6FE]/70 hover:text-white" : "text-[#7C3AED]/70 hover:text-[#4C1D95]"}`}>
+            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#DDD6FE]/70 hover:text-white" : "text-[#4C1D95]/70 hover:text-[#4C1D95]"}`}>
             <X className="size-3.5"/> Close
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           <Link to="/download"
-            className={`text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#8B5CF6] hover:text-white hover:border-[#8B5CF6]" : "bg-ink text-white border-ink hover:bg-[#8B5CF6] hover:border-[#8B5CF6]"}`}>
+            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#8B5CF6] hover:text-white hover:border-[#8B5CF6]" : "bg-ink text-white border-ink hover:bg-[#8B5CF6] hover:border-[#8B5CF6]"}`}>
             Get App
           </Link>
         </div>
@@ -592,26 +592,24 @@ function PlacesDetailView() {
       {/* ── Slide Stage ── */}
       <div
         ref={containerRef}
-        className="flex-1 relative overflow-hidden"
+        className="flex-1 relative overflow-hidden select-none"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 50) {
+          if (Math.abs(delta) > 40) {
             if (delta > 0) goTo(current + 1);
             else goTo(current - 1);
           }
         }}
       >
-        {/* ── Top hint (Scroll Up) ── */}
+        {/* Subtle Top Up Arrow */}
         {current > 0 && (
           <button
             onClick={() => goTo(current - 1)}
-            className="absolute top-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+            className="absolute top-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-40 cursor-pointer group opacity-35 hover:opacity-100 transition-opacity"
+            aria-label="Previous Slide"
           >
-            <ChevronDown className={`size-3.5 rotate-180 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#DDD6FE]/30 group-hover:text-white" : "text-[#7C3AED]/30 group-hover:text-[#4C1D95]"}`} />
-            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#DDD6FE]/30 group-hover:text-white" : "text-[#7C3AED]/30 group-hover:text-[#4C1D95]"}`}>
-              scroll or ↑
-            </span>
+            <ChevronUp className={`size-5 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
           </button>
         )}
 
@@ -628,16 +626,14 @@ function PlacesDetailView() {
           </motion.div>
         </AnimatePresence>
 
-        {/* ── Bottom hint (Scroll Down) ── */}
+        {/* Subtle Bottom Down Arrow */}
         {current < TOTAL - 1 && (
           <button
             onClick={() => goTo(current + 1)}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group"
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-40 cursor-pointer group opacity-35 hover:opacity-100 transition-opacity"
+            aria-label="Next Slide"
           >
-            <span className={`text-[9px] font-black uppercase tracking-widest transition ${isDark ? "text-[#DDD6FE]/20 group-hover:text-white" : "text-[#7C3AED]/20 group-hover:text-[#4C1D95]"}`}>
-              scroll or ↓
-            </span>
-            <ChevronDown className={`size-3.5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#DDD6FE]/20 group-hover:text-white" : "text-[#7C3AED]/20 group-hover:text-[#4C1D95]"}`} />
+            <ChevronDown className={`size-5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
           </button>
         )}
 

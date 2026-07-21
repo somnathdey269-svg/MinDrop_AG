@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import {
-  HeartHandshake, Sparkles, CheckCircle2, RotateCcw, Rocket, X
+  HeartHandshake, Sparkles, CheckCircle2, RotateCcw, Rocket, X, ChevronDown, ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -207,19 +207,19 @@ function VisionDetailView() {
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-vision" } as React.CSSProperties}
     >
-      <header className="shrink-0 border-b-2 border-[#D97706]/10 z-50"
+      <header className="shrink-0 border-b-2 border-[#D97706]/10 z-50 py-2.5 px-3 sm:px-6"
         style={{ backgroundColor: isDark ? "rgba(69,26,3,0.96)" : "rgba(255,251,235,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
-        <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2">
           <Link to="/" hash={backHash} viewTransition
             className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
             <X className="size-3.5"/> Close
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           <Link to="/download"
-            className={`text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-ink text-white border-ink hover:bg-[#D97706] hover:border-[#D97706]"}`}>
+            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-ink text-[#D97706] border-ink hover:bg-[#D97706] hover:text-white hover:border-[#D97706]"}`}>
             Get App
           </Link>
         </div>
@@ -231,12 +231,23 @@ function VisionDetailView() {
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 50) {
+          if (Math.abs(delta) > 40) {
             if (delta > 0) goTo(current + 1);
             else goTo(current - 1);
           }
         }}
       >
+        {/* Subtle Top Up Arrow */}
+        {current > 0 && (
+          <button
+            onClick={() => goTo(current - 1)}
+            className="absolute top-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-40 cursor-pointer group opacity-35 hover:opacity-100 transition-opacity"
+            aria-label="Previous Slide"
+          >
+            <ChevronUp className={`size-5 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+          </button>
+        )}
+
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -249,6 +260,17 @@ function VisionDetailView() {
             {slides[current]}
           </motion.div>
         </AnimatePresence>
+
+        {/* Subtle Bottom Down Arrow */}
+        {current < TOTAL - 1 && (
+          <button
+            onClick={() => goTo(current + 1)}
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-40 cursor-pointer group opacity-35 hover:opacity-100 transition-opacity"
+            aria-label="Next Slide"
+          >
+            <ChevronDown className={`size-5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+          </button>
+        )}
 
         <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-30">
           {slides.map((_, i) => (

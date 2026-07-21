@@ -306,7 +306,7 @@ export function DesktopShowcase() {
                     <h3 className="text-3xl lg:text-4xl xl:text-5xl font-black text-ink leading-tight tracking-tight mb-2.5 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-lg lg:text-xl xl:text-2xl text-ink/90 font-medium leading-relaxed">
+                    <p className="text-lg lg:text-xl xl:text-2xl text-ink/80 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -366,7 +366,7 @@ export function DesktopShowcase() {
                       <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-sm lg:text-base text-ink/90 font-medium leading-relaxed">
+                      <p className="text-sm lg:text-base text-ink/80 font-normal leading-relaxed">
                         {card.description}
                       </p>
                     </div>

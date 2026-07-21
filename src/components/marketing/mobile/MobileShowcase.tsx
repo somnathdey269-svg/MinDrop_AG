@@ -192,7 +192,7 @@ export function MobileShowcase() {
                     <h3 className="text-3xl sm:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-lg sm:text-xl text-ink/90 font-medium leading-relaxed">
+                    <p className="text-lg sm:text-xl text-ink/80 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -233,7 +233,7 @@ export function MobileShowcase() {
                       <h3 className="text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-base text-ink/90 font-medium leading-relaxed">
+                      <p className="text-base text-ink/80 font-normal leading-relaxed">
                         {card.description}
                       </p>
                     </div>
