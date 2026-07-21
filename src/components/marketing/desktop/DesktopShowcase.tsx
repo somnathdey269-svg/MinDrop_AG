@@ -18,7 +18,7 @@ export function DesktopShowcase() {
   const [autoPlay] = useState(false);
   
   // Initialize viewMode synchronously on first paint based on URL hash/query
-  const [viewMode, setViewMode] = useState<"deck" | "grid">(()) => {
+  const [viewMode, setViewMode] = useState<"deck" | "grid">(() => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash;
       const search = window.location.search;

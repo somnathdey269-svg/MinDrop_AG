@@ -18,7 +18,7 @@ export function MobileShowcase() {
   const touchStartX = useRef(0);
   
   // Mobile View Mode initialized from hash/search
-  const [viewMode, setViewMode] = useState<"deck" | "grid">(()) => {
+  const [viewMode, setViewMode] = useState<"deck" | "grid">(() => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash;
       const search = window.location.search;
