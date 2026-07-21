@@ -311,11 +311,31 @@ function FAQHelpIllustration() {
 
 function ShowcaseDeckPage() {
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const [activeIdx, setActiveIdx] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
-  const [viewMode, setViewMode] = useState<"deck" | "grid">("deck");
-  
+  const [hashMode, setHashMode] = useState<"deck" | "grid" | null>(() => {
+    if (typeof window !== "undefined") {
+      return (window.location.hash.includes("grid") || window.location.search.includes("grid")) ? "grid" : "deck";
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    const syncHashView = () => {
+      if (typeof window !== "undefined") {
+        const isGrid = window.location.hash.includes("grid") || window.location.search.includes("grid");
+        setHashMode(isGrid ? "grid" : "deck");
+      }
+    };
+    syncHashView();
+    window.addEventListener("hashchange", syncHashView);
+    return () => window.removeEventListener("hashchange", syncHashView);
+  }, []);
+
+  const viewMode: "deck" | "grid" = (search?.mode === "grid" || hashMode === "grid") ? "grid" : "deck";
+
   // Track active hover zones
   const [hoverZone, setHoverZone] = useState<"center" | "left" | "right">("center");
   const scrollCooldown = useRef(false);
@@ -333,25 +353,18 @@ function ShowcaseDeckPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    const syncHashView = () => {
-      if (typeof window !== "undefined") {
-        if (window.location.hash === "#grid") {
-          setViewMode("grid");
-        } else {
-          setViewMode("deck");
+  const handleToggleView = (mode: "deck" | "grid") => {
+    setHashMode(mode);
+    if (typeof window !== "undefined") {
+      if (mode === "grid") {
+        window.location.hash = "grid";
+      } else {
+        try {
+          window.history.pushState("", document.title, window.location.pathname);
+        } catch {
+          window.location.hash = "";
         }
       }
-    };
-    syncHashView();
-    window.addEventListener("hashchange", syncHashView);
-    return () => window.removeEventListener("hashchange", syncHashView);
-  }, []);
-
-  const handleToggleView = (mode: "deck" | "grid") => {
-    setViewMode(mode);
-    if (typeof window !== "undefined") {
-      window.location.hash = mode === "grid" ? "grid" : "";
     }
   };
 
