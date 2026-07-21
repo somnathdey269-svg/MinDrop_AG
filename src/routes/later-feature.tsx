@@ -534,28 +534,24 @@ function SlideScenarios() {
   );
 }
 
-/* Slide 10: Closer */
+/* Slide 10: Closer & Next Chapter Bridge */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
     <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
         <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857]/55">
-          The last reminder app you will ever need
+          UP NEXT · CHAPTER 04
         </p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#064E3B] leading-none tracking-tighter">
-          You have been remembering<br className="hidden sm:block"/> too much on your own.
+          Curious about what's coming next on our roadmap?
         </h2>
         <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#047857]/60 leading-relaxed max-w-2xl">
-          MinDrop holds your pills, your calls, your tasks, and your deadlines. Hand them over. We will make sure you never miss them again.
+          Continuous looping alarms hold your critical tasks. Now step into Chapter 04 to explore contact triggers, voice micro-notes, and cross-app bridges.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link to="/download"
+          <Link to="/future-feature" viewTransition style={{ viewTransitionName: 'card-future' } as React.CSSProperties}
             className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#10B981] hover:border-[#10B981] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Download MinDrop — Free
-          </Link>
-          <Link to="/" hash={backHash} viewTransition
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D1FAE5] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            See All Features
+            Continue to Chapter 04: Future Actions →
           </Link>
         </div>
       </div>

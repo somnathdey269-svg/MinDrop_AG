@@ -464,28 +464,24 @@ function SlideScenarios() {
   );
 }
 
-/* Slide 10: Closer */
+/* Slide 10: Closer & Next Chapter Bridge */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
     <div className="h-full bg-[#F5F3FF] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
-        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4C1D95]/45">
-          Stop carrying it all in your head
+        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4C1D95]/55">
+          UP NEXT · CHAPTER 03
         </p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#4C1D95] leading-none tracking-tighter">
-          The place will remind you. You just have to show up.
+          What happens when an alert must never be ignored?
         </h2>
         <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#4C1D95]/60 leading-relaxed max-w-2xl">
-          MinDrop turns every place you visit into a smart helper that knows exactly what you need to do when you arrive. No clocks. No guessing. Just walk in.
+          Geofences trigger when you arrive. Now see how MinDrop's looping alarms ring continuously until checked, surviving app restarts.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link to="/download"
+          <Link to="/later-feature" viewTransition style={{ viewTransitionName: 'card-later' } as React.CSSProperties}
             className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#8B5CF6] hover:border-[#8B5CF6] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Download MinDrop — Free
-          </Link>
-          <Link to="/" hash={backHash} viewTransition
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#EDE9FE] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            See All Features
+            Continue to Chapter 03: Looping Alarm →
           </Link>
         </div>
       </div>

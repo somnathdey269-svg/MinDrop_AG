@@ -447,28 +447,24 @@ function SlideScenarios() {
   );
 }
 
-/* Slide 10: Closer */
+/* Slide 10: Closer & Next Chapter Bridge */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
     <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
         <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#78350F]/55">
-          Stop treating all alerts the same
+          UP NEXT · CHAPTER 02
         </p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#78350F] leading-none tracking-tighter">
-          Some things demand your attention. Others don't.
+          What happens when tasks depend on location?
         </h2>
         <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#78350F]/60 leading-relaxed max-w-2xl">
-          MinDrop gives your truly important alerts a voice loud enough to be heard — and keeps everything else quiet, just the way you like it.
+          Filtered alerts protect your focus at home. Now discover how MinDrop triggers reminders as you enter or leave physical radii.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link to="/download"
+          <Link to="/places-feature" viewTransition style={{ viewTransitionName: 'card-places' } as React.CSSProperties}
             className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#F59E0B] hover:border-[#F59E0B] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Download MinDrop — Free
-          </Link>
-          <Link to="/" hash={backHash} viewTransition
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FEF3C7] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            See All Features
+            Continue to Chapter 02: Location Reminder →
           </Link>
         </div>
       </div>

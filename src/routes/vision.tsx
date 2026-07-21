@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import {
-  HeartHandshake, Sparkles, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, X
+  HeartHandshake, Sparkles, CheckCircle2, RotateCcw, Rocket, X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -109,28 +109,47 @@ function SlideParadigm() {
   );
 }
 
-/* Slide 4: Closing Remark */
-function SlideCloser({ backHash }: { backHash?: string }) {
+/* Slide 4: The Founder's Commitment */
+function SlideCommitment() {
+  return (
+    <div className="h-full bg-[#451A03] flex items-center justify-center px-6 text-center">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/30 bg-white/10 px-5 py-2 text-xs font-black uppercase tracking-widest text-[#FDE68A]">
+          <Sparkles className="size-4" /> OUR PROMISE TO YOU
+        </span>
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight">
+          Quiet software built for peaceful minds.
+        </h2>
+        <p className="text-base sm:text-xl font-semibold text-[#FEF3C7] max-w-2xl leading-relaxed">
+          We promise to keep MinDrop zero-cloud, ultra-fast, and free of subscriptions or ad clutter. Software should respect your attention, not exploit it.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 5: Grand Finale & Replay Bridge */
+function SlideCloser() {
   return (
     <div className="h-full bg-[#FEF3C7] flex items-center justify-center px-6 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706]">
-          Thank you for joining our mission
+          Your second brain is ready
         </p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#78350F] leading-none tracking-tighter">
-          Ready to experience pure focus?
+          Experience zero clutter & ultimate mental peace.
         </h2>
         <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#78350F]/70 leading-relaxed max-w-2xl">
-          MinDrop is engineered with love to protect your time and peace of mind.
+          MinDrop is engineered for crowded minds who value focus and immediate micro-actions.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
           <Link to="/download"
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-[#78350F] text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Get MinDrop Android App
+            className="inline-flex items-center justify-center gap-2 px-10 sm:px-12 py-4.5 sm:py-5 bg-[#78350F] text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            <Rocket className="size-5" /> Get MinDrop Android App
           </Link>
-          <Link to="/" hash={backHash} viewTransition
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFFBEB] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Back to Showcase
+          <Link to="/about" viewTransition style={{ viewTransitionName: 'card-[#about]' } as React.CSSProperties}
+            className="inline-flex items-center justify-center gap-2 px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFFBEB] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            <RotateCcw className="size-5" /> Replay from Index (About)
           </Link>
         </div>
       </div>
@@ -150,10 +169,11 @@ function VisionDetailView() {
     <SlideOpening />,
     <SlideProblem />,
     <SlideParadigm />,
-    <SlideCloser backHash={backHash} />,
+    <SlideCommitment />,
+    <SlideCloser />,
   ];
   const TOTAL = slides.length;
-  const isDark = current === 1;
+  const isDark = current === 1 || current === 3;
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;

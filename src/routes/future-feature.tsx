@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import {
-  Compass, PhoneCall, Layers, Mic, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, X
+  Compass, PhoneCall, Layers, Mic, SlidersHorizontal, ArrowRight, X, Sparkles
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -76,100 +76,124 @@ function SlideProblem() {
   );
 }
 
-/* Slide 3: 4 R&D Features Grid */
-function SlideGrid() {
+/* Slide 3: Topic 1 - Contact Triggers */
+function SlideContactTriggers() {
   return (
     <div className="h-full bg-[#EFF6FF] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-10 max-w-6xl">
-        <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB] mb-3">
-            Active R&D Roadmap
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
+        <div className="flex-1 text-left">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB] mb-4">
+            R&D Topic 01 · Contact Triggers
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink leading-tight tracking-tight">
-            4 Features We Are Striving to Deliver Natively
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink leading-tight mb-4 tracking-tight">
+            Remind me when [Name] calls or texts.
           </h2>
+          <p className="text-base sm:text-lg font-semibold text-ink/80 leading-relaxed max-w-lg">
+            Attach a micro-note to specific contacts. The moment their call or text arrives, MinDrop pops up your note so you never forget what to ask or say.
+          </p>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full text-left">
-          <div className="bg-white border-3 border-ink rounded-[2rem] p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex gap-4">
-            <div className="size-12 rounded-2xl bg-[#DBEAFE] grid place-items-center text-[#2563EB] shrink-0">
-              <PhoneCall className="size-6 stroke-[2.5px]" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-ink mb-1">1. Contact Triggers</h3>
-              <p className="text-sm font-semibold text-ink/75 leading-relaxed">
-                Remind me the moment I receive a call or text from [Name], surfacing instant context right when you talk.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white border-3 border-ink rounded-[2rem] p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex gap-4">
-            <div className="size-12 rounded-2xl bg-[#DBEAFE] grid place-items-center text-[#2563EB] shrink-0">
-              <Layers className="size-6 stroke-[2.5px]" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-ink mb-1">2. Cross-App Bridge</h3>
-              <p className="text-sm font-semibold text-ink/75 leading-relaxed">
-                Set quick reminders for third-party apps that lack native notification hooks (saved articles, email threads).
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white border-3 border-ink rounded-[2rem] p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex gap-4">
-            <div className="size-12 rounded-2xl bg-[#DBEAFE] grid place-items-center text-[#2563EB] shrink-0">
-              <Mic className="size-6 stroke-[2.5px]" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-ink mb-1">3. Voice Micro-Drops</h3>
-              <p className="text-sm font-semibold text-ink/75 leading-relaxed">
-                Speak a 5-second voice note that gets transcribed locally into an actionable reminder without typing.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white border-3 border-ink rounded-[2rem] p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex gap-4">
-            <div className="size-12 rounded-2xl bg-[#DBEAFE] grid place-items-center text-[#2563EB] shrink-0">
-              <SlidersHorizontal className="size-6 stroke-[2.5px]" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-ink mb-1">4. Context Sweeps</h3>
-              <p className="text-sm font-semibold text-ink/75 leading-relaxed">
-                Intelligently bundle micro-tasks into time-of-day sweeps (e.g. evening wind-down summary).
-              </p>
-            </div>
-          </div>
+        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-ink bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <PhoneCall className="size-28 sm:size-36 text-[#2563EB]" />
         </div>
-
-        <p className="text-xs font-bold text-ink/60 italic">
-          *We are striving our best to achieve all 4 features natively on Android without third-party cloud servers.
-        </p>
       </div>
     </div>
   );
 }
 
-/* Slide 4: Closer */
-function SlideCloser({ backHash }: { backHash?: string }) {
+/* Slide 4: Topic 2 & 3 - Cross-App Bridge & Voice Drops */
+function SlideCrossAppVoice() {
   return (
-    <div className="h-full bg-[#DBEAFE] flex items-center justify-center px-6 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
-        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB]">
-          The future of offline micro-actions
-        </p>
-        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tighter">
-          Built for privacy. Designed for life.
+    <div className="h-full bg-[#DBEAFE] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-6xl">
+        <div>
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB] mb-3">
+            R&D Topics 02 & 03
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink leading-tight tracking-tight">
+            Cross-App Bridges & Voice Micro-Drops
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full text-left">
+          <div className="bg-white border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex gap-4">
+            <div className="size-14 rounded-2xl bg-[#DBEAFE] grid place-items-center text-[#2563EB] shrink-0">
+              <Layers className="size-7 stroke-[2.5px]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-ink mb-1">Cross-App Bridge</h3>
+              <p className="text-sm font-semibold text-ink/75 leading-relaxed">
+                Set quick reminders for third-party apps that lack native notification hooks (saved articles, unreplied email threads).
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex gap-4">
+            <div className="size-14 rounded-2xl bg-[#DBEAFE] grid place-items-center text-[#2563EB] shrink-0">
+              <Mic className="size-7 stroke-[2.5px]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-ink mb-1">Voice Micro-Drops</h3>
+              <p className="text-sm font-semibold text-ink/75 leading-relaxed">
+                Speak a 5-second voice note that gets transcribed locally into an actionable reminder without typing a word.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 5: Topic 4 - Context Sweeps */
+function SlideContextSweeps() {
+  return (
+    <div className="h-full bg-[#0F172A] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
+        <div className="flex-1 text-left">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#60A5FA] mb-4">
+            R&D Topic 04 · Context Sweeps
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6 tracking-tight">
+            Time-of-day task bundling.<br />
+            <span className="text-[#60A5FA]">Evening wind-down.</span>
+          </h2>
+          <p className="text-base sm:text-lg font-semibold text-slate-300 leading-relaxed max-w-lg">
+            Instead of buzzing you randomly throughout the night, MinDrop intelligently aggregates non-urgent micro-tasks into a single calm evening summary.
+          </p>
+        </div>
+        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-white/20 bg-white/5 backdrop-blur-md shadow-2xl">
+          <SlidersHorizontal className="size-28 sm:size-36 text-[#60A5FA]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 6: Motivated Transition Bridge to Chapter 05 (Absolute Privacy) */
+function SlideNextBridge() {
+  return (
+    <div className="h-full bg-[#F0FDF4] flex items-center justify-center px-6 text-center">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[#059669]/30 bg-[#DCFCE7] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#059669] shadow-sm">
+          <Sparkles className="size-4" /> UP NEXT · CHAPTER 05
+        </span>
+
+        <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tighter max-w-3xl">
+          How do we power these features with 100% privacy?
         </h2>
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-ink/70 leading-relaxed max-w-2xl">
-          Get MinDrop today and join us as we expand local Android capabilities.
+
+        <p className="text-base sm:text-xl md:text-2xl font-semibold text-ink/75 leading-relaxed max-w-2xl">
+          Future features sound powerful—and they are engineered with total data sovereignty. Step into Chapter 05 for our Absolute Privacy manifesto.
         </p>
+
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link to="/download"
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#2563EB] hover:border-[#2563EB] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Get MinDrop Android App
-          </Link>
-          <Link to="/" hash={backHash} viewTransition
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-100 transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Back to Showcase
+          <Link
+            to="/privacy-feature"
+            viewTransition
+            style={{ viewTransitionName: 'card-privacy-manifesto' } as React.CSSProperties}
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#059669] hover:border-[#059669] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center"
+          >
+            Continue to Chapter 05: Absolute Privacy <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>
@@ -188,11 +212,13 @@ function FutureFeatureDetailView() {
   const slides = [
     <SlideOpening />,
     <SlideProblem />,
-    <SlideGrid />,
-    <SlideCloser backHash={backHash} />,
+    <SlideContactTriggers />,
+    <SlideCrossAppVoice />,
+    <SlideContextSweeps />,
+    <SlideNextBridge />,
   ];
   const TOTAL = slides.length;
-  const isDark = current === 1;
+  const isDark = current === 1 || current === 4;
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;

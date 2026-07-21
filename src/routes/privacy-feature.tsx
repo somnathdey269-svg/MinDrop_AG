@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import {
-  ShieldCheck, Lock, Database, EyeOff, ServerOff, ChevronDown, ChevronLeft, ChevronRight, X
+  ShieldCheck, Lock, Database, EyeOff, ServerOff, ArrowRight, X, Sparkles
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -109,28 +109,58 @@ function SlidePillars() {
   );
 }
 
-/* Slide 4: Closer */
-function SlideCloser({ backHash }: { backHash?: string }) {
+/* Slide 4: Legal & DPDP Act Sovereignty */
+function SlideCompliance() {
   return (
-    <div className="h-full bg-[#DCFCE7] flex items-center justify-center px-6 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
-        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#059669]">
-          Reclaim your digital sovereignty
-        </p>
-        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tighter">
-          Privacy isn't a feature. It's a fundamental right.
+    <div className="h-full bg-[#DCFCE7] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
+        <div className="flex-1 text-left">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#059669] mb-4">
+            Digital Personal Data Protection Act 2023
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink leading-tight mb-6 tracking-tight">
+            Designed for total data sovereignty.
+          </h2>
+          <p className="text-base sm:text-lg font-semibold text-ink/80 leading-relaxed mb-6">
+            We follow data minimization rules by design. Because we don't collect, store, or transmit your personal data to remote databases, your privacy is protected by math and physics, not just promises.
+          </p>
+          <div className="inline-flex items-center gap-2 bg-white border-2 border-ink px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-[#059669] shadow-sm">
+            <Lock className="size-4" /> 100% DPDP Act Compliant
+          </div>
+        </div>
+        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-ink bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <ShieldCheck className="size-28 sm:size-36 text-[#059669]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 5: Motivated Transition Bridge to The Closure */
+function SlideNextBridge() {
+  return (
+    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6 text-center">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/30 bg-[#FEF3C7] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#D97706] shadow-sm">
+          <Sparkles className="size-4" /> UP NEXT · THE CLOSURE
+        </span>
+
+        <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#78350F] leading-none tracking-tighter max-w-3xl">
+          Complete privacy secured. Step into the vision.
         </h2>
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-ink/70 leading-relaxed max-w-2xl">
-          MinDrop protects your thoughts by keeping them 100% on your Android device.
+
+        <p className="text-base sm:text-xl md:text-2xl font-semibold text-[#78350F]/75 leading-relaxed max-w-2xl">
+          Now that you know your data is 100% private, enter the final chapter: how MinDrop revolutionizes task management for crowded minds.
         </p>
+
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link to="/download"
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#059669] hover:border-[#059669] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Get MinDrop Android App
-          </Link>
-          <Link to="/privacy"
-            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-100 transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Read Privacy Terms
+          <Link
+            to="/vision"
+            viewTransition
+            style={{ viewTransitionName: 'card-vision' } as React.CSSProperties}
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center"
+          >
+            Continue to The Closure <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>
@@ -150,7 +180,8 @@ function PrivacyFeatureDetailView() {
     <SlideOpening />,
     <SlideProblem />,
     <SlidePillars />,
-    <SlideCloser backHash={backHash} />,
+    <SlideCompliance />,
+    <SlideNextBridge />,
   ];
   const TOTAL = slides.length;
   const isDark = current === 1;
@@ -199,7 +230,7 @@ function PrivacyFeatureDetailView() {
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           <Link to="/download"
-            className={`text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-white hover:border-[#059669]" : "bg-ink text-white border-ink hover:bg-[#059669] hover:border-[#059669]"}`}>
+            className={`text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-[#059669] hover:border-[#059669]" : "bg-ink text-white border-ink hover:bg-[#059669] hover:border-[#059669]"}`}>
             Get App
           </Link>
         </div>
