@@ -135,12 +135,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Tight Vertical Gap & Enlarged Senior Typography) */}
+      {/* 2. Mobile Showcase (Web-Parity Layout: Text on Top, Un-Cut Graphic Below) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[375px] h-[375px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[375px] h-[400px] xs:h-[420px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout" custom={swipeDirection}>
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -151,26 +151,23 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 200, damping: 22 }}
                   className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
-                  <div className="flex justify-between items-center shrink-0">
+                  <div className="shrink-0">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-3 py-0.5 rounded-full border border-ink/10">
                       {nextCard.tag}
                     </span>
+                    <h3 className="text-2xl font-black text-ink mt-2">{nextCard.title}</h3>
                   </div>
 
-                  <div className="my-0.5 flex items-center justify-center overflow-hidden w-full opacity-40">
+                  <div className="flex-1 my-1 flex items-center justify-center overflow-hidden w-full opacity-40">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
                     {nextCard.id === "pricing" && <PricingTierIllustration />}
                     {nextCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
-
-                  <div className="shrink-0">
-                    <h3 className="text-xl font-black text-ink">{nextCard.title}</h3>
-                  </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Tight Gaps + Enlarged Senior Typography) */}
+                {/* Active Front Hero Card (Text on Top, Full Graphic Below, Non-Bold Description) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   custom={swipeDirection}
@@ -192,32 +189,31 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 220, damping: 24, mass: 0.8 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 xs:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
-                  {/* Top Bar inside Card */}
-                  <div className="flex justify-between items-center shrink-0">
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
-                      {currentCard.tag}
-                    </span>
+                  {/* Top Bar + Title + Non-Bold Description */}
+                  <div className="shrink-0">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
+                        {currentCard.tag}
+                      </span>
+                    </div>
+
+                    <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mt-2.5 mb-1.5">
+                      {currentCard.title}
+                    </h3>
+                    <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed">
+                      {currentCard.description}
+                    </p>
                   </div>
 
-                  {/* Borderless Organic Visual Hero Element (Tight my-0.5 Gap) */}
-                  <div className="my-0.5 flex items-center justify-center overflow-hidden w-full relative">
+                  {/* Fully Visible Un-Cut Graphic Illustration Below Text */}
+                  <div className="flex-1 my-1 flex items-center justify-center overflow-visible w-full relative">
                     {currentCard.id === "later" && <LaterAlarmIllustration />}
                     {currentCard.id === "notify" && <SmartFiltersIllustration />}
                     {currentCard.id === "places" && <PlacesMappingIllustration />}
                     {currentCard.id === "pricing" && <PricingTierIllustration />}
                     {currentCard.id === "faq" && <FAQHelpIllustration />}
-                  </div>
-
-                  {/* Enlarged Senior-Friendly Content Typography */}
-                  <div className="shrink-0">
-                    <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-snug tracking-tight mb-1.5">
-                      {currentCard.title}
-                    </h3>
-                    <p className="text-lg xs:text-xl text-ink/90 font-semibold leading-relaxed">
-                      {currentCard.description}
-                    </p>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -243,19 +239,19 @@ export function MobileShowcase() {
                       </span>
                     </div>
 
-                    <div className="my-0.5 flex items-center justify-center overflow-hidden w-full relative pointer-events-none">
+                    <div>
+                      <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed mb-3">
+                        {card.description}
+                      </p>
+                    </div>
+
+                    <div className="my-1 flex items-center justify-center overflow-hidden w-full relative pointer-events-none">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
                       {card.id === "pricing" && <PricingTierIllustration />}
                       {card.id === "faq" && <FAQHelpIllustration />}
-                    </div>
-
-                    <div>
-                      <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-snug tracking-tight mb-1.5">{card.title}</h3>
-                      <p className="text-lg xs:text-xl text-ink/90 font-semibold leading-relaxed">
-                        {card.description}
-                      </p>
                     </div>
                   </Link>
                 );
@@ -335,7 +331,7 @@ export function MobileShowcase() {
                   💡 Project Info
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight">About MinDrop</h3>
-                <p className="text-base sm:text-lg text-ink/80 font-medium mt-3 leading-relaxed">
+                <p className="text-base sm:text-lg text-ink/80 font-normal mt-3 leading-relaxed">
                   MinDrop is an offline second brain for immediate micro-actions—looping alarms for small tasks, location sweeps, and notification filters.
                 </p>
                 <div className="mt-6 pt-3 border-t-2 border-ink/10 flex">
