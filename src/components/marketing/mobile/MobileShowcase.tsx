@@ -158,14 +158,14 @@ export function MobileShowcase() {
                   className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
-                  <div className="shrink-0 flex justify-between items-center mb-1">
+                  <div className="shrink-0 flex justify-between items-center h-7 mb-1">
                     <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Hero Graphic (With Explicit Top Clearance Below Tag Pill) */}
-                  <div className="my-auto pt-5 pb-2 flex items-center justify-center overflow-visible w-full shrink-0">
+                  {/* Section 2: Hero Graphic */}
+                  <div className="shrink-0 h-[210px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full">
                     <div className="scale-[1.50] sm:scale-[1.60] transform-gpu origin-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
@@ -212,26 +212,28 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[360px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[380px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
-                    <div className="flex justify-between items-center mb-3 shrink-0">
+                    <div className="shrink-0 flex items-center justify-between h-7 mb-2">
                       <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Graphic Section (With Explicit Top Clearance) */}
-                    <div className="my-auto pt-5 pb-3 flex items-center justify-center overflow-visible w-full pointer-events-none scale-120 transform-gpu origin-center">
-                      {card.id === "later" && <LaterAlarmIllustration />}
-                      {card.id === "notify" && <SmartFiltersIllustration />}
-                      {card.id === "places" && <PlacesMappingIllustration />}
-                      {card.id === "pricing" && <PricingTierIllustration />}
-                      {card.id === "faq" && <FAQHelpIllustration />}
+                    {/* Graphic Section */}
+                    <div className="shrink-0 h-[200px] flex flex-col items-center justify-center pt-3 pb-1 overflow-visible w-full pointer-events-none">
+                      <div className="scale-120 transform-gpu origin-center flex items-center justify-center">
+                        {card.id === "later" && <LaterAlarmIllustration />}
+                        {card.id === "notify" && <SmartFiltersIllustration />}
+                        {card.id === "places" && <PlacesMappingIllustration />}
+                        {card.id === "pricing" && <PricingTierIllustration />}
+                        {card.id === "faq" && <FAQHelpIllustration />}
+                      </div>
                     </div>
 
                     {/* Content Section */}
-                    <div className="shrink-0 mt-3">
+                    <div className="flex-1 flex flex-col justify-start mt-2">
                       <h3 className="text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
@@ -251,7 +253,7 @@ export function MobileShowcase() {
       <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
         <div className="justify-self-start">
           <button
-            onClick={() => setAboutOpen(true)}
+            onClick={() => setAboutOpen(false)}
             className="text-xs sm:text-sm font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all cursor-pointer"
           >
             About
