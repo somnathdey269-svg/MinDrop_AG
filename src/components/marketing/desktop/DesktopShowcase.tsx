@@ -227,7 +227,7 @@ export function DesktopShowcase() {
       <div ref={containerRef} className="flex-1 w-full min-h-0 my-2 no-scrollbar z-10 flex flex-col justify-center items-center overflow-y-auto">
         {viewMode === "deck" ? (
           /* DECK STACK MODE */
-          <div className="w-full h-full max-h-[510px] flex items-center justify-center relative">
+          <div className="w-full h-full max-h-[420px] flex items-center justify-center relative">
             {/* Left Hover Zone */}
             <div 
               onClick={handlePrev} 
@@ -243,8 +243,8 @@ export function DesktopShowcase() {
               </div>
             </div>
 
-            {/* Proportional Center Card Stack */}
-            <div className="relative w-[410px] lg:w-[430px] h-[460px] lg:h-[480px] flex items-center justify-center">
+            {/* Compact, Perfect Proportions Center Card Stack */}
+            <div className="relative w-[360px] lg:w-[380px] h-[350px] lg:h-[370px] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -257,13 +257,13 @@ export function DesktopShowcase() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-6 flex flex-col justify-start gap-2 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0">
                     <span className="text-xs uppercase font-bold tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  <div className="my-2 flex items-center justify-center overflow-visible w-full opacity-40 pointer-events-none scale-95">
+                  <div className="my-1 flex items-center justify-center overflow-visible w-full opacity-40 pointer-events-none scale-95">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -272,11 +272,11 @@ export function DesktopShowcase() {
                   </div>
 
                   <div className="shrink-0">
-                    <h3 className="text-2xl font-black text-ink leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-xl font-black text-ink leading-tight">{nextCard.title}</h3>
                   </div>
                 </motion.div>
 
-                {/* Active Front Card (Large Bold Typography, Comfortable Breathing Room, Perfect Card Fill) */}
+                {/* Active Front Card (Compact Height, Zero Empty Space, Crisp Typography) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -290,18 +290,18 @@ export function DesktopShowcase() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-7 lg:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-6 flex flex-col justify-start gap-2.5 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   {/* Top Bar inside Card */}
                   <div className="shrink-0 flex justify-between items-center">
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink/80 bg-white/70 border border-ink/15 px-3.5 py-1 rounded-full shadow-sm">
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink/80 bg-white/70 border border-ink/15 px-3 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Graphic Illustration ON TOP Section (Uncut, overflow-visible, breathing room) */}
-                  <div className="my-3 flex items-center justify-center overflow-visible w-full relative">
-                    <div className="scale-110 transform-gpu origin-center flex items-center justify-center">
+                  {/* Graphic Illustration ON TOP Section (Uncut, overflow-visible) */}
+                  <div className="my-1 flex items-center justify-center overflow-visible w-full relative">
+                    <div className="scale-100 transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -310,12 +310,12 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Large Bold Typography Filling Lower Section Beautifully */}
+                  {/* Clean Content Section directly wrapping text */}
                   <div className="shrink-0">
-                    <h3 className="text-4xl lg:text-[44px] font-black text-ink leading-tight tracking-tight mb-2.5">
+                    <h3 className="text-3xl lg:text-[32px] font-black text-ink leading-tight tracking-tight mb-1.5">
                       {currentCard.title}
                     </h3>
-                    <p className="text-lg lg:text-xl text-ink/85 font-normal leading-relaxed">
+                    <p className="text-sm lg:text-base text-ink/80 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -351,7 +351,7 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.25rem] border-3 border-ink p-7 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[380px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-start gap-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[340px] ${card.bgClass}`}
                   >
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
@@ -360,7 +360,7 @@ export function DesktopShowcase() {
                     </div>
 
                     {/* Graphic Illustration ON TOP Section (Uncut) */}
-                    <div className="my-3 flex items-center justify-center overflow-visible w-full pointer-events-none">
+                    <div className="my-1 flex items-center justify-center overflow-visible w-full pointer-events-none">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -370,13 +370,13 @@ export function DesktopShowcase() {
 
                     {/* Content in LOWER Section */}
                     <div>
-                      <h3 className="text-3xl lg:text-4xl font-black text-ink leading-tight tracking-tight mb-2">{card.title}</h3>
-                      <p className="text-base lg:text-lg text-ink/85 font-normal leading-relaxed">
+                      <h3 className="text-2xl md:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <p className="text-sm lg:text-base text-ink/80 font-normal leading-relaxed">
                         {card.description}
                       </p>
                     </div>
 
-                    <div className="flex justify-between items-end pt-3 shrink-0 border-t border-ink/10 mt-3">
+                    <div className="flex justify-between items-end pt-2 shrink-0 border-t border-ink/10 mt-auto">
                       <span className="text-xs font-black uppercase text-ink/50 tracking-wider">Open card</span>
                       <span className="inline-grid place-items-center size-10 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         {Icon && <Icon className="size-5 text-ink" />}
