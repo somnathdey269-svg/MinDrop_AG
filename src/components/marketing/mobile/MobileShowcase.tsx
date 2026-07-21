@@ -132,7 +132,7 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Sleek Mobile Showcase (Ultra-Smooth 3D Card Fling Animation) */}
+      {/* 2. Sleek Mobile Showcase */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
@@ -166,7 +166,7 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Ultra-Smooth 3D Fling Animation) */}
+                {/* Active Front Hero Card */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 260, y: -10, rotate: 10, scale: 0.85, opacity: 0 }}
@@ -198,7 +198,7 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Editorial Text (No Tap Hint) */}
+                  {/* Editorial Text */}
                   <div className="shrink-0">
                     <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1">
                       {currentCard.title}
@@ -209,18 +209,6 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
               </AnimatePresence>
-            </div>
-
-            {/* Sleek Progress Line Indicator */}
-            <div className="w-44 mx-auto h-1.5 bg-ink/15 rounded-full overflow-hidden mt-4 relative z-30">
-              <motion.div
-                className="h-full bg-ink rounded-full"
-                animate={{
-                  width: `${100 / DECK_CARDS.length}%`,
-                  x: `${activeIdx * 100}%`
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
             </div>
           </div>
         ) : (
