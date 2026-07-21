@@ -5,14 +5,14 @@ import { useState, useEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
+  AboutAppIllustration,
   LaterAlarmIllustration, 
   SmartFiltersIllustration, 
   PlacesMappingIllustration, 
   FutureActionsIllustration,
   PrivacyManifestoIllustration,
   PricingTierIllustration, 
-  ClosureVisionIllustration,
-  FAQHelpIllustration 
+  ClosureVisionIllustration
 } from "../ShowcaseCardData";
 
 export function MobileShowcase() {
@@ -88,6 +88,20 @@ export function MobileShowcase() {
   };
 
   const currentCard = DECK_CARDS[activeIdx];
+
+  const renderIllustration = (id: string) => {
+    switch (id) {
+      case "about": return <AboutAppIllustration />;
+      case "notify": return <SmartFiltersIllustration />;
+      case "places": return <PlacesMappingIllustration />;
+      case "later": return <LaterAlarmIllustration />;
+      case "future": return <FutureActionsIllustration />;
+      case "privacy-manifesto": return <PrivacyManifestoIllustration />;
+      case "pricing": return <PricingTierIllustration />;
+      case "vision": return <ClosureVisionIllustration />;
+      default: return null;
+    }
+  };
 
   return (
     <div 
@@ -169,14 +183,7 @@ export function MobileShowcase() {
                   {/* Section 2: Hero Graphic */}
                   <div className="shrink-0 h-[210px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full">
                     <div className="scale-[1.50] sm:scale-[1.60] transform-gpu origin-center">
-                      {currentCard.id === "notify" && <SmartFiltersIllustration />}
-                      {currentCard.id === "places" && <PlacesMappingIllustration />}
-                      {currentCard.id === "later" && <LaterAlarmIllustration />}
-                      {currentCard.id === "future" && <FutureActionsIllustration />}
-                      {currentCard.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
-                      {currentCard.id === "pricing" && <PricingTierIllustration />}
-                      {currentCard.id === "vision" && <ClosureVisionIllustration />}
-                      {currentCard.id === "faq" && <FAQHelpIllustration />}
+                      {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
@@ -217,14 +224,7 @@ export function MobileShowcase() {
                     {/* Graphic Section */}
                     <div className="shrink-0 h-[200px] flex flex-col items-center justify-center pt-3 pb-1 overflow-visible w-full pointer-events-none">
                       <div className="scale-120 transform-gpu origin-center flex items-center justify-center">
-                        {card.id === "notify" && <SmartFiltersIllustration />}
-                        {card.id === "places" && <PlacesMappingIllustration />}
-                        {card.id === "later" && <LaterAlarmIllustration />}
-                        {card.id === "future" && <FutureActionsIllustration />}
-                        {card.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
-                        {card.id === "pricing" && <PricingTierIllustration />}
-                        {card.id === "vision" && <ClosureVisionIllustration />}
-                        {card.id === "faq" && <FAQHelpIllustration />}
+                        {renderIllustration(card.id)}
                       </div>
                     </div>
 

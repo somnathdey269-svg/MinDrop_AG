@@ -1,237 +1,245 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, ShieldCheck, Lock, Database } from "lucide-react";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
+import {
+  ShieldCheck, Lock, Database, EyeOff, ServerOff, ChevronDown, ChevronLeft, ChevronRight, X
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/privacy-feature")({
   validateSearch: (search: Record<string, unknown>) => {
-    return {
-      from: (search.from as string) || undefined,
-    };
+    return { from: (search.from as string) || undefined };
   },
   head: () => ({
     meta: [
-      { title: "Chapter 05/07: Absolute Privacy — MinDrop Manifesto" },
+      { title: "Chapter 05/05: Absolute Privacy — MinDrop Manifesto" },
       { name: "description", content: "Discover MinDrop's Absolute Privacy manifesto: zero cloud tracking, local SQLite persistence, and zero telemetry." },
     ],
   }),
-  component: PrivacyFeatureStoryView,
+  component: PrivacyFeatureDetailView,
 });
 
-function PrivacyFeatureStoryView() {
-  const { from } = Route.useSearch();
-  const [current, setCurrent] = useState(0);
-  const totalSlides = 2;
+/* Slide 1: Opening */
+function SlideOpening() {
+  return (
+    <div className="h-full bg-[#F0FDF4] flex flex-col items-center justify-center text-center px-5">
+      <motion.span
+        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+        className="inline-flex items-center gap-2 rounded-full border border-[#059669]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#059669] mb-8 sm:mb-12 shadow-sm">
+        🔒 CHAPTER 05/05 · ABSOLUTE PRIVACY
+      </motion.span>
 
+      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
+        {[
+          "Your thoughts are private property.",
+          "Not telemetry data.",
+        ].map((line, i) => (
+          <motion.p key={i}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#059669]/60 leading-tight tracking-tight">
+            {line}
+          </motion.p>
+        ))}
+      </div>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-ink leading-none tracking-tighter">
+        100% Local. Zero Cloud.
+      </motion.p>
+    </div>
+  );
+}
+
+/* Slide 2: Cloud Surveillance Threat (Dark Theme) */
+function SlideProblem() {
+  return (
+    <div className="h-full bg-[#064E3B] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
+        <div className="flex-1 text-left">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#A7F3D0] mb-4">
+            Why SaaS cloud syncs risk your data
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 sm:mb-8 tracking-tight">
+            Cloud servers leak.<br />
+            <span className="text-[#34D399]">Your phone stays safe.</span>
+          </h2>
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-emerald-100 leading-relaxed max-w-lg">
+            Most reminder apps upload your tasks, locations, and personal schedules to remote servers for ad analytics and cloud sync. MinDrop cuts the cord entirely.
+          </p>
+        </div>
+        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-white/20 bg-white/5 backdrop-blur-md shadow-2xl">
+          <ShieldCheck className="size-28 sm:size-36 text-[#34D399]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 3: Three Privacy Pillars */
+function SlidePillars() {
+  return (
+    <div className="h-full bg-[#F0FDF4] flex items-center justify-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
+        <div>
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#059669] mb-4">
+            Our Uncompromising Privacy Guarantee
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink leading-tight tracking-tight">
+            Engineered with strict hardware-level isolation.
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 w-full">
+          {[
+            { icon: EyeOff, title: "Zero Telemetry", body: "No tracking SDKs, no analytics servers, and no user activity logging. What happens in MinDrop stays in MinDrop." },
+            { icon: Database, title: "Native SQLite Engine", body: "Your reminders and location pins are saved strictly in your device's encrypted local SQLite database." },
+            { icon: ServerOff, title: "Zero Cloud Dependencies", body: "MinDrop operates 100% offline. It needs no internet connection to set, schedule, or ring your alarms." },
+          ].map(({ icon: Icon, title, body }) => (
+            <div key={title} className="bg-white border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-3">
+              <div className="size-12 rounded-2xl bg-[#DCFCE7] grid place-items-center text-[#059669]">
+                <Icon className="size-6 stroke-[2.5px]" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-black text-ink">{title}</h3>
+              <p className="text-sm sm:text-base font-semibold text-ink/70 leading-relaxed">{body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Slide 4: Closer */
+function SlideCloser({ backHash }: { backHash?: string }) {
+  return (
+    <div className="h-full bg-[#DCFCE7] flex items-center justify-center px-6 text-center">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
+        <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#059669]">
+          Reclaim your digital sovereignty
+        </p>
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tighter">
+          Privacy isn't a feature. It's a fundamental right.
+        </h2>
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-ink/70 leading-relaxed max-w-2xl">
+          MinDrop protects your thoughts by keeping them 100% on your Android device.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
+          <Link to="/download"
+            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#059669] hover:border-[#059669] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            Get MinDrop Android App
+          </Link>
+          <Link to="/privacy"
+            className="px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-100 transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
+            Read Privacy Terms
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PrivacyFeatureDetailView() {
+  const { from } = Route.useSearch();
+  const backHash = from === "grid" ? "grid" : undefined;
+  const [current, setCurrent] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
-  const wheelLock = useRef(false);
+  const lastScrollTime = useRef(0);
+
+  const slides = [
+    <SlideOpening />,
+    <SlideProblem />,
+    <SlidePillars />,
+    <SlideCloser backHash={backHash} />,
+  ];
+  const TOTAL = slides.length;
+  const isDark = current === 1;
 
   const goTo = (idx: number) => {
-    if (idx < 0 || idx >= totalSlides) return;
+    if (idx < 0 || idx >= TOTAL) return;
+    const now = Date.now();
+    if (now - lastScrollTime.current < 750) return;
+    lastScrollTime.current = now;
     setCurrent(idx);
   };
 
-  const next = () => goTo(current + 1);
-  const prev = () => goTo(current - 1);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 12) return;
+      if (e.deltaY > 0) goTo(current + 1);
+      else if (e.deltaY < 0) goTo(current - 1);
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, [current]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
-        e.preventDefault();
-        next();
-      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        prev();
-      }
+      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [current]);
 
-  // Wheel navigation
-  const handleWheel = (e: React.WheelEvent) => {
-    if (wheelLock.current) return;
-    if (Math.abs(e.deltaY) > 25 || Math.abs(e.deltaX) > 25) {
-      wheelLock.current = true;
-      if (e.deltaY > 0 || e.deltaX > 0) {
-        next();
-      } else {
-        prev();
-      }
-      setTimeout(() => {
-        wheelLock.current = false;
-      }, 500);
-    }
-  };
-
-  const backHash = from === "grid" ? "grid" : undefined;
-
   return (
     <div
-      onWheel={handleWheel}
-      className="h-[100dvh] flex flex-col justify-between select-none overflow-hidden text-ink font-sans transition-colors duration-500 bg-[#F0FDF4]"
-      style={{
-        viewTransitionName: "card-privacy-manifesto"
-      } as React.CSSProperties}
+      className="h-[100dvh] flex flex-col overflow-hidden"
+      style={{ viewTransitionName: "card-privacy-manifesto" } as React.CSSProperties}
     >
-      {/* Header */}
-      <header className="shrink-0 border-b-2 border-[#059669]/10 z-50 bg-[#F0FDF4]/95 backdrop-blur-md">
+      <header className="shrink-0 border-b-2 border-ink/10 z-50"
+        style={{ backgroundColor: isDark ? "rgba(6,78,59,0.96)" : "rgba(240,253,244,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
         <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
-          <Link
-            to="/"
-            hash={backHash}
-            viewTransition
-            className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#059669]/70 hover:text-[#065F46]"
-          >
-            <X className="size-3.5" /> Close
+          <Link to="/" hash={backHash} viewTransition
+            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-emerald-200 hover:text-white" : "text-ink/70 hover:text-ink"}`}>
+            <X className="size-3.5"/> Close
           </Link>
-          
-          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
-          
-          <Link
-            to="/download"
-            className="text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 border-ink bg-ink text-white hover:bg-[#059669] hover:border-[#059669] shrink-0 leading-none whitespace-nowrap shadow-sm transition"
-          >
+          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
+          <Link to="/download"
+            className={`text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-white hover:border-[#059669]" : "bg-ink text-white border-ink hover:bg-[#059669] hover:border-[#059669]"}`}>
             Get App
           </Link>
         </div>
       </header>
 
-      {/* Main Full-Screen Stage */}
-      <main
-        className="flex-1 w-full relative overflow-hidden flex items-center justify-center p-4 sm:p-6"
+      <div
+        ref={containerRef}
+        className="flex-1 relative overflow-hidden"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 40) {
-            if (delta > 0) next();
-            else prev();
+          if (Math.abs(delta) > 50) {
+            if (delta > 0) goTo(current + 1);
+            else goTo(current - 1);
           }
         }}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          {current === 0 ? (
-            /* SLIDE 1: Absolute Privacy Manifesto */
-            <motion.div
-              key="privacy-1"
-              initial={{ opacity: 0, y: 30, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -30, scale: 0.96 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full max-w-4xl mx-auto px-4 py-6 flex flex-col items-center justify-center text-center overflow-y-auto no-scrollbar max-h-[84vh]"
-            >
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-white/90 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#059669] mb-4 shadow-sm">
-                CHAPTER 05/07 · ABSOLUTE PRIVACY
-              </span>
-
-              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-[1.05] tracking-tight max-w-3xl mb-4">
-                Your Data Never Leaves Your Pocket.
-              </h1>
-
-              <motion.div
-                animate={{ scale: [1, 1.04, 1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="size-36 sm:size-48 md:size-56 my-3 bg-white border-3 border-ink rounded-[2.2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center shrink-0"
-              >
-                <ShieldCheck className="size-16 sm:size-20 md:size-24 text-[#059669] stroke-[2.2px]" />
-              </motion.div>
-
-              <p className="text-base sm:text-lg md:text-xl font-semibold text-ink/80 max-w-2xl leading-relaxed mb-3">
-                In an era of invasive cloud tracking and ad brokers, MinDrop is engineered with strict local-first architecture.
-              </p>
-
-              <p className="text-xs sm:text-sm font-medium text-ink/65 max-w-xl leading-relaxed">
-                Zero telemetry analytics, zero ad SDKs, and zero background data syncing. Your thoughts belong solely to you.
-              </p>
-            </motion.div>
-          ) : (
-            /* SLIDE 2: Local SQLite & Zero Telemetry */
-            <motion.div
-              key="privacy-2"
-              initial={{ opacity: 0, y: 30, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -30, scale: 0.96 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full max-w-4xl mx-auto px-4 py-6 flex flex-col items-center justify-center text-center overflow-y-auto no-scrollbar max-h-[84vh]"
-            >
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-white/90 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#059669] mb-4 shadow-sm">
-                HARDWARE SECURITY
-              </span>
-
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-ink leading-[1.05] tracking-tight max-w-3xl mb-4">
-                Encrypted Local SQLite Database
-              </h1>
-
-              <div className="grid sm:grid-cols-2 gap-4 max-w-2xl my-3 text-left">
-                <div className="bg-white border-2 border-ink p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="flex items-center gap-2 mb-2 text-[#059669]">
-                    <Database className="size-5" />
-                    <h3 className="font-black text-base text-ink">On-Device Storage</h3>
-                  </div>
-                  <p className="text-xs text-ink/75 font-semibold leading-relaxed">
-                    All reminders and logs are written straight to your phone's native SQLite storage engine.
-                  </p>
-                </div>
-
-                <div className="bg-white border-2 border-ink p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="flex items-center gap-2 mb-2 text-[#059669]">
-                    <Lock className="size-5" />
-                    <h3 className="font-black text-base text-ink">DPDP Act Compliant</h3>
-                  </div>
-                  <p className="text-xs text-ink/75 font-semibold leading-relaxed">
-                    Designed in compliance with DPDP Act 2023 principles for total user sovereignty.
-                  </p>
-                </div>
-              </div>
-
-              <Link
-                to="/privacy"
-                className="mt-2 text-xs font-black uppercase tracking-wider text-[#059669] underline decoration-2 underline-offset-4 hover:text-[#065F46]"
-              >
-                Read Full Privacy Policy →
-              </Link>
-            </motion.div>
-          )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            {slides[current]}
+          </motion.div>
         </AnimatePresence>
-      </main>
 
-      {/* Footer Controls */}
-      <footer className="shrink-0 w-full py-3 px-4 sm:px-8 z-40 bg-white/60 backdrop-blur-md border-t-2 border-ink/10 flex items-center justify-between">
-        <button
-          onClick={prev}
-          disabled={current === 0}
-          className={`flex items-center gap-1 text-xs font-black uppercase tracking-wider transition ${
-            current === 0 ? "opacity-30 cursor-not-allowed text-ink/40" : "text-ink hover:text-[#FF671F] cursor-pointer"
-          }`}
-        >
-          <ChevronLeft className="size-4" /> Prev
-        </button>
-
-        <div className="flex items-center gap-2">
-          {Array.from({ length: totalSlides }).map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => goTo(idx)}
-              className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                current === idx ? "w-8 bg-ink" : "w-2.5 bg-ink/25 hover:bg-ink/50"
+        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-30">
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)}
+              className={`rounded-full transition-all duration-300 cursor-pointer ${
+                i === current ? "w-1.5 h-7 bg-[#059669]" : isDark ? "size-1.5 bg-white/30 hover:bg-white/60" : "size-1.5 bg-ink/20 hover:bg-ink/50"
               }`}
-              aria-label={`Go to slide ${idx + 1}`}
             />
           ))}
         </div>
-
-        <button
-          onClick={next}
-          disabled={current === totalSlides - 1}
-          className={`flex items-center gap-1 text-xs font-black uppercase tracking-wider transition ${
-            current === totalSlides - 1 ? "opacity-30 cursor-not-allowed text-ink/40" : "text-ink hover:text-[#FF671F] cursor-pointer"
-          }`}
-        >
-          Next <ChevronRight className="size-4" />
-        </button>
-      </footer>
+      </div>
     </div>
   );
 }

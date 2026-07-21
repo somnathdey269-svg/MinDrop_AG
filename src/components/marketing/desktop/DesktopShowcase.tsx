@@ -5,14 +5,14 @@ import { useState, useEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
+  AboutAppIllustration,
   LaterAlarmIllustration, 
   SmartFiltersIllustration, 
   PlacesMappingIllustration, 
   FutureActionsIllustration,
   PrivacyManifestoIllustration,
   PricingTierIllustration, 
-  ClosureVisionIllustration,
-  FAQHelpIllustration 
+  ClosureVisionIllustration
 } from "../ShowcaseCardData";
 
 export function DesktopShowcase() {
@@ -145,6 +145,20 @@ export function DesktopShowcase() {
     rightBubbleTransform = "translate(-12vw, -50%) scale(1.35)";
   }
 
+  const renderIllustration = (id: string) => {
+    switch (id) {
+      case "about": return <AboutAppIllustration />;
+      case "notify": return <SmartFiltersIllustration />;
+      case "places": return <PlacesMappingIllustration />;
+      case "later": return <LaterAlarmIllustration />;
+      case "future": return <FutureActionsIllustration />;
+      case "privacy-manifesto": return <PrivacyManifestoIllustration />;
+      case "pricing": return <PricingTierIllustration />;
+      case "vision": return <ClosureVisionIllustration />;
+      default: return null;
+    }
+  };
+
   return (
     <div 
       onMouseMove={handleMouseMove}
@@ -246,14 +260,7 @@ export function DesktopShowcase() {
 
                   <div className="shrink-0 h-[240px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full opacity-40 pointer-events-none">
                     <div className="scale-[clamp(1.3,1.5vh+0.4vw,1.65)] transform-gpu origin-center">
-                      {nextCard.id === "notify" && <SmartFiltersIllustration />}
-                      {nextCard.id === "places" && <PlacesMappingIllustration />}
-                      {nextCard.id === "later" && <LaterAlarmIllustration />}
-                      {nextCard.id === "future" && <FutureActionsIllustration />}
-                      {nextCard.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
-                      {nextCard.id === "pricing" && <PricingTierIllustration />}
-                      {nextCard.id === "vision" && <ClosureVisionIllustration />}
-                      {nextCard.id === "faq" && <FAQHelpIllustration />}
+                      {renderIllustration(nextCard.id)}
                     </div>
                   </div>
 
@@ -290,14 +297,7 @@ export function DesktopShowcase() {
                   {/* Section 2: Fixed Height Hero Graphic Area */}
                   <div className="shrink-0 h-[240px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full relative">
                     <div className="scale-[clamp(1.3,1.5vh+0.4vw,1.65)] transform-gpu origin-center flex items-center justify-center">
-                      {currentCard.id === "notify" && <SmartFiltersIllustration />}
-                      {currentCard.id === "places" && <PlacesMappingIllustration />}
-                      {currentCard.id === "later" && <LaterAlarmIllustration />}
-                      {currentCard.id === "future" && <FutureActionsIllustration />}
-                      {currentCard.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
-                      {currentCard.id === "pricing" && <PricingTierIllustration />}
-                      {currentCard.id === "vision" && <ClosureVisionIllustration />}
-                      {currentCard.id === "faq" && <FAQHelpIllustration />}
+                      {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
@@ -330,7 +330,7 @@ export function DesktopShowcase() {
             </div>
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (4 Columns on Desktop for 7 Cards) */
+          /* RESPONSIVE GRID VIEW MODE (4 Columns on Desktop for 8 Cards) */
           <div className="w-full max-w-7xl mx-auto px-4 pt-4 pb-36 z-20 h-full overflow-y-auto no-scrollbar">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
@@ -357,14 +357,7 @@ export function DesktopShowcase() {
                     {/* Fixed Height Graphic Area */}
                     <div className="shrink-0 h-[210px] flex flex-col items-center justify-center pt-3 pb-1 overflow-visible w-full pointer-events-none">
                       <div className="scale-115 transform-gpu origin-center flex items-center justify-center">
-                        {card.id === "notify" && <SmartFiltersIllustration />}
-                        {card.id === "places" && <PlacesMappingIllustration />}
-                        {card.id === "later" && <LaterAlarmIllustration />}
-                        {card.id === "future" && <FutureActionsIllustration />}
-                        {card.id === "privacy-manifesto" && <PrivacyManifestoIllustration />}
-                        {card.id === "pricing" && <PricingTierIllustration />}
-                        {card.id === "vision" && <ClosureVisionIllustration />}
-                        {card.id === "faq" && <FAQHelpIllustration />}
+                        {renderIllustration(card.id)}
                       </div>
                     </div>
 

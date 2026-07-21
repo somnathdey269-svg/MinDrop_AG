@@ -1,4 +1,4 @@
-import { AlarmClock, BellRing, Navigation, Sparkles, BrainCircuit, Compass, ShieldCheck, HeartHandshake } from "lucide-react";
+import { AlarmClock, BellRing, Navigation, Sparkles, Compass, ShieldCheck, HeartHandshake, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
 export interface DeckCardItem {
@@ -14,8 +14,18 @@ export interface DeckCardItem {
 
 export const DECK_CARDS: DeckCardItem[] = [
   {
+    id: "about",
+    tag: "INDEX",
+    title: "About the App",
+    description: "Built for immediate micro-actions. An offline second brain that captures urgent thoughts and protects your mental bandwidth.",
+    to: "/about",
+    bgColor: "#F8FAFC", // Slate Pearl
+    bgClass: "bg-[#F8FAFC]",
+    illustrator: BookOpen,
+  },
+  {
     id: "notify",
-    tag: "Chapter 01/07",
+    tag: "Chapter 01/05",
     title: "Smart Notification",
     description: "Silence low-priority chatter. Create keyword rules that convert essential notification streams into actionable tasks.",
     to: "/notify-feature",
@@ -25,7 +35,7 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
   {
     id: "places",
-    tag: "Chapter 02/07",
+    tag: "Chapter 02/05",
     title: "Location Reminder",
     description: "Drop pins where items or tasks are bound. MinDrop runs background sweeps and triggers reminders as you enter or leave radii.",
     to: "/places-feature",
@@ -35,7 +45,7 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
   {
     id: "later",
-    tag: "Chapter 03/07",
+    tag: "Chapter 03/05",
     title: "Looping Alarm",
     description: "Ordinary alerts are easy to ignore. MinDrop alarms ring continuously like a phone call until checked, surviving system restarts.",
     to: "/later-feature",
@@ -45,7 +55,7 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
   {
     id: "future",
-    tag: "Chapter 04/07",
+    tag: "Chapter 04/05",
     title: "Future Actions",
     description: "Person-based alerts, cross-app trigger bridges, and local voice drops. Features we are striving to bring natively to Android.",
     to: "/future-feature",
@@ -55,7 +65,7 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
   {
     id: "privacy-manifesto",
-    tag: "Chapter 05/07",
+    tag: "Chapter 05/05",
     title: "Absolute Privacy",
     description: "Zero cloud telemetry, zero subscription traps, and zero ad tracking. Local SQLite persistence engineered for pure peace of mind.",
     to: "/privacy-feature",
@@ -64,18 +74,8 @@ export const DECK_CARDS: DeckCardItem[] = [
     illustrator: ShieldCheck,
   },
   {
-    id: "pricing",
-    tag: "Chapter 06/07",
-    title: "Simple Pricing",
-    description: "Zero subscriptions or hidden tiers. Upgrade to Unlimited Pro for just Rs. 999 / year.",
-    to: "/pricing",
-    bgColor: "#FCE7F3", // Soft Rose
-    bgClass: "bg-[#FCE7F3]",
-    illustrator: Sparkles,
-  },
-  {
     id: "vision",
-    tag: "Chapter 07/07",
+    tag: "THE CLOSURE",
     title: "The Closure",
     description: "Revolutionizing micro-tasks. Moving from ignored todo lists to an offline second brain that protects your mental bandwidth.",
     to: "/vision",
@@ -83,9 +83,43 @@ export const DECK_CARDS: DeckCardItem[] = [
     bgClass: "bg-[#FFFBEB]",
     illustrator: HeartHandshake,
   },
+  {
+    id: "pricing",
+    tag: "PRICING",
+    title: "Simple Pricing",
+    description: "Zero subscriptions or hidden tiers. Upgrade to Unlimited Pro for just Rs. 999 / year.",
+    to: "/pricing",
+    bgColor: "#FCE7F3", // Soft Rose
+    bgClass: "bg-[#FCE7F3]",
+    illustrator: Sparkles,
+  },
 ];
 
 // Unclustered Organic Visual Hero Graphics
+export function AboutAppIllustration() {
+  return (
+    <div className="w-full pt-3 pb-1 flex flex-col items-center justify-center relative select-none">
+      <div className="relative grid place-items-center">
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.35, 0.1, 0.35] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="absolute inset-0 -m-[clamp(0.5rem,0.9vw,0.95rem)] rounded-full bg-[#6366F1]/25 border-2 border-[#6366F1]/40 pointer-events-none"
+        />
+        <motion.div 
+          animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+          className="size-[clamp(4.8rem,6.6vw,6.6rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+        >
+          <BookOpen className="size-[clamp(2.5rem,3.5vw,3.4rem)] text-[#6366F1]" />
+        </motion.div>
+      </div>
+      <span className="text-[clamp(11px,0.95vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
+        📖 About the App
+      </span>
+    </div>
+  );
+}
+
 export function LaterAlarmIllustration() {
   return (
     <div className="w-full pt-3 pb-1 flex flex-col items-center justify-center relative select-none">
@@ -249,30 +283,6 @@ export function ClosureVisionIllustration() {
       </div>
       <span className="text-[clamp(11px,0.95vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         ✨ The Vision
-      </span>
-    </div>
-  );
-}
-
-export function FAQHelpIllustration() {
-  return (
-    <div className="w-full pt-3 pb-1 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-[clamp(0.5rem,0.9vw,0.95rem)] rounded-full bg-[#0284C7]/25 border-2 border-[#0284C7]/40 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-[clamp(4.8rem,6.6vw,6.6rem)] rounded-3xl bg-white/95 border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <BrainCircuit className="size-[clamp(2.5rem,3.5vw,3.4rem)] text-[#0284C7]" />
-        </motion.div>
-      </div>
-      <span className="text-[clamp(11px,0.95vw,14px)] font-black uppercase tracking-wider text-ink/80 bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
-        🔒 Offline SQLite
       </span>
     </div>
   );
