@@ -8,9 +8,6 @@ import {
 import { useState, useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    mode: (search.mode as "deck" | "grid") || undefined,
-  }),
   head: () => ({
     meta: [
       { title: "MinDrop — A Kind Second Brain" },
@@ -311,30 +308,27 @@ function FAQHelpIllustration() {
 
 function ShowcaseDeckPage() {
   const navigate = useNavigate();
-  const search = Route.useSearch();
   const [activeIdx, setActiveIdx] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
-  const [hashMode, setHashMode] = useState<"deck" | "grid" | null>(() => {
-    if (typeof window !== "undefined") {
-      return (window.location.hash.includes("grid") || window.location.search.includes("grid")) ? "grid" : "deck";
-    }
-    return null;
-  });
+  const [viewMode, setViewMode] = useState<"deck" | "grid">("deck");
 
+  // Sync viewMode safely on mount and window hashchange/popstate events
   useEffect(() => {
-    const syncHashView = () => {
+    const syncViewMode = () => {
       if (typeof window !== "undefined") {
         const isGrid = window.location.hash.includes("grid") || window.location.search.includes("grid");
-        setHashMode(isGrid ? "grid" : "deck");
+        setViewMode(isGrid ? "grid" : "deck");
       }
     };
-    syncHashView();
-    window.addEventListener("hashchange", syncHashView);
-    return () => window.removeEventListener("hashchange", syncHashView);
+    syncViewMode();
+    window.addEventListener("hashchange", syncViewMode);
+    window.addEventListener("popstate", syncViewMode);
+    return () => {
+      window.removeEventListener("hashchange", syncViewMode);
+      window.removeEventListener("popstate", syncViewMode);
+    };
   }, []);
-
-  const viewMode: "deck" | "grid" = (search?.mode === "grid" || hashMode === "grid") ? "grid" : "deck";
 
   // Track active hover zones
   const [hoverZone, setHoverZone] = useState<"center" | "left" | "right">("center");
@@ -354,15 +348,17 @@ function ShowcaseDeckPage() {
   }, []);
 
   const handleToggleView = (mode: "deck" | "grid") => {
-    setHashMode(mode);
+    setViewMode(mode);
     if (typeof window !== "undefined") {
       if (mode === "grid") {
         window.location.hash = "grid";
       } else {
-        try {
-          window.history.pushState("", document.title, window.location.pathname);
-        } catch {
-          window.location.hash = "";
+        if (window.location.hash) {
+          try {
+            window.history.pushState("", document.title, window.location.pathname + window.location.search);
+          } catch {
+            window.location.hash = "";
+          }
         }
       }
     }
