@@ -161,7 +161,6 @@ function VisionDetailView() {
   const { from } = Route.useSearch();
   const backHash = from === "grid" ? "grid" : undefined;
   const [current, setCurrent] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
   const lastScrollTime = useRef(0);
 
@@ -178,28 +177,35 @@ function VisionDetailView() {
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
     const now = Date.now();
-    if (now - lastScrollTime.current < 750) return;
+    if (now - lastScrollTime.current < 350) return;
     lastScrollTime.current = now;
     setCurrent(idx);
   };
 
+  // Global Mouse Wheel Listener
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
     const handler = (e: WheelEvent) => {
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 12) return;
-      if (e.deltaY > 0) goTo(current + 1);
-      else if (e.deltaY < 0) goTo(current - 1);
+      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
+      const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      if (delta > 0) goTo(current + 1);
+      else if (delta < 0) goTo(current - 1);
     };
-    el.addEventListener("wheel", handler, { passive: false });
-    return () => el.removeEventListener("wheel", handler);
+    window.addEventListener("wheel", handler, { passive: false });
+    return () => window.removeEventListener("wheel", handler);
   }, [current]);
 
+  // Global Keyboard Listener
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
-      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+      if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
+        e.preventDefault();
+        goTo(current + 1);
+      }
+      if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
+        e.preventDefault();
+        goTo(current - 1);
+      }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -219,19 +225,18 @@ function VisionDetailView() {
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           <Link to="/download"
-            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-ink text-[#D97706] border-ink hover:bg-[#D97706] hover:text-white hover:border-[#D97706]"}`}>
+            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-ink text-white border-ink hover:bg-[#D97706] hover:border-[#D97706]"}`}>
             Get App
           </Link>
         </div>
       </header>
 
       <div
-        ref={containerRef}
         className="flex-1 relative overflow-hidden"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 40) {
+          if (Math.abs(delta) > 35) {
             if (delta > 0) goTo(current + 1);
             else goTo(current - 1);
           }
@@ -240,11 +245,18 @@ function VisionDetailView() {
         {/* Subtle Top Up Arrow */}
         {current > 0 && (
           <button
-            onClick={() => goTo(current - 1)}
-            className="absolute top-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-40 cursor-pointer group opacity-35 hover:opacity-100 transition-opacity"
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              goTo(current - 1);
+            }}
+            className="absolute top-3 left-1/2 -translate-x-1/2 p-3 z-50 cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"
             aria-label="Previous Slide"
           >
-            <ChevronUp className={`size-5 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-current/10">
+              <ChevronUp className={`size-5 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]/80" : "text-[#78350F]/80"}`}>UP</span>
+            </div>
           </button>
         )}
 
@@ -264,15 +276,23 @@ function VisionDetailView() {
         {/* Subtle Bottom Down Arrow */}
         {current < TOTAL - 1 && (
           <button
-            onClick={() => goTo(current + 1)}
-            className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-40 cursor-pointer group opacity-35 hover:opacity-100 transition-opacity"
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              goTo(current + 1);
+            }}
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 p-3 z-50 cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"
             aria-label="Next Slide"
           >
-            <ChevronDown className={`size-5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-current/10">
+              <ChevronDown className={`size-5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]/80" : "text-[#78350F]/80"}`}>DOWN</span>
+            </div>
           </button>
         )}
 
-        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-30">
+        {/* Right Dot Navigation */}
+        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-50">
           {slides.map((_, i) => (
             <button key={i} onClick={() => goTo(i)}
               className={`rounded-full transition-all duration-300 cursor-pointer ${
