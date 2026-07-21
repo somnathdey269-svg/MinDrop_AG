@@ -15,9 +15,11 @@ export function DesktopShowcase() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [autoPlay] = useState(false);
-  
-  // Initialize viewMode synchronously on first paint based on URL hash/query
+  const [hoverZone, setHoverZone] = useState<"left" | "right" | "none">("none");
+  const wheelLock = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Sync View Mode with Hash/URL State
   const [viewMode, setViewMode] = useState<"deck" | "grid">(() => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash;
@@ -45,9 +47,6 @@ export function DesktopShowcase() {
     };
   }, []);
 
-  const [hoverZone, setHoverZone] = useState<"center" | "left" | "right">("center");
-  const scrollCooldown = useRef(false);
-
   const handleToggleView = (mode: "deck" | "grid") => {
     setViewMode(mode);
     if (typeof window !== "undefined") {
@@ -65,53 +64,48 @@ export function DesktopShowcase() {
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (viewMode !== "deck" || aboutOpen) return;
-    const { clientX } = e;
-    const width = window.innerWidth;
-    const x = (clientX / width) - 0.5;
+  const handleNext = () => {
+    setActiveIdx((prev) => (prev + 1) % DECK_CARDS.length);
+  };
 
-    if (x < -0.16) {
+  const handlePrev = () => {
+    setActiveIdx((prev) => (prev - 1 + DECK_CARDS.length) % DECK_CARDS.length);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (viewMode !== "deck") return;
+    const { clientX } = e;
+    const { innerWidth } = window;
+    const third = innerWidth / 3;
+
+    if (clientX < third) {
       setHoverZone("left");
-    } else if (x > 0.16) {
+    } else if (clientX > third * 2) {
       setHoverZone("right");
     } else {
-      setHoverZone("center");
+      setHoverZone("none");
     }
   };
 
   const handleMouseLeave = () => {
-    setHoverZone("center");
+    setHoverZone("none");
   };
 
   const handleWheel = (e: React.WheelEvent) => {
-    if (viewMode !== "deck" || aboutOpen) return;
-    if (Math.abs(e.deltaY) < 15 && Math.abs(e.deltaX) < 15) return;
+    if (viewMode !== "deck") return;
+    if (wheelLock.current) return;
 
-    if (scrollCooldown.current) return;
-    scrollCooldown.current = true;
-
-    if (e.deltaY > 0 || e.deltaX > 0) {
-      setActiveIdx((prev) => (prev + 1) % DECK_CARDS.length);
-    } else {
-      setActiveIdx((prev) => (prev - 1 + DECK_CARDS.length) % DECK_CARDS.length);
+    if (Math.abs(e.deltaY) > 20 || Math.abs(e.deltaX) > 20) {
+      wheelLock.current = true;
+      if (e.deltaY > 0 || e.deltaX > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+      setTimeout(() => {
+        wheelLock.current = false;
+      }, 400);
     }
-
-    setTimeout(() => {
-      scrollCooldown.current = false;
-    }, 850);
-  };
-
-  useEffect(() => {
-    if (!autoPlay || viewMode !== "deck") return;
-    const t = setInterval(() => {
-      setActiveIdx((prev) => (prev + 1) % DECK_CARDS.length);
-    }, 4500);
-    return () => clearInterval(t);
-  }, [autoPlay, viewMode]);
-
-  const handleNext = () => {
-    setActiveIdx((prev) => (prev + 1) % DECK_CARDS.length);
   };
 
   const handleShowMe = () => {
@@ -218,7 +212,7 @@ export function DesktopShowcase() {
               <span className="text-white font-black text-xs font-sans">m</span>
             </motion.div>
           </div>
-          <span className="text-xs font-black uppercase tracking-wider text-ink">MinDrop</span>
+          <span className="text-sm font-black uppercase tracking-wider text-ink">MinDrop</span>
         </div>
 
         <Link
@@ -231,41 +225,36 @@ export function DesktopShowcase() {
         </Link>
       </header>
 
-      {/* 2. Desktop Content Area */}
-      <div 
-        className={`flex-1 w-full min-h-0 my-2 no-scrollbar z-10 ${
-          viewMode === "deck" 
-            ? "flex items-center justify-center relative overflow-hidden" 
-            : "block overflow-y-auto no-scrollbar py-2"
-        }`}
-      >
+      {/* 2. Main Desktop Stage */}
+      <div ref={containerRef} className="flex-1 w-full min-h-0 my-2 no-scrollbar z-10 flex flex-col justify-center items-center overflow-y-auto">
         {viewMode === "deck" ? (
-          /* DECK VIEW MODE */
-          <div className="w-full h-full flex flex-col items-center justify-center relative">
-            {/* Cycle Deck Trigger */}
-            <div className="absolute left-12 z-30 flex">
-              <button
-                onClick={handleNext}
-                className="flex flex-col items-start gap-1 group text-left cursor-pointer"
-              >
-                <span className="text-[10px] uppercase font-bold tracking-widest text-ink/40">Cycle Deck</span>
-                <span className="text-2xl lg:text-3xl font-black text-ink border-b-3 border-ink group-hover:text-[#FF671F] group-hover:border-[#FF671F] transition-colors pb-0.5">
+          /* DECK STACK MODE */
+          <div className="w-full h-full max-h-[560px] flex items-center justify-center relative">
+            {/* Left Hover Zone */}
+            <div 
+              onClick={handlePrev} 
+              className="absolute left-12 z-30 flex cursor-pointer group"
+            >
+              <div className="flex flex-col items-center">
+                <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
+                  Cycle Deck
+                </span>
+                <span className="text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
                   Next card
                 </span>
-              </button>
+              </div>
             </div>
 
-            {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[460px] lg:w-[490px] h-[460px] lg:h-[480px] flex items-center justify-center z-10">
+            {/* Center Card Stack */}
+            <div className="relative w-[440px] h-[520px] lg:h-[540px] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
-                {/* Behind card */}
+                {/* Behind Stacked Preview Card */}
                 <motion.div
                   key={`next-${nextCard.id}`}
-                  initial={{ scale: 0.9, rotate: 6, x: 0, opacity: 0.8 }}
                   animate={{
-                    scale: behindScale,
-                    rotate: behindRotate,
                     x: behindX,
+                    rotate: behindRotate,
+                    scale: behindScale,
                     opacity: 0.95
                   }}
                   exit={{ opacity: 0 }}
@@ -273,16 +262,19 @@ export function DesktopShowcase() {
                   className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0">
-                    <span className="text-sm uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-2xl lg:text-3xl font-black text-ink mt-4 leading-tight">{nextCard.title}</h3>
+                    <span className="text-sm uppercase font-bold tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full opacity-40 pointer-events-none scale-95">
+                  <div className="flex-1 my-2 flex items-center justify-center overflow-visible w-full opacity-40 pointer-events-none scale-95">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
                     {nextCard.id === "pricing" && <PricingTierIllustration />}
                     {nextCard.id === "faq" && <FAQHelpIllustration />}
+                  </div>
+
+                  <div className="shrink-0">
+                    <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight">{nextCard.title}</h3>
                   </div>
 
                   <div className="flex justify-end pt-1 shrink-0">
@@ -292,7 +284,7 @@ export function DesktopShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Card */}
+                {/* Active Front Card (Graphic ON TOP, Content in LOWER Section, Uncut Graphic) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -306,26 +298,18 @@ export function DesktopShowcase() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-7 lg:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
-                  <div className="shrink-0">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm uppercase font-bold tracking-wider text-ink/70 bg-white/60 border border-ink/10 px-3.5 py-1 rounded-full">
-                        {currentCard.tag}
-                      </span>
-                    </div>
-
-                    <h3 className="text-4xl lg:text-5xl font-black text-ink mt-4 leading-tight tracking-tight">
-                      {currentCard.title}
-                    </h3>
-
-                    <p className="text-lg text-ink/80 font-normal mt-3 leading-relaxed">
-                      {currentCard.description}
-                    </p>
+                  {/* Top Bar inside Card */}
+                  <div className="shrink-0 flex justify-between items-center">
+                    <span className="text-sm uppercase font-bold tracking-wider text-ink/70 bg-white/60 border border-ink/10 px-3.5 py-1 rounded-full">
+                      {currentCard.tag}
+                    </span>
                   </div>
 
-                  <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
-                    <div className="scale-100 transform-gpu origin-center flex items-center justify-center">
+                  {/* Graphic Illustration ON TOP Section (Uncut, overflow-visible) */}
+                  <div className="my-2 flex items-center justify-center overflow-visible w-full relative">
+                    <div className="scale-105 transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -334,10 +318,21 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-end pt-4 shrink-0">
+                  {/* Content in LOWER Section */}
+                  <div className="shrink-0">
+                    <h3 className="text-4xl lg:text-[44px] font-black text-ink leading-tight tracking-tight">
+                      {currentCard.title}
+                    </h3>
+                    <p className="text-lg text-ink/80 font-normal mt-2 leading-relaxed">
+                      {currentCard.description}
+                    </p>
+                  </div>
+
+                  {/* Bottom Bar: MinDrop Brain & Icon */}
+                  <div className="flex justify-between items-end pt-2 shrink-0">
                     <span className="text-sm uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
-                    <span className="inline-grid place-items-center size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                      {CardIcon && <CardIcon className="size-7 text-ink" />}
+                    <span className="inline-grid place-items-center size-12 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                      {CardIcon && <CardIcon className="size-6 text-ink" />}
                     </span>
                   </div>
                 </motion.div>
@@ -348,17 +343,19 @@ export function DesktopShowcase() {
             <div className="absolute right-12 z-30 flex">
               <button
                 onClick={handleShowMe}
-                className="flex flex-col items-end gap-1 group text-right cursor-pointer"
+                className="flex flex-col items-center cursor-pointer group bg-transparent border-0"
               >
-                <span className="text-[10px] uppercase font-bold tracking-widest text-ink/40">Read specs</span>
-                <span className="text-2xl lg:text-3xl font-black text-ink border-b-3 border-ink group-hover:text-[#FF671F] group-hover:border-[#FF671F] transition-colors pb-0.5">
+                <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
+                  Read Specs
+                </span>
+                <span className="text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
                   Show me!
                 </span>
               </button>
             </div>
           </div>
         ) : (
-          /* GRID VIEW MODE */
+          /* GRID VIEW MODE (Graphic ON TOP, Content in LOWER Section) */
           <div className="w-full max-w-6xl mx-auto px-4 py-2 no-scrollbar z-20">
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-3 gap-6 pb-16">
               {DECK_CARDS.map((card) => {
@@ -370,27 +367,32 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[340px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[380px] ${card.bgClass}`}
                   >
-                    <div>
+                    <div className="flex justify-between items-center mb-1">
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
-                      <h3 className="text-2xl md:text-3xl font-black text-ink mt-3 leading-tight tracking-tight">{card.title}</h3>
-                      <p className="text-base text-ink/85 font-semibold mt-2 leading-relaxed">
-                        {card.description}
-                      </p>
                     </div>
 
-                    <div className="flex-1 my-3 flex items-center justify-center overflow-hidden w-full max-h-[120px] scale-[0.9] pointer-events-none">
+                    {/* Graphic Illustration ON TOP Section (Uncut) */}
+                    <div className="my-3 flex items-center justify-center overflow-visible w-full pointer-events-none">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
                       {card.id === "pricing" && <PricingTierIllustration />}
                       {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
-                    
-                    <div className="flex justify-between items-end pt-2 shrink-0 border-t border-ink/10">
+
+                    {/* Content in LOWER Section */}
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-black text-ink leading-tight tracking-tight">{card.title}</h3>
+                      <p className="text-base text-ink/80 font-normal mt-2 leading-relaxed">
+                        {card.description}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-end pt-3 shrink-0 border-t border-ink/10 mt-3">
                       <span className="text-xs font-black uppercase text-ink/50 tracking-wider">Open card</span>
                       <span className="inline-grid place-items-center size-10 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         {Icon && <Icon className="size-5 text-ink" />}
@@ -478,14 +480,15 @@ export function DesktopShowcase() {
                   MinDrop is an offline second brain for immediate micro-actions—looping alarms for small tasks, location sweeps, and notification filters.
                 </p>
                 <p className="text-xs text-ink/65 font-medium mt-3 leading-relaxed">
-                  Built fully statically on Cloudflare Pages using React, Tailwind V4, and TanStack Start, mimicking the exact deck/grid animations of Google's Web Showcase.
+                  Engineered with zero cloud dependencies and built with local SQLite persistence for instant privacy.
                 </p>
-                <div className="mt-8 pt-4 border-t-2 border-ink/8 flex gap-3">
+                <div className="mt-6 pt-4 border-t-2 border-ink/10 flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-black tracking-wider text-ink/40">Version 1.0.0</span>
                   <button
                     onClick={() => setAboutOpen(false)}
-                    className="flex-1 text-center py-3 rounded-xl bg-ink text-canvas hover:opacity-90 font-bold transition text-xs uppercase tracking-wider cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-ink text-canvas font-black text-xs uppercase tracking-wider hover:bg-ink/90 transition cursor-pointer"
                   >
-                    Got it
+                    Close
                   </button>
                 </div>
               </motion.div>

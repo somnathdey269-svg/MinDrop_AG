@@ -135,12 +135,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Web-Parity Layout: Text on Top, Un-Cut Graphic Below) */}
+      {/* 2. Mobile Showcase (Graphic ON TOP Section, Content in LOWER Section, Uncut Graphic) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[375px] h-[400px] xs:h-[420px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[375px] h-[410px] xs:h-[430px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout" custom={swipeDirection}>
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -151,23 +151,26 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 200, damping: 22 }}
                   className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
-                  <div className="shrink-0">
+                  <div className="flex justify-between items-center shrink-0">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-3 py-0.5 rounded-full border border-ink/10">
                       {nextCard.tag}
                     </span>
-                    <h3 className="text-2xl font-black text-ink mt-2">{nextCard.title}</h3>
                   </div>
 
-                  <div className="flex-1 my-1 flex items-center justify-center overflow-hidden w-full opacity-40">
+                  <div className="my-1 flex items-center justify-center overflow-visible w-full opacity-40">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
                     {nextCard.id === "pricing" && <PricingTierIllustration />}
                     {nextCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
+
+                  <div className="shrink-0">
+                    <h3 className="text-xl font-black text-ink">{nextCard.title}</h3>
+                  </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Text on Top, Full Graphic Below, Non-Bold Description) */}
+                {/* Active Front Hero Card (Graphic ON TOP, Content LOWER, Uncut Graphic) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   custom={swipeDirection}
@@ -191,36 +194,37 @@ export function MobileShowcase() {
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
                   className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 xs:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
-                  {/* Top Bar + Title + Non-Bold Description */}
-                  <div className="shrink-0">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
-                        {currentCard.tag}
-                      </span>
-                    </div>
-
-                    <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mt-2.5 mb-1.5">
-                      {currentCard.title}
-                    </h3>
-                    <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed">
-                      {currentCard.description}
-                    </p>
+                  {/* Top Bar inside Card */}
+                  <div className="flex justify-between items-center shrink-0">
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
+                      {currentCard.tag}
+                    </span>
                   </div>
 
-                  {/* Fully Visible Un-Cut Graphic Illustration Below Text */}
-                  <div className="flex-1 my-1 flex items-center justify-center overflow-visible w-full relative">
+                  {/* Graphic Illustration ON TOP Section (Uncut, overflow-visible) */}
+                  <div className="my-1.5 flex items-center justify-center overflow-visible w-full relative">
                     {currentCard.id === "later" && <LaterAlarmIllustration />}
                     {currentCard.id === "notify" && <SmartFiltersIllustration />}
                     {currentCard.id === "places" && <PlacesMappingIllustration />}
                     {currentCard.id === "pricing" && <PricingTierIllustration />}
                     {currentCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
+
+                  {/* Content in LOWER Section */}
+                  <div className="shrink-0">
+                    <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                      {currentCard.title}
+                    </h3>
+                    <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed">
+                      {currentCard.description}
+                    </p>
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
         ) : (
-          /* GRID / FEED MODE */
+          /* GRID / FEED MODE (Graphic ON TOP Section, Content in LOWER Section) */
           <div className="w-full max-w-[400px] mx-auto py-1 no-scrollbar z-20">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-5 pb-16">
               {DECK_CARDS.map((card) => {
@@ -239,19 +243,21 @@ export function MobileShowcase() {
                       </span>
                     </div>
 
-                    <div>
-                      <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
-                      <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed mb-3">
-                        {card.description}
-                      </p>
-                    </div>
-
-                    <div className="my-1 flex items-center justify-center overflow-hidden w-full relative pointer-events-none">
+                    {/* Graphic Illustration ON TOP Section (Uncut) */}
+                    <div className="my-2 flex items-center justify-center overflow-visible w-full relative pointer-events-none">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
                       {card.id === "pricing" && <PricingTierIllustration />}
                       {card.id === "faq" && <FAQHelpIllustration />}
+                    </div>
+
+                    {/* Content in LOWER Section */}
+                    <div>
+                      <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed">
+                        {card.description}
+                      </p>
                     </div>
                   </Link>
                 );
