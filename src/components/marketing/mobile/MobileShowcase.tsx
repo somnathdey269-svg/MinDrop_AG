@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layers, LayoutGrid, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
   LaterAlarmIllustration, 
@@ -105,34 +106,25 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Mobile Header (Animated MinDrop Wordmark with Highlighted M & D) */}
-      <header className="flex justify-between items-center w-full z-30 shrink-0 py-1.5 px-1">
+      {/* 1. Mobile Header (Perfectly Aligned MinDrop Wordmark & Links) */}
+      <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-1">
         <Link
           to="/terms"
           viewTransition
           style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
-          className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink hover:bg-white/40 px-2.5 py-1 rounded-full transition-all"
+          className="text-xs font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
         >
           Terms
         </Link>
         
-        {/* Animated MinDrop Wordmark with Highlighted M & D */}
-        <motion.div 
-          animate={{ y: [0, -1.5, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="flex items-center select-none font-black uppercase tracking-widest text-base sm:text-lg cursor-default"
-        >
-          <span className="text-[#FF671F]">M</span>
-          <span className="text-ink">in</span>
-          <span className="text-[#FF671F]">D</span>
-          <span className="text-ink">rop</span>
-        </motion.div>
+        {/* Animated MinDrop Header Logo (Highlighted M & D, Mixed Case) */}
+        <MinDropHeaderLogo className="text-xl sm:text-2xl" />
 
         <Link
           to="/privacy"
           viewTransition
           style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
-          className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink hover:bg-white/40 px-2.5 py-1 rounded-full transition-all"
+          className="text-xs font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all"
         >
           Privacy
         </Link>

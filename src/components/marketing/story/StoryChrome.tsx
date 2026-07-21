@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { BookOpen, History, X } from "lucide-react";
 import { CHAPTERS, chapterFor, readChaptersFromStorage, type ChapterSlug } from "@/lib/marketing/chapters";
 import { subscribeBeatEyebrow, getCurrentBeatEyebrow } from "@/lib/marketing/beatSignal";
+import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 
 interface Props {
   onOpenBook: () => void;
@@ -44,9 +45,9 @@ export function StoryChrome({ onOpenBook, onOpenRecap }: Props) {
       style={{ borderBottom: "1px solid rgba(26,26,26,0.15)" }}
     >
       <div className="relative w-full px-4 md:px-8 lg:px-14 xl:px-20 flex items-center justify-between gap-3">
-        {/* Left — brand, aligned with the left arrow below */}
+        {/* Left — brand header logo */}
         <Link to="/" className="relative z-10 flex items-center gap-2 min-w-0 shrink-0" aria-label="MinDrop — home">
-          <AnimatedMWordmark />
+          <MinDropHeaderLogo className="text-xl md:text-2xl" />
         </Link>
 
         {/* Center — chapter · sub-chapter name */}

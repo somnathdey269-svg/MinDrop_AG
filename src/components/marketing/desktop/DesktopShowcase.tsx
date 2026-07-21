@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layers, LayoutGrid, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
   LaterAlarmIllustration, 
@@ -185,7 +186,7 @@ export function DesktopShowcase() {
       />
 
       {/* 1. Desktop Header */}
-      <header className="flex justify-between items-center w-full z-30 shrink-0">
+      <header className="flex justify-between items-center w-full z-30 shrink-0 h-10">
         <Link
           to="/terms"
           viewTransition
@@ -195,17 +196,8 @@ export function DesktopShowcase() {
           Terms
         </Link>
         
-        {/* Animated MinDrop Wordmark with Highlighted M & D */}
-        <motion.div 
-          animate={{ y: [0, -2, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="flex items-center select-none font-black uppercase tracking-widest text-lg md:text-xl cursor-default"
-        >
-          <span className="text-[#FF671F]">M</span>
-          <span className="text-ink">in</span>
-          <span className="text-[#FF671F]">D</span>
-          <span className="text-ink">rop</span>
-        </motion.div>
+        {/* Animated MinDrop Header Wordmark (Highlighted M & D, Larger Font Size) */}
+        <MinDropHeaderLogo className="text-2xl md:text-3xl" />
 
         <Link
           to="/privacy"
@@ -306,7 +298,7 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Prominent Content with Single-Line Card Header */}
+                  {/* Section 3: Prominent Content */}
                   <div className="shrink-0 mt-3">
                     <h3 className="text-[clamp(22px,2.0vw+0.2rem,36px)] font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
