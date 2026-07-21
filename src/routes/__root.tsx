@@ -25,19 +25,21 @@ import { installNativeApiForwarder } from "../lib/platform";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#FFFBEB] p-6 text-center">
-      <div className="bg-white border-3 border-ink rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md w-full flex flex-col items-center">
-        <span className="text-5xl mb-3">📍</span>
-        <h1 className="text-3xl font-black text-ink">Page Not Found</h1>
-        <p className="mt-2 text-sm font-semibold text-ink/75 leading-relaxed">
-          The page you're looking for was moved or doesn't exist.
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md text-center">
+        <h1 className="text-7xl font-bold text-foreground">404</h1>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          The page you're looking for doesn't exist or has been moved.
         </p>
-        <Link
-          to="/"
-          className="mt-6 px-8 py-3.5 bg-ink text-white font-black text-xs uppercase tracking-wider rounded-xl border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FF671F] hover:border-[#FF671F] transition cursor-pointer"
-        >
-          Return to Home Deck
-        </Link>
+        <div className="mt-6">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Go home
+          </Link>
+        </div>
       </div>
     </div>
   );

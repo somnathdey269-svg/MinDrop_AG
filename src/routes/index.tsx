@@ -418,9 +418,9 @@ function ShowcaseDeckPage() {
 
   // Custom positioning offsets passed directly to Framer Motion animate parameters
   let activeX = 0;
-  let activeRotate = -3;
+  let activeRotate = -2;
   let behindX = 0;
-  let behindRotate = 6;
+  let behindRotate = 8;
   let behindScale = 0.95;
 
   let leftBubbleTransform = "translate(0px, -50%) scale(0.85)";
@@ -566,7 +566,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[88vw] max-w-[360px] xs:max-w-[385px] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[72vh] max-h-[560px] min-h-[420px] sm:h-[440px] md:h-[460px] lg:h-[480px] flex items-center justify-center z-10">
+            <div className="relative w-[92vw] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[72vh] max-h-[540px] min-h-[420px] sm:h-[440px] md:h-[460px] lg:h-[480px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
@@ -580,7 +580,7 @@ function ShowcaseDeckPage() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.2rem] sm:rounded-[2.5rem] border-3 border-ink p-5 xs:p-6 sm:p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-5 sm:p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-ink/40">Next Card</span>
@@ -617,35 +617,27 @@ function ShowcaseDeckPage() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.2rem] sm:rounded-[2.5rem] border-3 border-ink p-5 xs:p-6 sm:p-7 md:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-7 md:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   <div className="shrink-0">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs sm:text-sm uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1.5 rounded-full shadow-sm">
+                      <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-ink/70 bg-white/60 border border-ink/10 px-3.5 py-1 rounded-full">
                         {currentCard.tag}
                       </span>
                     </div>
 
-                    {/* Mobile-only Big Typography */}
-                    <h3 className="text-3xl xs:text-4xl sm:hidden font-black text-ink mt-2.5 leading-tight tracking-tight">
+                    <h3 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-4 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base xs:text-lg sm:hidden text-ink font-extrabold mt-2 leading-snug">
-                      {currentCard.description}
-                    </p>
 
-                    {/* Desktop & Tablet Typography (Restored Original Desktop Scale) */}
-                    <h3 className="hidden sm:block text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-4 leading-tight tracking-tight">
-                      {currentCard.title}
-                    </h3>
-                    <p className="hidden sm:block text-base md:text-lg text-ink/85 font-semibold mt-2 sm:mt-3 leading-relaxed">
+                    <p className="text-base sm:text-base md:text-lg text-ink/85 font-semibold mt-2 sm:mt-3 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
                   {/* Centered Premium Live Illustration Component */}
                   <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
-                    <div className="scale-125 xs:scale-135 sm:scale-100 transform-gpu origin-center flex items-center justify-center">
+                    <div className="scale-110 sm:scale-100 transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -654,22 +646,7 @@ function ShowcaseDeckPage() {
                     </div>
                   </div>
 
-                  {/* Mobile Footer with Explore Callout */}
-                  <div className="flex md:hidden pt-2.5 border-t border-ink/15 justify-between items-center shrink-0">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-grid place-items-center size-9 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        <CardIcon className="size-5 text-ink" />
-                      </span>
-                      <span className="text-xs uppercase font-black text-ink/70 tracking-wider">MinDrop Brain</span>
-                    </div>
-
-                    <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-ink bg-white/80 border-2 border-ink px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FF671F] hover:text-white transition">
-                      Explore specs <span className="text-sm">→</span>
-                    </span>
-                  </div>
-
-                  {/* Desktop Footer (Restored Original Desktop Design) */}
-                  <div className="hidden md:flex justify-between items-end pt-3 sm:pt-4 shrink-0">
+                  <div className="flex justify-between items-end pt-3 sm:pt-4 shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
                     <span className="inline-grid place-items-center size-11 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                       <CardIcon className="size-6 sm:size-7 text-ink" />
