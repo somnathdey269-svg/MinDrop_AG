@@ -135,12 +135,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Compact, Perfect Proportions, Zero Blank Space) */}
+      {/* 2. Mobile Showcase (Large Bold Fonts Restored, Shorter Card Height, Zero Blank Space) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[340px] h-[340px] xs:h-[355px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[350px] h-[365px] xs:h-[385px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout" custom={swipeDirection}>
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -170,7 +170,7 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Graphic ON TOP, Compact Height, Zero Blank Space) */}
+                {/* Active Front Hero Card (Graphic ON TOP, Large Bold Typography, Zero Blank Space) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   custom={swipeDirection}
@@ -210,12 +210,12 @@ export function MobileShowcase() {
                     {currentCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
 
-                  {/* Clean Content Section directly wrapping text */}
+                  {/* Restored Large Bold Typography directly under graphic */}
                   <div className="shrink-0">
-                    <h3 className="text-2xl xs:text-3xl font-black text-ink leading-tight tracking-tight mb-1">
+                    <h3 className="text-3xl xs:text-[34px] font-black text-ink leading-tight tracking-tight mb-1.5">
                       {currentCard.title}
                     </h3>
-                    <p className="text-sm xs:text-base text-ink/80 font-normal leading-relaxed">
+                    <p className="text-base xs:text-lg text-ink/85 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -254,8 +254,8 @@ export function MobileShowcase() {
 
                     {/* Content in LOWER Section */}
                     <div>
-                      <h3 className="text-2xl xs:text-3xl font-black text-ink leading-tight tracking-tight mb-1">{card.title}</h3>
-                      <p className="text-sm xs:text-base text-ink/80 font-normal leading-relaxed">
+                      <h3 className="text-3xl xs:text-[34px] font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <p className="text-base xs:text-lg text-ink/85 font-normal leading-relaxed">
                         {card.description}
                       </p>
                     </div>
