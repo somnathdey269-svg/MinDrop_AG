@@ -273,7 +273,7 @@ function SlideDifference() {
             <div key={title} className="bg-white border-3 border-[#F59E0B] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] text-left flex flex-col gap-3">
               <span className="text-3xl sm:text-4xl">{icon}</span>
               <h3 className="text-base sm:text-lg md:text-xl font-black text-[#78350F]">{title}</h3>
-              <p className="text-xs sm:text-sm md:text-base font-semibold text-[#78350F]/70 leading-relaxed">{body}</p>
+              <p className="text-sm sm:text-sm md:text-base font-semibold text-[#78350F]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>

@@ -116,7 +116,7 @@ function SlideSummary() {
             <div key={title} className="bg-white border-3 border-slate-700 rounded-[2rem] p-6 sm:p-8 shadow-[5px_5px_0px_0px_rgba(30,41,59,0.15)] text-left flex flex-col gap-3">
               <Icon className="size-8 text-slate-600 shrink-0" />
               <h3 className="text-base sm:text-lg md:text-xl font-black text-slate-800">{title}</h3>
-              <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-600/80 leading-relaxed">{body}</p>
+              <p className="text-sm sm:text-sm md:text-base font-semibold text-slate-600/80 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -145,7 +145,7 @@ function SlideLegalDoc({ officer, officerEmail, address }: SlideLegalDocProps) {
         </div>
 
         <div className="w-full border-3 border-slate-800 bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(30,41,59,0.15)] text-left">
-          <div className="space-y-6 text-xs sm:text-sm md:text-[15px] font-semibold text-slate-700 leading-relaxed">
+          <div className="space-y-6 text-sm sm:text-sm md:text-base font-semibold text-slate-700 leading-relaxed">
             <p className="font-bold text-slate-900 border-b-2 border-dashed border-slate-200 pb-4">
               This Privacy Policy describes how MinDrop ("MinDrop", "we", "us", "our") collects, uses, discloses, retains, and protects personal data when you use the MinDrop mobile application. DPDP Act, 2023 Compliant. Last updated: {LAST_UPDATED}.
             </p>

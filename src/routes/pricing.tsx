@@ -145,7 +145,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
                 <p className="text-xs sm:text-sm uppercase font-black text-ink/50 tracking-wider">Free Tier</p>
               </div>
               <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">Free Forever</p>
-              <ul className="text-xs sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
+              <ul className="text-sm sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
                   <span>Up to 3 active alarms</span>
@@ -164,7 +164,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
                 </li>
               </ul>
             </div>
-            <p className="text-[10px] sm:text-xs text-ink/40 font-black uppercase tracking-wider">Default setup ready offline</p>
+            <p className="text-xs sm:text-xs text-ink/40 font-black uppercase tracking-wider">Default setup ready offline</p>
           </div>
 
           {/* Premium Tier */}
@@ -175,7 +175,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
                 <p className="text-xs sm:text-sm uppercase font-black text-[#DB2777] tracking-wider">Premium Plan</p>
               </div>
               <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">{priceDisplay} / Year</p>
-              <ul className="text-xs sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
+              <ul className="text-sm sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
                   <span className="text-[#831843]">Infinite active alarms</span>
@@ -194,7 +194,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
                 </li>
               </ul>
             </div>
-            <p className="text-[10px] sm:text-xs text-[#DB2777]/50 font-black uppercase tracking-wider">Linked to superadmin configs</p>
+            <p className="text-xs sm:text-xs text-[#DB2777]/50 font-black uppercase tracking-wider">Linked to superadmin configs</p>
           </div>
         </div>
       </div>
@@ -220,27 +220,27 @@ function SlideFlow() {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 w-full max-w-6xl">
           {/* Step 1 */}
           <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
-            <span className="text-[11px] sm:text-xs font-black text-[#DB2777] uppercase tracking-wider">01 / Download</span>
+            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">01 / Download</span>
             <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Get Free App</h4>
-            <p className="text-xs sm:text-sm md:text-base text-ink/60 font-bold mt-2 leading-relaxed">Runs offline. Set up to 3 alarms, filters, & locations.</p>
+            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">Runs offline. Set up to 3 alarms, filters, & locations.</p>
           </div>
 
           <ArrowRight className="size-8 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
 
           {/* Step 2 */}
           <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
-            <span className="text-[11px] sm:text-xs font-black text-[#DB2777] uppercase tracking-wider">02 / Subscribe</span>
+            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">02 / Subscribe</span>
             <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Yearly Plan</h4>
-            <p className="text-xs sm:text-sm md:text-base text-ink/60 font-bold mt-2 leading-relaxed">Unlock settings securely via in-app dashboard.</p>
+            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">Unlock settings securely via in-app dashboard.</p>
           </div>
 
           <ArrowRight className="size-8 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
 
           {/* Step 3 */}
           <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
-            <span className="text-[11px] sm:text-xs font-black text-[#DB2777] uppercase tracking-wider">03 / Enjoy</span>
+            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">03 / Enjoy</span>
             <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Unlimited Slots</h4>
-            <p className="text-xs sm:text-sm md:text-base text-ink/60 font-bold mt-2 leading-relaxed">Enjoy geofences and cloud sync instantly.</p>
+            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">Enjoy geofences and cloud sync instantly.</p>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ function SlideCloser({ backHash }: { backHash?: string }) {
             <div key={title} className="bg-white border-3 border-[#EC4899] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(131,24,67,0.15)] flex flex-col gap-3">
               <Icon className={`size-8 ${color} shrink-0`} />
               <h3 className="text-base sm:text-lg md:text-xl font-black text-[#831843]">{title}</h3>
-              <p className="text-xs sm:text-sm md:text-base font-semibold text-[#DB2777]/70 leading-relaxed">{desc}</p>
+              <p className="text-sm sm:text-sm md:text-base font-semibold text-[#DB2777]/70 leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>

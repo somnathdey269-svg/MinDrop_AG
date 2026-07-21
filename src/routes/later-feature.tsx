@@ -303,15 +303,15 @@ function SlideProblem() {
               { n: "0", label: "Times a normal notification comes back on its own" },
             ].map(({ n, label }) => (
               <div key={n} className="bg-white/5 border border-[#10B981]/25 rounded-2xl p-4 sm:p-6">
-                <p className="text-2xl sm:text-3xl md:text-4xl font-black text-[#10B981]">{n}</p>
-                <p className="text-[10px] sm:text-xs font-semibold text-[#A7F3D0]/40 mt-2 leading-relaxed">{label}</p>
+                <p className="text-3xl sm:text-3xl md:text-4xl font-black text-[#10B981]">{n}</p>
+                <p className="text-xs sm:text-xs font-semibold text-[#A7F3D0]/40 mt-2 leading-relaxed">{label}</p>
               </div>
             ))}
           </div>
         </div>
         <div className="shrink-0 flex flex-col items-center gap-4">
           <SwipeAwayDemo />
-          <p className="text-[10px] sm:text-xs font-black text-[#A7F3D0]/20 uppercase tracking-widest">Watch it disappear</p>
+          <p className="text-xs sm:text-xs font-black text-[#A7F3D0]/20 uppercase tracking-widest">Watch it disappear</p>
         </div>
       </div>
     </div>
@@ -341,7 +341,7 @@ function SlideDifference() {
             <div key={title} className="bg-white border-3 border-[#10B981] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(2,44,34,0.15)] text-left flex flex-col gap-3">
               <span className="text-3xl sm:text-4xl">{icon}</span>
               <h3 className="text-base sm:text-lg md:text-xl font-black text-[#064E3B]">{title}</h3>
-              <p className="text-xs sm:text-sm md:text-base font-semibold text-[#047857]/70 leading-relaxed">{body}</p>
+              <p className="text-sm sm:text-sm md:text-base font-semibold text-[#047857]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>

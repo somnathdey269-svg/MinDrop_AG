@@ -178,12 +178,12 @@ function SlidePrivacyFAQ() {
           {data.map((faq, idx) => (
             <div key={idx} className="bg-white border-3 border-ink rounded-[2rem] overflow-hidden shadow-[4px_4px_0px_0px_rgba(2,44,34,0.1)]">
               <button onClick={() => setActive(active === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
+                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-sm sm:text-base cursor-pointer">
                 <span>{faq.q}</span>
                 <ChevronDown className={`size-4 text-ink/50 transition-transform shrink-0 ml-4 ${active === idx ? "rotate-180" : ""}`} />
               </button>
               {active === idx && (
-                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm md:text-base font-semibold">
+                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-sm sm:text-base font-semibold">
                   {faq.a}
                 </div>
               )}
@@ -231,12 +231,12 @@ function SlideBatteryFAQ() {
           {data.map((faq, idx) => (
             <div key={idx} className="bg-white border-3 border-ink rounded-[2rem] overflow-hidden shadow-[4px_4px_0px_0px_rgba(2,44,34,0.1)]">
               <button onClick={() => setActive(active === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
+                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-sm sm:text-base cursor-pointer">
                 <span>{faq.q}</span>
                 <ChevronDown className={`size-4 text-ink/50 transition-transform shrink-0 ml-4 ${active === idx ? "rotate-180" : ""}`} />
               </button>
               {active === idx && (
-                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm md:text-base font-semibold">
+                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-sm sm:text-base font-semibold">
                   {faq.a}
                 </div>
               )}
@@ -291,12 +291,12 @@ function SlideAlarmsFAQ({ backHash }: { backHash?: string }) {
           {data.map((faq, idx) => (
             <div key={idx} className="bg-white border-3 border-ink rounded-[2rem] overflow-hidden shadow-[4px_4px_0px_0px_rgba(2,44,34,0.1)]">
               <button onClick={() => setActive(active === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-xs sm:text-sm md:text-base cursor-pointer">
+                className="w-full flex items-center justify-between p-6 sm:p-7 text-left font-black text-ink text-sm sm:text-base cursor-pointer">
                 <span>{faq.q}</span>
                 <ChevronDown className={`size-4 text-ink/50 transition-transform shrink-0 ml-4 ${active === idx ? "rotate-180" : ""}`} />
               </button>
               {active === idx && (
-                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-xs sm:text-sm md:text-base font-semibold">
+                <div className="px-7 pb-6 pt-1.5 border-t-2 border-ink text-ink/75 leading-relaxed text-sm sm:text-base font-semibold">
                   {faq.a}
                 </div>
               )}
