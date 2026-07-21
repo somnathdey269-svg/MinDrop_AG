@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Layers, LayoutGrid, X } from "lucide-react";
+import { Layers, LayoutGrid, X, ArrowRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { 
   DECK_CARDS, 
@@ -77,8 +77,6 @@ export function MobileShowcase() {
 
   const currentCard = DECK_CARDS[activeIdx];
   const nextCard = DECK_CARDS[(activeIdx + 1) % DECK_CARDS.length];
-  const CardIcon = currentCard.illustrator;
-  const NextIcon = nextCard.illustrator;
 
   const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFD043";
 
@@ -134,12 +132,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Main Mobile Content Area */}
-      <div className="flex-1 w-full min-h-0 my-1.5 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
+      {/* 2. Concept A: Google Showcase / Apple Wallet Deck Mode */}
+      <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
-          /* 3D STACKED DECK CAROUSEL MODE */
-          <div className="w-full min-h-full flex flex-col items-center justify-center relative py-2">
-            <div className="relative w-full max-w-[390px] h-[440px] flex flex-col items-center justify-center">
+          /* CONCEPT A: 3D STACKED GOOGLE SHOWCASE DECK */
+          <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
+            <div className="relative w-full max-w-[380px] h-[480px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -148,14 +146,14 @@ export function MobileShowcase() {
                   animate={{ scale: 0.94, rotate: 5, opacity: 0.95 }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
-                  className="absolute inset-0 rounded-[2rem] border-3 border-ink p-5 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
-                  <div className="shrink-0">
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-2.5 py-0.5 rounded-full border border-ink/10">Next Card</span>
-                    <h3 className="text-xl font-black text-ink mt-2 leading-tight">{nextCard.title}</h3>
+                  <div className="flex justify-between items-center shrink-0">
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-3 py-0.5 rounded-full border border-ink/10">Next Card</span>
+                    <span className="text-xs font-mono font-bold text-ink/30">0{((activeIdx + 1) % DECK_CARDS.length) + 1}/05</span>
                   </div>
 
-                  <div className="flex-1 my-1 flex items-center justify-center min-h-0 w-full opacity-40 pointer-events-none scale-90">
+                  <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/60 border-2 border-ink rounded-2xl py-4 opacity-40">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -163,42 +161,34 @@ export function MobileShowcase() {
                     {nextCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
 
-                  <div className="flex justify-end pt-1 shrink-0">
-                    <span className="inline-grid place-items-center size-10 rounded-xl bg-canvas border-2 border-ink">
-                      {NextIcon && <NextIcon className="size-5 text-ink/40" />}
-                    </span>
+                  <div className="shrink-0">
+                    <h3 className="text-xl font-black text-ink">{nextCard.title}</h3>
                   </div>
                 </motion.div>
 
-                {/* Active Front Card (3D Stack + Aesthetic Medium Description Font) */}
+                {/* Active Front Hero Card (Concept A: Google Showcase Edition) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 220, rotate: -12, scale: 0.88, opacity: 0 }}
                   animate={{ x: 0, rotate: -2, scale: 1, opacity: 1 }}
                   exit={{ x: -280, rotate: -16, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 110, damping: 16 }}
-                  onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-transform ${currentCard.bgClass}`}
                 >
-                  {/* Tag Pill & Title */}
-                  <div>
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white border-2 border-ink px-3 py-1 rounded-full shadow-sm inline-block">
+                  {/* Top Bar inside Card */}
+                  <div className="flex justify-between items-center shrink-0">
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
-                    {/* Bold 28px Headline */}
-                    <h3 className="text-3xl font-black text-ink leading-tight tracking-tight mt-3 mb-1.5">
-                      {currentCard.title}
-                    </h3>
-                    {/* Aesthetic Non-Bold Medium Description Typography */}
-                    <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
-                      {currentCard.description}
-                    </p>
+                    <span className="text-xs font-mono font-bold text-ink/60 bg-white/60 border border-ink/10 px-2.5 py-0.5 rounded-full">
+                      0{activeIdx + 1}/05
+                    </span>
                   </div>
 
-                  {/* Feature Vector Illustration Widget */}
-                  <div className="my-2 flex items-center justify-center overflow-hidden w-full py-1">
-                    <div className="scale-100 transform-gpu origin-center">
+                  {/* Top 50% Visual Hero Showcase Canvas */}
+                  <div className="my-2.5 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-5 shadow-sm relative">
+                    <div className="scale-110 transform-gpu origin-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -207,59 +197,66 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Full-Width Touch CTA Button */}
+                  {/* Bottom 50% Editorial Text & Action */}
+                  <div className="shrink-0">
+                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                      {currentCard.title}
+                    </h3>
+                    <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
+                      {currentCard.description}
+                    </p>
+                  </div>
+
+                  {/* Integrated Organic CTA Row (Replaces Heavy Black Bar) */}
                   <button
                     onClick={handleShowMe}
-                    className="w-full py-3 bg-ink text-canvas font-black text-xs uppercase tracking-wider rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] transition mt-1"
+                    className="w-full flex items-center justify-between pt-3 mt-1 border-t-2 border-ink/15 group cursor-pointer"
                   >
-                    <span>Explore Feature</span>
-                    {CardIcon && <CardIcon className="size-4 text-canvas" />}
+                    <div className="text-left">
+                      <span className="text-xs font-black uppercase tracking-wider text-ink group-hover:text-[#FF671F] transition-colors block">
+                        Explore feature →
+                      </span>
+                      <span className="text-[10px] font-bold text-ink/50 block">Tap to view specifications</span>
+                    </div>
+                    <span className="inline-grid place-items-center size-10 rounded-2xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:bg-ink group-hover:text-canvas transition shrink-0">
+                      <ArrowRight className="size-5 text-ink group-hover:text-canvas transition-colors" />
+                    </span>
                   </button>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Subtle, Soft & Light Pagination Dots */}
-            <div className="flex justify-center items-center gap-1.5 mt-3 z-30">
-              {DECK_CARDS.map((c, idx) => (
-                <button
-                  key={c.id}
-                  onClick={() => setActiveIdx(idx)}
-                  className={`transition-all rounded-full ${
-                    idx === activeIdx 
-                      ? "size-2 bg-ink/75" 
-                      : "size-1.5 bg-ink/20 hover:bg-ink/40"
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              ))}
+            {/* Sleek Progress Line Indicator (Concept A) */}
+            <div className="w-44 mx-auto h-1.5 bg-ink/15 rounded-full overflow-hidden mt-4 relative z-30">
+              <motion.div
+                className="h-full bg-ink rounded-full"
+                animate={{
+                  width: `${100 / DECK_CARDS.length}%`,
+                  x: `${activeIdx * 100}%`
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
             </div>
           </div>
         ) : (
-          /* GRID / FEED MODE */
-          <div className="w-full max-w-[420px] mx-auto py-1 no-scrollbar z-20">
+          /* CONCEPT A: GRID / FEED MODE */
+          <div className="w-full max-w-[400px] mx-auto py-1 no-scrollbar z-20">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-5 pb-16">
-              {DECK_CARDS.map((card) => {
-                const Icon = card.illustrator;
+              {DECK_CARDS.map((card, idx) => {
                 return (
                   <div
                     key={card.id}
-                    className={`rounded-[1.85rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] ${card.bgClass}`}
+                    className={`rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] ${card.bgClass}`}
                   >
-                    <div>
-                      <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white border-2 border-ink px-3 py-1 rounded-full shadow-sm inline-block">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
-                      {/* Bold Headline */}
-                      <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mt-2.5 mb-1.5">{card.title}</h3>
-                      {/* Aesthetic Non-Bold Medium Body Typography */}
-                      <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
-                        {card.description}
-                      </p>
+                      <span className="text-xs font-mono font-bold text-ink/50">0{idx + 1}/05</span>
                     </div>
 
-                    <div className="my-3 flex items-center justify-center overflow-hidden w-full py-1">
-                      <div className="scale-100 transform-gpu origin-center pointer-events-none">
+                    <div className="my-2.5 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-5 shadow-sm relative pointer-events-none">
+                      <div className="scale-105 transform-gpu origin-center">
                         {card.id === "later" && <LaterAlarmIllustration />}
                         {card.id === "notify" && <SmartFiltersIllustration />}
                         {card.id === "places" && <PlacesMappingIllustration />}
@@ -267,14 +264,28 @@ export function MobileShowcase() {
                         {card.id === "faq" && <FAQHelpIllustration />}
                       </div>
                     </div>
-                    
+
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
+                        {card.description}
+                      </p>
+                    </div>
+
                     <Link
                       to={card.to}
                       search={{ from: "grid" }}
-                      className="w-full py-3 bg-ink text-canvas font-black text-xs uppercase tracking-wider rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] transition mt-1"
+                      className="w-full flex items-center justify-between pt-3.5 mt-2 border-t-2 border-ink/15 group cursor-pointer"
                     >
-                      <span>Explore Feature</span>
-                      {Icon && <Icon className="size-4 text-canvas" />}
+                      <div className="text-left">
+                        <span className="text-xs font-black uppercase tracking-wider text-ink group-hover:text-[#FF671F] transition-colors block">
+                          Explore feature →
+                        </span>
+                        <span className="text-[10px] font-bold text-ink/50 block">Tap to view specifications</span>
+                      </div>
+                      <span className="inline-grid place-items-center size-10 rounded-2xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:bg-ink group-hover:text-canvas transition shrink-0">
+                        <ArrowRight className="size-5 text-ink group-hover:text-canvas transition-colors" />
+                      </span>
                     </Link>
                   </div>
                 );
@@ -326,7 +337,7 @@ export function MobileShowcase() {
         </div>
       </footer>
 
-      {/* Senior-Friendly Mobile About Modal */}
+      {/* Mobile About Modal */}
       <AnimatePresence>
         {aboutOpen && (
           <>
