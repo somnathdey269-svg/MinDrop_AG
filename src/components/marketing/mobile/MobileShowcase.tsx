@@ -135,7 +135,7 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Borderless Organic Visual Hero Elements) */}
+      {/* 2. Mobile Showcase (Tight Vertical Gap & Enlarged Senior Typography) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
@@ -157,7 +157,7 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  <div className="my-1 flex items-center justify-center overflow-hidden w-full opacity-40">
+                  <div className="my-0.5 flex items-center justify-center overflow-hidden w-full opacity-40">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -170,7 +170,7 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Borderless Organic Visuals) */}
+                {/* Active Front Hero Card (Tight Gaps + Enlarged Senior Typography) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   custom={swipeDirection}
@@ -201,8 +201,8 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  {/* Borderless Organic Visual Hero Element */}
-                  <div className="my-1 flex items-center justify-center overflow-hidden w-full relative">
+                  {/* Borderless Organic Visual Hero Element (Tight my-0.5 Gap) */}
+                  <div className="my-0.5 flex items-center justify-center overflow-hidden w-full relative">
                     {currentCard.id === "later" && <LaterAlarmIllustration />}
                     {currentCard.id === "notify" && <SmartFiltersIllustration />}
                     {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -210,12 +210,12 @@ export function MobileShowcase() {
                     {currentCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
 
-                  {/* Editorial Text */}
+                  {/* Enlarged Senior-Friendly Content Typography */}
                   <div className="shrink-0">
-                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1">
+                    <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-snug tracking-tight mb-1.5">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
+                    <p className="text-lg xs:text-xl text-ink/90 font-semibold leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -243,7 +243,7 @@ export function MobileShowcase() {
                       </span>
                     </div>
 
-                    <div className="my-1 flex items-center justify-center overflow-hidden w-full relative pointer-events-none">
+                    <div className="my-0.5 flex items-center justify-center overflow-hidden w-full relative pointer-events-none">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -252,8 +252,8 @@ export function MobileShowcase() {
                     </div>
 
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1">{card.title}</h3>
-                      <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
+                      <h3 className="text-3xl xs:text-[32px] font-black text-ink leading-snug tracking-tight mb-1.5">{card.title}</h3>
+                      <p className="text-lg xs:text-xl text-ink/90 font-semibold leading-relaxed">
                         {card.description}
                       </p>
                     </div>
