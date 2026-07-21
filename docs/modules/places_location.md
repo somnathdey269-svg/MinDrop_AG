@@ -62,3 +62,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Reorder DECK_CARDS so Smart Filters is Chapter 01/05, Places & Sweeps is Chapter 02/05, and Looping Alarms is Chapter 03/05 in ShowcaseCardData.tsx'
 - **2026-07-21 23:20:08** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Update ShowcaseCardData titles to 2 words (Smart Notification, Location Reminder, Looping Alarm, Simple Pricing, Ask Me), fix 1-line graphic sub-pills, add vertical spacing between chapter tag and graphic, and remove Open Card footer/icon from grid view in DesktopShowcase.tsx'
+- **2026-07-21 23:26:53** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Remove orange m logo icon from header and replace with highlighted animated MinDrop wordmark (M and D in orange) in DesktopShowcase.tsx and MobileShowcase.tsx'
