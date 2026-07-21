@@ -232,7 +232,7 @@ export function DesktopShowcase() {
                 <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
                   Cycle Deck
                 </span>
-                <span className="text-2xl lg:text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
+                <span className="text-2xl lg:text-3xl font-black text-ink group-hover:text-[#FF671F] transition">
                   Next card
                 </span>
               </div>
@@ -323,7 +323,7 @@ export function DesktopShowcase() {
                 <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-1 group-hover:text-ink transition">
                   Read Specs
                 </span>
-                <span className="text-2xl lg:text-3xl font-black text-ink underline decoration-3 underline-offset-4 group-hover:text-[#FF671F] transition">
+                <span className="text-2xl lg:text-3xl font-black text-ink group-hover:text-[#FF671F] transition">
                   Show me!
                 </span>
               </button>
