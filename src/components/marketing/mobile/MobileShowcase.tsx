@@ -102,13 +102,13 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Header (Frozen) */}
-      <header className="flex justify-between items-center w-full z-30 shrink-0 py-1 px-1">
+      {/* 1. Mobile Header (Sleek Aligned Pills, No Underlines) */}
+      <header className="flex justify-between items-center w-full z-30 shrink-0 py-1.5 px-1">
         <Link
           to="/terms"
           viewTransition
           style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
-          className="text-xs uppercase tracking-widest font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+          className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink hover:bg-white/40 px-2.5 py-1 rounded-full transition-all"
         >
           Terms
         </Link>
@@ -126,26 +126,26 @@ export function MobileShowcase() {
           to="/privacy"
           viewTransition
           style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
-          className="text-xs uppercase tracking-widest font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+          className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink hover:bg-white/40 px-2.5 py-1 rounded-full transition-all"
         >
           Privacy
         </Link>
       </header>
 
-      {/* 2. Compact Sleek Mobile Showcase (No Heavy Bottom Row) */}
+      {/* 2. Sleek Mobile Showcase (Ultra-Smooth 3D Card Fling Animation) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[380px] h-[395px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[375px] h-[375px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
                   key={`next-${nextCard.id}`}
-                  initial={{ scale: 0.9, rotate: 6, opacity: 0.8 }}
-                  animate={{ scale: 0.94, rotate: 5, opacity: 0.95 }}
+                  initial={{ scale: 0.9, y: 12, rotate: 6, opacity: 0.7 }}
+                  animate={{ scale: 0.94, y: 6, rotate: 5, opacity: 0.95 }}
                   exit={{ opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 22 }}
                   className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="flex justify-between items-center shrink-0">
@@ -166,13 +166,13 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Compact Sleek Height) */}
+                {/* Active Front Hero Card (Ultra-Smooth 3D Fling Animation) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
-                  initial={{ x: 220, rotate: -12, scale: 0.88, opacity: 0 }}
-                  animate={{ x: 0, rotate: -2, scale: 1, opacity: 1 }}
-                  exit={{ x: -280, rotate: -16, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 110, damping: 16 }}
+                  initial={{ x: 260, y: -10, rotate: 10, scale: 0.85, opacity: 0 }}
+                  animate={{ x: 0, y: 0, rotate: -2, scale: 1, opacity: 1 }}
+                  exit={{ x: -300, y: 15, rotate: -18, scale: 0.85, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 220, damping: 24, mass: 0.8 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
                   className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
@@ -198,7 +198,7 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Editorial Text */}
+                  {/* Editorial Text (No Tap Hint) */}
                   <div className="shrink-0">
                     <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1">
                       {currentCard.title}
@@ -206,9 +206,6 @@ export function MobileShowcase() {
                     <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
-                    <span className="text-[11px] uppercase font-bold tracking-wider text-ink/40 mt-2.5 block text-right">
-                      Tap card for details ↗
-                    </span>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -262,9 +259,6 @@ export function MobileShowcase() {
                       <p className="text-base sm:text-lg text-ink/80 font-medium leading-relaxed">
                         {card.description}
                       </p>
-                      <span className="text-[11px] uppercase font-bold tracking-wider text-ink/40 mt-2.5 block text-right">
-                        Tap card for details ↗
-                      </span>
                     </div>
                   </Link>
                 );
@@ -274,12 +268,12 @@ export function MobileShowcase() {
         )}
       </div>
 
-      {/* 3. Mobile Footer (Frozen) */}
-      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0 pt-2 pb-1 px-1">
+      {/* 3. Mobile Footer (Frozen Aligned Pills, No Underlines) */}
+      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0 pt-1.5 pb-1 px-1">
         <div className="justify-self-start">
           <button
             onClick={() => setAboutOpen(true)}
-            className="text-xs uppercase tracking-widest font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5 cursor-pointer"
+            className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink hover:bg-white/40 px-2.5 py-1 rounded-full transition-all cursor-pointer"
           >
             About
           </button>
@@ -309,7 +303,7 @@ export function MobileShowcase() {
         <div className="justify-self-end">
           <Link
             to="/download"
-            className="text-xs uppercase tracking-widest font-black text-ink hover:text-[#FF671F] border-b-2 border-ink pb-0.5"
+            className="text-[11px] font-black uppercase tracking-widest text-ink/80 hover:text-ink hover:bg-white/40 px-2.5 py-1 rounded-full transition-all"
           >
             Get App
           </Link>
