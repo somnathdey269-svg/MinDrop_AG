@@ -289,7 +289,7 @@ function SlideProblem() {
     <div className="h-full bg-[#022C22] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#A7F3D0]/30 mb-4">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#A7F3D0] mb-4">
             Why your current app keeps failing you
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 sm:mb-8 tracking-tight">
@@ -304,14 +304,14 @@ function SlideProblem() {
             ].map(({ n, label }) => (
               <div key={n} className="bg-white/5 border border-[#10B981]/25 rounded-2xl p-4 sm:p-6">
                 <p className="text-3xl sm:text-3xl md:text-4xl font-black text-[#10B981]">{n}</p>
-                <p className="text-xs sm:text-xs font-semibold text-[#A7F3D0]/40 mt-2 leading-relaxed">{label}</p>
+                <p className="text-xs sm:text-sm font-semibold text-[#A7F3D0] mt-2 leading-relaxed">{label}</p>
               </div>
             ))}
           </div>
         </div>
         <div className="shrink-0 flex flex-col items-center gap-4">
           <SwipeAwayDemo />
-          <p className="text-xs sm:text-xs font-black text-[#A7F3D0]/20 uppercase tracking-widest">Watch it disappear</p>
+          <p className="text-xs sm:text-xs font-black text-[#A7F3D0]/70 uppercase tracking-widest">Watch it disappear</p>
         </div>
       </div>
     </div>

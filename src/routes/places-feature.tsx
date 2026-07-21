@@ -255,20 +255,20 @@ function SlideProblem() {
     <div className="h-full bg-[#2E1065] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DDD6FE]/30 mb-4">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DDD6FE] mb-4">
             The problem with time-based reminders
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 sm:mb-8 tracking-tight">
             Some things cannot be tied to a time.<br />
             <span className="text-[#A78BFA]">They need a place.</span>
           </h2>
-          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#EDE9FE]/60 leading-relaxed max-w-lg">
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#EDE9FE] leading-relaxed max-w-lg">
             A reminder at 5 PM is useless if you reach the market at 6 PM, or at 3 PM on a different day. What you actually need is a reminder the moment you walk through the door.
           </p>
         </div>
         <div className="shrink-0 flex flex-col items-center gap-4">
           <AnimatedMap />
-          <p className="text-[10px] sm:text-xs font-black text-[#EDE9FE]/20 uppercase tracking-widest">Active location entry</p>
+          <p className="text-xs font-black text-[#EDE9FE]/75 uppercase tracking-widest">Active location entry</p>
         </div>
       </div>
     </div>

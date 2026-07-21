@@ -101,11 +101,11 @@ function SilentBell() {
 function NotificationFlood() {
   const [visible, setVisible] = useState<number[]>([]);
   const notifs = [
-    { icon: "💬", app: "WhatsApp Group", text: "Rahul sent a meme 😂", color: "bg-[#FFFDF5] border-[#F59E0B]/20" },
-    { icon: "🛒", app: "Swiggy Offer", text: "60% off your next order!", color: "bg-[#FEF3C7]/40 border-[#F59E0B]/20" },
-    { icon: "🏦", app: "HDFC Bank", text: "₹15,000 debited from your account", color: "bg-[#FEF3C7] border-[#F59E0B]/40", important: true },
-    { icon: "📱", app: "Instagram", text: "Priya liked your photo", color: "bg-[#FFFDF5] border-[#F59E0B]/20" },
-    { icon: "🛍️", app: "Amazon Sale", text: "Today only — 80% off!", color: "bg-[#FDE68A]/30 border-[#F59E0B]/30" },
+    { icon: "💬", app: "WhatsApp Group", text: "Rahul sent a meme 😂", important: false },
+    { icon: "🛒", app: "Swiggy Offer", text: "60% off your next order!", important: false },
+    { icon: "🏦", app: "HDFC Bank", text: "₹15,000 debited from your account", important: true },
+    { icon: "📱", app: "Instagram", text: "Priya liked your photo", important: false },
+    { icon: "🛍️", app: "Amazon Sale", text: "Today only — 80% off!", important: false },
   ];
 
   useEffect(() => {
@@ -116,7 +116,7 @@ function NotificationFlood() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-md">
+    <div className="flex flex-col gap-2.5 w-full max-w-md">
       {notifs.map((n, i) => (
         <AnimatePresence key={i}>
           {visible.includes(i) && (
@@ -124,15 +124,23 @@ function NotificationFlood() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ type: "spring", stiffness: 220, damping: 20 }}
-              className={`flex items-center gap-4 border rounded-[1.25rem] px-5 py-3 sm:py-4 ${n.color} ${n.important ? "ring-3 ring-[#F59E0B]" : ""}`}>
-              <span className="text-xl sm:text-2xl">{n.icon}</span>
+              className={`flex items-center gap-3.5 rounded-2xl px-4 py-3 sm:py-3.5 ${
+                n.important
+                  ? "bg-[#FEF3C7] border-2 border-[#F59E0B] shadow-lg ring-4 ring-[#F59E0B]/30"
+                  : "bg-white/90 border border-white/40 shadow-sm"
+              }`}>
+              <span className="text-xl sm:text-2xl shrink-0">{n.icon}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] sm:text-xs font-black text-[#78350F]/50 uppercase tracking-wide">{n.app}</p>
-                <p className={`text-xs sm:text-sm md:text-base font-bold leading-snug truncate ${n.important ? "text-[#78350F]" : "text-[#78350F]/70"}`}>{n.text}</p>
+                <p className={`text-[10px] sm:text-xs font-black uppercase tracking-wider ${
+                  n.important ? "text-[#92400E]" : "text-slate-500"
+                }`}>{n.app}</p>
+                <p className={`text-xs sm:text-sm md:text-base font-bold leading-snug truncate ${
+                  n.important ? "text-[#451A03]" : "text-slate-800"
+                }`}>{n.text}</p>
               </div>
               {n.important && (
-                <motion.span animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1, repeat: Infinity }}
-                  className="text-[9px] sm:text-xs font-black text-[#78350F] bg-[#FEF3C7] px-2.5 py-1 rounded-full shrink-0">
+                <motion.span animate={{ scale: [1, 1.12, 1] }} transition={{ duration: 1, repeat: Infinity }}
+                  className="text-[9px] sm:text-xs font-black text-[#78350F] bg-[#F59E0B] text-white px-2.5 py-1 rounded-full shrink-0 shadow-sm">
                   IMPORTANT
                 </motion.span>
               )}
@@ -159,7 +167,7 @@ function FilterSimulator() {
 
   return (
     <div className="w-full max-w-md flex flex-col gap-4">
-      <p className="text-xs font-black uppercase tracking-widest text-[#78350F]/40">
+      <p className="text-xs font-black uppercase tracking-widest text-[#78350F]/70">
         Which alerts should wake you up?
       </p>
       <div className="flex flex-col gap-2">
@@ -171,7 +179,7 @@ function FilterSimulator() {
                 : "border-[#F59E0B]/20 bg-white"
             }`}>
             <span className="text-xl sm:text-2xl">{r.emoji}</span>
-            <p className={`flex-1 text-xs sm:text-sm md:text-base font-bold ${active.includes(r.id) ? "text-[#78350F]" : "text-[#78350F]/40"}`}>{r.label}</p>
+            <p className={`flex-1 text-xs sm:text-sm md:text-base font-bold ${active.includes(r.id) ? "text-[#78350F]" : "text-[#78350F]/60"}`}>{r.label}</p>
             {active.includes(r.id) && <Volume2 className="size-4.5 text-[#F59E0B] shrink-0" />}
           </button>
         ))}
@@ -209,7 +217,7 @@ function SlideOpening() {
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#D97706]/45 leading-tight tracking-tight">
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#D97706]/60 leading-tight tracking-tight">
             {line}
           </motion.p>
         ))}
@@ -230,20 +238,20 @@ function SlideProblem() {
     <div className="h-full bg-[#451A03] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A]/30 mb-4">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A] mb-4">
             Why everything gets lost in your phone
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 sm:mb-8 tracking-tight">
             Every app shouts.<br />
             <span className="text-[#F59E0B]">The important ones get lost</span> in the crowd.
           </h2>
-          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#FEF3C7]/60 leading-relaxed max-w-lg">
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-[#FEF3C7] leading-relaxed max-w-lg">
             Sales offers, group chats, likes, reminders, cricket scores — they all arrive looking exactly the same. Your brain tunes them all out. Including the one that actually needed your attention.
           </p>
         </div>
         <div className="shrink-0 flex flex-col items-center gap-4 w-full lg:w-auto">
           <NotificationFlood />
-          <p className="text-[10px] sm:text-xs font-black text-[#FEF3C7]/20 uppercase tracking-widest">All alerts look identical</p>
+          <p className="text-xs font-black text-[#FEF3C7] uppercase tracking-widest">All alerts look identical</p>
         </div>
       </div>
     </div>

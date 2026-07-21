@@ -85,7 +85,6 @@ const DECK_CARDS: ShowcaseCard[] = [
     bgClass: "bg-[#F0FDF4] border-[#22C55E]",
     bgColor: "#F0FDF4",
     tag: "❔ FAQ Help",
-    illustrator: ShieldCheck,
     to: "/faq"
   }
 ];
@@ -95,14 +94,14 @@ const DECK_CARDS: ShowcaseCard[] = [
  */
 function LaterAlarmIllustration() {
   return (
-    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2 sm:p-2.5 flex flex-col items-center justify-center gap-1 w-[160px] sm:w-[200px] relative overflow-hidden shrink-0">
-      <div className="relative size-8 sm:size-10 flex items-center justify-center">
+    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2.5 sm:p-3 flex flex-col items-center justify-center gap-1.5 w-[180px] sm:w-[210px] relative overflow-hidden shrink-0">
+      <div className="relative size-9 sm:size-11 flex items-center justify-center">
         <motion.div
           animate={{ rotate: [-7, 7, -7] }}
           transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}
-          className="p-1 sm:p-1.5 bg-[#E2F5EC] border-2 border-ink rounded-full relative z-10"
+          className="p-1.5 bg-[#E2F5EC] border-2 border-ink rounded-full relative z-10"
         >
-          <AlarmClock className="size-3.5 sm:size-5 text-ink" />
+          <AlarmClock className="size-4 sm:size-5 text-ink" />
         </motion.div>
 
         {/* Pulsing expanding rings */}
@@ -110,21 +109,21 @@ function LaterAlarmIllustration() {
           <motion.div
             animate={{ scale: [1, 2.2], opacity: [0.6, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
-            className="absolute border-2 border-[#10B981]/50 rounded-full size-7"
+            className="absolute border-2 border-[#10B981]/50 rounded-full size-8"
           />
           <motion.div
             animate={{ scale: [1, 1.7], opacity: [0.6, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut", delay: 0.5 }}
-            className="absolute border border-[#10B981]/30 rounded-full size-7"
+            className="absolute border border-[#10B981]/30 rounded-full size-8"
           />
         </div>
       </div>
 
-      <div className="text-[7px] sm:text-[8px] font-black uppercase text-[#10B981] animate-pulse">Alarm Ringing</div>
+      <div className="text-[8px] sm:text-[9px] font-black uppercase text-[#10B981] animate-pulse tracking-wide">Alarm Ringing</div>
 
       <div className="flex gap-1.5 mt-0.5 w-full z-10">
-        <div className="flex-1 py-0.5 text-[6px] sm:text-[7px] font-black uppercase text-center border-2 border-ink bg-[#10B981] text-white rounded-md shadow-[1px_1px_0px_rgba(0,0,0,1)]">Dismiss</div>
-        <div className="flex-1 py-0.5 text-[6px] sm:text-[7px] font-black uppercase text-center border-2 border-ink bg-white text-ink rounded-md shadow-[1px_1px_0px_rgba(0,0,0,1)]">Snooze</div>
+        <div className="flex-1 py-1 text-[7px] sm:text-[8px] font-black uppercase text-center border-2 border-ink bg-[#10B981] text-white rounded-md shadow-[1px_1px_0px_rgba(0,0,0,1)]">Dismiss</div>
+        <div className="flex-1 py-1 text-[7px] sm:text-[8px] font-black uppercase text-center border-2 border-ink bg-white text-ink rounded-md shadow-[1px_1px_0px_rgba(0,0,0,1)]">Snooze</div>
       </div>
     </div>
   );
@@ -135,17 +134,17 @@ function LaterAlarmIllustration() {
  */
 function SmartFiltersIllustration() {
   return (
-    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2 sm:p-3 w-[160px] sm:w-[220px] relative overflow-hidden h-[75px] sm:h-[100px]">
+    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2 sm:p-3 w-[180px] sm:w-[210px] relative overflow-hidden h-[82px] sm:h-[95px] shrink-0">
       {/* Target boundary line */}
       <div className="absolute top-[45%] left-0 right-0 border-t-2 border-dashed border-ink/20 z-0 flex justify-center">
-        <span className="bg-white px-1 text-[5px] sm:text-[6px] font-black uppercase tracking-wider -translate-y-[4px] text-ink/40">Filters</span>
+        <span className="bg-white px-1 text-[6px] sm:text-[7px] font-black uppercase tracking-wider -translate-y-[5px] text-ink/60">Filters</span>
       </div>
 
       {/* Standard Ping */}
       <motion.div
         animate={{ y: [-20, 85] }}
         transition={{ repeat: Infinity, duration: 3.2, ease: "linear" }}
-        className="absolute left-2 sm:left-4 z-10 px-1 py-0.5 border border-ink bg-canvas rounded text-[5px] sm:text-[6px] font-bold text-ink/60 shadow-[1px_1px_0px_rgba(0,0,0,0.15)]"
+        className="absolute left-2 sm:left-4 z-10 px-1.5 py-0.5 border border-ink bg-canvas rounded text-[6px] sm:text-[7px] font-bold text-ink shadow-[1px_1px_0px_rgba(0,0,0,0.15)]"
       >
         💬 Lunch?
       </motion.div>
@@ -154,7 +153,7 @@ function SmartFiltersIllustration() {
       <motion.div
         animate={{ y: [-20, 32, 32, 85], opacity: [1, 1, 1, 0] }}
         transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
-        className="absolute right-2 sm:right-4 z-10 px-1 py-0.5 border-2 border-ink bg-[#FFFBEB] rounded text-[5px] sm:text-[6px] font-black text-ink shadow-[1px_1px_0px_rgba(0,0,0,1)] flex items-center gap-0.5"
+        className="absolute right-2 sm:right-4 z-10 px-1.5 py-0.5 border-2 border-ink bg-[#FFFBEB] rounded text-[6px] sm:text-[7px] font-black text-ink shadow-[1px_1px_0px_rgba(0,0,0,1)] flex items-center gap-0.5"
       >
         <motion.span
           animate={{ color: ["#111", "#EF4444", "#111"] }}
@@ -169,9 +168,9 @@ function SmartFiltersIllustration() {
         <motion.div
           animate={{ rotate: [-6, 6, -6], scale: [1, 1.1, 1] }}
           transition={{ repeat: Infinity, duration: 0.18 }}
-          className="p-0.5 bg-[#F59E0B] border border-ink text-white rounded-md"
+          className="p-1 bg-[#F59E0B] border border-ink text-white rounded-md"
         >
-          <BellRing className="size-3" />
+          <BellRing className="size-3.5" />
         </motion.div>
       </div>
     </div>
@@ -183,7 +182,7 @@ function SmartFiltersIllustration() {
  */
 function PlacesMappingIllustration() {
   return (
-    <div className="border-2 border-ink bg-[#FAF9F6] rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2 w-[160px] sm:w-[220px] h-[75px] sm:h-[100px] relative overflow-hidden">
+    <div className="border-2 border-ink bg-[#FAF9F6] rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2 w-[180px] sm:w-[210px] h-[82px] sm:h-[95px] relative overflow-hidden shrink-0">
       <div className="absolute left-[35%] top-0 bottom-0 w-1 bg-ink/10" />
       <div className="absolute top-[45%] left-0 right-0 h-1 bg-ink/10" />
 
@@ -192,9 +191,9 @@ function PlacesMappingIllustration() {
         <motion.div
           animate={{ scale: [1, 1.1, 1], opacity: [0.35, 0.5, 0.35] }}
           transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-          className="size-12 rounded-full border border-dashed border-[#8B5CF6] bg-[#8B5CF6]/10"
+          className="size-13 rounded-full border border-dashed border-[#8B5CF6] bg-[#8B5CF6]/10"
         />
-        <Navigation className="size-3 text-[#8B5CF6] fill-[#8B5CF6] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <Navigation className="size-3.5 text-[#8B5CF6] fill-[#8B5CF6] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
 
       {/* Walking GPS Dot */}
@@ -205,7 +204,7 @@ function PlacesMappingIllustration() {
           scale: [1, 1, 1.25, 1]
         }}
         transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut" }}
-        className="absolute size-3 rounded-full border border-ink bg-[#8B5CF6] shadow-[1px_1px_0px_rgba(0,0,0,0.15)] flex items-center justify-center text-[5px]"
+        className="absolute size-3.5 rounded-full border border-ink bg-[#8B5CF6] shadow-[1px_1px_0px_rgba(0,0,0,0.15)] flex items-center justify-center text-[6px]"
       >
         📍
       </motion.div>
@@ -219,10 +218,10 @@ function PlacesMappingIllustration() {
           x: [90, 90, 78, 78, 90]
         }}
         transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut" }}
-        className="absolute right-1 top-1 p-1 border border-ink bg-white rounded shadow-[1px_1px_0px_rgba(0,0,0,1)] max-w-[65px]"
+        className="absolute right-1 top-1 p-1 border border-ink bg-white rounded shadow-[1px_1px_0px_rgba(0,0,0,1)] max-w-[70px]"
       >
-        <div className="text-[5px] font-black leading-none text-[#8B5CF6] uppercase">Home</div>
-        <div className="text-[4px] font-bold text-ink/70 leading-tight mt-0.5">✓ Keys</div>
+        <div className="text-[6px] font-black leading-none text-[#8B5CF6] uppercase">Home</div>
+        <div className="text-[5px] font-bold text-ink mt-0.5">✓ Keys</div>
       </motion.div>
     </div>
   );
@@ -233,35 +232,35 @@ function PlacesMappingIllustration() {
  */
 function PricingTierIllustration() {
   return (
-    <div className="flex gap-1.5 justify-center items-center w-[160px] sm:w-[220px]">
-      <div className="flex-1 border border-ink bg-white rounded-xl p-2 h-[75px] sm:h-[90px] flex flex-col justify-between shadow-[1px_1px_0px_rgba(0,0,0,1)] opacity-70">
+    <div className="flex gap-1.5 justify-center items-center w-[180px] sm:w-[210px] shrink-0">
+      <div className="flex-1 border border-ink bg-white rounded-xl p-2 h-[82px] sm:h-[92px] flex flex-col justify-between shadow-[1px_1px_0px_rgba(0,0,0,1)] opacity-80">
         <div>
-          <div className="text-[6px] font-black uppercase text-ink/40">Free</div>
-          <div className="text-[8px] font-black mt-0.5">3 active alarms</div>
+          <div className="text-[7px] font-black uppercase text-ink/60">Free</div>
+          <div className="text-[9px] font-black mt-0.5 text-ink">3 active alarms</div>
         </div>
-        <div className="w-full bg-ink/10 h-1 rounded-full overflow-hidden border border-ink/20">
+        <div className="w-full bg-ink/10 h-1.5 rounded-full overflow-hidden border border-ink/20">
           <div className="bg-[#EC4899] h-full w-[80%]" />
         </div>
       </div>
 
-      <div className="flex-1 border-2 border-ink bg-[#FFFBEB] rounded-xl p-2 h-[75px] sm:h-[90px] flex flex-col justify-between shadow-[2px_2px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+      <div className="flex-1 border-2 border-ink bg-[#FFFBEB] rounded-xl p-2 h-[82px] sm:h-[92px] flex flex-col justify-between shadow-[2px_2px_0px_rgba(0,0,0,1)] relative overflow-hidden">
         <div className="absolute top-1 right-1">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
           >
-            <Sparkles className="size-3 text-[#F59E0B]" />
+            <Sparkles className="size-3.5 text-[#F59E0B]" />
           </motion.div>
         </div>
         <div>
-          <div className="text-[6px] font-black uppercase text-[#EC4899]">Pro</div>
-          <div className="text-[8px] font-black mt-0.5">Unlimited</div>
+          <div className="text-[7px] font-black uppercase text-[#EC4899]">Pro</div>
+          <div className="text-[9px] font-black mt-0.5 text-ink">Unlimited</div>
         </div>
         <div className="flex items-center gap-0.5">
           <motion.div
             animate={{ scale: [1, 1.08, 1] }}
             transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-            className="text-[5px] font-black bg-[#EC4899] text-white px-1.5 py-0.5 rounded"
+            className="text-[6px] font-black bg-[#EC4899] text-white px-1.5 py-0.5 rounded shadow-sm"
           >
             Unlock all
           </motion.div>
@@ -276,12 +275,12 @@ function PricingTierIllustration() {
  */
 function FAQHelpIllustration() {
   return (
-    <div className="border border-ink bg-white rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] p-2.5 w-[160px] sm:w-[220px] h-[75px] sm:h-[95px] flex items-center justify-between relative overflow-hidden">
+    <div className="border border-ink bg-white rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] p-2.5 w-[180px] sm:w-[210px] h-[82px] sm:h-[95px] flex items-center justify-between relative overflow-hidden shrink-0">
       <div className="flex flex-col items-center gap-0.5 z-10">
-        <div className="p-0.5 bg-[#F0FDF4] border border-ink rounded shadow-[1px_1px_0px_rgba(0,0,0,1)]">
-          <BrainCircuit className="size-4.5 text-ink" />
+        <div className="p-1 bg-[#F0FDF4] border border-ink rounded shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+          <BrainCircuit className="size-5 text-ink" />
         </div>
-        <span className="text-[5px] font-black uppercase text-ink/40">Local DB</span>
+        <span className="text-[6px] font-black uppercase text-ink/60">Local DB</span>
       </div>
 
       <div className="flex flex-col items-center justify-center relative z-10">
@@ -567,7 +566,7 @@ function ShowcaseDeckPage() {
             </div>
 
             {/* 3D Stacked Cards Deck */}
-            <div className="relative w-[88vw] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[60vh] max-h-[460px] min-h-[380px] sm:h-[420px] md:h-[450px] lg:h-[480px] flex items-center justify-center z-10">
+            <div className="relative w-[92vw] sm:w-[390px] md:w-[460px] lg:w-[490px] h-[72vh] max-h-[540px] min-h-[420px] sm:h-[440px] md:h-[460px] lg:h-[480px] flex items-center justify-center z-10">
               <AnimatePresence mode="popLayout">
                 {/* Behind stacked preview card */}
                 <motion.div
@@ -585,11 +584,11 @@ function ShowcaseDeckPage() {
                 >
                   <div className="shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-ink mt-1.5 sm:mt-4 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-2xl sm:text-2xl lg:text-3xl font-black text-ink mt-2 sm:mt-4 leading-tight">{nextCard.title}</h3>
                   </div>
 
                   {/* Behind card illustration preview */}
-                  <div className="flex-1 my-1 sm:my-2 flex items-center justify-center min-h-0 w-full opacity-40 pointer-events-none scale-85 sm:scale-90">
+                  <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full opacity-40 pointer-events-none scale-90 sm:scale-95">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -598,8 +597,8 @@ function ShowcaseDeckPage() {
                   </div>
 
                   <div className="flex justify-end pt-1 shrink-0">
-                    <span className="inline-grid place-items-center size-9 sm:size-12 rounded-2xl bg-canvas border-2 border-ink">
-                      <NextIcon className="size-4 sm:size-6 text-ink/40" />
+                    <span className="inline-grid place-items-center size-10 sm:size-12 rounded-2xl bg-canvas border-2 border-ink">
+                      <NextIcon className="size-5 sm:size-6 text-ink/40" />
                     </span>
                   </div>
                 </motion.div>
@@ -618,27 +617,27 @@ function ShowcaseDeckPage() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-5 sm:p-7 md:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-7 md:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   <div className="shrink-0">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-ink/60 bg-white/50 border border-ink/10 px-3 py-1 rounded-full">
+                      <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-ink/70 bg-white/60 border border-ink/10 px-3.5 py-1 rounded-full">
                         {currentCard.tag}
                       </span>
                     </div>
 
-                    <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-ink mt-2 sm:mt-4 leading-tight tracking-tight">
+                    <h3 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-3 sm:mt-4 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm md:text-base text-ink/75 font-medium mt-1 sm:mt-3 leading-relaxed">
+                    <p className="text-base sm:text-base md:text-lg text-ink/85 font-semibold mt-2 sm:mt-3 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
                   {/* Centered Premium Live Illustration Component */}
-                  <div className="flex-1 my-1 sm:my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
-                    <div className="scale-90 sm:scale-95 md:scale-100 transform-gpu origin-center flex items-center justify-center">
+                  <div className="flex-1 my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
+                    <div className="scale-110 sm:scale-100 transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -647,10 +646,10 @@ function ShowcaseDeckPage() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-end pt-2 sm:pt-4 shrink-0">
+                  <div className="flex justify-between items-end pt-3 sm:pt-4 shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
-                    <span className="inline-grid place-items-center size-10 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                      <CardIcon className="size-5 sm:size-7 text-ink" />
+                    <span className="inline-grid place-items-center size-11 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                      <CardIcon className="size-6 sm:size-7 text-ink" />
                     </span>
                   </div>
                 </motion.div>
