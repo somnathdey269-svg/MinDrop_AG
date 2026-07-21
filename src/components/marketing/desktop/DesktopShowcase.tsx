@@ -228,9 +228,9 @@ export function DesktopShowcase() {
         {viewMode === "deck" ? (
           /* DECK STACK MODE */
           <div className="w-full h-full max-h-[min(540px,70vh)] flex items-center justify-center relative">
-            {/* Left Hover Zone */}
+            {/* Left Hover Zone: Cycles Forwards 1 -> 2 -> 3 -> 4 -> 5 -> 1 */}
             <div 
-              onClick={handlePrev} 
+              onClick={handleNext} 
               className="absolute left-8 lg:left-14 z-30 flex cursor-pointer group"
             >
               <div className="flex flex-col items-center">
@@ -276,7 +276,7 @@ export function DesktopShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Card (Fluid Typography & Dynamic Hero Graphic) */}
+                {/* Active Front Card (Fluid Typography & Enlarged Hero Graphic) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   initial={{ x: 250, rotate: -15, scale: 0.85, opacity: 0 }}
@@ -299,9 +299,9 @@ export function DesktopShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Centered Hero Graphic with Fluid Scale */}
+                  {/* Section 2: Centered Hero Graphic with Enlarged Fluid Scale */}
                   <div className="my-auto py-[clamp(0.25rem,1vh,1rem)] flex items-center justify-center overflow-visible w-full relative shrink-0">
-                    <div className="scale-[clamp(0.9,1.1vh,1.2)] transform-gpu origin-center flex items-center justify-center">
+                    <div className="scale-[clamp(1.05,1.22vh,1.32)] transform-gpu origin-center flex items-center justify-center">
                       {currentCard.id === "later" && <LaterAlarmIllustration />}
                       {currentCard.id === "notify" && <SmartFiltersIllustration />}
                       {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -310,7 +310,7 @@ export function DesktopShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Prominent Content (Fluid 28px-44px Title & 14px-18px Description) */}
+                  {/* Section 3: Prominent Content (Fluid Title & Description) */}
                   <div className="shrink-0">
                     <h3 className="text-[clamp(26px,2.2vw+0.5rem,44px)] font-black text-ink leading-tight tracking-tight mb-[clamp(0.25rem,0.6vh,0.6rem)]">
                       {currentCard.title}
