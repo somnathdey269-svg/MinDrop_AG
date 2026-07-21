@@ -85,6 +85,7 @@ const DECK_CARDS: ShowcaseCard[] = [
     bgClass: "bg-[#F0FDF4] border-[#22C55E]",
     bgColor: "#F0FDF4",
     tag: "❔ FAQ Help",
+    illustrator: BrainCircuit,
     to: "/faq"
   }
 ];
@@ -626,7 +627,7 @@ function ShowcaseDeckPage() {
 
                   <div className="flex justify-end pt-1 shrink-0">
                     <span className="inline-grid place-items-center size-10 sm:size-12 rounded-2xl bg-canvas border-2 border-ink">
-                      <NextIcon className="size-5 sm:size-6 text-ink/40" />
+                      {NextIcon && <NextIcon className="size-5 sm:size-6 text-ink/40" />}
                     </span>
                   </div>
                 </motion.div>
@@ -677,7 +678,7 @@ function ShowcaseDeckPage() {
                   <div className="flex justify-between items-end pt-3 sm:pt-4 shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
                     <span className="inline-grid place-items-center size-11 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                      <CardIcon className="size-6 sm:size-7 text-ink" />
+                      {CardIcon && <CardIcon className="size-6 sm:size-7 text-ink" />}
                     </span>
                   </div>
                 </motion.div>
@@ -734,7 +735,7 @@ function ShowcaseDeckPage() {
                     <div className="flex justify-between items-end pt-2 shrink-0 border-t border-ink/10">
                       <span className="text-xs font-black uppercase text-ink/50 tracking-wider">Open card</span>
                       <span className="inline-grid place-items-center size-10 rounded-xl bg-white border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        <Icon className="size-5 text-ink" />
+                        {Icon && <Icon className="size-5 text-ink" />}
                       </span>
                     </div>
                   </Link>
