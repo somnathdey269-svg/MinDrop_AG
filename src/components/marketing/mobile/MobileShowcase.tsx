@@ -135,12 +135,12 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Graphic ON TOP Section, Content in LOWER Section, Uncut Graphic) */}
+      {/* 2. Mobile Showcase (Tight Gap, Zero Blank Space) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
-            <div className="relative w-full max-w-[375px] h-[410px] xs:h-[430px] flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[375px] h-[395px] xs:h-[415px] flex flex-col items-center justify-center">
               <AnimatePresence mode="popLayout" custom={swipeDirection}>
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -149,7 +149,7 @@ export function MobileShowcase() {
                   animate={{ scale: 0.94, y: 6, rotate: 5, opacity: 0.95 }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 200, damping: 22 }}
-                  className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-start gap-2 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="flex justify-between items-center shrink-0">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40 bg-canvas px-3 py-0.5 rounded-full border border-ink/10">
@@ -170,7 +170,7 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Graphic ON TOP, Content LOWER, Uncut Graphic) */}
+                {/* Active Front Hero Card (Graphic ON TOP, Content directly below, Zero Blank Space) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   custom={swipeDirection}
@@ -192,7 +192,7 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 220, damping: 24, mass: 0.8 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 xs:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 xs:p-6 flex flex-col justify-start gap-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Top Bar inside Card */}
                   <div className="flex justify-between items-center shrink-0">
@@ -202,7 +202,7 @@ export function MobileShowcase() {
                   </div>
 
                   {/* Graphic Illustration ON TOP Section (Uncut, overflow-visible) */}
-                  <div className="my-1.5 flex items-center justify-center overflow-visible w-full relative">
+                  <div className="my-0.5 flex items-center justify-center overflow-visible w-full relative">
                     {currentCard.id === "later" && <LaterAlarmIllustration />}
                     {currentCard.id === "notify" && <SmartFiltersIllustration />}
                     {currentCard.id === "places" && <PlacesMappingIllustration />}
@@ -210,9 +210,9 @@ export function MobileShowcase() {
                     {currentCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
 
-                  {/* Content in LOWER Section */}
+                  {/* Content pulled UP directly below Graphic */}
                   <div className="shrink-0">
-                    <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                    <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1">
                       {currentCard.title}
                     </h3>
                     <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed">
@@ -224,7 +224,7 @@ export function MobileShowcase() {
             </div>
           </div>
         ) : (
-          /* GRID / FEED MODE (Graphic ON TOP Section, Content in LOWER Section) */
+          /* GRID / FEED MODE */
           <div className="w-full max-w-[400px] mx-auto py-1 no-scrollbar z-20">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-5 pb-16">
               {DECK_CARDS.map((card) => {
@@ -235,16 +235,16 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${card.bgClass}`}
+                    className={`rounded-[2.25rem] border-3 border-ink p-5 flex flex-col justify-start gap-2 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${card.bgClass}`}
                   >
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex justify-between items-center mb-1">
                       <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
                     {/* Graphic Illustration ON TOP Section (Uncut) */}
-                    <div className="my-2 flex items-center justify-center overflow-visible w-full relative pointer-events-none">
+                    <div className="my-1 flex items-center justify-center overflow-visible w-full relative pointer-events-none">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -254,7 +254,7 @@ export function MobileShowcase() {
 
                     {/* Content in LOWER Section */}
                     <div>
-                      <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1.5">{card.title}</h3>
+                      <h3 className="text-3xl xs:text-4xl font-black text-ink leading-tight tracking-tight mb-1">{card.title}</h3>
                       <p className="text-base xs:text-lg text-ink/80 font-normal leading-relaxed">
                         {card.description}
                       </p>
