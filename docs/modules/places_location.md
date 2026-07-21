@@ -60,3 +60,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'Fix 404 card navigation error by updating ShowcaseCardData.tsx target routes to /later-feature, /notify-feature, and /places-feature, and creating route aliases in src/routes'
 - **2026-07-21 22:45:36** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Reorder DECK_CARDS so Smart Filters is Chapter 01/05, Places & Sweeps is Chapter 02/05, and Looping Alarms is Chapter 03/05 in ShowcaseCardData.tsx'
+- **2026-07-21 23:20:08** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Update ShowcaseCardData titles to 2 words (Smart Notification, Location Reminder, Looping Alarm, Simple Pricing, Ask Me), fix 1-line graphic sub-pills, add vertical spacing between chapter tag and graphic, and remove Open Card footer/icon from grid view in DesktopShowcase.tsx'
