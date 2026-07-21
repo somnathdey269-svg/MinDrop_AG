@@ -95,7 +95,7 @@ export function MobileShowcase() {
       }}
       className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
     >
-      {/* 1. Mobile Header (Perfect Optical Baseline Alignment across Terms, MinDrop, Privacy) */}
+      {/* 1. Mobile Header */}
       <header className="flex justify-between items-center w-full z-30 shrink-0 h-12 px-2">
         <div className="flex items-center h-full">
           <Link
@@ -175,7 +175,7 @@ export function MobileShowcase() {
                     </div>
                   </div>
 
-                  {/* Section 3: Header & Description Typography */}
+                  {/* Section 3: Typography */}
                   <div className="shrink-0 mt-2">
                     <h3 className="text-3xl sm:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
@@ -201,9 +201,9 @@ export function MobileShowcase() {
             </div>
           </div>
         ) : (
-          /* GRID VIEW MODE (Dynamic min-h-[380px] to fit full graphics & text) */
-          <div className="w-full h-full overflow-y-auto px-1 py-4 z-20 no-scrollbar">
-            <div className="flex flex-col gap-5 pb-20">
+          /* GRID VIEW MODE (Generous pb-32 bottom clearance) */
+          <div className="w-full h-full overflow-y-auto px-1 pt-2 pb-32 z-20 no-scrollbar">
+            <div className="flex flex-col gap-5">
               {DECK_CARDS.map((card) => {
                 return (
                   <Link
@@ -212,7 +212,7 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[380px] ${card.bgClass}`}
+                    className={`rounded-[2rem] border-3 border-ink p-5.5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[350px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="flex justify-between items-center mb-1 shrink-0">

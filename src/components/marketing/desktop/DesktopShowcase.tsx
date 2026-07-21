@@ -322,12 +322,12 @@ export function DesktopShowcase() {
             </div>
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (Dynamic Clamp Height to fit enlarged cards without truncation) */
-          <div className="w-full max-w-6xl mx-auto px-4 pt-6 pb-28 z-20 h-full overflow-y-auto no-scrollbar">
+          /* RESPONSIVE GRID VIEW MODE (Clean, Balanced & Fully Scrollable Above Footer) */
+          <div className="w-full max-w-5xl mx-auto px-4 pt-4 pb-36 z-20 h-full overflow-y-auto no-scrollbar">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch"
             >
               {DECK_CARDS.map((card) => {
                 return (
@@ -337,7 +337,7 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2.2rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[clamp(440px,48vh,520px)] ${card.bgClass}`}
+                    className={`rounded-[2.2rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[360px] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="flex justify-between items-center mb-2 shrink-0">
@@ -347,7 +347,7 @@ export function DesktopShowcase() {
                     </div>
 
                     {/* Centered Graphic Illustration Section */}
-                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-120 transform-gpu origin-center">
+                    <div className="my-auto py-2 flex items-center justify-center overflow-visible w-full pointer-events-none scale-110 transform-gpu origin-center">
                       {card.id === "later" && <LaterAlarmIllustration />}
                       {card.id === "notify" && <SmartFiltersIllustration />}
                       {card.id === "places" && <PlacesMappingIllustration />}
@@ -357,10 +357,10 @@ export function DesktopShowcase() {
 
                     {/* Content Section */}
                     <div className="shrink-0 mt-3">
-                      <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                      <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-base lg:text-lg text-ink/90 font-medium leading-relaxed">
+                      <p className="text-sm lg:text-base text-ink/90 font-medium leading-relaxed">
                         {card.description}
                       </p>
                     </div>
