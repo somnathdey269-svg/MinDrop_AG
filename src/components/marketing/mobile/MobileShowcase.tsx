@@ -14,6 +14,7 @@ import {
 export function MobileShowcase() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState<"next" | "prev">("next");
   const [aboutOpen, setAboutOpen] = useState(false);
   const touchStartX = useRef(0);
   
@@ -63,10 +64,12 @@ export function MobileShowcase() {
   };
 
   const handleNext = () => {
+    setSwipeDirection("next");
     setActiveIdx((prev) => (prev + 1) % DECK_CARDS.length);
   };
 
   const handlePrev = () => {
+    setSwipeDirection("prev");
     setActiveIdx((prev) => (prev - 1 + DECK_CARDS.length) % DECK_CARDS.length);
   };
 
@@ -132,13 +135,13 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Clean Chapter Tag Pill, No Right Side Number Pill) */}
+      {/* 2. Mobile Showcase (Dynamic Directional Swipe Animations) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
           <div className="w-full min-h-full flex flex-col items-center justify-center relative py-1">
             <div className="relative w-full max-w-[375px] h-[375px] flex flex-col items-center justify-center">
-              <AnimatePresence mode="popLayout">
+              <AnimatePresence mode="popLayout" custom={swipeDirection}>
                 {/* Behind Stacked Preview Card */}
                 <motion.div
                   key={`next-${nextCard.id}`}
@@ -167,12 +170,25 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card */}
+                {/* Active Front Hero Card (Dynamic Dynamic Directional Fling) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
-                  initial={{ x: 260, y: -10, rotate: 10, scale: 0.85, opacity: 0 }}
+                  custom={swipeDirection}
+                  initial={(dir) => ({
+                    x: dir === "next" ? 280 : -280,
+                    y: -10,
+                    rotate: dir === "next" ? 10 : -10,
+                    scale: 0.85,
+                    opacity: 0
+                  })}
                   animate={{ x: 0, y: 0, rotate: -2, scale: 1, opacity: 1 }}
-                  exit={{ x: -300, y: 15, rotate: -18, scale: 0.85, opacity: 0 }}
+                  exit={(dir) => ({
+                    x: dir === "next" ? -300 : 300,
+                    y: 15,
+                    rotate: dir === "next" ? -18 : 18,
+                    scale: 0.85,
+                    opacity: 0
+                  })}
                   transition={{ type: "spring", stiffness: 220, damping: 24, mass: 0.8 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
