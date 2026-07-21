@@ -95,14 +95,14 @@ const DECK_CARDS: ShowcaseCard[] = [
  */
 function LaterAlarmIllustration() {
   return (
-    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2.5 sm:p-3.5 flex flex-col items-center justify-center gap-1 w-[160px] sm:w-[220px] relative overflow-hidden">
-      <div className="relative size-9 sm:size-12 flex items-center justify-center">
+    <div className="border-2 border-ink bg-white rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-2 sm:p-2.5 flex flex-col items-center justify-center gap-1 w-[160px] sm:w-[200px] relative overflow-hidden shrink-0">
+      <div className="relative size-8 sm:size-10 flex items-center justify-center">
         <motion.div
           animate={{ rotate: [-7, 7, -7] }}
           transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}
-          className="p-1.5 sm:p-2 bg-[#E2F5EC] border-2 border-ink rounded-full relative z-10"
+          className="p-1 sm:p-1.5 bg-[#E2F5EC] border-2 border-ink rounded-full relative z-10"
         >
-          <AlarmClock className="size-4 sm:size-6 text-ink" />
+          <AlarmClock className="size-3.5 sm:size-5 text-ink" />
         </motion.div>
 
         {/* Pulsing expanding rings */}
@@ -110,12 +110,12 @@ function LaterAlarmIllustration() {
           <motion.div
             animate={{ scale: [1, 2.2], opacity: [0.6, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
-            className="absolute border-2 border-[#10B981]/50 rounded-full size-8"
+            className="absolute border-2 border-[#10B981]/50 rounded-full size-7"
           />
           <motion.div
             animate={{ scale: [1, 1.7], opacity: [0.6, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut", delay: 0.5 }}
-            className="absolute border border-[#10B981]/30 rounded-full size-8"
+            className="absolute border border-[#10B981]/30 rounded-full size-7"
           />
         </div>
       </div>
@@ -123,8 +123,8 @@ function LaterAlarmIllustration() {
       <div className="text-[7px] sm:text-[8px] font-black uppercase text-[#10B981] animate-pulse">Alarm Ringing</div>
 
       <div className="flex gap-1.5 mt-0.5 w-full z-10">
-        <div className="flex-1 py-0.5 text-[6px] sm:text-[7px] font-black uppercase text-center border-2 border-ink bg-[#10B981] text-white rounded-md">Dismiss</div>
-        <div className="flex-1 py-0.5 text-[6px] sm:text-[7px] font-black uppercase text-center border-2 border-ink bg-white text-ink rounded-md">Snooze</div>
+        <div className="flex-1 py-0.5 text-[6px] sm:text-[7px] font-black uppercase text-center border-2 border-ink bg-[#10B981] text-white rounded-md shadow-[1px_1px_0px_rgba(0,0,0,1)]">Dismiss</div>
+        <div className="flex-1 py-0.5 text-[6px] sm:text-[7px] font-black uppercase text-center border-2 border-ink bg-white text-ink rounded-md shadow-[1px_1px_0px_rgba(0,0,0,1)]">Snooze</div>
       </div>
     </div>
   );
@@ -581,15 +581,15 @@ function ShowcaseDeckPage() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 border-ink p-5 sm:p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
                   <div className="shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-ink/40">Next Card</span>
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-ink mt-2 sm:mt-6 leading-tight">{nextCard.title}</h3>
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-ink mt-1.5 sm:mt-4 leading-tight">{nextCard.title}</h3>
                   </div>
 
                   {/* Behind card illustration preview */}
-                  <div className="flex-1 my-3 flex items-center justify-center overflow-hidden w-full max-h-[140px] opacity-40 pointer-events-none scale-90">
+                  <div className="flex-1 my-1 sm:my-2 flex items-center justify-center min-h-0 w-full opacity-40 pointer-events-none scale-85 sm:scale-90">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -597,9 +597,9 @@ function ShowcaseDeckPage() {
                     {nextCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
 
-                  <div className="flex justify-end pt-2 shrink-0">
-                    <span className="inline-grid place-items-center size-10 sm:size-14 rounded-2xl bg-canvas border-2 border-ink">
-                      <NextIcon className="size-5 sm:size-7 text-ink/40" />
+                  <div className="flex justify-end pt-1 shrink-0">
+                    <span className="inline-grid place-items-center size-9 sm:size-12 rounded-2xl bg-canvas border-2 border-ink">
+                      <NextIcon className="size-4 sm:size-6 text-ink/40" />
                     </span>
                   </div>
                 </motion.div>
@@ -618,7 +618,7 @@ function ShowcaseDeckPage() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-6 sm:p-10 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 border-ink p-5 sm:p-7 md:p-8 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   <div className="shrink-0">
                     <div className="flex justify-between items-center">
@@ -627,28 +627,30 @@ function ShowcaseDeckPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-ink mt-2 sm:mt-6 leading-tight tracking-tight">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-ink mt-2 sm:mt-4 leading-tight tracking-tight">
                       {currentCard.title}
                     </h3>
 
-                    <p className="text-sm sm:text-base md:text-lg text-ink/75 font-medium mt-1.5 sm:mt-5 leading-relaxed">
+                    <p className="text-xs sm:text-sm md:text-base text-ink/75 font-medium mt-1 sm:mt-3 leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
 
                   {/* Centered Premium Live Illustration Component */}
-                  <div className="flex-1 my-3 flex items-center justify-center overflow-hidden w-full max-h-[140px] sm:max-h-[200px]">
-                    {currentCard.id === "later" && <LaterAlarmIllustration />}
-                    {currentCard.id === "notify" && <SmartFiltersIllustration />}
-                    {currentCard.id === "places" && <PlacesMappingIllustration />}
-                    {currentCard.id === "pricing" && <PricingTierIllustration />}
-                    {currentCard.id === "faq" && <FAQHelpIllustration />}
+                  <div className="flex-1 my-1 sm:my-2 flex items-center justify-center min-h-0 w-full overflow-visible">
+                    <div className="scale-90 sm:scale-95 md:scale-100 transform-gpu origin-center flex items-center justify-center">
+                      {currentCard.id === "later" && <LaterAlarmIllustration />}
+                      {currentCard.id === "notify" && <SmartFiltersIllustration />}
+                      {currentCard.id === "places" && <PlacesMappingIllustration />}
+                      {currentCard.id === "pricing" && <PricingTierIllustration />}
+                      {currentCard.id === "faq" && <FAQHelpIllustration />}
+                    </div>
                   </div>
 
-                  <div className="flex justify-between items-end pt-2 sm:pt-6 shrink-0">
+                  <div className="flex justify-between items-end pt-2 sm:pt-4 shrink-0">
                     <span className="text-xs sm:text-sm uppercase font-black text-ink/40 tracking-wider">MinDrop Brain</span>
-                    <span className="inline-grid place-items-center size-10 sm:size-16 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                      <CardIcon className="size-5 sm:size-8 text-ink" />
+                    <span className="inline-grid place-items-center size-10 sm:size-14 rounded-2xl bg-white border-2 border-ink shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                      <CardIcon className="size-5 sm:size-7 text-ink" />
                     </span>
                   </div>
                 </motion.div>
