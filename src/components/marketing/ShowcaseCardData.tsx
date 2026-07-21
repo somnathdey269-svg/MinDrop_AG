@@ -74,149 +74,133 @@ export const DECK_CARDS: ShowcaseCard[] = [
   }
 ];
 
-// Shared Vector Illustrations
+// Unclustered, Borderless Organic Visual Hero Graphics
 export function LaterAlarmIllustration() {
   return (
-    <div className="size-48 xs:size-52 bg-white rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 flex flex-col items-center justify-center relative overflow-hidden select-none">
-      <div className="absolute top-2 left-3 flex items-center gap-1.5">
-        <span className="size-2 rounded-full bg-[#FF671F] animate-ping" />
-        <span className="text-[10px] uppercase font-black tracking-wider text-ink/40">Loop Active</span>
-      </div>
-      <div className="relative my-2">
+    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+      <div className="relative grid place-items-center">
+        {/* Pulsing Sonar Ring */}
         <motion.div 
-          animate={{ scale: [1, 1.15, 1], rotate: [0, -4, 4, 0] }}
-          transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
-          className="size-16 rounded-full bg-[#E2F5EC] border-2 border-ink grid place-items-center shadow-sm"
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0.1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="absolute inset-0 -m-5 rounded-full bg-[#10B981]/25 border-2 border-[#10B981]/40"
+        />
+        {/* Central Floating Icon Badge */}
+        <motion.div 
+          animate={{ scale: [1, 1.06, 1], rotate: [0, -3, 3, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <AlarmClock className="size-9 text-[#10B981]" />
+          <AlarmClock className="size-10 text-[#10B981]" />
         </motion.div>
       </div>
-      <span className="text-xs font-black text-ink uppercase tracking-wider mt-1">Alarm Ringing</span>
-      <div className="flex gap-2 mt-3 w-full">
-        <button className="flex-1 py-1.5 bg-[#10B981] text-white font-black text-[10px] uppercase rounded-lg border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-          Dismiss
-        </button>
-        <button className="flex-1 py-1.5 bg-white text-ink font-black text-[10px] uppercase rounded-lg border-2 border-ink shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-          Snooze
-        </button>
-      </div>
+      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+        🔔 Continuous Ringing
+      </span>
     </div>
   );
 }
 
 export function SmartFiltersIllustration() {
   return (
-    <div className="size-48 xs:size-52 bg-white rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3.5 flex flex-col justify-between select-none">
-      <div className="flex items-center justify-between border-b-2 border-ink/10 pb-2">
-        <span className="text-[10px] font-black uppercase tracking-wider text-ink/40">Keyword Filter</span>
-        <span className="text-[9px] font-black uppercase text-[#F59E0B] bg-[#FFFBEB] px-2 py-0.5 rounded-full border border-[#F59E0B]/30">
-          Match: "URGENT"
-        </span>
+    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+      <div className="relative grid place-items-center">
+        {/* Pulsing Sonar Ring */}
+        <motion.div 
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0.1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="absolute inset-0 -m-5 rounded-full bg-[#F59E0B]/25 border-2 border-[#F59E0B]/40"
+        />
+        {/* Central Floating Icon Badge */}
+        <motion.div 
+          animate={{ scale: [1, 1.06, 1], rotate: [0, 3, -3, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+        >
+          <BellRing className="size-10 text-[#F59E0B]" />
+        </motion.div>
       </div>
-      <div className="space-y-1.5 my-1">
-        <div className="bg-canvas border border-ink/20 p-2 rounded-lg flex items-center justify-between opacity-40">
-          <span className="text-[10px] font-bold text-ink">Lunch tomorrow?</span>
-          <span className="text-[9px] text-ink/40 font-mono">Ignored</span>
-        </div>
-        <div className="bg-[#FFFBEB] border-2 border-ink p-2 rounded-lg flex items-center justify-between shadow-sm">
-          <span className="text-[10px] font-black text-ink">URGENT: Server Down!</span>
-          <span className="text-[9px] font-black text-[#F59E0B] uppercase">Ringing</span>
-        </div>
-      </div>
-      <div className="pt-1 border-t border-ink/10 flex items-center justify-between text-[9px] font-black uppercase tracking-wider text-ink/60">
-        <span>Slack / SMS</span>
-        <BellRing className="size-3 text-[#F59E0B]" />
-      </div>
+      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+        ✨ Keyword Match Filter
+      </span>
     </div>
   );
 }
 
 export function PlacesMappingIllustration() {
   return (
-    <div className="size-48 xs:size-52 bg-white rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 flex flex-col justify-between select-none relative overflow-hidden">
-      {/* Map grid background */}
-      <div className="absolute inset-0 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:12px_12px] opacity-10" />
-      <div className="relative z-10 flex items-center justify-between border-b-2 border-ink/10 pb-1.5">
-        <span className="text-[10px] font-black uppercase tracking-wider text-ink/40">Passive Geofence</span>
-        <span className="text-[9px] font-black text-[#8B5CF6]">500m Radius</span>
+    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+      <div className="relative grid place-items-center">
+        {/* Pulsing Sonar Radar Ring */}
+        <motion.div 
+          animate={{ scale: [1, 1.45, 1], opacity: [0.4, 0.1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="absolute inset-0 -m-6 rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50"
+        />
+        {/* Central Floating Icon Badge */}
+        <motion.div 
+          animate={{ scale: [1, 1.06, 1], rotate: [0, -3, 3, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+        >
+          <Navigation className="size-10 text-[#8B5CF6] transform rotate-45" />
+        </motion.div>
       </div>
-      
-      <div className="relative z-10 my-auto grid place-items-center">
-        <div className="relative">
-          <motion.div 
-            animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="absolute inset-0 -m-4 rounded-full bg-[#8B5CF6]/20 border-2 border-dashed border-[#8B5CF6]"
-          />
-          <div className="size-10 rounded-full bg-[#F5F3FF] border-2 border-ink grid place-items-center shadow-sm relative z-10">
-            <Navigation className="size-5 text-[#8B5CF6] transform rotate-45" />
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 pt-1 border-t border-ink/10 flex items-center justify-between text-[9px] font-black uppercase tracking-wider text-ink">
-        <span>Arrive @ Office</span>
-        <span className="text-[#8B5CF6]">Triggered</span>
-      </div>
+      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+        📍 500m Geofence Boundary
+      </span>
     </div>
   );
 }
 
 export function PricingTierIllustration() {
   return (
-    <div className="size-48 xs:size-52 bg-white rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3.5 flex flex-col justify-between select-none">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-black uppercase tracking-wider text-ink/40">Pricing</span>
-        <span className="text-[9px] font-black uppercase bg-[#EC4899] text-white px-2 py-0.5 rounded-full">
-          One Plan
-        </span>
+    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+      <div className="relative grid place-items-center">
+        {/* Pulsing Sonar Ring */}
+        <motion.div 
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0.1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="absolute inset-0 -m-5 rounded-full bg-[#EC4899]/25 border-2 border-[#EC4899]/40"
+        />
+        {/* Central Floating Icon Badge */}
+        <motion.div 
+          animate={{ scale: [1, 1.06, 1], rotate: [0, 3, -3, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+        >
+          <Sparkles className="size-10 text-[#EC4899]" />
+        </motion.div>
       </div>
-      <div className="grid grid-cols-2 gap-2 my-1">
-        <div className="bg-canvas border border-ink/20 p-2 rounded-xl flex flex-col justify-between h-20">
-          <span className="text-[9px] font-bold text-ink/60 uppercase">Free</span>
-          <span className="text-[11px] font-black text-ink">3 Active Alarms</span>
-          <div className="w-full h-1 bg-ink/10 rounded-full overflow-hidden">
-            <div className="w-full h-full bg-[#EC4899]" />
-          </div>
-        </div>
-        <div className="bg-[#FDF2F7] border-2 border-ink p-2 rounded-xl flex flex-col justify-between h-20 shadow-sm relative">
-          <Sparkles className="size-3 text-[#EC4899] absolute top-1.5 right-1.5" />
-          <span className="text-[9px] font-black text-[#EC4899] uppercase">Pro</span>
-          <span className="text-[11px] font-black text-ink">Unlimited</span>
-          <span className="text-[8px] font-black uppercase text-white bg-[#EC4899] text-center py-0.5 rounded">
-            Unlock All
-          </span>
-        </div>
-      </div>
-      <div className="text-[9px] text-center font-bold text-ink/50 uppercase tracking-wider">
-        No subscription trap
-      </div>
+      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+        💎 Free Plan • Lifetime Pro
+      </span>
     </div>
   );
 }
 
 export function FAQHelpIllustration() {
   return (
-    <div className="size-48 xs:size-52 bg-white rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3.5 flex flex-col justify-between select-none">
-      <div className="flex items-center justify-between border-b-2 border-ink/10 pb-1.5">
-        <span className="text-[10px] font-black uppercase tracking-wider text-ink/40">Privacy First</span>
-        <ShieldCheck className="size-4 text-[#0284C7]" />
+    <div className="w-full py-4 flex flex-col items-center justify-center relative select-none">
+      <div className="relative grid place-items-center">
+        {/* Pulsing Sonar Ring */}
+        <motion.div 
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0.1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="absolute inset-0 -m-5 rounded-full bg-[#0284C7]/25 border-2 border-[#0284C7]/40"
+        />
+        {/* Central Floating Icon Badge */}
+        <motion.div 
+          animate={{ scale: [1, 1.06, 1], rotate: [0, -3, 3, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          className="size-20 rounded-3xl bg-white/95 border-2.5 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+        >
+          <BrainCircuit className="size-10 text-[#0284C7]" />
+        </motion.div>
       </div>
-      
-      <div className="my-1 space-y-2">
-        <div className="bg-[#E0F2FE] border-2 border-ink p-2 rounded-xl flex items-center justify-between">
-          <span className="text-[10px] font-black text-ink">Local SQLite DB</span>
-          <span className="text-[9px] font-black text-[#0284C7] bg-white px-2 py-0.5 rounded border border-ink/20">100% Offline</span>
-        </div>
-        <div className="bg-canvas border border-ink/20 p-2 rounded-xl flex items-center justify-between opacity-80">
-          <span className="text-[10px] font-bold text-ink">Zero Cloud Syncing</span>
-          <span className="text-[9px] font-bold text-ink/50">Private</span>
-        </div>
-      </div>
-
-      <div className="text-[9px] text-center font-black text-ink/60 uppercase tracking-wider">
-        Your data stays on device
-      </div>
+      <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 bg-white/80 border border-ink/20 px-3 py-1 rounded-full shadow-sm mt-3 relative z-10">
+        🔒 100% Offline SQLite
+      </span>
     </div>
   );
 }

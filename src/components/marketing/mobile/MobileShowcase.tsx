@@ -135,7 +135,7 @@ export function MobileShowcase() {
         </Link>
       </header>
 
-      {/* 2. Mobile Showcase (Dynamic Directional Swipe Animations) */}
+      {/* 2. Mobile Showcase (Borderless Organic Visual Hero Elements) */}
       <div className="flex-1 w-full min-h-0 my-1 no-scrollbar z-10 block overflow-y-auto no-scrollbar py-2 px-1">
         {viewMode === "deck" ? (
           /* DECK / CAROUSEL MODE */
@@ -157,7 +157,7 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/60 border-2 border-ink rounded-2xl py-3 opacity-40">
+                  <div className="my-1 flex items-center justify-center overflow-hidden w-full opacity-40">
                     {nextCard.id === "later" && <LaterAlarmIllustration />}
                     {nextCard.id === "notify" && <SmartFiltersIllustration />}
                     {nextCard.id === "places" && <PlacesMappingIllustration />}
@@ -170,7 +170,7 @@ export function MobileShowcase() {
                   </div>
                 </motion.div>
 
-                {/* Active Front Hero Card (Dynamic Dynamic Directional Fling) */}
+                {/* Active Front Hero Card (Borderless Organic Visuals) */}
                 <motion.div
                   key={`active-${currentCard.id}`}
                   custom={swipeDirection}
@@ -194,22 +194,20 @@ export function MobileShowcase() {
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
                   className={`absolute inset-0 rounded-[2.25rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
-                  {/* Top Bar inside Card (Chapter Pill Only) */}
+                  {/* Top Bar inside Card */}
                   <div className="flex justify-between items-center shrink-0">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink bg-white/90 border-2 border-ink px-3 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Visual Hero Showcase Canvas */}
-                  <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-4 shadow-sm relative">
-                    <div className="scale-105 transform-gpu origin-center">
-                      {currentCard.id === "later" && <LaterAlarmIllustration />}
-                      {currentCard.id === "notify" && <SmartFiltersIllustration />}
-                      {currentCard.id === "places" && <PlacesMappingIllustration />}
-                      {currentCard.id === "pricing" && <PricingTierIllustration />}
-                      {currentCard.id === "faq" && <FAQHelpIllustration />}
-                    </div>
+                  {/* Borderless Organic Visual Hero Element */}
+                  <div className="my-1 flex items-center justify-center overflow-hidden w-full relative">
+                    {currentCard.id === "later" && <LaterAlarmIllustration />}
+                    {currentCard.id === "notify" && <SmartFiltersIllustration />}
+                    {currentCard.id === "places" && <PlacesMappingIllustration />}
+                    {currentCard.id === "pricing" && <PricingTierIllustration />}
+                    {currentCard.id === "faq" && <FAQHelpIllustration />}
                   </div>
 
                   {/* Editorial Text */}
@@ -245,14 +243,12 @@ export function MobileShowcase() {
                       </span>
                     </div>
 
-                    <div className="my-2 flex items-center justify-center overflow-hidden w-full bg-white/80 border-2 border-ink rounded-2xl py-4 shadow-sm relative pointer-events-none">
-                      <div className="scale-105 transform-gpu origin-center">
-                        {card.id === "later" && <LaterAlarmIllustration />}
-                        {card.id === "notify" && <SmartFiltersIllustration />}
-                        {card.id === "places" && <PlacesMappingIllustration />}
-                        {card.id === "pricing" && <PricingTierIllustration />}
-                        {card.id === "faq" && <FAQHelpIllustration />}
-                      </div>
+                    <div className="my-1 flex items-center justify-center overflow-hidden w-full relative pointer-events-none">
+                      {card.id === "later" && <LaterAlarmIllustration />}
+                      {card.id === "notify" && <SmartFiltersIllustration />}
+                      {card.id === "places" && <PlacesMappingIllustration />}
+                      {card.id === "pricing" && <PricingTierIllustration />}
+                      {card.id === "faq" && <FAQHelpIllustration />}
                     </div>
 
                     <div>
