@@ -137,3 +137,97 @@ export function PricingTierIllustration() {
 export function ClosureVisionIllustration() {
   return <AccentIcon color="#D97706" Icon={HeartHandshake} />;
 }
+
+/**
+ * System Layout Tokens for Card Architecture.
+ * Centralizes borders, rounded corners, offset box shadows, and padding scales.
+ */
+export const CARD_TOKENS = {
+  border: "border-3 lg:border-4 border-ink",
+  radius: {
+    deck: "rounded-[2.2rem] lg:rounded-[2.5rem]",
+    grid: "rounded-[1.8rem]",
+  },
+  shadow: {
+    deck: "shadow-[9px_9px_0px_0px_rgba(0,0,0,1)]",
+    grid: "shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]",
+  },
+  padding: {
+    deck: { paddingTop: '2.5%', paddingBottom: '2.5%', paddingLeft: '6%', paddingRight: '6%' },
+    grid: { paddingTop: '2.5%', paddingBottom: '2.5%', paddingLeft: '6%', paddingRight: '6%' },
+  },
+} as const;
+
+export interface ShowcaseCardLayoutPrimitiveProps {
+  mode?: "deck" | "grid";
+  bgClass?: string;
+  headerSlot: React.ReactNode;
+  illustrationSlot: React.ReactNode;
+  titleSlot: React.ReactNode;
+  descriptionSlot: React.ReactNode;
+  footerActionSlot?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
+}
+
+/**
+ * Universal Card Layout Primitive.
+ * Pure composition component strictly governing structural geometry, intrinsic flex sizing,
+ * padding tokens, and content flow. Decoupled from routing, state, or gesture logic.
+ */
+export function ShowcaseCardLayoutPrimitive({
+  mode = "deck",
+  bgClass = "bg-white",
+  headerSlot,
+  illustrationSlot,
+  titleSlot,
+  descriptionSlot,
+  footerActionSlot,
+  className = "",
+  style,
+  onClick,
+}: ShowcaseCardLayoutPrimitiveProps) {
+  const isDeck = mode === "deck";
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        ...(isDeck ? CARD_TOKENS.padding.deck : CARD_TOKENS.padding.grid),
+        ...style,
+      }}
+      className={`relative w-full h-full flex flex-col justify-between select-none ${
+        isDeck ? CARD_TOKENS.radius.deck : CARD_TOKENS.radius.grid
+      } ${CARD_TOKENS.border} ${
+        isDeck ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
+      } ${bgClass} ${className}`}
+    >
+      {/* 1. Header Slot (Intrinsic min-content height) */}
+      <div className="shrink-0 flex items-center w-full min-h-[1.8rem]">
+        {headerSlot}
+      </div>
+
+      {/* 2. Elastic Core Illustration Spring Zone */}
+      <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
+        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[140px]' : 'max-h-[90px]'}`}>
+          {illustrationSlot}
+        </div>
+      </div>
+
+      {/* 3. Content Slot (Intrinsic min-content height, zero truncation) */}
+      <div className="shrink-0 w-full flex flex-col justify-between gap-1.5 mt-auto">
+        <div className="w-full flex items-center">
+          {titleSlot}
+        </div>
+        <div className="w-full flex flex-col justify-between overflow-hidden">
+          {descriptionSlot}
+        </div>
+        {footerActionSlot && (
+          <div className="w-full mt-1">
+            {footerActionSlot}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

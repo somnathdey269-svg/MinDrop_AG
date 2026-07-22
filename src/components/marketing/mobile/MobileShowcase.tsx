@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
+  ShowcaseCardLayoutPrimitive,
   AboutAppIllustration,
   LaterAlarmIllustration, 
   SmartFiltersIllustration, 
@@ -19,22 +20,28 @@ export function MobileShowcase() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<"next" | "prev">("next");
-  const touchStartX = useRef(0);
-  
+
+  const touchStartX = useRef<number | null>(null);
+
   // Sync View Mode with Hash/URL State
   const [viewMode, setViewMode] = useState<"deck" | "grid">(
-    () => typeof window !== "undefined" && window.location.hash.includes("grid") ? "grid" : "deck"
+    () => typeof window !== "undefined" && (window.location.hash.includes("grid") || window.location.search.includes("grid")) ? "grid" : "deck"
   );
 
   useEffect(() => {
     const syncViewMode = () => {
       if (typeof window !== "undefined") {
-        setViewMode(window.location.hash.includes("grid") ? "grid" : "deck");
+        const isGrid = window.location.hash.includes("grid") || window.location.search.includes("grid");
+        setViewMode(isGrid ? "grid" : "deck");
       }
     };
     syncViewMode();
     window.addEventListener("hashchange", syncViewMode);
-    return () => window.removeEventListener("hashchange", syncViewMode);
+    window.addEventListener("popstate", syncViewMode);
+    return () => {
+      window.removeEventListener("hashchange", syncViewMode);
+      window.removeEventListener("popstate", syncViewMode);
+    };
   }, []);
 
   const handleToggleView = (mode: "deck" | "grid") => {
@@ -69,7 +76,7 @@ export function MobileShowcase() {
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (viewMode !== "deck") return;
+    if (touchStartX.current === null) return;
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX.current - touchEndX;
 
@@ -80,14 +87,8 @@ export function MobileShowcase() {
         handlePrev();
       }
     }
+    touchStartX.current = null;
   };
-
-  const handleShowMe = () => {
-    const card = DECK_CARDS[activeIdx];
-    navigate({ to: card.to, search: { from: "deck" }, viewTransition: true });
-  };
-
-  const currentCard = DECK_CARDS[activeIdx];
 
   const renderIllustration = (id: string) => {
     switch (id) {
@@ -99,50 +100,39 @@ export function MobileShowcase() {
       case "privacy-manifesto": return <PrivacyManifestoIllustration />;
       case "pricing": return <PricingTierIllustration />;
       case "vision": return <ClosureVisionIllustration />;
-      default: return null;
+      default: return <AboutAppIllustration />;
     }
   };
 
-  return (
-    <div 
-      style={{
-        backgroundColor: viewMode === "deck" ? currentCard.bgColor : "#FFD043",
-        transition: "background-color 0.5s ease"
-      }}
-      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3 sm:p-4 select-none overflow-hidden h-[100dvh] w-screen"
-    >
-      {/* 1. Mobile Header */}
-      <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-2">
-        <div className="flex items-center h-full">
-          <Link
-            to="/terms"
-            viewTransition
-            style={{ viewTransitionName: 'card-terms' } as React.CSSProperties}
-            className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all flex items-center leading-none"
-          >
-            Terms
-          </Link>
-        </div>
-        
-        {/* Animated MinDrop Header Logo */}
-        <div className="flex items-center h-full">
-          <MinDropHeaderLogo className="text-xl sm:text-2xl" />
-        </div>
+  const currentCard = DECK_CARDS[activeIdx];
 
-        <div className="flex items-center h-full">
-          <Link
-            to="/privacy"
-            viewTransition
-            style={{ viewTransitionName: 'card-privacy' } as React.CSSProperties}
-            className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 hover:text-ink transition-all flex items-center leading-none"
-          >
-            Privacy
-          </Link>
-        </div>
+  const handleShowMe = () => {
+    navigate({ to: currentCard.to, search: { from: "deck" } });
+  };
+
+  return (
+    <div className="relative w-full h-screen overflow-hidden bg-[#FFC935] flex flex-col justify-between select-none font-sans">
+      {/* 1. TOP NAV BAR */}
+      <header className="w-full px-5 py-4 flex items-center justify-between z-30 shrink-0">
+        <Link 
+          to="/terms"
+          className="text-[11px] uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
+        >
+          TERMS
+        </Link>
+        
+        <MinDropHeaderLogo />
+
+        <Link 
+          to="/privacy"
+          className="text-[11px] uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
+        >
+          PRIVACY
+        </Link>
       </header>
 
-      {/* 2. Mobile Main Stage */}
-      <div className="flex-1 w-full min-h-0 my-1 z-10 flex flex-col justify-center items-center overflow-hidden">
+      {/* 2. MAIN SHOWCASE AREA */}
+      <main className="relative flex-1 w-full flex items-center justify-center overflow-hidden px-3">
         {viewMode === "deck" ? (
           /* DECK VIEW MODE (Fluid Mobile Viewport Math) */
           <div 
@@ -169,51 +159,39 @@ export function MobileShowcase() {
                     opacity: 0 
                   }}
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
-                  onClick={handleShowMe}
+                  className="absolute inset-0 w-full h-full"
                   style={{ 
                     viewTransitionName: `card-${currentCard.id}`,
-                    paddingTop: '2.5%',
-                    paddingBottom: '2.5%',
-                    paddingLeft: '6%',
-                    paddingRight: '6%',
                   } as React.CSSProperties}
-                  className={`absolute inset-0 w-full h-full rounded-[2.2rem] border-3 border-ink flex flex-col justify-between shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
-                  {/* Section 1: Tag Pill (15% height) */}
-                  <div className="h-[15%] w-full shrink-0 flex items-center">
-                    <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
-                      {currentCard.tag}
-                    </span>
-                  </div>
-
-                  {/* Section 2: Centered Icon (25% height) */}
-                  <div className="h-[25%] w-full shrink-0 flex items-center justify-center">
-                    <div className="h-full aspect-square flex items-center justify-center">
-                      {renderIllustration(currentCard.id)}
-                    </div>
-                  </div>
-
-                  {/* Section 3: Content Area (55% height) */}
-                  <div className="h-[55%] w-full shrink-0 flex flex-col justify-between">
-                    {/* Title: 20% of Content Area */}
-                    <div className="h-[20%] w-full flex items-center">
+                  <ShowcaseCardLayoutPrimitive
+                    mode="deck"
+                    bgClass={currentCard.bgClass}
+                    onClick={handleShowMe}
+                    className="active:scale-[0.98] transition-transform"
+                    headerSlot={
+                      <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
+                        {currentCard.tag}
+                      </span>
+                    }
+                    illustrationSlot={renderIllustration(currentCard.id)}
+                    titleSlot={
                       <h3
                         className="font-black text-ink leading-tight tracking-tight"
                         style={{ fontSize: 'clamp(1.35rem, 3.8vh, 2.2rem)' }}
                       >
                         {currentCard.title}
                       </h3>
-                    </div>
-                    {/* Description: 80% of Content Area */}
-                    <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-1">
+                    }
+                    descriptionSlot={
                       <p
                         className="text-ink/85 font-normal leading-relaxed"
                         style={{ fontSize: 'clamp(1.05rem, 2.5vh, 1.4rem)', lineHeight: '1.6' }}
                       >
                         {currentCard.description}
                       </p>
-                    </div>
-                  </div>
+                    }
+                  />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -231,68 +209,42 @@ export function MobileShowcase() {
                     viewTransition
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
-                      paddingTop: '2.5%',
-                      paddingBottom: '2.5%',
-                      paddingLeft: '6%',
-                      paddingRight: '6%',
                     } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform aspect-[3/3.6] min-h-[290px] ${card.bgClass}`}
+                    className="aspect-[3/3.6] min-h-[290px] block"
                   >
-                    {/* Section 1: Tag Pill (15% height) */}
-                    <div className="h-[15%] w-full shrink-0 flex items-center">
-                      <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
-                        {card.tag}
-                      </span>
-                    </div>
-
-                    {/* Section 2: Centered Icon (25% height) */}
-                    <div className="h-[25%] w-full shrink-0 flex items-center justify-center">
-                      <div className="h-full aspect-square flex items-center justify-center p-0.5">
-                        {renderIllustration(card.id)}
-                      </div>
-                    </div>
-
-                    {/* Section 3: Content Area (55% height: 20% Title + 80% Description) */}
-                    <div className="h-[55%] w-full shrink-0 flex flex-col justify-between">
-                      {/* Title: 20% of Content Area */}
-                      <div className="h-[20%] w-full flex items-center">
+                    <ShowcaseCardLayoutPrimitive
+                      mode="grid"
+                      bgClass={card.bgClass}
+                      className="active:scale-[0.98] transition-transform cursor-pointer"
+                      headerSlot={
+                        <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
+                          {card.tag}
+                        </span>
+                      }
+                      illustrationSlot={renderIllustration(card.id)}
+                      titleSlot={
                         <h3
                           className="font-black text-ink leading-tight tracking-tight"
                           style={{ fontSize: 'clamp(1.15rem, 2.8vh, 1.6rem)' }}
                         >
                           {card.title}
                         </h3>
-                      </div>
-                      {/* Description: 80% of Content Area — full text, exact 2.5% bottom pad */}
-                      <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-0.5">
+                      }
+                      descriptionSlot={
                         <p
                           className="text-ink/80 font-normal leading-relaxed"
                           style={{ fontSize: 'clamp(0.85rem, 1.9vh, 1.08rem)', lineHeight: '1.5' }}
                         >
                           {card.description}
                         </p>
-                      </div>
-                    </div>
+                      }
+                    />
                   </Link>
                 );
               })}
             </div>
           </div>
         )}
-      </div>
-
-      {/* 3. Mobile Footer */}
-      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0 h-10">
-        <div className="justify-self-start">
-          <Link
-            to="/about"
-            viewTransition
-            style={{ viewTransitionName: 'card-[#about]' } as React.CSSProperties}
-            className="text-xs sm:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors"
-          >
-            About
-          </Link>
-        </div>
 
         <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
           <button
