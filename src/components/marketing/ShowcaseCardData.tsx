@@ -154,12 +154,12 @@ export const CARD_TOKENS = {
   },
   typography: {
     deck: {
-      title: "font-black text-ink leading-tight tracking-tight text-[1.45em] lg:text-[1.55em]",
-      description: "text-ink/85 font-normal leading-relaxed text-[0.9em] lg:text-[0.95em]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.55em] lg:text-[1.7em]",
+      description: "text-ink/85 font-normal leading-relaxed text-[1.02em] lg:text-[1.12em]",
     },
     grid: {
-      title: "font-black text-ink leading-tight tracking-tight text-[1.3em]",
-      description: "text-ink/80 font-normal leading-relaxed text-[0.82em]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.35em]",
+      description: "text-ink/80 font-normal leading-relaxed text-[0.85em]",
     },
   },
 } as const;
@@ -179,12 +179,8 @@ export interface ShowcaseCardLayoutPrimitiveProps {
 
 /**
  * Universal Two-Stage Adaptive Card Layout Primitive.
- * Exact Percentage Height Allocations:
- * - Top Padding: 2.5%
- * - Header Slot: 15%
- * - Illustration: 25%
- * - Content Zone: 55% (20% Title, 80% Description)
- * - Bottom Padding: 2.5%
+ * Stage 1: Responsive Card Sizing Context (Outer Boundary Math).
+ * Stage 2: Dynamic Height Allocation & Auto-Adjusted Typography Scale (Zero Bottom Void).
  */
 export function ShowcaseCardLayoutPrimitive({
   mode = "deck",
@@ -204,11 +200,11 @@ export function ShowcaseCardLayoutPrimitive({
       onClick={onClick}
       style={{
         containerType: 'inline-size',
-        fontSize: isDeck ? 'clamp(0.95rem, 3.0cqi + 0.15rem, 1.45rem)' : 'clamp(0.85rem, 2.5cqi + 0.1rem, 1.15rem)',
-        paddingTop: '2.5%',
-        paddingBottom: '2.5%',
-        paddingLeft: '6%',
-        paddingRight: '6%',
+        fontSize: isDeck ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.85rem, 2.5cqi + 0.1rem, 1.15rem)',
+        paddingTop: '3.5%',
+        paddingBottom: '3.5%',
+        paddingLeft: '6.5%',
+        paddingRight: '6.5%',
         ...style,
       }}
       className={`relative w-full h-full flex flex-col justify-between select-none ${
@@ -217,30 +213,28 @@ export function ShowcaseCardLayoutPrimitive({
         isDeck ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
-      {/* 1. Header Slot (15% Height Budget) */}
-      <div className="h-[15%] shrink-0 flex items-center w-full text-[0.75em]">
+      {/* 1. Header Slot (Tag / Pill) */}
+      <div className="shrink-0 flex items-center w-full min-h-[1.8em] text-[0.75em]">
         {headerSlot}
       </div>
 
-      {/* 2. Illustration Zone (25% Height Budget) */}
-      <div className="h-[25%] shrink-0 w-full flex items-center justify-center py-1">
-        <div className="h-full aspect-square flex items-center justify-center max-h-full">
+      {/* 2. Illustration Zone */}
+      <div className="flex-1 min-h-0 w-full flex items-center justify-center py-2">
+        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(38%,8.5em)]' : 'max-h-[min(32%,5.5em)]'}`}>
           {illustrationSlot}
         </div>
       </div>
 
-      {/* 3. Content Zone (55% Height Budget: 20% Title, 80% Description) */}
-      <div className="h-[55%] shrink-0 w-full flex flex-col justify-between overflow-hidden">
-        {/* Title Slot (20% of 55% Content Zone) */}
-        <div className="min-h-[20%] shrink-0 w-full flex items-center">
+      {/* 3. Content Zone (Dynamic Title & Description Fill - Zero Bottom Void) */}
+      <div className="shrink-0 w-full flex flex-col justify-end gap-2.5 mt-auto">
+        <div className="w-full flex items-center">
           {titleSlot}
         </div>
-        {/* Description Slot (80% of 55% Content Zone) */}
-        <div className="flex-1 w-full flex flex-col justify-start overflow-hidden pt-1">
+        <div className="w-full flex flex-col justify-start overflow-hidden">
           {descriptionSlot}
         </div>
         {footerActionSlot && (
-          <div className="w-full mt-auto">
+          <div className="w-full mt-1">
             {footerActionSlot}
           </div>
         )}
