@@ -239,7 +239,7 @@ export function DesktopShowcase() {
             </div>
 
             {/* Web Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(380px,32vw,470px)] h-[clamp(460px,66vh,590px)] flex items-center justify-center">
+            <div className="relative w-[clamp(380px,32vw,470px)] min-h-[clamp(420px,65vh,570px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -252,16 +252,20 @@ export function DesktopShowcase() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.5rem] border-3 lg:border-4 border-ink p-7 lg:p-8 flex flex-col justify-between bg-white shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.5rem] border-3 lg:border-4 border-ink flex flex-col bg-white shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  style={{ padding: '5%', containerType: 'inline-size' } as React.CSSProperties}
                 >
-                  <div className="shrink-0 h-8 flex items-center">
+                  <div className="shrink-0 mb-[5%]">
                     <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  {/* BOTTOM behind: icon + title faded */}
-                  <div className="shrink-0 opacity-40">
-                    <div className="mb-3">{renderIllustration(nextCard.id)}</div>
-                    <h3 className="text-3xl lg:text-4xl font-black text-ink leading-tight">
+                  {/* BOTTOM behind: icon + title — faded */}
+                  <div className="flex-1 flex flex-col justify-end opacity-40">
+                    <div className="w-[20%] aspect-square mb-[4%]">{renderIllustration(nextCard.id)}</div>
+                    <h3
+                      className="font-black text-ink leading-tight"
+                      style={{ fontSize: 'clamp(1.2rem, 7cqw, 3rem)' }}
+                    >
                       {nextCard.title}
                     </h3>
                   </div>
@@ -280,25 +284,31 @@ export function DesktopShowcase() {
                   exit={{ x: -400, rotate: -18, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
-                  style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 lg:border-4 border-ink p-7 lg:p-8 flex flex-col justify-between shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  style={{ viewTransitionName: `card-${currentCard.id}`, padding: '5%', containerType: 'inline-size' } as React.CSSProperties}
+                  className={`absolute inset-0 rounded-[2.5rem] border-3 lg:border-4 border-ink flex flex-col shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   {/* TOP: Tag Pill */}
-                  <div className="shrink-0 flex items-center">
+                  <div className="shrink-0 mb-[5%]">
                     <span className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* BOTTOM: Icon grouped above content — zero blank space */}
-                  <div className="shrink-0">
-                    <div className="mb-4">
+                  {/* BOTTOM: Icon + Content — width-proportional */}
+                  <div className="flex-1 flex flex-col justify-end">
+                    <div className="w-[20%] aspect-square mb-[4%]">
                       {renderIllustration(currentCard.id)}
                     </div>
-                    <h3 className="text-[2rem] lg:text-[2.4rem] xl:text-5xl font-black text-ink leading-tight tracking-tight mb-3">
+                    <h3
+                      className="font-black text-ink leading-tight tracking-tight mb-[3%]"
+                      style={{ fontSize: 'clamp(1.2rem, 7cqw, 3rem)' }}
+                    >
                       {currentCard.title}
                     </h3>
-                    <p className="text-base lg:text-xl xl:text-2xl text-ink/75 font-normal leading-relaxed">
+                    <p
+                      className="text-ink/75 font-normal leading-snug"
+                      style={{ fontSize: 'clamp(0.85rem, 4cqw, 1.3rem)' }}
+                    >
                       {currentCard.description}
                     </p>
                   </div>
@@ -336,25 +346,31 @@ export function DesktopShowcase() {
                     to={card.to}
                     search={{ from: "grid" }}
                     viewTransition
-                    style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink p-4 lg:p-5 xl:p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[clamp(300px,34vh,420px)] ${card.bgClass}`}
+                    style={{ viewTransitionName: `card-${card.id}`, padding: '5%', containerType: 'inline-size' } as React.CSSProperties}
+                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[clamp(280px,30vh,380px)] ${card.bgClass}`}
                   >
                     {/* TOP: Tag Pill */}
-                    <div className="shrink-0 flex items-center">
+                    <div className="shrink-0 mb-[5%]">
                       <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* BOTTOM: Icon + Content grouped — no blank space */}
-                    <div className="shrink-0">
-                      <div className="mb-3">
+                    {/* BOTTOM: Icon + Content — width-proportional */}
+                    <div className="flex-1 flex flex-col justify-end">
+                      <div className="w-[22%] aspect-square mb-[3%]">
                         {renderIllustration(card.id)}
                       </div>
-                      <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-2">
+                      <h3
+                        className="font-black text-ink leading-tight tracking-tight mb-[2%]"
+                        style={{ fontSize: 'clamp(0.9rem, 5.5cqw, 2rem)' }}
+                      >
                         {card.title}
                       </h3>
-                      <p className="text-sm lg:text-base xl:text-lg text-ink/70 font-normal leading-snug line-clamp-3">
+                      <p
+                        className="text-ink/70 font-normal leading-snug line-clamp-3"
+                        style={{ fontSize: 'clamp(0.72rem, 3.2cqw, 1rem)' }}
+                      >
                         {card.description}
                       </p>
                     </div>

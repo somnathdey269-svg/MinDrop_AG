@@ -151,7 +151,7 @@ export function MobileShowcase() {
             className="w-full h-full flex flex-col items-center justify-center relative"
           >
             {/* Mobile Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(275px,80vw,340px)] h-[clamp(350px,55vh,440px)] flex items-center justify-center">
+            <div className="relative w-[clamp(275px,80vw,340px)] min-h-[clamp(300px,50vh,400px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -171,24 +171,32 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink flex flex-col shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  style={{ padding: '5%', containerType: 'inline-size' } as React.CSSProperties}
                 >
                   {/* TOP: Tag Pill */}
-                  <div className="shrink-0 flex items-center">
+                  <div className="shrink-0 mb-[5%]">
                     <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* BOTTOM: Icon accent grouped directly above content — no flex-1 gap */}
-                  <div className="shrink-0">
-                    <div className="mb-3">
+                  {/* BOTTOM: Icon (22% width, square) + Content — all width-proportional */}
+                  <div className="flex-1 flex flex-col justify-end">
+                    {/* Icon scales with card width: 22% × card-width = auto square */}
+                    <div className="w-[22%] aspect-square mb-[4%]">
                       {renderIllustration(currentCard.id)}
                     </div>
-                    <h3 className="text-2xl sm:text-[1.75rem] font-black text-ink leading-tight tracking-tight mb-2">
+                    <h3
+                      className="font-black text-ink leading-tight tracking-tight mb-[2.5%]"
+                      style={{ fontSize: 'clamp(1rem, 7cqw, 2.2rem)' }}
+                    >
                       {currentCard.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-ink/75 font-normal leading-snug">
+                    <p
+                      className="text-ink/75 font-normal leading-snug"
+                      style={{ fontSize: 'clamp(0.78rem, 4cqw, 1.05rem)' }}
+                    >
                       {currentCard.description}
                     </p>
                   </div>
@@ -207,25 +215,35 @@ export function MobileShowcase() {
                     to={card.to}
                     search={{ from: "grid" }}
                     viewTransition
-                    style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink p-4 sm:p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[clamp(280px,38vh,360px)] ${card.bgClass}`}
+                    style={{ 
+                      viewTransitionName: `card-${card.id}`,
+                      padding: '5%',
+                      containerType: 'inline-size'
+                    } as React.CSSProperties}
+                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[clamp(250px,35vh,330px)] ${card.bgClass}`}
                   >
                     {/* TOP: Tag Pill */}
-                    <div className="shrink-0 flex items-center">
+                    <div className="shrink-0 mb-[5%]">
                       <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* BOTTOM: Icon + Content grouped — no blank space */}
-                    <div className="shrink-0">
-                      <div className="mb-2">
+                    {/* BOTTOM: Icon + Content — width-proportional */}
+                    <div className="flex-1 flex flex-col justify-end">
+                      <div className="w-[20%] aspect-square mb-[4%]">
                         {renderIllustration(card.id)}
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                      <h3
+                        className="font-black text-ink leading-tight tracking-tight mb-[2%]"
+                        style={{ fontSize: 'clamp(0.9rem, 6.5cqw, 1.8rem)' }}
+                      >
                         {card.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-ink/70 font-normal leading-snug line-clamp-3">
+                      <p
+                        className="text-ink/70 font-normal leading-snug"
+                        style={{ fontSize: 'clamp(0.72rem, 3.8cqw, 1rem)' }}
+                      >
                         {card.description}
                       </p>
                     </div>
