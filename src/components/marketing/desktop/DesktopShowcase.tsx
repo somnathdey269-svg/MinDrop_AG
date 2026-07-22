@@ -122,28 +122,39 @@ export function DesktopShowcase() {
 
   const currentCard = DECK_CARDS[activeIdx];
   const nextCard = DECK_CARDS[(activeIdx + 1) % DECK_CARDS.length];
+  const prevCard = DECK_CARDS[(activeIdx - 1 + DECK_CARDS.length) % DECK_CARDS.length];
+
+  const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFC935";
+  const bgColorPrev = prevCard.bgColor;
+  const bgColorNext = nextCard.bgColor;
 
   let activeX = 0;
-  let activeRotate = 0;
-  if (hoverZone === "left") {
-    activeX = -20;
-    activeRotate = -2;
-  } else if (hoverZone === "right") {
-    activeX = 20;
-    activeRotate = 2;
-  }
+  let activeRotate = -2;
+  let behindX = 0;
+  let behindRotate = 8;
+  let behindScale = 0.95;
 
-  let behindX = 40;
-  let behindRotate = 6;
-  let behindScale = 0.94;
+  let leftBubbleTransform = "translate(0px, -50%) scale(0.85)";
+  let rightBubbleTransform = "translate(0px, -50%) scale(0.85)";
+
   if (hoverZone === "left") {
-    behindX = 60;
-    behindRotate = 9;
-    behindScale = 0.92;
-  } else if (hoverZone === "right") {
-    behindX = 15;
+    activeX = -200;
+    activeRotate = -10;
+    behindX = 200;
     behindRotate = 2;
-    behindScale = 0.96;
+    behindScale = 1;
+
+    leftBubbleTransform = "translate(12vw, -50%) scale(1.35)";
+    rightBubbleTransform = "translate(-3vw, -50%) scale(0.7)";
+  } else if (hoverZone === "right") {
+    activeX = 200;
+    activeRotate = 10;
+    behindX = 0;
+    behindRotate = 4;
+    behindScale = 0.95;
+
+    leftBubbleTransform = "translate(3vw, -50%) scale(0.7)";
+    rightBubbleTransform = "translate(-12vw, -50%) scale(1.35)";
   }
 
   const handleShowMe = () => {
@@ -156,44 +167,75 @@ export function DesktopShowcase() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onWheel={handleWheel}
-      className="relative w-full h-screen overflow-hidden bg-[#FFC935] flex flex-col justify-between select-none font-sans"
+      style={{
+        backgroundColor: activeBgColor,
+        transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+      }}
+      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3 sm:p-4 lg:p-6 select-none overflow-hidden h-[100dvh] w-screen"
     >
+      {/* Dynamic Ambient Background Circles */}
+      <div 
+        className="absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0 hidden md:block"
+        style={{
+          backgroundColor: viewMode === "deck" ? bgColorPrev : "transparent",
+          left: "-28vw",
+          width: "clamp(350px, 55vw, 850px)",
+          height: "clamp(350px, 55vw, 850px)",
+          transform: leftBubbleTransform,
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)"
+        }}
+      />
+      <div 
+        className="absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0 hidden md:block"
+        style={{
+          backgroundColor: viewMode === "deck" ? bgColorNext : "transparent",
+          right: "-28vw",
+          width: "clamp(350px, 55vw, 850px)",
+          height: "clamp(350px, 55vw, 850px)",
+          transform: rightBubbleTransform,
+          transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)"
+        }}
+      />
+
       {/* 1. TOP NAV BAR */}
-      <header className="w-full px-8 py-5 flex items-center justify-between z-30 shrink-0">
+      <header className="flex justify-between items-center w-full z-30 shrink-0 h-9 px-2">
         <Link 
           to="/terms"
-          className="text-xs uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
+          className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
         >
-          TERMS
+          Terms
         </Link>
         
-        <MinDropHeaderLogo />
+        <MinDropHeaderLogo className="text-xl sm:text-2xl" />
 
         <Link 
           to="/privacy"
-          className="text-xs uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
+          className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
         >
-          PRIVACY
+          Privacy
         </Link>
       </header>
 
       {/* 2. MAIN SHOWCASE AREA */}
-      <main className="relative flex-1 w-full flex items-center justify-center overflow-hidden px-4">
+      <main className="flex-1 w-full min-h-0 my-1 z-10 flex flex-col justify-center items-center overflow-hidden">
         {viewMode === "deck" ? (
           /* HERO STACKED DECK VIEW MODE */
-          <div className="relative w-full h-full flex flex-col items-center justify-center py-2">
+          <div className="w-full h-full flex items-center justify-center relative">
             
-            {/* Click Zones (Left = Prev, Right = Next) */}
+            {/* Left Hover Trigger */}
             <div 
-              onClick={handlePrev}
-              className="absolute left-0 top-0 w-1/3 h-full z-20 cursor-w-resize"
-              title="Previous card"
-            />
-            <div 
-              onClick={handleNext}
-              className="absolute right-0 top-0 w-1/3 h-full z-20 cursor-e-resize"
-              title="Next card"
-            />
+              onClick={handleNext} 
+              className="absolute left-4 lg:left-12 z-30 flex cursor-pointer group"
+            >
+              <div className="flex flex-col items-center text-center">
+                <span className="text-[11px] lg:text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-0.5 group-hover:text-ink transition">
+                  Cycle Deck
+                </span>
+                <span className="text-xl lg:text-3xl font-black text-ink group-hover:text-[#FF671F] transition">
+                  Next card
+                </span>
+              </div>
+            </div>
 
             {/* Web Card Container (Prominent Hero Proportions) */}
             <div className="relative w-[clamp(380px,32vw,470px)] min-h-[clamp(420px,65vh,570px)] flex items-center justify-center">
@@ -218,6 +260,7 @@ export function DesktopShowcase() {
                     headerSlot={<span className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink/40">{nextCard.tag}</span>}
                     illustrationSlot={renderIllustration(nextCard.id)}
                     titleSlot={<h3 className="font-black text-ink leading-tight">{nextCard.title}</h3>}
+                    descriptionSlot={<p className="text-ink/60 font-normal">{nextCard.description}</p>}
                   />
                 </motion.div>
 
@@ -264,17 +307,20 @@ export function DesktopShowcase() {
               </AnimatePresence>
             </div>
 
-            {/* Read Specs Trigger */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-6 z-20 text-center cursor-pointer"
-              onClick={handleShowMe}
-            >
-              <span className="text-xs font-black uppercase tracking-widest text-ink/70 hover:text-ink transition-colors underline decoration-2 underline-offset-4">
-                Click Card to Explore Feature
-              </span>
-            </motion.div>
+            {/* Right Hover Trigger */}
+            <div className="absolute right-4 lg:right-12 z-30 flex">
+              <button
+                onClick={handleShowMe}
+                className="flex flex-col items-center text-center cursor-pointer group bg-transparent border-0"
+              >
+                <span className="text-[11px] lg:text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-0.5 group-hover:text-ink transition">
+                  Read Specs
+                </span>
+                <span className="text-xl lg:text-3xl font-black text-ink group-hover:text-[#FF671F] transition">
+                  Show me!
+                </span>
+              </button>
+            </div>
 
           </div>
         ) : (
@@ -327,22 +373,22 @@ export function DesktopShowcase() {
       </main>
 
       {/* 3. BOTTOM FLOATING CONTROLS */}
-      <footer className="w-full py-4 flex items-center justify-between px-8 z-30 shrink-0">
-        <Link 
-          to="/about"
-          className="text-xs uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
-        >
-          ABOUT
-        </Link>
+      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0 h-10">
+        <div className="justify-self-start">
+          <Link
+            to="/about"
+            className="text-xs lg:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
+          >
+            About
+          </Link>
+        </div>
 
         {/* View Toggle Controls */}
-        <div className="bg-ink p-1.5 rounded-full flex items-center gap-1 shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
+        <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
           <button
             onClick={() => handleToggleView("deck")}
-            className={`p-2 rounded-full transition-all ${
-              viewMode === "deck" 
-                ? "bg-white text-ink shadow-sm" 
-                : "text-white/60 hover:text-white"
+            className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
+              viewMode === "deck" ? "bg-white text-ink" : "bg-ink text-canvas hover:text-[#FF671F]"
             }`}
             title="Deck View"
             aria-label="Switch to Deck View"
@@ -355,7 +401,8 @@ export function DesktopShowcase() {
             className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
               viewMode === "grid" ? "bg-white text-ink" : "bg-ink text-canvas hover:text-[#FF671F]"
             }`}
-            aria-label="Grid View"
+            title="Grid View"
+            aria-label="Switch to Grid View"
           >
             <LayoutGrid className="size-4" />
           </button>
@@ -364,7 +411,7 @@ export function DesktopShowcase() {
         <div className="justify-self-end">
           <Link
             to="/download"
-            className="text-xs lg:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors"
+            className="text-xs lg:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
           >
             Get App
           </Link>
