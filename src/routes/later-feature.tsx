@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import {
-  AlarmClock, ShieldAlert, Sparkles, Volume2, ChevronLeft, ChevronRight, X, ArrowRight, Pill, Phone, Flame, MapPin, Bell, ChevronDown, ChevronUp
+  AlarmClock, ShieldAlert, Sparkles, Volume2, ChevronLeft, ChevronRight, X, ArrowRight, Pill, Phone, Flame, ChevronDown, ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -222,7 +222,8 @@ function LaterFeatureDetailView() {
   const backHash = from === "grid" ? "grid" : undefined;
   const [current, setCurrent] = useState(0);
   const touchStartY = useRef(0);
-  const lastScrollTime = useRef(0);
+  const isAnimating = useRef(false);
+  const lockTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
     <SlideOpening />,
@@ -236,26 +237,37 @@ function LaterFeatureDetailView() {
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
-    const now = Date.now();
-    if (now - lastScrollTime.current < 350) return;
-    lastScrollTime.current = now;
+    if (isAnimating.current) return;
+
+    isAnimating.current = true;
     setCurrent(idx);
+
+    if (lockTimer.current) clearTimeout(lockTimer.current);
+    lockTimer.current = setTimeout(() => {
+      isAnimating.current = false;
+    }, 600);
   };
 
-  // Global Mouse Wheel Listener
+  // Wheel Listener with strict 1-slide gesture lock
   useEffect(() => {
     const handler = (e: WheelEvent) => {
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
+      if (isAnimating.current) return;
+      if (Math.abs(e.deltaY) < 12 && Math.abs(e.deltaX) < 12) return;
+
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       if (delta > 0) goTo(current + 1);
       else if (delta < 0) goTo(current - 1);
     };
+
     window.addEventListener("wheel", handler, { passive: false });
-    return () => window.removeEventListener("wheel", handler);
+    return () => {
+      window.removeEventListener("wheel", handler);
+      if (lockTimer.current) clearTimeout(lockTimer.current);
+    };
   }, [current]);
 
-  // Global Keyboard Listener
+  // Keyboard Listener with strict 1-slide gesture lock
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
@@ -267,6 +279,7 @@ function LaterFeatureDetailView() {
         goTo(current - 1);
       }
     };
+
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [current]);
