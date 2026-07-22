@@ -401,11 +401,11 @@ export function DesktopShowcase() {
                           {card.title}
                         </h3>
                       </div>
-                      {/* Description: 80% of Content Area */}
-                      <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-1">
+                      {/* Description: 80% of Content Area — full text, no ellipsis (...) */}
+                      <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-0.5">
                         <p
-                          className="text-ink/80 font-normal leading-relaxed line-clamp-4"
-                          style={{ fontSize: 'clamp(0.85rem, 1.9vh, 1.1rem)', lineHeight: '1.5' }}
+                          className="text-ink/80 font-normal leading-snug"
+                          style={{ fontSize: 'clamp(0.75rem, 1.55vh, 0.98rem)', lineHeight: '1.4' }}
                         >
                           {card.description}
                         </p>
