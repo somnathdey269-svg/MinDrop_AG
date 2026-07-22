@@ -140,7 +140,7 @@ export function ClosureVisionIllustration() {
 
 /**
  * System Layout Tokens for Card Architecture.
- * Centralizes borders, rounded corners, offset box shadows, and padding scales.
+ * Centralizes borders, rounded corners, offset box shadows, padding scales, and typography.
  */
 export const CARD_TOKENS = {
   border: "border-3 lg:border-4 border-ink",
@@ -155,6 +155,16 @@ export const CARD_TOKENS = {
   padding: {
     deck: { paddingTop: '2.5%', paddingBottom: '2.5%', paddingLeft: '6%', paddingRight: '6%' },
     grid: { paddingTop: '2.5%', paddingBottom: '2.5%', paddingLeft: '6%', paddingRight: '6%' },
+  },
+  typography: {
+    deck: {
+      title: "font-black text-ink leading-tight tracking-tight text-[clamp(1.5rem,5.5cqi+0.2rem,2.8rem)]",
+      description: "text-ink/85 font-normal leading-relaxed text-[clamp(0.95rem,3.2cqi+0.1rem,1.35rem)]",
+    },
+    grid: {
+      title: "font-black text-ink leading-tight tracking-tight text-[clamp(1.1rem,4.2cqi,1.55rem)]",
+      description: "text-ink/80 font-normal leading-relaxed text-[clamp(0.85rem,2.6cqi,1.05rem)]",
+    },
   },
 } as const;
 
@@ -174,7 +184,7 @@ export interface ShowcaseCardLayoutPrimitiveProps {
 /**
  * Universal Card Layout Primitive.
  * Pure composition component strictly governing structural geometry, intrinsic flex sizing,
- * padding tokens, and content flow. Decoupled from routing, state, or gesture logic.
+ * padding tokens, container query scope, and content flow. Decoupled from routing or state logic.
  */
 export function ShowcaseCardLayoutPrimitive({
   mode = "deck",
@@ -194,6 +204,7 @@ export function ShowcaseCardLayoutPrimitive({
       onClick={onClick}
       style={{
         ...(isDeck ? CARD_TOKENS.padding.deck : CARD_TOKENS.padding.grid),
+        containerType: 'inline-size',
         ...style,
       }}
       className={`relative w-full h-full flex flex-col justify-between select-none ${
@@ -207,9 +218,9 @@ export function ShowcaseCardLayoutPrimitive({
         {headerSlot}
       </div>
 
-      {/* 2. Elastic Core Illustration Spring Zone */}
+      {/* 2. Elastic Core Illustration Spring Zone (Relative max-height bounds) */}
       <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
-        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[140px]' : 'max-h-[90px]'}`}>
+        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(35%,10em)]' : 'max-h-[min(30%,6.5em)]'}`}>
           {illustrationSlot}
         </div>
       </div>

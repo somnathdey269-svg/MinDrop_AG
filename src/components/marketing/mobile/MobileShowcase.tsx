@@ -6,6 +6,7 @@ import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
   ShowcaseCardLayoutPrimitive,
+  CARD_TOKENS,
   AboutAppIllustration,
   LaterAlarmIllustration, 
   SmartFiltersIllustration, 
@@ -164,11 +165,12 @@ export function MobileShowcase() {
                     viewTransitionName: `card-${currentCard.id}`,
                   } as React.CSSProperties}
                 >
+                  {/* NEW IMPLEMENTATION USING UNIVERSAL CARD LAYOUT PRIMITIVE */}
                   <ShowcaseCardLayoutPrimitive
                     mode="deck"
                     bgClass={currentCard.bgClass}
                     onClick={handleShowMe}
-                    className="active:scale-[0.98] transition-transform"
+                    className="active:scale-[0.98] transition-transform cursor-pointer"
                     headerSlot={
                       <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                         {currentCard.tag}
@@ -176,18 +178,12 @@ export function MobileShowcase() {
                     }
                     illustrationSlot={renderIllustration(currentCard.id)}
                     titleSlot={
-                      <h3
-                        className="font-black text-ink leading-tight tracking-tight"
-                        style={{ fontSize: 'clamp(1.35rem, 3.8vh, 2.2rem)' }}
-                      >
+                      <h3 className={CARD_TOKENS.typography.deck.title}>
                         {currentCard.title}
                       </h3>
                     }
                     descriptionSlot={
-                      <p
-                        className="text-ink/85 font-normal leading-relaxed"
-                        style={{ fontSize: 'clamp(1.05rem, 2.5vh, 1.4rem)', lineHeight: '1.6' }}
-                      >
+                      <p className={CARD_TOKENS.typography.deck.description}>
                         {currentCard.description}
                       </p>
                     }
@@ -212,6 +208,7 @@ export function MobileShowcase() {
                     } as React.CSSProperties}
                     className="aspect-[3/3.6] min-h-[290px] block"
                   >
+                    {/* NEW IMPLEMENTATION USING UNIVERSAL CARD LAYOUT PRIMITIVE */}
                     <ShowcaseCardLayoutPrimitive
                       mode="grid"
                       bgClass={card.bgClass}
@@ -223,18 +220,12 @@ export function MobileShowcase() {
                       }
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
-                        <h3
-                          className="font-black text-ink leading-tight tracking-tight"
-                          style={{ fontSize: 'clamp(1.15rem, 2.8vh, 1.6rem)' }}
-                        >
+                        <h3 className={CARD_TOKENS.typography.grid.title}>
                           {card.title}
                         </h3>
                       }
                       descriptionSlot={
-                        <p
-                          className="text-ink/80 font-normal leading-relaxed"
-                          style={{ fontSize: 'clamp(0.85rem, 1.9vh, 1.08rem)', lineHeight: '1.5' }}
-                        >
+                        <p className={CARD_TOKENS.typography.grid.description}>
                           {card.description}
                         </p>
                       }
@@ -245,14 +236,28 @@ export function MobileShowcase() {
             </div>
           </div>
         )}
+      </main>
 
-        <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
+      {/* 3. BOTTOM FLOATING CONTROLS */}
+      <footer className="w-full py-4 flex items-center justify-between px-6 z-30 shrink-0">
+        <Link 
+          to="/about"
+          className="text-[11px] uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
+        >
+          ABOUT
+        </Link>
+
+        {/* View Toggle Controls */}
+        <div className="bg-ink p-1.5 rounded-full flex items-center gap-1 shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
           <button
             onClick={() => handleToggleView("deck")}
-            className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
-              viewMode === "deck" ? "bg-white text-ink" : "bg-ink text-canvas hover:text-[#FF671F]"
+            className={`p-2 rounded-full transition-all ${
+              viewMode === "deck" 
+                ? "bg-white text-ink shadow-sm" 
+                : "text-white/60 hover:text-white"
             }`}
-            aria-label="Deck View"
+            title="Deck View"
+            aria-label="Switch to Deck View"
           >
             <Layers className="size-4" />
           </button>

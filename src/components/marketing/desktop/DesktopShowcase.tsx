@@ -6,6 +6,7 @@ import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
   ShowcaseCardLayoutPrimitive,
+  CARD_TOKENS,
   AboutAppIllustration,
   LaterAlarmIllustration, 
   SmartFiltersIllustration, 
@@ -249,18 +250,12 @@ export function DesktopShowcase() {
                     }
                     illustrationSlot={renderIllustration(currentCard.id)}
                     titleSlot={
-                      <h3
-                        className="font-black text-ink leading-tight tracking-tight"
-                        style={{ fontSize: 'clamp(1.75rem, 4.8vh, 3.2rem)' }}
-                      >
+                      <h3 className={CARD_TOKENS.typography.deck.title}>
                         {currentCard.title}
                       </h3>
                     }
                     descriptionSlot={
-                      <p
-                        className="text-ink/85 font-normal leading-relaxed"
-                        style={{ fontSize: 'clamp(1.2rem, 3.2vh, 2.0rem)', lineHeight: '1.65' }}
-                      >
+                      <p className={CARD_TOKENS.typography.deck.description}>
                         {currentCard.description}
                       </p>
                     }
@@ -313,18 +308,12 @@ export function DesktopShowcase() {
                       }
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
-                        <h3
-                          className="font-black text-ink leading-tight tracking-tight"
-                          style={{ fontSize: 'clamp(1.2rem, 2.8vh, 1.7rem)' }}
-                        >
+                        <h3 className={CARD_TOKENS.typography.grid.title}>
                           {card.title}
                         </h3>
                       }
                       descriptionSlot={
-                        <p
-                          className="text-ink/80 font-normal leading-relaxed"
-                          style={{ fontSize: 'clamp(0.88rem, 2.0vh, 1.15rem)', lineHeight: '1.5' }}
-                        >
+                        <p className={CARD_TOKENS.typography.grid.description}>
                           {card.description}
                         </p>
                       }
