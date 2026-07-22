@@ -150,8 +150,8 @@ export function MobileShowcase() {
             onTouchEnd={handleTouchEnd}
             className="w-full h-full flex flex-col items-center justify-center relative"
           >
-            {/* Mobile Card Container (Balanced Proportions) */}
-            <div className="relative w-[clamp(290px,84vw,360px)] h-[clamp(390px,58vh,460px)] flex items-center justify-center">
+            {/* Mobile Card Container (Prominent Hero Proportions) */}
+            <div className="relative w-[clamp(300px,88vw,380px)] h-[clamp(430px,65vh,520px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -171,11 +171,11 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2rem] border-3 border-ink p-4.5 sm:p-5 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
-                  <div className="shrink-0 flex justify-between items-center h-7">
-                    <span className="text-[11px] font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
+                  <div className="shrink-0 flex justify-between items-center h-8">
+                    <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
@@ -188,11 +188,11 @@ export function MobileShowcase() {
                   </div>
 
                   {/* Section 3: Title & Description */}
-                  <div className="shrink-0 mt-1">
-                    <h3 className="text-xl sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <div className="shrink-0 mt-2">
+                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-ink/80 font-normal leading-snug line-clamp-3">
+                    <p className="text-sm sm:text-base text-ink font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
