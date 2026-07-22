@@ -230,9 +230,9 @@ function SlideLegalDoc({ officer, officerEmail, address }: SlideLegalDocProps) {
                 <li><strong>Name:</strong> {officer}</li>
                 <li>
                   <strong>Email:</strong>{" "}
-                  <a href={`mailto:${officerEmail}`} className="underline font-black text-slate-800">{officerEmail}</a>
+                  <a href={`mailto:${supportEmail}`} className="underline font-black text-slate-800">{supportEmail}</a>
                 </li>
-                <li><strong>Address:</strong> {address}</li>
+                <li><strong>Address:</strong> {jur}</li>
               </ul>
               <p className="text-xs text-slate-400 mt-2 font-bold">Complaints acknowledged within 48 hours and resolved within 15 days.</p>
             </div>
@@ -249,60 +249,71 @@ function SlideLegalDoc({ officer, officerEmail, address }: SlideLegalDocProps) {
 function Privacy() {
   const { data: s } = useSuspenseQuery(settingsQuery());
   const [current, setCurrent] = useState(0);
+  const currentRef = useRef(0);
+  currentRef.current = current;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
-  const lastScrollTime = useRef(0);
+  const isAnimating = useRef(false);
 
   const slides = [
     <SlideOpening />,
     <SlideSummary />,
-    <SlideLegalDoc officer={s.grievanceOfficerName} officerEmail={s.grievanceOfficerEmail} address={s.companyAddress} />,
+    <SlideLegalDoc company={s.grievanceOfficerName} jur={s.companyAddress} supportEmail={s.grievanceOfficerEmail} />,
   ];
   const TOTAL = slides.length;
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
-    const now = Date.now();
-    if (now - lastScrollTime.current < 850) return;
-    lastScrollTime.current = now;
+    if (isAnimating.current) return;
+
+    isAnimating.current = true;
     setCurrent(idx);
+
+    setTimeout(() => {
+      isAnimating.current = false;
+    }, 450);
   };
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+
     const handler = (e: WheelEvent) => {
-      // If we are on Slide 3 (index 2), check if we should allow native scrolling or navigate back
-      if (current === 2) {
+      const activeIdx = currentRef.current;
+      if (activeIdx === 2) {
         const scrollContainer = el.querySelector(".overflow-y-auto");
         if (scrollContainer) {
           const scrollTop = scrollContainer.scrollTop;
-          // If we scroll up and we are already at the top, go back to slide 1
           if (e.deltaY < 0 && scrollTop <= 0) {
             e.preventDefault();
-            goTo(current - 1);
+            goTo(activeIdx - 1);
           }
-          return; // Allow native scrolling inside the container
+          return;
         }
       }
 
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 12) return;
-      if (e.deltaY > 0) goTo(current + 1);
-      else if (e.deltaY < 0) goTo(current - 1);
-    };
-    el.addEventListener("wheel", handler, { passive: false });
-    return () => el.removeEventListener("wheel", handler);
-  }, [current]);
+      if (isAnimating.current) return;
+      if (Math.abs(e.deltaY) < 10) return;
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
-      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+      if (e.deltaY > 0) goTo(activeIdx + 1);
+      else if (e.deltaY < 0) goTo(activeIdx - 1);
     };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [current]);
+
+    const keyHandler = (e: KeyboardEvent) => {
+      const activeIdx = currentRef.current;
+      if (["ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); goTo(activeIdx + 1); }
+      if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); goTo(activeIdx - 1); }
+    };
+
+    el.addEventListener("wheel", handler, { passive: false });
+    window.addEventListener("keydown", keyHandler);
+    return () => {
+      el.removeEventListener("wheel", handler);
+      window.removeEventListener("keydown", keyHandler);
+    };
+  }, []);
 
   return (
     <div
