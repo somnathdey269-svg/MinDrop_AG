@@ -150,8 +150,8 @@ export function MobileShowcase() {
             onTouchEnd={handleTouchEnd}
             className="w-full h-full flex flex-col items-center justify-center relative"
           >
-            {/* Mobile Card Container (Fluid Viewport Bounds) */}
-            <div className="relative w-[clamp(290px,86vw,380px)] h-[clamp(390px,64vh,540px)] flex items-center justify-center">
+            {/* Mobile Card Container (Prominent Hero Proportions) */}
+            <div className="relative w-[clamp(310px,88vw,400px)] h-[clamp(480px,72vh,600px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -171,28 +171,28 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2rem] border-3 border-ink p-[clamp(1rem,4vw,1.75rem)] flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-5 sm:p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
                   <div className="shrink-0 flex justify-between items-center h-7">
-                    <span className="text-[11px] font-black uppercase tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
+                    <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Fluid Hero Graphic */}
-                  <div className="flex-1 min-h-0 flex items-center justify-center py-2 overflow-hidden w-full">
-                    <div className="scale-[clamp(1.0,7vh/45,1.4)] transform-gpu origin-center flex items-center justify-center">
+                  {/* Section 2: Prominent Hero Graphic */}
+                  <div className="flex-1 min-h-0 flex items-center justify-center py-3 overflow-hidden w-full">
+                    <div className="transform-gpu origin-center flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
-                  {/* Section 3: Fluid Title & Description Typography */}
+                  {/* Section 3: Title & Description */}
                   <div className="shrink-0 mt-1">
-                    <h3 className="text-[clamp(1.35rem,2.2vh+0.3vw,1.95rem)] font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h3 className="text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-[clamp(0.85rem,1.3vh+0.2vw,1.05rem)] text-ink/80 font-normal leading-snug line-clamp-3">
+                    <p className="text-sm sm:text-base text-ink/80 font-normal leading-relaxed line-clamp-3">
                       {currentCard.description}
                     </p>
                   </div>
