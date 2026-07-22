@@ -291,50 +291,46 @@ export function DesktopShowcase() {
                   onClick={handleShowMe}
                   style={{ 
                     viewTransitionName: `card-${currentCard.id}`,
-                    paddingTop: '5%',
-                    paddingBottom: '5%',
+                    paddingTop: '2.5%',
+                    paddingBottom: '2.5%',
                     paddingLeft: '6%',
                     paddingRight: '6%',
-                    containerType: 'size'
                   } as React.CSSProperties}
                   className={`absolute inset-0 w-full h-full rounded-[2.5rem] border-3 lg:border-4 border-ink flex flex-col justify-between shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
-                  {/* Section 1: Header Tag Pill (15% height) */}
+                  {/* Section 1: Tag Pill (15% height) */}
                   <div className="h-[15%] w-full shrink-0 flex items-center">
                     <span className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Body Area (75% height) */}
-                  <div className="h-[75%] w-full shrink-0 flex flex-col justify-between">
-                    {/* Icon Area: 30% of Section 2 = 22.5% of total card height */}
-                    <div className="h-[30%] w-full flex items-center justify-center">
-                      <div className="h-full aspect-square flex items-center justify-center">
-                        {renderIllustration(currentCard.id)}
-                      </div>
+                  {/* Section 2: Centered Icon (25% height, 2-axis centered) */}
+                  <div className="h-[25%] w-full shrink-0 flex items-center justify-center">
+                    <div className="h-full aspect-square flex items-center justify-center">
+                      {renderIllustration(currentCard.id)}
                     </div>
+                  </div>
 
-                    {/* Content Area: 70% of Section 2 = 52.5% of total card height */}
-                    <div className="h-[70%] w-full flex flex-col justify-between">
-                      {/* Title Sub-zone: 20% of Content Area */}
-                      <div className="h-[22%] w-full flex items-center">
-                        <h3
-                          className="font-black text-ink leading-tight tracking-tight"
-                          style={{ fontSize: 'calc(5.2cqh + 1.2cqw)' }}
-                        >
-                          {currentCard.title}
-                        </h3>
-                      </div>
-                      {/* Description Sub-zone: 80% of Content Area */}
-                      <div className="h-[75%] w-full flex items-start overflow-hidden">
-                        <p
-                          className="text-ink/80 font-normal leading-relaxed"
-                          style={{ fontSize: 'calc(2.7cqh + 0.5cqw)', lineHeight: '1.5' }}
-                        >
-                          {currentCard.description}
-                        </p>
-                      </div>
+                  {/* Section 3: Content Area (55% height: 20% Title + 80% Description) */}
+                  <div className="h-[55%] w-full shrink-0 flex flex-col justify-between">
+                    {/* Title Sub-zone: 20% of Content Area */}
+                    <div className="h-[20%] w-full flex items-center">
+                      <h3
+                        className="font-black text-ink leading-tight tracking-tight"
+                        style={{ fontSize: 'clamp(1.4rem, 3.6vh, 2.6rem)' }}
+                      >
+                        {currentCard.title}
+                      </h3>
+                    </div>
+                    {/* Description Sub-zone: 80% of Content Area */}
+                    <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-1">
+                      <p
+                        className="text-ink/80 font-normal leading-relaxed"
+                        style={{ fontSize: 'clamp(0.95rem, 2.2vh, 1.4rem)', lineHeight: '1.6' }}
+                      >
+                        {currentCard.description}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -373,45 +369,44 @@ export function DesktopShowcase() {
                     viewTransition
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
-                      paddingTop: '5%',
-                      paddingBottom: '5%',
+                      paddingTop: '2.5%',
+                      paddingBottom: '2.5%',
                       paddingLeft: '6%',
                       paddingRight: '6%',
-                      containerType: 'size'
                     } as React.CSSProperties}
                     className={`rounded-[1.8rem] border-3 border-ink flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[clamp(290px,32vh,390px)] ${card.bgClass}`}
                   >
-                    {/* Section 1: Header Tag Pill */}
+                    {/* Section 1: Tag Pill */}
                     <div className="h-[15%] shrink-0 flex items-center">
                       <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Section 2: Body Area (75% height) */}
-                    <div className="h-[75%] shrink-0 flex flex-col justify-between">
-                      <div className="h-[30%] w-full flex items-center justify-center">
-                        <div className="h-full aspect-square flex items-center justify-center p-0.5">
-                          {renderIllustration(card.id)}
-                        </div>
+                    {/* Section 2: Centered Icon */}
+                    <div className="h-[25%] w-full shrink-0 flex items-center justify-center">
+                      <div className="h-full aspect-square flex items-center justify-center p-0.5">
+                        {renderIllustration(card.id)}
                       </div>
-                      <div className="h-[70%] w-full flex flex-col justify-between">
-                        <div className="h-[25%] w-full flex items-center">
-                          <h3
-                            className="font-black text-ink leading-tight tracking-tight"
-                            style={{ fontSize: 'calc(4.8cqh + 1cqw)' }}
-                          >
-                            {card.title}
-                          </h3>
-                        </div>
-                        <div className="h-[72%] w-full flex items-start overflow-hidden">
-                          <p
-                            className="text-ink/75 font-normal leading-snug line-clamp-3"
-                            style={{ fontSize: 'calc(2.5cqh + 0.4cqw)' }}
-                          >
-                            {card.description}
-                          </p>
-                        </div>
+                    </div>
+
+                    {/* Section 3: Content Area (55% height) */}
+                    <div className="h-[55%] shrink-0 flex flex-col justify-between">
+                      <div className="h-[20%] w-full flex items-center">
+                        <h3
+                          className="font-black text-ink leading-tight tracking-tight"
+                          style={{ fontSize: 'clamp(1.15rem, 3.2vh, 1.8rem)' }}
+                        >
+                          {card.title}
+                        </h3>
+                      </div>
+                      <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-1">
+                        <p
+                          className="text-ink/75 font-normal leading-snug line-clamp-3"
+                          style={{ fontSize: 'clamp(0.85rem, 2.1vh, 1.15rem)' }}
+                        >
+                          {card.description}
+                        </p>
                       </div>
                     </div>
                   </Link>
