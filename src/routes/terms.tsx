@@ -280,7 +280,8 @@ function Terms() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
-  const isAnimating = useRef(false);
+  const isWheelActive = useRef(false);
+  const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
     <SlideOpening />,
@@ -291,14 +292,7 @@ function Terms() {
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
-    if (isAnimating.current) return;
-
-    isAnimating.current = true;
     setCurrent(idx);
-
-    setTimeout(() => {
-      isAnimating.current = false;
-    }, 450);
   };
 
   useEffect(() => {
@@ -320,11 +314,19 @@ function Terms() {
       }
 
       e.preventDefault();
-      if (isAnimating.current) return;
-      if (Math.abs(e.deltaY) < 10) return;
+      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
 
-      if (e.deltaY > 0) goTo(activeIdx + 1);
-      else if (e.deltaY < 0) goTo(activeIdx - 1);
+      if (!isWheelActive.current) {
+        isWheelActive.current = true;
+        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        if (delta > 0) goTo(activeIdx + 1);
+        else if (delta < 0) goTo(activeIdx - 1);
+      }
+
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
+      wheelDebounceTimer.current = setTimeout(() => {
+        isWheelActive.current = false;
+      }, 250);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
@@ -338,6 +340,7 @@ function Terms() {
     return () => {
       el.removeEventListener("wheel", handler);
       window.removeEventListener("keydown", keyHandler);
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
   }, []);
 
