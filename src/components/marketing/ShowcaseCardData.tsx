@@ -227,13 +227,13 @@ export function ShowcaseCardLayoutPrimitive({
       </div>
 
       {/* 3. Content Zone (Aligned Baselines in Grid Mode) */}
-      <div className={`shrink-0 w-full flex flex-col ${isDeck ? 'gap-2.5 mt-auto' : 'flex-1 justify-between gap-1.5'}`}>
-        {/* Title Slot (Fixed 3rem baseline container in Grid Mode) */}
-        <div className={`w-full flex items-start ${isDeck ? '' : 'h-12'}`}>
+      <div className={`shrink-0 w-full flex flex-col ${isDeck ? 'gap-2.5 mt-auto' : 'flex-1 justify-start gap-1.5'}`}>
+        {/* Title Slot (Aligned to bottom of container so title sits closer to description) */}
+        <div className={`w-full flex items-end ${isDeck ? '' : 'h-10'}`}>
           {titleSlot}
         </div>
-        {/* Description Slot (Aligned top starting line in Grid Mode) */}
-        <div className={`w-full flex flex-col justify-start overflow-hidden ${isDeck ? '' : 'flex-1'}`}>
+        {/* Description Slot (Aligned top line in Grid Mode) */}
+        <div className={`w-full flex flex-col justify-start overflow-hidden ${isDeck ? '' : 'flex-1 pt-0.5'}`}>
           {descriptionSlot}
         </div>
         {footerActionSlot && (
