@@ -165,7 +165,8 @@ function VisionDetailView() {
   currentRef.current = current;
 
   const touchStartY = useRef(0);
-  const isAnimating = useRef(false);
+  const isWheelActive = useRef(false);
+  const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
     <SlideOpening />,
@@ -179,26 +180,26 @@ function VisionDetailView() {
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
-    if (isAnimating.current) return;
-
-    isAnimating.current = true;
     setCurrent(idx);
-
-    setTimeout(() => {
-      isAnimating.current = false;
-    }, 450);
   };
 
-  // Continuous Stable Event Listener Bindings
+  // Debounced Gesture Engine: Exactly 1 page per continuous scroll gesture
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (isAnimating.current) return;
       if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
 
-      const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-      if (delta > 0) goTo(currentRef.current + 1);
-      else if (delta < 0) goTo(currentRef.current - 1);
+      if (!isWheelActive.current) {
+        isWheelActive.current = true;
+        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        if (delta > 0) goTo(currentRef.current + 1);
+        else if (delta < 0) goTo(currentRef.current - 1);
+      }
+
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
+      wheelDebounceTimer.current = setTimeout(() => {
+        isWheelActive.current = false;
+      }, 250);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
@@ -217,6 +218,7 @@ function VisionDetailView() {
     return () => {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
   }, []);
 
@@ -234,7 +236,7 @@ function VisionDetailView() {
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           <Link to="/download"
-            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-ink text-white border-ink hover:bg-[#D97706] hover:border-[#D97706]"}`}>
+            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-ink text-[#FFFBEB] border-ink hover:bg-[#D97706] hover:border-[#D97706]"}`}>
             Get App
           </Link>
         </div>
@@ -251,7 +253,7 @@ function VisionDetailView() {
           }
         }}
       >
-        {/* Subtle Top Up Arrow */}
+        {/* Top Up Arrow */}
         {current > 0 && (
           <button
             type="button"
@@ -282,7 +284,7 @@ function VisionDetailView() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Subtle Bottom Down Arrow */}
+        {/* Bottom Down Arrow */}
         {current < TOTAL - 1 && (
           <button
             type="button"

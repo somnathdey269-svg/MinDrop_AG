@@ -153,7 +153,7 @@ function SlideContextSweeps() {
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#60A5FA] mb-4">
             R&D Topic 04 · Context Sweeps
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 tracking-tight">
             Time-of-day task bundling.<br />
             <span className="text-[#60A5FA]">Evening wind-down.</span>
           </h2>
@@ -209,7 +209,8 @@ function FutureFeatureDetailView() {
   currentRef.current = current;
 
   const touchStartY = useRef(0);
-  const isAnimating = useRef(false);
+  const isWheelActive = useRef(false);
+  const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
     <SlideOpening />,
@@ -224,26 +225,26 @@ function FutureFeatureDetailView() {
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
-    if (isAnimating.current) return;
-
-    isAnimating.current = true;
     setCurrent(idx);
-
-    setTimeout(() => {
-      isAnimating.current = false;
-    }, 450);
   };
 
-  // Continuous Stable Event Listener Bindings
+  // Debounced Gesture Engine: Exactly 1 page per continuous scroll gesture
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (isAnimating.current) return;
       if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
 
-      const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-      if (delta > 0) goTo(currentRef.current + 1);
-      else if (delta < 0) goTo(currentRef.current - 1);
+      if (!isWheelActive.current) {
+        isWheelActive.current = true;
+        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        if (delta > 0) goTo(currentRef.current + 1);
+        else if (delta < 0) goTo(currentRef.current - 1);
+      }
+
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
+      wheelDebounceTimer.current = setTimeout(() => {
+        isWheelActive.current = false;
+      }, 250);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
@@ -262,6 +263,7 @@ function FutureFeatureDetailView() {
     return () => {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
   }, []);
 
@@ -296,7 +298,7 @@ function FutureFeatureDetailView() {
           }
         }}
       >
-        {/* Subtle Top Up Arrow */}
+        {/* Top Up Arrow */}
         {current > 0 && (
           <button
             type="button"
@@ -327,7 +329,7 @@ function FutureFeatureDetailView() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Subtle Bottom Down Arrow */}
+        {/* Bottom Down Arrow */}
         {current < TOTAL - 1 && (
           <button
             type="button"

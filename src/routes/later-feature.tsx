@@ -225,7 +225,8 @@ function LaterFeatureDetailView() {
   currentRef.current = current;
 
   const touchStartY = useRef(0);
-  const isAnimating = useRef(false);
+  const isWheelActive = useRef(false);
+  const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
     <SlideOpening />,
@@ -239,26 +240,26 @@ function LaterFeatureDetailView() {
 
   const goTo = (idx: number) => {
     if (idx < 0 || idx >= TOTAL) return;
-    if (isAnimating.current) return;
-
-    isAnimating.current = true;
     setCurrent(idx);
-
-    setTimeout(() => {
-      isAnimating.current = false;
-    }, 450);
   };
 
-  // Continuous Stable Event Listener Bindings
+  // Debounced Gesture Engine: Exactly 1 page per continuous scroll gesture
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (isAnimating.current) return;
       if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
 
-      const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-      if (delta > 0) goTo(currentRef.current + 1);
-      else if (delta < 0) goTo(currentRef.current - 1);
+      if (!isWheelActive.current) {
+        isWheelActive.current = true;
+        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        if (delta > 0) goTo(currentRef.current + 1);
+        else if (delta < 0) goTo(currentRef.current - 1);
+      }
+
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
+      wheelDebounceTimer.current = setTimeout(() => {
+        isWheelActive.current = false;
+      }, 250);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
@@ -277,6 +278,7 @@ function LaterFeatureDetailView() {
     return () => {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
   }, []);
 
@@ -285,7 +287,7 @@ function LaterFeatureDetailView() {
       className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-later" } as React.CSSProperties}
     >
-      {/* ── Header ── */}
+      {/* Header */}
       <header className="shrink-0 border-b-2 border-[#10B981]/10 z-50 py-2.5 px-3 sm:px-6"
         style={{ backgroundColor: isDark ? "rgba(6,78,59,0.96)" : "rgba(226,245,236,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
         <div className="w-[95%] max-w-7xl mx-auto flex items-center justify-between gap-2">
@@ -301,7 +303,6 @@ function LaterFeatureDetailView() {
         </div>
       </header>
 
-      {/* ── Slide Stage ── */}
       <div
         className="flex-1 relative overflow-hidden"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
@@ -313,7 +314,7 @@ function LaterFeatureDetailView() {
           }
         }}
       >
-        {/* Subtle Top Up Arrow */}
+        {/* Top Up Arrow */}
         {current > 0 && (
           <button
             type="button"
@@ -344,7 +345,7 @@ function LaterFeatureDetailView() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Subtle Bottom Down Arrow */}
+        {/* Bottom Down Arrow */}
         {current < TOTAL - 1 && (
           <button
             type="button"
