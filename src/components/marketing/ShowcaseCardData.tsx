@@ -98,22 +98,22 @@ export const DECK_CARDS: DeckCardItem[] = [
 // Unclustered Organic Visual Hero Graphics
 export function AboutAppIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#6366F1]/25 border-2 border-[#6366F1]/40 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#6366F1]/25 border-2 border-[#6366F1]/40 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BookOpen className="size-18 sm:size-22 lg:size-26 text-[#6366F1]" />
+          <BookOpen className="size-14 sm:size-16 lg:size-18 text-[#6366F1]" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         📖 About the App
       </span>
     </div>
@@ -122,22 +122,22 @@ export function AboutAppIllustration() {
 
 export function LaterAlarmIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#10B981]/25 border-2 border-[#10B981]/40 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#10B981]/25 border-2 border-[#10B981]/40 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <AlarmClock className="size-18 sm:size-22 lg:size-26 text-[#10B981]" />
+          <AlarmClock className="size-14 sm:size-16 lg:size-18 text-[#10B981]" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         🔔 Continuous Ringing
       </span>
     </div>
@@ -146,22 +146,22 @@ export function LaterAlarmIllustration() {
 
 export function SmartFiltersIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#F59E0B]/25 border-2 border-[#F59E0B]/40 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#F59E0B]/25 border-2 border-[#F59E0B]/40 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BellRing className="size-18 sm:size-22 lg:size-26 text-[#F59E0B]" />
+          <BellRing className="size-14 sm:size-16 lg:size-18 text-[#F59E0B]" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         ✨ Keyword Filter
       </span>
     </div>
@@ -170,22 +170,22 @@ export function SmartFiltersIllustration() {
 
 export function PlacesMappingIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.22, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Navigation className="size-18 sm:size-22 lg:size-26 text-[#8B5CF6] transform rotate-45" />
+          <Navigation className="size-14 sm:size-16 lg:size-18 text-[#8B5CF6] transform rotate-45" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         📍 500m Geofence
       </span>
     </div>
@@ -194,22 +194,22 @@ export function PlacesMappingIllustration() {
 
 export function FutureActionsIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#2563EB]/25 border-2 border-[#2563EB]/40 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#2563EB]/25 border-2 border-[#2563EB]/40 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Compass className="size-18 sm:size-22 lg:size-26 text-[#2563EB]" />
+          <Compass className="size-14 sm:size-16 lg:size-18 text-[#2563EB]" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         🔮 Coming Soon
       </span>
     </div>
@@ -218,22 +218,22 @@ export function FutureActionsIllustration() {
 
 export function PrivacyManifestoIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#059669]/25 border-2 border-[#059669]/40 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#059669]/25 border-2 border-[#059669]/40 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <ShieldCheck className="size-18 sm:size-22 lg:size-26 text-[#059669]" />
+          <ShieldCheck className="size-14 sm:size-16 lg:size-18 text-[#059669]" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         🔒 100% Private
       </span>
     </div>
@@ -242,22 +242,22 @@ export function PrivacyManifestoIllustration() {
 
 export function PricingTierIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#EC4899]/25 border-2 border-[#EC4899]/40 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#EC4899]/25 border-2 border-[#EC4899]/40 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Sparkles className="size-18 sm:size-22 lg:size-26 text-[#EC4899]" />
+          <Sparkles className="size-14 sm:size-16 lg:size-18 text-[#EC4899]" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         💎 Free • Pro
       </span>
     </div>
@@ -266,22 +266,22 @@ export function PricingTierIllustration() {
 
 export function ClosureVisionIllustration() {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="w-full py-1 flex flex-col items-center justify-center relative select-none">
       <div className="relative grid place-items-center">
         <motion.div 
           animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-4 sm:-m-5 lg:-m-6 rounded-full bg-[#D97706]/25 border-2 border-[#D97706]/40 pointer-events-none"
+          className="absolute inset-0 -m-3 sm:-m-4 rounded-full bg-[#D97706]/25 border-2 border-[#D97706]/40 pointer-events-none"
         />
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-44 lg:size-52 rounded-[2.5rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-28 sm:size-32 lg:size-36 rounded-[2rem] bg-white/95 border-3 border-ink shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <HeartHandshake className="size-18 sm:size-22 lg:size-26 text-[#D97706]" />
+          <HeartHandshake className="size-14 sm:size-16 lg:size-18 text-[#D97706]" />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 sm:px-5 py-2 rounded-full shadow-md mt-4 relative z-10 whitespace-nowrap">
+      <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-3.5 sm:px-4 py-1 rounded-full shadow-sm mt-3 relative z-10 whitespace-nowrap">
         ✨ The Vision
       </span>
     </div>

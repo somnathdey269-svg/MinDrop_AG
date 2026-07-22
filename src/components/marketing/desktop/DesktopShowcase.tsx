@@ -238,8 +238,8 @@ export function DesktopShowcase() {
               </div>
             </div>
 
-            {/* Web Card Container (Commanding Hero Proportions) */}
-            <div className="relative w-[clamp(420px,34vw,560px)] h-[clamp(580px,75vh,720px)] flex items-center justify-center">
+            {/* Web Card Container (Balanced Proportions) */}
+            <div className="relative w-[clamp(360px,28vw,440px)] h-[clamp(450px,58vh,520px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -252,20 +252,20 @@ export function DesktopShowcase() {
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
-                  className="absolute inset-0 rounded-[2.8rem] border-3 lg:border-4 border-ink p-7 lg:p-9 flex flex-col justify-between bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
+                  className="absolute inset-0 rounded-[2.2rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-between bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-none"
                 >
-                  <div className="shrink-0 h-8 flex items-center">
-                    <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink/40">{nextCard.tag}</span>
+                  <div className="shrink-0 h-7 flex items-center">
+                    <span className="text-xs uppercase font-black tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  <div className="flex-1 min-h-0 flex items-center justify-center py-4 overflow-hidden w-full opacity-40 pointer-events-none">
+                  <div className="flex-1 min-h-0 flex items-center justify-center py-2 overflow-hidden w-full opacity-40 pointer-events-none">
                     <div className="transform-gpu origin-center flex items-center justify-center">
                       {renderIllustration(nextCard.id)}
                     </div>
                   </div>
 
-                  <div className="shrink-0 mt-3">
-                    <h3 className="text-3xl lg:text-4xl font-black text-ink leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
+                  <div className="shrink-0 mt-2">
+                    <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
                       {nextCard.title}
                     </h3>
                   </div>
@@ -285,28 +285,28 @@ export function DesktopShowcase() {
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.8rem] border-3 lg:border-4 border-ink p-7 lg:p-9 flex flex-col justify-between shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-6 lg:p-7 flex flex-col justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
-                  <div className="shrink-0 flex justify-between items-center h-8">
-                    <span className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4.5 py-1.5 rounded-full shadow-sm">
+                  <div className="shrink-0 flex justify-between items-center h-7">
+                    <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Prominent Hero Graphic Area */}
-                  <div className="flex-1 min-h-0 flex items-center justify-center py-4 overflow-hidden w-full relative">
+                  {/* Section 2: Centered Hero Graphic Area */}
+                  <div className="flex-1 min-h-0 flex items-center justify-center py-2 overflow-hidden w-full relative">
                     <div className="transform-gpu origin-center flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
                   {/* Section 3: Title & Description */}
-                  <div className="shrink-0 mt-3">
-                    <h3 className="text-3xl lg:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <div className="shrink-0 mt-2">
+                    <h3 className="text-2xl lg:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base lg:text-lg text-ink/80 font-medium leading-relaxed line-clamp-3">
+                    <p className="text-sm lg:text-base text-ink/80 font-medium leading-relaxed line-clamp-3">
                       {currentCard.description}
                     </p>
                   </div>
