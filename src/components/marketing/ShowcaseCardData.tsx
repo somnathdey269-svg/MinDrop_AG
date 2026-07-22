@@ -97,21 +97,19 @@ export const DECK_CARDS: DeckCardItem[] = [
 ];
 
 /**
- * Tiny accent icon — intentionally small so card content takes priority.
- * Box: 56px (mobile) → 64px (sm) → 72px (lg).
- * No label, minimal animation, light shadow.
+ * Width-proportional accent icon — fills its parent container completely.
+ * Parent card controls size via: <div className="w-[22%] aspect-square">
+ * This makes icon automatically scale with card width on any screen.
  */
 function AccentIcon({ color, Icon }: { color: string; Icon: ElementType }) {
   return (
-    <div className="flex items-center justify-center select-none">
-      <motion.div
-        animate={{ scale: [1, 1.04, 1], rotate: [0, -1, 1, 0] }}
-        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-        className="size-14 sm:size-16 lg:size-[4.5rem] xl:size-20 rounded-2xl bg-white/90 border-2 border-ink/70 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.8)] grid place-items-center"
-      >
-        <Icon className="size-7 sm:size-8 lg:size-9 xl:size-10" style={{ color }} />
-      </motion.div>
-    </div>
+    <motion.div
+      animate={{ scale: [1, 1.04, 1], rotate: [0, -1, 1, 0] }}
+      transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+      className="w-full h-full rounded-2xl bg-white/90 border-2 border-ink/70 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.8)] grid place-items-center select-none overflow-hidden"
+    >
+      <Icon className="w-[55%] h-[55%]" style={{ color }} />
+    </motion.div>
   );
 }
 
