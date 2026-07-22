@@ -154,8 +154,8 @@ export const CARD_TOKENS = {
   },
   typography: {
     deck: {
-      title: "font-black text-ink leading-tight tracking-tight text-[1.4em]",
-      description: "text-ink/85 font-normal leading-relaxed text-[0.88em]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.45em] lg:text-[1.55em]",
+      description: "text-ink/85 font-normal leading-relaxed text-[0.9em] lg:text-[0.95em]",
     },
     grid: {
       title: "font-black text-ink leading-tight tracking-tight text-[1.3em]",
@@ -179,8 +179,12 @@ export interface ShowcaseCardLayoutPrimitiveProps {
 
 /**
  * Universal Two-Stage Adaptive Card Layout Primitive.
- * Stage 1: Responsive Card Sizing Context (Outer Boundary Math).
- * Stage 2: Dynamic Height Allocation Engine (2.5% Pad | 15% Header | 25% Graphic | 55% Content).
+ * Exact Percentage Height Allocations:
+ * - Top Padding: 2.5%
+ * - Header Slot: 15%
+ * - Illustration: 25%
+ * - Content Zone: 55% (20% Title, 80% Description)
+ * - Bottom Padding: 2.5%
  */
 export function ShowcaseCardLayoutPrimitive({
   mode = "deck",
@@ -213,28 +217,30 @@ export function ShowcaseCardLayoutPrimitive({
         isDeck ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
-      {/* 1. Header Slot (~15% Height Budget Context) */}
-      <div className="shrink-0 flex items-center w-full min-h-[1.8em] text-[0.75em]">
+      {/* 1. Header Slot (15% Height Budget) */}
+      <div className="h-[15%] shrink-0 flex items-center w-full text-[0.75em]">
         {headerSlot}
       </div>
 
-      {/* 2. Elastic Core Illustration Spring Zone (~25% Graphic Height Budget) */}
-      <div className="flex-1 min-h-0 w-full flex items-center justify-center my-[0.25em]">
-        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(28%,7.5em)]' : 'max-h-[min(24%,5.5em)]'}`}>
+      {/* 2. Illustration Zone (25% Height Budget) */}
+      <div className="h-[25%] shrink-0 w-full flex items-center justify-center py-1">
+        <div className="h-full aspect-square flex items-center justify-center max-h-full">
           {illustrationSlot}
         </div>
       </div>
 
-      {/* 3. Content Zone (~55% Height Budget: Title & Description Dynamic Sharing) */}
-      <div className="shrink-0 w-full flex flex-col justify-between gap-[0.35em] mt-auto">
-        <div className="w-full flex items-center">
+      {/* 3. Content Zone (55% Height Budget: 20% Title, 80% Description) */}
+      <div className="h-[55%] shrink-0 w-full flex flex-col justify-between overflow-hidden">
+        {/* Title Slot (20% of 55% Content Zone) */}
+        <div className="min-h-[20%] shrink-0 w-full flex items-center">
           {titleSlot}
         </div>
-        <div className="w-full flex flex-col justify-between overflow-hidden">
+        {/* Description Slot (80% of 55% Content Zone) */}
+        <div className="flex-1 w-full flex flex-col justify-start overflow-hidden pt-1">
           {descriptionSlot}
         </div>
         {footerActionSlot && (
-          <div className="w-full mt-[0.25em]">
+          <div className="w-full mt-auto">
             {footerActionSlot}
           </div>
         )}
