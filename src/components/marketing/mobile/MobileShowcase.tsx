@@ -109,10 +109,10 @@ export function MobileShowcase() {
         backgroundColor: viewMode === "deck" ? currentCard.bgColor : "#FFD043",
         transition: "background-color 0.5s ease"
       }}
-      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3.5 sm:p-5 select-none overflow-hidden h-[100dvh] w-screen"
+      className="fixed inset-0 text-ink font-sans flex flex-col justify-between p-3 sm:p-4 select-none overflow-hidden h-[100dvh] w-screen"
     >
       {/* 1. Mobile Header */}
-      <header className="flex justify-between items-center w-full z-30 shrink-0 h-12 px-2">
+      <header className="flex justify-between items-center w-full z-30 shrink-0 h-10 px-2">
         <div className="flex items-center h-full">
           <Link
             to="/terms"
@@ -142,16 +142,16 @@ export function MobileShowcase() {
       </header>
 
       {/* 2. Mobile Main Stage */}
-      <div className="flex-1 w-full min-h-0 my-2 no-scrollbar z-10 flex flex-col justify-center items-center">
+      <div className="flex-1 w-full min-h-0 my-1 z-10 flex flex-col justify-center items-center overflow-hidden">
         {viewMode === "deck" ? (
-          /* DECK VIEW MODE */
+          /* DECK VIEW MODE (Fluid Mobile Viewport Math) */
           <div 
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            className="w-full h-full max-h-[84vh] flex flex-col items-center justify-center relative"
+            className="w-full h-full flex flex-col items-center justify-center relative"
           >
-            {/* Mobile Card Container */}
-            <div className="relative w-[min(90vw,360px)] h-[min(530px,74vh)] flex items-center justify-center">
+            {/* Mobile Card Container (Fluid Viewport Bounds) */}
+            <div className="relative w-[clamp(290px,86vw,380px)] h-[clamp(390px,64vh,540px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -171,28 +171,28 @@ export function MobileShowcase() {
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
                   onClick={handleShowMe}
                   style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
+                  className={`absolute inset-0 rounded-[2rem] border-3 border-ink p-[clamp(1rem,4vw,1.75rem)] flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill */}
-                  <div className="shrink-0 flex justify-between items-center h-7 mb-1">
-                    <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
+                  <div className="shrink-0 flex justify-between items-center h-7">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Hero Graphic */}
-                  <div className="shrink-0 h-[210px] flex flex-col items-center justify-center pt-4 pb-2 overflow-visible w-full">
-                    <div className="scale-[1.50] sm:scale-[1.60] transform-gpu origin-center">
+                  {/* Section 2: Fluid Hero Graphic */}
+                  <div className="flex-1 min-h-0 flex items-center justify-center py-2 overflow-hidden w-full">
+                    <div className="scale-[clamp(1.0,7vh/45,1.4)] transform-gpu origin-center flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
-                  {/* Section 3: Header & Description Typography */}
-                  <div className="shrink-0 mt-2">
-                    <h3 className="text-3xl sm:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {/* Section 3: Fluid Title & Description Typography */}
+                  <div className="shrink-0 mt-1">
+                    <h3 className="text-[clamp(1.35rem,2.2vh+0.3vw,1.95rem)] font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-lg sm:text-xl text-ink/80 font-normal leading-relaxed">
+                    <p className="text-[clamp(0.85rem,1.3vh+0.2vw,1.05rem)] text-ink/80 font-normal leading-snug line-clamp-3">
                       {currentCard.description}
                     </p>
                   </div>
@@ -202,8 +202,8 @@ export function MobileShowcase() {
           </div>
         ) : (
           /* GRID VIEW MODE */
-          <div className="w-full h-full overflow-y-auto px-1 pt-2 pb-32 z-20 no-scrollbar">
-            <div className="flex flex-col gap-5">
+          <div className="w-full h-full overflow-y-auto px-1 pt-1 pb-24 z-20 no-scrollbar">
+            <div className="flex flex-col gap-4">
               {DECK_CARDS.map((card) => {
                 return (
                   <Link
@@ -212,28 +212,28 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[2rem] border-3 border-ink p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[380px] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink p-4 sm:p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[clamp(290px,40vh,360px)] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
-                    <div className="shrink-0 flex items-center justify-between h-7 mb-2">
-                      <span className="text-xs uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
+                    <div className="shrink-0 flex items-center justify-between h-7 mb-1">
+                      <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Graphic Section */}
-                    <div className="shrink-0 h-[200px] flex flex-col items-center justify-center pt-3 pb-1 overflow-visible w-full pointer-events-none">
-                      <div className="scale-120 transform-gpu origin-center flex items-center justify-center">
+                    {/* Fluid Graphic Section */}
+                    <div className="flex-1 min-h-0 flex items-center justify-center py-2 overflow-hidden w-full pointer-events-none">
+                      <div className="scale-105 transform-gpu origin-center flex items-center justify-center">
                         {renderIllustration(card.id)}
                       </div>
                     </div>
 
                     {/* Content Section */}
-                    <div className="flex-1 flex flex-col justify-start mt-2">
-                      <h3 className="text-2xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <div className="shrink-0 mt-1">
+                      <h3 className="text-xl font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-base text-ink/80 font-normal leading-relaxed">
+                      <p className="text-xs sm:text-sm text-ink/80 font-normal leading-relaxed line-clamp-2">
                         {card.description}
                       </p>
                     </div>
@@ -246,43 +246,43 @@ export function MobileShowcase() {
       </div>
 
       {/* 3. Mobile Footer */}
-      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0">
+      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0 h-10">
         <div className="justify-self-start">
           <Link
             to="/about"
             viewTransition
             style={{ viewTransitionName: 'card-[#about]' } as React.CSSProperties}
-            className="text-xs sm:text-sm font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all cursor-pointer"
+            className="text-xs sm:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors"
           >
             About
           </Link>
         </div>
 
-        <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] gap-1">
+        <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
           <button
             onClick={() => handleToggleView("deck")}
-            className={`p-1.5 rounded-full transition ${
-              viewMode === "deck" ? "bg-white text-ink" : "bg-ink text-canvas"
+            className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
+              viewMode === "deck" ? "bg-white text-ink" : "bg-ink text-canvas hover:text-[#FF671F]"
             }`}
             aria-label="Deck View"
           >
-            <Layers className="size-3.5" />
+            <Layers className="size-4" />
           </button>
           <button
             onClick={() => handleToggleView("grid")}
-            className={`p-1.5 rounded-full transition ${
-              viewMode === "grid" ? "bg-white text-ink" : "bg-ink text-canvas"
+            className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
+              viewMode === "grid" ? "bg-white text-ink" : "bg-ink text-canvas hover:text-[#FF671F]"
             }`}
             aria-label="Grid View"
           >
-            <LayoutGrid className="size-3.5" />
+            <LayoutGrid className="size-4" />
           </button>
         </div>
 
         <div className="justify-self-end">
           <Link
             to="/download"
-            className="text-xs sm:text-sm font-black uppercase tracking-widest text-ink/80 hover:text-ink transition-all"
+            className="text-xs sm:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors"
           >
             Get App
           </Link>
