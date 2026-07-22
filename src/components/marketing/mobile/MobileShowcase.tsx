@@ -112,28 +112,28 @@ export function MobileShowcase() {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-[#FFC935] flex flex-col justify-between select-none font-sans">
-      {/* 1. TOP NAV BAR */}
-      <header className="w-full px-5 py-4 flex items-center justify-between z-30 shrink-0">
+    <div className="fixed inset-0 w-screen h-[100dvh] overflow-hidden bg-[#FFC935] flex flex-col justify-between select-none font-sans p-2 sm:p-4">
+      {/* 1. TOP NAV BAR (Aligned Terms, Logo, Privacy) */}
+      <header className="w-full px-5 pt-3 pb-1 flex items-center justify-between z-30 shrink-0 h-12">
         <Link 
           to="/terms"
-          className="text-[11px] uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
+          className="text-xs font-black uppercase tracking-wider text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center cursor-pointer"
         >
-          TERMS
+          Terms
         </Link>
         
-        <MinDropHeaderLogo />
+        <MinDropHeaderLogo className="text-xl sm:text-2xl flex items-center" />
 
         <Link 
           to="/privacy"
-          className="text-[11px] uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
+          className="text-xs font-black uppercase tracking-wider text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center cursor-pointer"
         >
-          PRIVACY
+          Privacy
         </Link>
       </header>
 
       {/* 2. MAIN SHOWCASE AREA */}
-      <main className="relative flex-1 w-full flex items-center justify-center overflow-hidden px-3">
+      <main className="relative flex-1 w-full flex items-center justify-center overflow-hidden px-3 my-1">
         {viewMode === "deck" ? (
           /* DECK VIEW MODE (Fluid Mobile Viewport Math) */
           <div 
@@ -165,7 +165,6 @@ export function MobileShowcase() {
                     viewTransitionName: `card-${currentCard.id}`,
                   } as React.CSSProperties}
                 >
-                  {/* NEW IMPLEMENTATION USING UNIVERSAL CARD LAYOUT PRIMITIVE */}
                   <ShowcaseCardLayoutPrimitive
                     mode="deck"
                     bgClass={currentCard.bgClass}
@@ -208,7 +207,6 @@ export function MobileShowcase() {
                     } as React.CSSProperties}
                     className="aspect-[3/3.6] min-h-[290px] block"
                   >
-                    {/* NEW IMPLEMENTATION USING UNIVERSAL CARD LAYOUT PRIMITIVE */}
                     <ShowcaseCardLayoutPrimitive
                       mode="grid"
                       bgClass={card.bgClass}
@@ -238,20 +236,22 @@ export function MobileShowcase() {
         )}
       </main>
 
-      {/* 3. BOTTOM FLOATING CONTROLS */}
-      <footer className="w-full py-4 flex items-center justify-between px-6 z-30 shrink-0">
-        <Link 
-          to="/about"
-          className="text-[11px] uppercase font-black tracking-widest text-ink hover:opacity-75 transition-opacity"
-        >
-          ABOUT
-        </Link>
+      {/* 3. BOTTOM FLOATING CONTROLS (Elevated above iOS address bar) */}
+      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0 h-12 px-5 pb-[env(safe-area-inset-bottom,0.75rem)]">
+        <div className="justify-self-start flex items-center">
+          <Link 
+            to="/about"
+            className="text-xs uppercase font-black tracking-widest text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
+          >
+            About
+          </Link>
+        </div>
 
         {/* View Toggle Controls */}
-        <div className="bg-ink p-1.5 rounded-full flex items-center gap-1 shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
+        <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
           <button
             onClick={() => handleToggleView("deck")}
-            className={`p-2 rounded-full transition-all ${
+            className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
               viewMode === "deck" 
                 ? "bg-white text-ink shadow-sm" 
                 : "text-white/60 hover:text-white"
@@ -266,16 +266,17 @@ export function MobileShowcase() {
             className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
               viewMode === "grid" ? "bg-white text-ink" : "bg-ink text-canvas hover:text-[#FF671F]"
             }`}
-            aria-label="Grid View"
+            title="Grid View"
+            aria-label="Switch to Grid View"
           >
             <LayoutGrid className="size-4" />
           </button>
         </div>
 
-        <div className="justify-self-end">
+        <div className="justify-self-end flex items-center">
           <Link
             to="/download"
-            className="text-xs sm:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors"
+            className="text-xs sm:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
           >
             Get App
           </Link>

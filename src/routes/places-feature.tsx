@@ -350,17 +350,17 @@ function PlacesFeatureDetailView() {
     };
   }, []);
 
-  return (
+    return (
     <div
       className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-places" } as React.CSSProperties}
     >
-      {/* Header */}
-      <header className="shrink-0 border-b-2 border-[#8B5CF6]/10 z-50 py-2.5 px-3 sm:px-6"
+      {/* 1. Header (Fixed Top Bar) */}
+      <header className="shrink-0 h-12 border-b-2 border-[#8B5CF6]/10 z-50 px-4 sm:px-6 flex items-center"
         style={{ backgroundColor: isDark ? "rgba(46,16,101,0.96)" : "rgba(245,243,255,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
-        <div className="w-[95%] max-w-7xl mx-auto flex items-center justify-between gap-2">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#DDD6FE]/70 hover:text-white" : "text-[#4C1D95]/70 hover:text-[#4C1D95]"}`}>
+            className={`flex items-center gap-1 text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#DDD6FE]/70 hover:text-white" : "text-[#8B5CF6]/70 hover:text-[#4C1D95]"}`}>
             <X className="size-3.5"/> Close
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
@@ -371,8 +371,28 @@ function PlacesFeatureDetailView() {
         </div>
       </header>
 
-      <div
-        className="flex-1 relative overflow-hidden"
+      {/* 2. Dedicated Top UP Navigation Bar */}
+      <div className="shrink-0 h-9 flex items-center justify-center z-40">
+        {current > 0 ? (
+          <button
+            type="button"
+            onClick={() => goTo(current - 1)}
+            className="cursor-pointer group opacity-80 hover:opacity-100 transition-opacity"
+            aria-label="Previous Slide"
+          >
+            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
+              <ChevronUp className={`size-4 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
+              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`}>UP</span>
+            </div>
+          </button>
+        ) : (
+          <div className="h-6" />
+        )}
+      </div>
+
+      {/* 3. Center Middle Stage (Content perfectly centered between UP & DOWN) */}
+      <main 
+        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center px-3 sm:px-6 py-1"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
@@ -382,24 +402,6 @@ function PlacesFeatureDetailView() {
           }
         }}
       >
-        {/* Top Up Arrow */}
-        {current > 0 && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              goTo(current - 1);
-            }}
-            className="absolute top-3 left-1/2 -translate-x-1/2 p-3 z-50 cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"
-            aria-label="Previous Slide"
-          >
-            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-current/10">
-              <ChevronUp className={`size-5 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
-              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#DDD6FE]/80" : "text-[#4C1D95]/80"}`}>UP</span>
-            </div>
-          </button>
-        )}
-
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -407,29 +409,11 @@ function PlacesFeatureDetailView() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="absolute inset-0"
+            className="w-full h-full flex items-center justify-center"
           >
             {slides[current]}
           </motion.div>
         </AnimatePresence>
-
-        {/* Bottom Down Arrow */}
-        {current < TOTAL - 1 && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              goTo(current + 1);
-            }}
-            className="absolute bottom-3 left-1/2 -translate-x-1/2 p-3 z-50 cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"
-            aria-label="Next Slide"
-          >
-            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-current/10">
-              <ChevronDown className={`size-5 transition group-hover:translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
-              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#DDD6FE]/80" : "text-[#4C1D95]/80"}`}>DOWN</span>
-            </div>
-          </button>
-        )}
 
         {/* Right Dot Navigation */}
         <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-50">
@@ -441,6 +425,25 @@ function PlacesFeatureDetailView() {
             />
           ))}
         </div>
+      </main>
+
+      {/* 4. Dedicated Bottom DOWN Navigation Bar */}
+      <div className="shrink-0 h-9 flex items-center justify-center z-40 pb-[env(safe-area-inset-bottom,0.25rem)]">
+        {current < TOTAL - 1 ? (
+          <button
+            type="button"
+            onClick={() => goTo(current + 1)}
+            className="cursor-pointer group opacity-80 hover:opacity-100 transition-opacity"
+            aria-label="Next Slide"
+          >
+            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
+              <ChevronDown className={`size-4 transition group-hover:translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
+              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`}>DOWN</span>
+            </div>
+          </button>
+        ) : (
+          <div className="h-6" />
+        )}
       </div>
     </div>
   );
