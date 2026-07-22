@@ -199,7 +199,7 @@ export function MobileShowcase() {
                     <div className="h-[20%] w-full flex items-center">
                       <h3
                         className="font-black text-ink leading-tight tracking-tight"
-                        style={{ fontSize: 'clamp(1.15rem, 3.2vh, 1.8rem)' }}
+                        style={{ fontSize: 'clamp(1.35rem, 3.8vh, 2.2rem)' }}
                       >
                         {currentCard.title}
                       </h3>
@@ -207,8 +207,8 @@ export function MobileShowcase() {
                     {/* Description: 80% of Content Area */}
                     <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-1">
                       <p
-                        className="text-ink/80 font-normal leading-relaxed"
-                        style={{ fontSize: 'clamp(0.82rem, 2.1vh, 1.1rem)' }}
+                        className="text-ink/85 font-normal leading-relaxed"
+                        style={{ fontSize: 'clamp(1.05rem, 2.5vh, 1.4rem)', lineHeight: '1.6' }}
                       >
                         {currentCard.description}
                       </p>
@@ -257,15 +257,15 @@ export function MobileShowcase() {
                       <div className="h-[20%] w-full flex items-center">
                         <h3
                           className="font-black text-ink leading-tight tracking-tight"
-                          style={{ fontSize: 'clamp(1.05rem, 3vh, 1.6rem)' }}
+                          style={{ fontSize: 'clamp(1.2rem, 3.2vh, 1.8rem)' }}
                         >
                           {card.title}
                         </h3>
                       </div>
                       <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-1">
                         <p
-                          className="text-ink/75 font-normal leading-snug line-clamp-3"
-                          style={{ fontSize: 'clamp(0.78rem, 2vh, 1rem)' }}
+                          className="text-ink/80 font-normal leading-snug line-clamp-3"
+                          style={{ fontSize: 'clamp(0.95rem, 2.2vh, 1.2rem)' }}
                         >
                           {card.description}
                         </p>
