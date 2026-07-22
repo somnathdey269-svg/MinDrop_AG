@@ -152,18 +152,14 @@ export const CARD_TOKENS = {
     deck: "shadow-[9px_9px_0px_0px_rgba(0,0,0,1)]",
     grid: "shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]",
   },
-  padding: {
-    deck: { paddingTop: '2.5%', paddingBottom: '2.5%', paddingLeft: '6%', paddingRight: '6%' },
-    grid: { paddingTop: '2.5%', paddingBottom: '2.5%', paddingLeft: '6%', paddingRight: '6%' },
-  },
   typography: {
     deck: {
-      title: "font-black text-ink leading-tight tracking-tight text-[clamp(1.5rem,5.5cqi+0.2rem,2.8rem)]",
-      description: "text-ink/85 font-normal leading-relaxed text-[clamp(0.95rem,3.2cqi+0.1rem,1.35rem)]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.45em]",
+      description: "text-ink/85 font-normal leading-relaxed text-[0.88em]",
     },
     grid: {
-      title: "font-black text-ink leading-tight tracking-tight text-[clamp(1.1rem,4.2cqi,1.55rem)]",
-      description: "text-ink/80 font-normal leading-relaxed text-[clamp(0.85rem,2.6cqi,1.05rem)]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.35em]",
+      description: "text-ink/80 font-normal leading-relaxed text-[0.82em]",
     },
   },
 } as const;
@@ -182,9 +178,9 @@ export interface ShowcaseCardLayoutPrimitiveProps {
 }
 
 /**
- * Universal Card Layout Primitive.
+ * Universal Card Layout Primitive (Fluid Adaptive Layout Engine).
  * Pure composition component strictly governing structural geometry, intrinsic flex sizing,
- * padding tokens, container query scope, and content flow. Decoupled from routing or state logic.
+ * em-cascade scale context, container query scope, and unified content flow.
  */
 export function ShowcaseCardLayoutPrimitive({
   mode = "deck",
@@ -203,8 +199,9 @@ export function ShowcaseCardLayoutPrimitive({
     <div
       onClick={onClick}
       style={{
-        ...(isDeck ? CARD_TOKENS.padding.deck : CARD_TOKENS.padding.grid),
         containerType: 'inline-size',
+        fontSize: isDeck ? 'clamp(0.95rem, 3.0cqi + 0.15rem, 1.45rem)' : 'clamp(0.85rem, 2.5cqi + 0.1rem, 1.15rem)',
+        padding: '1.25em',
         ...style,
       }}
       className={`relative w-full h-full flex flex-col justify-between select-none ${
@@ -214,19 +211,19 @@ export function ShowcaseCardLayoutPrimitive({
       } ${bgClass} ${className}`}
     >
       {/* 1. Header Slot (Intrinsic min-content height) */}
-      <div className="shrink-0 flex items-center w-full min-h-[1.8rem]">
+      <div className="shrink-0 flex items-center w-full min-h-[1.8em] text-[0.75em]">
         {headerSlot}
       </div>
 
-      {/* 2. Elastic Core Illustration Spring Zone (Relative max-height bounds) */}
-      <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
-        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(35%,10em)]' : 'max-h-[min(30%,6.5em)]'}`}>
+      {/* 2. Elastic Core Illustration Spring Zone */}
+      <div className="flex-1 min-h-0 w-full flex items-center justify-center my-[0.25em]">
+        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(38%,7.5em)]' : 'max-h-[min(32%,5.5em)]'}`}>
           {illustrationSlot}
         </div>
       </div>
 
       {/* 3. Content Slot (Intrinsic min-content height, zero truncation) */}
-      <div className="shrink-0 w-full flex flex-col justify-between gap-1.5 mt-auto">
+      <div className="shrink-0 w-full flex flex-col justify-between gap-[0.35em] mt-auto">
         <div className="w-full flex items-center">
           {titleSlot}
         </div>
@@ -234,7 +231,7 @@ export function ShowcaseCardLayoutPrimitive({
           {descriptionSlot}
         </div>
         {footerActionSlot && (
-          <div className="w-full mt-1">
+          <div className="w-full mt-[0.25em]">
             {footerActionSlot}
           </div>
         )}
