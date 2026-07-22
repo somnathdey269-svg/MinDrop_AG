@@ -239,7 +239,7 @@ export function DesktopShowcase() {
             </div>
 
             {/* Web Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(400px,31vw,490px)] h-[clamp(500px,68vh,610px)] flex items-center justify-center">
+            <div className="relative w-[clamp(420px,38vw,600px)] h-[clamp(520px,75vh,740px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -303,10 +303,10 @@ export function DesktopShowcase() {
 
                   {/* Section 3: Title & Description */}
                   <div className="shrink-0 mt-3">
-                    <h3 className="text-3xl lg:text-4xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h3 className="text-3xl lg:text-4xl xl:text-5xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base sm:text-lg lg:text-xl text-ink font-medium leading-relaxed">
+                    <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-ink font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -335,7 +335,7 @@ export function DesktopShowcase() {
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 items-stretch pb-24"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 xl:gap-6 items-stretch pb-24"
             >
               {DECK_CARDS.map((card) => {
                 return (
@@ -345,7 +345,7 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink p-4 lg:p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[clamp(310px,36vh,400px)] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink p-4 lg:p-5 xl:p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[clamp(340px,38vh,480px)] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="shrink-0 flex items-center justify-between h-7 mb-1">
@@ -363,10 +363,10 @@ export function DesktopShowcase() {
 
                     {/* Content Section */}
                     <div className="shrink-0 mt-1">
-                      <h3 className="text-lg lg:text-xl font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                      <h3 className="text-xl lg:text-2xl xl:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
                         {card.title}
                       </h3>
-                      <p className="text-xs lg:text-sm text-ink/80 font-normal leading-relaxed line-clamp-2">
+                      <p className="text-sm lg:text-base xl:text-lg text-ink/80 font-normal leading-relaxed line-clamp-2">
                         {card.description}
                       </p>
                     </div>
