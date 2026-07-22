@@ -236,51 +236,49 @@ export function MobileShowcase() {
         )}
       </main>
 
-      {/* 3. BOTTOM FLOATING CONTROLS (Elevated above iOS address bar) */}
-      <footer className="grid grid-cols-3 w-full items-center z-30 shrink-0 h-12 px-5 pb-[env(safe-area-inset-bottom,0.75rem)]">
-        <div className="justify-self-start flex items-center">
-          <Link 
-            to="/about"
-            className="text-xs uppercase font-black tracking-widest text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
-          >
-            About
-          </Link>
-        </div>
+      {/* 3. BOTTOM FLOATING CONTROLS (Perfectly aligned flex baseline) */}
+      <footer className="w-full flex items-center justify-between px-6 z-30 shrink-0 h-14 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <Link 
+          to="/about"
+          className="text-xs uppercase font-black tracking-widest text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center cursor-pointer shrink-0"
+        >
+          ABOUT
+        </Link>
 
-        {/* View Toggle Controls */}
-        <div className="justify-self-center flex items-center bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] gap-1">
+        {/* Premium Segmented View Switcher */}
+        <div className="bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1 shrink-0">
           <button
             onClick={() => handleToggleView("deck")}
-            className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
+            className={`px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer leading-none ${
               viewMode === "deck" 
                 ? "bg-white text-ink shadow-sm" 
-                : "text-white/60 hover:text-white"
+                : "text-white/70 hover:text-white"
             }`}
-            title="Deck View"
             aria-label="Switch to Deck View"
           >
-            <Layers className="size-4" />
+            <Layers className="size-3.5" />
+            <span>DECK</span>
           </button>
           <button
             onClick={() => handleToggleView("grid")}
-            className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer ${
-              viewMode === "grid" ? "bg-white text-ink" : "bg-ink text-canvas hover:text-[#FF671F]"
+            className={`px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer leading-none ${
+              viewMode === "grid" 
+                ? "bg-white text-ink shadow-sm" 
+                : "text-white/70 hover:text-white"
             }`}
-            title="Grid View"
             aria-label="Switch to Grid View"
           >
-            <LayoutGrid className="size-4" />
+            <LayoutGrid className="size-3.5" />
+            <span>GRID</span>
           </button>
         </div>
 
-        <div className="justify-self-end flex items-center">
-          <Link
-            to="/download"
-            className="text-xs sm:text-sm uppercase tracking-wider font-black text-ink hover:text-[#FF671F] transition-colors cursor-pointer"
-          >
-            Get App
-          </Link>
-        </div>
+        <Link
+          to="/download"
+          className="text-xs uppercase tracking-widest font-black text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center cursor-pointer shrink-0"
+        >
+          GET APP
+        </Link>
       </footer>
     </div>
   );

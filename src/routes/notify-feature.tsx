@@ -224,18 +224,18 @@ function SlideScenarios() {
   const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
 
   return (
-    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-5xl">
+    <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
+      <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center gap-4 sm:gap-6">
         <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-2">
+          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1">
             Real-World Protection Scenarios
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
+          <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-[#78350F] leading-tight tracking-tight">
             How people rely on MinDrop notification rules.
           </h2>
         </div>
 
-        <div className="w-full relative overflow-hidden min-h-[300px] flex items-center justify-center">
+        <div className="w-full relative overflow-hidden min-h-[220px] sm:min-h-[280px] flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={cardIdx}
@@ -243,38 +243,38 @@ function SlideScenarios() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`w-full rounded-[2.5rem] border-3 ${scenarios[cardIdx].borderColor} p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(120,53,15,0.15)] ${scenarios[cardIdx].color} text-left flex flex-col gap-6`}
+              className={`w-full rounded-[1.8rem] sm:rounded-[2.2rem] border-3 ${scenarios[cardIdx].borderColor} p-5 sm:p-8 shadow-md ${scenarios[cardIdx].color} text-left flex flex-col gap-3 sm:gap-5`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <span className="text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-3.5 py-1 rounded-full shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-3 py-0.5 sm:py-1 rounded-full shadow-xs">
                   {scenarios[cardIdx].app}
                 </span>
-                <span className="text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-3.5 py-1 rounded-full">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-3 py-0.5 sm:py-1 rounded-full">
                   KEYWORD: {scenarios[cardIdx].kw}
                 </span>
               </div>
               <div>
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#78350F] mb-3">{scenarios[cardIdx].title}</h3>
-                <p className="text-base sm:text-xl font-semibold text-[#78350F]/80 leading-relaxed">{scenarios[cardIdx].desc}</p>
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-black text-[#78350F] mb-1.5 sm:mb-2">{scenarios[cardIdx].title}</h3>
+                <p className="text-xs sm:text-base font-semibold text-[#78350F]/85 leading-relaxed">{scenarios[cardIdx].desc}</p>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
           <button onClick={prev} disabled={cardIdx === 0}
-            className="size-12 rounded-full border-2 border-[#78350F] bg-white text-[#78350F] grid place-items-center disabled:opacity-30 hover:bg-[#FEF3C7] transition cursor-pointer shadow-sm">
-            <ChevronLeft className="size-6" />
+            className="size-9 sm:size-11 rounded-full border-2 border-[#78350F] bg-white text-[#78350F] grid place-items-center disabled:opacity-30 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
+            <ChevronLeft className="size-4 sm:size-5" />
           </button>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {scenarios.map((_, i) => (
               <button key={i} onClick={() => setCardIdx(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-8 h-2.5 bg-[#D97706]" : "size-2.5 bg-[#D97706]/30 hover:bg-[#D97706]/60"}`} />
+                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-6 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/30 hover:bg-[#D97706]/60"}`} />
             ))}
           </div>
           <button onClick={next} disabled={cardIdx === scenarios.length - 1}
-            className="size-12 rounded-full border-2 border-[#78350F] bg-white text-[#78350F] grid place-items-center disabled:opacity-30 hover:bg-[#FEF3C7] transition cursor-pointer shadow-sm">
-            <ChevronRight className="size-6" />
+            className="size-9 sm:size-11 rounded-full border-2 border-[#78350F] bg-white text-[#78350F] grid place-items-center disabled:opacity-30 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
+            <ChevronRight className="size-4 sm:size-5" />
           </button>
         </div>
       </div>
@@ -472,12 +472,12 @@ function NotifyFeatureDetailView() {
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden select-none"
+      className={`h-[100dvh] flex flex-col overflow-hidden select-none relative transition-colors duration-400 ${isDark ? "bg-[#451A03]" : "bg-[#FFFBEB]"}`}
       style={{ viewTransitionName: "card-notify" } as React.CSSProperties}
     >
       {/* 1. Header (Fixed Top Bar) */}
-      <header className="shrink-0 h-12 border-b-2 border-[#F59E0B]/10 z-50 px-4 sm:px-6 flex items-center"
-        style={{ backgroundColor: isDark ? "rgba(69,26,3,0.96)" : "rgba(255,251,235,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
+      <header className="shrink-0 h-12 border-b border-[#F59E0B]/15 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
+        style={{ backgroundColor: isDark ? "rgba(69,26,3,0.92)" : "rgba(255,251,235,0.92)", transition: "background-color 0.4s ease" }}>
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2">
           <Link to="/" hash={backHash} viewTransition
             className={`flex items-center gap-1 text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
@@ -491,28 +491,24 @@ function NotifyFeatureDetailView() {
         </div>
       </header>
 
-      {/* 2. Dedicated Top UP Navigation Bar */}
-      <div className="shrink-0 h-9 flex items-center justify-center z-40">
-        {current > 0 ? (
-          <button
-            type="button"
-            onClick={() => goTo(current - 1)}
-            className="cursor-pointer group opacity-80 hover:opacity-100 transition-opacity"
-            aria-label="Previous Slide"
-          >
-            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
-              <ChevronUp className={`size-4 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
-              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>UP</span>
-            </div>
-          </button>
-        ) : (
-          <div className="h-6" />
-        )}
-      </div>
+      {/* 2. Floating Subtle Top UP Control */}
+      {current > 0 && (
+        <button
+          type="button"
+          onClick={() => goTo(current - 1)}
+          className="absolute top-14 left-1/2 -translate-x-1/2 z-40 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+          aria-label="Previous Slide"
+        >
+          <div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-current/10">
+            <ChevronUp className={`size-3.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+            <span className={`text-[9px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>UP</span>
+          </div>
+        </button>
+      )}
 
-      {/* 3. Center Middle Stage (Content perfectly centered between UP & DOWN) */}
+      {/* 3. Center Middle Stage (Seamless Background) */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center px-3 sm:px-6 py-1"
+        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center p-3 sm:p-6"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
@@ -547,24 +543,20 @@ function NotifyFeatureDetailView() {
         </div>
       </main>
 
-      {/* 4. Dedicated Bottom DOWN Navigation Bar */}
-      <div className="shrink-0 h-9 flex items-center justify-center z-40 pb-[env(safe-area-inset-bottom,0.25rem)]">
-        {current < TOTAL - 1 ? (
-          <button
-            type="button"
-            onClick={() => goTo(current + 1)}
-            className="cursor-pointer group opacity-80 hover:opacity-100 transition-opacity"
-            aria-label="Next Slide"
-          >
-            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
-              <ChevronDown className={`size-4 transition group-hover:translate-y-0.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
-              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>DOWN</span>
-            </div>
-          </button>
-        ) : (
-          <div className="h-6" />
-        )}
-      </div>
+      {/* 4. Floating Subtle Bottom DOWN Control */}
+      {current < TOTAL - 1 && (
+        <button
+          type="button"
+          onClick={() => goTo(current + 1)}
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 z-40 cursor-pointer opacity-50 hover:opacity-100 transition-opacity pb-[env(safe-area-inset-bottom,0px)]"
+          aria-label="Next Slide"
+        >
+          <div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-current/10">
+            <ChevronDown className={`size-3.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+            <span className={`text-[9px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>DOWN</span>
+          </div>
+        </button>
+      )}
     </div>
   );
 }
