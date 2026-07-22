@@ -108,7 +108,7 @@ export function AboutAppIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <BookOpen className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#6366F1]" />
         </motion.div>
@@ -132,7 +132,7 @@ export function LaterAlarmIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <AlarmClock className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#10B981]" />
         </motion.div>
@@ -156,7 +156,7 @@ export function SmartFiltersIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <BellRing className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#F59E0B]" />
         </motion.div>
@@ -180,7 +180,7 @@ export function PlacesMappingIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <Navigation className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#8B5CF6] transform rotate-45" />
         </motion.div>
@@ -204,7 +204,7 @@ export function FutureActionsIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <Compass className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#2563EB]" />
         </motion.div>
@@ -228,7 +228,7 @@ export function PrivacyManifestoIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <ShieldCheck className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#059669]" />
         </motion.div>
@@ -252,7 +252,7 @@ export function PricingTierIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <Sparkles className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#EC4899]" />
         </motion.div>
@@ -276,7 +276,7 @@ export function ClosureVisionIllustration() {
         <motion.div 
           animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-32 sm:size-38 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
           <HeartHandshake className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#D97706]" />
         </motion.div>
