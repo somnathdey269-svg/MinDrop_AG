@@ -97,19 +97,19 @@ export const DECK_CARDS: DeckCardItem[] = [
 ];
 
 /**
- * Width-proportional accent icon — fills its parent container completely.
- * Parent card controls size via: <div className="w-[22%] aspect-square">
- * This makes icon automatically scale with card width on any screen.
+ * Clean accent icon — centered, no border or background box.
  */
 function AccentIcon({ color, Icon }: { color: string; Icon: ElementType }) {
   return (
-    <motion.div
-      animate={{ scale: [1, 1.04, 1], rotate: [0, -1, 1, 0] }}
-      transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-      className="w-full h-full rounded-2xl bg-white/90 border-2 border-ink/70 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.8)] grid place-items-center select-none overflow-hidden"
-    >
-      <Icon className="w-[55%] h-[55%]" style={{ color }} />
-    </motion.div>
+    <div className="w-full h-full flex items-center justify-center select-none">
+      <motion.div
+        animate={{ scale: [1, 1.05, 1], rotate: [0, -1, 1, 0] }}
+        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+        className="w-full h-full flex items-center justify-center"
+      >
+        <Icon className="w-full h-full object-contain" style={{ color }} />
+      </motion.div>
+    </div>
   );
 }
 

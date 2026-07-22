@@ -170,35 +170,39 @@ export function MobileShowcase() {
                   }}
                   transition={{ type: "spring", stiffness: 120, damping: 18 }}
                   onClick={handleShowMe}
-                  style={{ viewTransitionName: `card-${currentCard.id}` } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.2rem] border-3 border-ink flex flex-col shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform ${currentCard.bgClass}`}
-                  style={{ padding: '5%', containerType: 'inline-size' } as React.CSSProperties}
+                  style={{ padding: '6%', containerType: 'inline-size' } as React.CSSProperties}
                 >
-                  {/* TOP: Tag Pill */}
-                  <div className="shrink-0 mb-[5%]">
+                  {/* Section 1: Header Tag Pill (15% height) */}
+                  <div className="h-[15%] shrink-0 flex items-center">
                     <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* BOTTOM: Icon (22% width, square) + Content — all width-proportional */}
-                  <div className="flex-1 flex flex-col justify-end">
-                    {/* Icon scales with card width: 22% × card-width = auto square */}
-                    <div className="w-[22%] aspect-square mb-[4%]">
-                      {renderIllustration(currentCard.id)}
+                  {/* Section 2: Body Area (75% height) */}
+                  <div className="h-[80%] shrink-0 flex flex-col justify-between">
+                    {/* Icon Area: 30% height, centered cleanly */}
+                    <div className="h-[30%] w-full flex items-center justify-center">
+                      <div className="h-full aspect-square flex items-center justify-center p-1">
+                        {renderIllustration(currentCard.id)}
+                      </div>
                     </div>
-                    <h3
-                      className="font-black text-ink leading-tight tracking-tight mb-[2.5%]"
-                      style={{ fontSize: 'clamp(1rem, 7cqw, 2.2rem)' }}
-                    >
-                      {currentCard.title}
-                    </h3>
-                    <p
-                      className="text-ink/75 font-normal leading-snug"
-                      style={{ fontSize: 'clamp(0.78rem, 4cqw, 1.05rem)' }}
-                    >
-                      {currentCard.description}
-                    </p>
+
+                    {/* Content Area: 65% height — Title (Bold) + Description */}
+                    <div className="h-[65%] w-full flex flex-col justify-center">
+                      <h3
+                        className="font-black text-ink leading-tight tracking-tight mb-2"
+                        style={{ fontSize: 'clamp(1.25rem, 7.5cqw, 2.2rem)' }}
+                      >
+                        {currentCard.title}
+                      </h3>
+                      <p
+                        className="text-ink/80 font-normal leading-relaxed"
+                        style={{ fontSize: 'clamp(0.85rem, 4.2cqw, 1.15rem)' }}
+                      >
+                        {currentCard.description}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -217,35 +221,39 @@ export function MobileShowcase() {
                     viewTransition
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
-                      padding: '5%',
+                      padding: '6%',
                       containerType: 'inline-size'
                     } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[clamp(250px,35vh,330px)] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform min-h-[clamp(260px,36vh,340px)] ${card.bgClass}`}
                   >
-                    {/* TOP: Tag Pill */}
-                    <div className="shrink-0 mb-[5%]">
+                    {/* Section 1: Header Tag Pill */}
+                    <div className="h-[15%] shrink-0 flex items-center">
                       <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* BOTTOM: Icon + Content — width-proportional */}
-                    <div className="flex-1 flex flex-col justify-end">
-                      <div className="w-[20%] aspect-square mb-[4%]">
-                        {renderIllustration(card.id)}
+                    {/* Section 2: Body Area (Icon 30%, Content 65%) */}
+                    <div className="h-[80%] shrink-0 flex flex-col justify-between">
+                      <div className="h-[28%] w-full flex items-center justify-center">
+                        <div className="h-full aspect-square flex items-center justify-center p-0.5">
+                          {renderIllustration(card.id)}
+                        </div>
                       </div>
-                      <h3
-                        className="font-black text-ink leading-tight tracking-tight mb-[2%]"
-                        style={{ fontSize: 'clamp(0.9rem, 6.5cqw, 1.8rem)' }}
-                      >
-                        {card.title}
-                      </h3>
-                      <p
-                        className="text-ink/70 font-normal leading-snug"
-                        style={{ fontSize: 'clamp(0.72rem, 3.8cqw, 1rem)' }}
-                      >
-                        {card.description}
-                      </p>
+                      <div className="h-[68%] w-full flex flex-col justify-center">
+                        <h3
+                          className="font-black text-ink leading-tight tracking-tight mb-1.5"
+                          style={{ fontSize: 'clamp(1.1rem, 6.8cqw, 1.8rem)' }}
+                        >
+                          {card.title}
+                        </h3>
+                        <p
+                          className="text-ink/75 font-normal leading-snug line-clamp-3"
+                          style={{ fontSize: 'clamp(0.8rem, 4cqw, 1.05rem)' }}
+                        >
+                          {card.description}
+                        </p>
+                      </div>
                     </div>
                   </Link>
                 );
