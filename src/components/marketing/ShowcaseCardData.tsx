@@ -1,3 +1,4 @@
+import { ElementType } from "react";
 import { AlarmClock, BellRing, Navigation, Sparkles, Compass, ShieldCheck, HeartHandshake, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -9,7 +10,7 @@ export interface DeckCardItem {
   to: string;
   bgColor: string;
   bgClass: string;
-  illustrator: any;
+  illustrator: ElementType;
 }
 
 export const DECK_CARDS: DeckCardItem[] = [
@@ -95,70 +96,46 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
 ];
 
-// Subtle icon accent — small, centred, no dominant label
-function SubtleIllustration({ 
-  color, 
-  Icon, 
-  animateRotate = false 
-}: { 
-  color: string; 
-  Icon: React.ElementType; 
-  animateRotate?: boolean;
-}) {
+/**
+ * Tiny accent icon — intentionally small so card content takes priority.
+ * Box: 56px (mobile) → 64px (sm) → 72px (lg).
+ * No label, minimal animation, light shadow.
+ */
+function AccentIcon({ color, Icon }: { color: string; Icon: ElementType }) {
   return (
     <div className="flex items-center justify-center select-none">
-      <div className="relative grid place-items-center">
-        {/* Soft glow ring — very subtle */}
-        <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.05, 0.2] }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-          className="absolute inset-0 -m-2 sm:-m-3 lg:-m-4 rounded-full pointer-events-none"
-          style={{ backgroundColor: `${color}30`, border: `1.5px solid ${color}40` }}
-        />
-        {/* Icon box — clean, light shadow */}
-        <motion.div
-          animate={{ scale: [1, 1.03, 1], rotate: animateRotate ? [0, -1.5, 1.5, 0] : [0, -1, 1, 0] }}
-          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-          className="size-20 sm:size-24 lg:size-28 xl:size-32 2xl:size-36 rounded-[1.5rem] lg:rounded-[1.8rem] bg-white/90 border-2 border-ink/80 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.85)] grid place-items-center relative z-10"
-        >
-          <Icon
-            className="size-10 sm:size-12 lg:size-14 xl:size-16 2xl:size-18"
-            style={{ color }}
-          />
-        </motion.div>
-      </div>
+      <motion.div
+        animate={{ scale: [1, 1.04, 1], rotate: [0, -1, 1, 0] }}
+        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+        className="size-14 sm:size-16 lg:size-[4.5rem] xl:size-20 rounded-2xl bg-white/90 border-2 border-ink/70 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.8)] grid place-items-center"
+      >
+        <Icon className="size-7 sm:size-8 lg:size-9 xl:size-10" style={{ color }} />
+      </motion.div>
     </div>
   );
 }
 
 export function AboutAppIllustration() {
-  return <SubtleIllustration color="#6366F1" Icon={BookOpen} />;
+  return <AccentIcon color="#6366F1" Icon={BookOpen} />;
 }
-
 export function LaterAlarmIllustration() {
-  return <SubtleIllustration color="#10B981" Icon={AlarmClock} />;
+  return <AccentIcon color="#10B981" Icon={AlarmClock} />;
 }
-
 export function SmartFiltersIllustration() {
-  return <SubtleIllustration color="#F59E0B" Icon={BellRing} animateRotate />;
+  return <AccentIcon color="#F59E0B" Icon={BellRing} />;
 }
-
 export function PlacesMappingIllustration() {
-  return <SubtleIllustration color="#8B5CF6" Icon={Navigation} />;
+  return <AccentIcon color="#8B5CF6" Icon={Navigation} />;
 }
-
 export function FutureActionsIllustration() {
-  return <SubtleIllustration color="#2563EB" Icon={Compass} animateRotate />;
+  return <AccentIcon color="#2563EB" Icon={Compass} />;
 }
-
 export function PrivacyManifestoIllustration() {
-  return <SubtleIllustration color="#059669" Icon={ShieldCheck} />;
+  return <AccentIcon color="#059669" Icon={ShieldCheck} />;
 }
-
 export function PricingTierIllustration() {
-  return <SubtleIllustration color="#EC4899" Icon={Sparkles} animateRotate />;
+  return <AccentIcon color="#EC4899" Icon={Sparkles} />;
 }
-
 export function ClosureVisionIllustration() {
-  return <SubtleIllustration color="#D97706" Icon={HeartHandshake} />;
+  return <AccentIcon color="#D97706" Icon={HeartHandshake} />;
 }

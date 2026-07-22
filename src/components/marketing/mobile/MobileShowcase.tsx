@@ -180,19 +180,19 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Subtle Icon Accent — capped at 38% so content dominates */}
-                  <div className="flex-1 min-h-0 max-h-[38%] flex items-center justify-center py-1 overflow-hidden w-full">
-                    <div className="w-full h-full transform-gpu flex items-center justify-center">
+                  {/* Section 2: Tiny accent icon — 28% max so content dominates */}
+                  <div className="flex-1 min-h-0 max-h-[28%] flex items-center justify-center overflow-hidden w-full">
+                    <div className="transform-gpu flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
-                  {/* Section 3: Content — PRIORITY */}
-                  <div className="shrink-0 mt-2">
-                    <h3 className="text-[1.35rem] sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                  {/* Section 3: Content — PRIMARY FOCUS */}
+                  <div className="shrink-0 mt-3">
+                    <h3 className="text-2xl sm:text-[1.7rem] font-black text-ink leading-tight tracking-tight mb-2">
                       {currentCard.title}
                     </h3>
-                    <p className="text-sm sm:text-[0.95rem] text-ink/80 font-normal leading-snug">
+                    <p className="text-[0.95rem] sm:text-base text-ink/75 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -221,19 +221,20 @@ export function MobileShowcase() {
                       </span>
                     </div>
 
-                    {/* Fluid Graphic Section */}
-                    <div className="flex-1 min-h-0 max-h-[48%] flex items-center justify-center py-1 overflow-hidden w-full pointer-events-none">
-                      <div className="w-full h-full transform-gpu flex items-center justify-center">
+                    {/* Grid Graphic — tiny accent */}
+                    <div className="flex-1 min-h-0 max-h-[30%] flex items-center justify-center overflow-hidden w-full pointer-events-none">
+                      <div className="transform-gpu flex items-center justify-center">
                         {renderIllustration(card.id)}
                       </div>
                     </div>
 
                     {/* Content Section */}
+                    {/* Grid Content */}
                     <div className="shrink-0 mt-2">
                       <h3 className="text-xl sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5">
                         {card.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-ink/80 font-normal leading-snug line-clamp-3">
+                      <p className="text-sm sm:text-base text-ink/75 font-normal leading-snug line-clamp-3">
                         {card.description}
                       </p>
                     </div>

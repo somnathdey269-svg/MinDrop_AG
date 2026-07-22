@@ -258,9 +258,9 @@ export function DesktopShowcase() {
                     <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  {/* Section 2 (Behind): Subtle Icon Accent */}
-                  <div className="flex-1 min-h-0 max-h-[38%] flex items-center justify-center py-2 overflow-hidden w-full opacity-40 pointer-events-none">
-                    <div className="w-full h-full transform-gpu flex items-center justify-center">
+                  {/* Section 2 Behind: Tiny accent */}
+                  <div className="flex-1 min-h-0 max-h-[28%] flex items-center justify-center overflow-hidden w-full opacity-40 pointer-events-none">
+                    <div className="transform-gpu flex items-center justify-center">
                       {renderIllustration(nextCard.id)}
                     </div>
                   </div>
@@ -295,19 +295,19 @@ export function DesktopShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Subtle Icon Accent — capped, content is priority */}
-                  <div className="flex-1 min-h-0 max-h-[38%] flex items-center justify-center py-2 overflow-hidden w-full relative">
-                    <div className="w-full h-full transform-gpu flex items-center justify-center">
+                  {/* Section 2: Tiny accent — content is the star */}
+                  <div className="flex-1 min-h-0 max-h-[28%] flex items-center justify-center overflow-hidden w-full relative">
+                    <div className="transform-gpu flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
-                  {/* Section 3: Content — PRIORITY */}
-                  <div className="shrink-0 mt-3">
-                    <h3 className="text-3xl lg:text-[2.1rem] xl:text-4xl font-black text-ink leading-tight tracking-tight mb-2">
+                  {/* Section 3: Content — PRIMARY */}
+                  <div className="shrink-0 mt-4">
+                    <h3 className="text-[2rem] lg:text-[2.4rem] xl:text-5xl font-black text-ink leading-tight tracking-tight mb-3">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base lg:text-lg text-ink/80 font-normal leading-relaxed">
+                    <p className="text-base lg:text-xl xl:text-2xl text-ink/75 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -355,19 +355,19 @@ export function DesktopShowcase() {
                       </span>
                     </div>
 
-                    {/* Fluid Graphic Area — capped to prevent blank space */}
-                    <div className="flex-1 min-h-0 max-h-[50%] flex items-center justify-center py-2 overflow-hidden w-full pointer-events-none">
-                      <div className="w-full h-full transform-gpu flex items-center justify-center">
+                    {/* Grid Graphic — tiny accent */}
+                    <div className="flex-1 min-h-0 max-h-[30%] flex items-center justify-center overflow-hidden w-full pointer-events-none">
+                      <div className="transform-gpu flex items-center justify-center">
                         {renderIllustration(card.id)}
                       </div>
                     </div>
 
-                    {/* Content Section — title wraps, description visible */}
-                    <div className="shrink-0 mt-2">
-                      <h3 className="text-lg lg:text-xl xl:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5">
+                    {/* Grid Content — title wraps, description reads fully */}
+                    <div className="shrink-0 mt-3">
+                      <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight mb-2">
                         {card.title}
                       </h3>
-                      <p className="text-sm lg:text-base text-ink/70 font-normal leading-snug line-clamp-3">
+                      <p className="text-sm lg:text-base xl:text-lg text-ink/70 font-normal leading-snug line-clamp-3">
                         {card.description}
                       </p>
                     </div>
