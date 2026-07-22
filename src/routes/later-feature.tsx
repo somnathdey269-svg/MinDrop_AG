@@ -221,9 +221,11 @@ function LaterFeatureDetailView() {
   const { from } = Route.useSearch();
   const backHash = from === "grid" ? "grid" : undefined;
   const [current, setCurrent] = useState(0);
+  const currentRef = useRef(0);
+  currentRef.current = current;
+
   const touchStartY = useRef(0);
   const isAnimating = useRef(false);
-  const lockTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
     <SlideOpening />,
@@ -242,47 +244,41 @@ function LaterFeatureDetailView() {
     isAnimating.current = true;
     setCurrent(idx);
 
-    if (lockTimer.current) clearTimeout(lockTimer.current);
-    lockTimer.current = setTimeout(() => {
+    setTimeout(() => {
       isAnimating.current = false;
-    }, 600);
+    }, 450);
   };
 
-  // Wheel Listener with strict 1-slide gesture lock
+  // Continuous Stable Event Listener Bindings
   useEffect(() => {
-    const handler = (e: WheelEvent) => {
+    const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
       if (isAnimating.current) return;
-      if (Math.abs(e.deltaY) < 12 && Math.abs(e.deltaX) < 12) return;
+      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
 
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-      if (delta > 0) goTo(current + 1);
-      else if (delta < 0) goTo(current - 1);
+      if (delta > 0) goTo(currentRef.current + 1);
+      else if (delta < 0) goTo(currentRef.current - 1);
     };
 
-    window.addEventListener("wheel", handler, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", handler);
-      if (lockTimer.current) clearTimeout(lockTimer.current);
-    };
-  }, [current]);
-
-  // Keyboard Listener with strict 1-slide gesture lock
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
+    const keyHandler = (e: KeyboardEvent) => {
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
-        goTo(current + 1);
+        goTo(currentRef.current + 1);
       }
       if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
         e.preventDefault();
-        goTo(current - 1);
+        goTo(currentRef.current - 1);
       }
     };
 
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [current]);
+    window.addEventListener("wheel", wheelHandler, { passive: false });
+    window.addEventListener("keydown", keyHandler);
+    return () => {
+      window.removeEventListener("wheel", wheelHandler);
+      window.removeEventListener("keydown", keyHandler);
+    };
+  }, []);
 
   return (
     <div
@@ -312,8 +308,8 @@ function LaterFeatureDetailView() {
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           if (Math.abs(delta) > 35) {
-            if (delta > 0) goTo(current + 1);
-            else goTo(current - 1);
+            if (delta > 0) goTo(currentRef.current + 1);
+            else goTo(currentRef.current - 1);
           }
         }}
       >
