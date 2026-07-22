@@ -181,6 +181,7 @@ export interface ShowcaseCardLayoutPrimitiveProps {
  * Universal Two-Stage Adaptive Card Layout Primitive.
  * Stage 1: Responsive Card Sizing Context (Outer Boundary Math).
  * Stage 2: Dynamic Height Allocation & Auto-Adjusted Typography Scale (Zero Bottom Void).
+ * Grid Mode: Fixed structural baselines for perfect horizontal alignment across grid rows.
  */
 export function ShowcaseCardLayoutPrimitive({
   mode = "deck",
@@ -200,11 +201,11 @@ export function ShowcaseCardLayoutPrimitive({
       onClick={onClick}
       style={{
         containerType: 'inline-size',
-        fontSize: isDeck ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.85rem, 2.5cqi + 0.1rem, 1.15rem)',
-        paddingTop: '3.5%',
-        paddingBottom: '3.5%',
-        paddingLeft: '6.5%',
-        paddingRight: '6.5%',
+        fontSize: isDeck ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.85rem, 2.5cqi + 0.1rem, 1.12rem)',
+        paddingTop: isDeck ? '3.5%' : '1.25rem',
+        paddingBottom: isDeck ? '3.5%' : '1.25rem',
+        paddingLeft: isDeck ? '6.5%' : '1.25rem',
+        paddingRight: isDeck ? '6.5%' : '1.25rem',
         ...style,
       }}
       className={`relative w-full h-full flex flex-col justify-between select-none ${
@@ -213,24 +214,26 @@ export function ShowcaseCardLayoutPrimitive({
         isDeck ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
-      {/* 1. Header Slot (Tag / Pill) */}
-      <div className="shrink-0 flex items-center w-full min-h-[1.8em] text-[0.75em]">
+      {/* 1. Header Slot */}
+      <div className={`shrink-0 flex items-center w-full ${isDeck ? 'min-h-[1.8em] text-[0.75em]' : 'h-7 text-[0.75em]'}`}>
         {headerSlot}
       </div>
 
       {/* 2. Illustration Zone */}
-      <div className="flex-1 min-h-0 w-full flex items-center justify-center py-2">
-        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(38%,8.5em)]' : 'max-h-[min(32%,5.5em)]'}`}>
+      <div className={`shrink-0 w-full flex items-center justify-center ${isDeck ? 'flex-1 min-h-0 py-2' : 'h-20 my-2'}`}>
+        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(38%,8.5em)]' : 'max-h-full'}`}>
           {illustrationSlot}
         </div>
       </div>
 
-      {/* 3. Content Zone (Dynamic Title & Description Fill - Zero Bottom Void) */}
-      <div className="shrink-0 w-full flex flex-col justify-end gap-2.5 mt-auto">
-        <div className="w-full flex items-center">
+      {/* 3. Content Zone (Aligned Baselines in Grid Mode) */}
+      <div className={`shrink-0 w-full flex flex-col ${isDeck ? 'gap-2.5 mt-auto' : 'flex-1 justify-between gap-1.5'}`}>
+        {/* Title Slot (Fixed 3rem baseline container in Grid Mode) */}
+        <div className={`w-full flex items-start ${isDeck ? '' : 'h-12'}`}>
           {titleSlot}
         </div>
-        <div className="w-full flex flex-col justify-start overflow-hidden">
+        {/* Description Slot (Aligned top starting line in Grid Mode) */}
+        <div className={`w-full flex flex-col justify-start overflow-hidden ${isDeck ? '' : 'flex-1'}`}>
           {descriptionSlot}
         </div>
         {footerActionSlot && (
