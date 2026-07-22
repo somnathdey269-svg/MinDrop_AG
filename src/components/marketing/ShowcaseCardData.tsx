@@ -154,11 +154,11 @@ export const CARD_TOKENS = {
   },
   typography: {
     deck: {
-      title: "font-black text-ink leading-tight tracking-tight text-[1.45em]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.4em]",
       description: "text-ink/85 font-normal leading-relaxed text-[0.88em]",
     },
     grid: {
-      title: "font-black text-ink leading-tight tracking-tight text-[1.35em]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.3em]",
       description: "text-ink/80 font-normal leading-relaxed text-[0.82em]",
     },
   },
@@ -178,9 +178,9 @@ export interface ShowcaseCardLayoutPrimitiveProps {
 }
 
 /**
- * Universal Card Layout Primitive (Fluid Adaptive Layout Engine).
- * Pure composition component strictly governing structural geometry, intrinsic flex sizing,
- * em-cascade scale context, container query scope, and unified content flow.
+ * Universal Two-Stage Adaptive Card Layout Primitive.
+ * Stage 1: Responsive Card Sizing Context (Outer Boundary Math).
+ * Stage 2: Dynamic Height Allocation Engine (2.5% Pad | 15% Header | 25% Graphic | 55% Content).
  */
 export function ShowcaseCardLayoutPrimitive({
   mode = "deck",
@@ -201,7 +201,10 @@ export function ShowcaseCardLayoutPrimitive({
       style={{
         containerType: 'inline-size',
         fontSize: isDeck ? 'clamp(0.95rem, 3.0cqi + 0.15rem, 1.45rem)' : 'clamp(0.85rem, 2.5cqi + 0.1rem, 1.15rem)',
-        padding: '1.25em',
+        paddingTop: '2.5%',
+        paddingBottom: '2.5%',
+        paddingLeft: '6%',
+        paddingRight: '6%',
         ...style,
       }}
       className={`relative w-full h-full flex flex-col justify-between select-none ${
@@ -210,19 +213,19 @@ export function ShowcaseCardLayoutPrimitive({
         isDeck ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
-      {/* 1. Header Slot (Intrinsic min-content height) */}
+      {/* 1. Header Slot (~15% Height Budget Context) */}
       <div className="shrink-0 flex items-center w-full min-h-[1.8em] text-[0.75em]">
         {headerSlot}
       </div>
 
-      {/* 2. Elastic Core Illustration Spring Zone */}
+      {/* 2. Elastic Core Illustration Spring Zone (~25% Graphic Height Budget) */}
       <div className="flex-1 min-h-0 w-full flex items-center justify-center my-[0.25em]">
-        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(38%,7.5em)]' : 'max-h-[min(32%,5.5em)]'}`}>
+        <div className={`h-full aspect-square flex items-center justify-center ${isDeck ? 'max-h-[min(28%,7.5em)]' : 'max-h-[min(24%,5.5em)]'}`}>
           {illustrationSlot}
         </div>
       </div>
 
-      {/* 3. Content Slot (Intrinsic min-content height, zero truncation) */}
+      {/* 3. Content Zone (~55% Height Budget: Title & Description Dynamic Sharing) */}
       <div className="shrink-0 w-full flex flex-col justify-between gap-[0.35em] mt-auto">
         <div className="w-full flex items-center">
           {titleSlot}
