@@ -369,45 +369,31 @@ export function DesktopShowcase() {
                     viewTransition
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
-                      paddingTop: '2.5%',
-                      paddingBottom: '2.5%',
-                      paddingLeft: '6%',
-                      paddingRight: '6%',
                     } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[clamp(290px,32vh,390px)] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink p-5 lg:p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer min-h-[320px] ${card.bgClass}`}
                   >
-                    {/* Section 1: Tag Pill */}
-                    <div className="h-[15%] shrink-0 flex items-center">
+                    {/* Header Tag Pill */}
+                    <div className="shrink-0 flex items-center justify-between mb-3">
                       <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                         {card.tag}
                       </span>
                     </div>
 
-                    {/* Section 2: Centered Icon */}
-                    <div className="h-[25%] w-full shrink-0 flex items-center justify-center">
-                      <div className="h-full aspect-square flex items-center justify-center p-0.5">
+                    {/* Centered Accent Icon */}
+                    <div className="w-full flex items-center justify-center my-3">
+                      <div className="size-12 lg:size-14 flex items-center justify-center">
                         {renderIllustration(card.id)}
                       </div>
                     </div>
 
-                    {/* Section 3: Content Area (55% height) */}
-                    <div className="h-[55%] shrink-0 flex flex-col justify-between">
-                      <div className="h-[20%] w-full flex items-center">
-                        <h3
-                          className="font-black text-ink leading-tight tracking-tight"
-                          style={{ fontSize: 'clamp(1.3rem, 3.6vh, 2.2rem)' }}
-                        >
-                          {card.title}
-                        </h3>
-                      </div>
-                      <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-1">
-                        <p
-                          className="text-ink/80 font-normal leading-snug line-clamp-3"
-                          style={{ fontSize: 'clamp(0.95rem, 2.4vh, 1.35rem)' }}
-                        >
-                          {card.description}
-                        </p>
-                      </div>
+                    {/* Title & Description Flow — auto adjusts without text collision */}
+                    <div className="flex flex-col gap-2 mt-auto">
+                      <h3 className="text-xl lg:text-2xl font-black text-ink leading-tight tracking-tight">
+                        {card.title}
+                      </h3>
+                      <p className="text-xs lg:text-sm text-ink/75 font-normal leading-relaxed line-clamp-3">
+                        {card.description}
+                      </p>
                     </div>
                   </Link>
                 );
