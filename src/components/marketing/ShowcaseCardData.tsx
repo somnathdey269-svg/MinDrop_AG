@@ -19,7 +19,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "About the App",
     description: "Built for immediate micro-actions. An offline second brain that captures urgent thoughts and protects your mental bandwidth.",
     to: "/about",
-    bgColor: "#F8FAFC", // Slate Pearl
+    bgColor: "#F8FAFC",
     bgClass: "bg-[#F8FAFC]",
     illustrator: BookOpen,
   },
@@ -29,7 +29,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "Smart Notification",
     description: "Silence low-priority chatter. Create keyword rules that convert essential notification streams into actionable tasks.",
     to: "/notify-feature",
-    bgColor: "#FEF3C7", // Soft Amber
+    bgColor: "#FEF3C7",
     bgClass: "bg-[#FEF3C7]",
     illustrator: BellRing,
   },
@@ -39,7 +39,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "Location Reminder",
     description: "Drop pins where items or tasks are bound. MinDrop runs background sweeps and triggers reminders as you enter or leave radii.",
     to: "/places-feature",
-    bgColor: "#F3E8FF", // Soft Lavender
+    bgColor: "#F3E8FF",
     bgClass: "bg-[#F3E8FF]",
     illustrator: Navigation,
   },
@@ -49,7 +49,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "Looping Alarm",
     description: "Ordinary alerts are easy to ignore. MinDrop alarms ring continuously like a phone call until checked, surviving system restarts.",
     to: "/later-feature",
-    bgColor: "#E0F2FE", // Soft Sky Blue
+    bgColor: "#E0F2FE",
     bgClass: "bg-[#E0F2FE]",
     illustrator: AlarmClock,
   },
@@ -59,7 +59,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "Future Actions",
     description: "Person-based alerts, cross-app trigger bridges, and local voice drops. Features we are striving to bring natively to Android.",
     to: "/future-feature",
-    bgColor: "#EFF6FF", // Soft Indigo
+    bgColor: "#EFF6FF",
     bgClass: "bg-[#EFF6FF]",
     illustrator: Compass,
   },
@@ -69,7 +69,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "Absolute Privacy",
     description: "Zero cloud telemetry, zero subscription traps, and zero ad tracking. Local SQLite persistence engineered for pure peace of mind.",
     to: "/privacy-feature",
-    bgColor: "#F0FDF4", // Soft Mint
+    bgColor: "#F0FDF4",
     bgClass: "bg-[#F0FDF4]",
     illustrator: ShieldCheck,
   },
@@ -79,7 +79,7 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "The Closure",
     description: "Revolutionizing micro-tasks. Moving from ignored todo lists to an offline second brain that protects your mental bandwidth.",
     to: "/vision",
-    bgColor: "#FFFBEB", // Soft Gold
+    bgColor: "#FFFBEB",
     bgClass: "bg-[#FFFBEB]",
     illustrator: HeartHandshake,
   },
@@ -89,201 +89,76 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "Simple Pricing",
     description: "Zero subscriptions or hidden tiers. Upgrade to Unlimited Pro for just Rs. 999 / year.",
     to: "/pricing",
-    bgColor: "#FCE7F3", // Soft Rose
+    bgColor: "#FCE7F3",
     bgClass: "bg-[#FCE7F3]",
     illustrator: Sparkles,
   },
 ];
 
-// Unclustered Organic Visual Hero Graphics
-export function AboutAppIllustration() {
+// Subtle icon accent — small, centred, no dominant label
+function SubtleIllustration({ 
+  color, 
+  Icon, 
+  animateRotate = false 
+}: { 
+  color: string; 
+  Icon: React.ElementType; 
+  animateRotate?: boolean;
+}) {
   return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
+    <div className="flex items-center justify-center select-none">
       <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#6366F1]/25 border-2 border-[#6366F1]/40 pointer-events-none"
+        {/* Soft glow ring — very subtle */}
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.05, 0.2] }}
+          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+          className="absolute inset-0 -m-2 sm:-m-3 lg:-m-4 rounded-full pointer-events-none"
+          style={{ backgroundColor: `${color}30`, border: `1.5px solid ${color}40` }}
         />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
+        {/* Icon box — clean, light shadow */}
+        <motion.div
+          animate={{ scale: [1, 1.03, 1], rotate: animateRotate ? [0, -1.5, 1.5, 0] : [0, -1, 1, 0] }}
+          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+          className="size-20 sm:size-24 lg:size-28 xl:size-32 2xl:size-36 rounded-[1.5rem] lg:rounded-[1.8rem] bg-white/90 border-2 border-ink/80 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.85)] grid place-items-center relative z-10"
         >
-          <BookOpen className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#6366F1]" />
+          <Icon
+            className="size-10 sm:size-12 lg:size-14 xl:size-16 2xl:size-18"
+            style={{ color }}
+          />
         </motion.div>
       </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        📖 About the App
-      </span>
     </div>
   );
+}
+
+export function AboutAppIllustration() {
+  return <SubtleIllustration color="#6366F1" Icon={BookOpen} />;
 }
 
 export function LaterAlarmIllustration() {
-  return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#10B981]/25 border-2 border-[#10B981]/40 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <AlarmClock className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#10B981]" />
-        </motion.div>
-      </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        🔔 Continuous Ringing
-      </span>
-    </div>
-  );
+  return <SubtleIllustration color="#10B981" Icon={AlarmClock} />;
 }
 
 export function SmartFiltersIllustration() {
-  return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#F59E0B]/25 border-2 border-[#F59E0B]/40 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <BellRing className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#F59E0B]" />
-        </motion.div>
-      </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        ✨ Keyword Filter
-      </span>
-    </div>
-  );
+  return <SubtleIllustration color="#F59E0B" Icon={BellRing} animateRotate />;
 }
 
 export function PlacesMappingIllustration() {
-  return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.22, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#8B5CF6]/25 border-2 border-dashed border-[#8B5CF6]/50 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <Navigation className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#8B5CF6] transform rotate-45" />
-        </motion.div>
-      </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        📍 500m Geofence
-      </span>
-    </div>
-  );
+  return <SubtleIllustration color="#8B5CF6" Icon={Navigation} />;
 }
 
 export function FutureActionsIllustration() {
-  return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#2563EB]/25 border-2 border-[#2563EB]/40 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <Compass className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#2563EB]" />
-        </motion.div>
-      </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        🔮 Coming Soon
-      </span>
-    </div>
-  );
+  return <SubtleIllustration color="#2563EB" Icon={Compass} animateRotate />;
 }
 
 export function PrivacyManifestoIllustration() {
-  return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#059669]/25 border-2 border-[#059669]/40 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <ShieldCheck className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#059669]" />
-        </motion.div>
-      </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        🔒 100% Private
-      </span>
-    </div>
-  );
+  return <SubtleIllustration color="#059669" Icon={ShieldCheck} />;
 }
 
 export function PricingTierIllustration() {
-  return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#EC4899]/25 border-2 border-[#EC4899]/40 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, 2, -2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <Sparkles className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#EC4899]" />
-        </motion.div>
-      </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        💎 Free • Pro
-      </span>
-    </div>
-  );
+  return <SubtleIllustration color="#EC4899" Icon={Sparkles} animateRotate />;
 }
 
 export function ClosureVisionIllustration() {
-  return (
-    <div className="w-full py-2 flex flex-col items-center justify-center relative select-none">
-      <div className="relative grid place-items-center">
-        <motion.div 
-          animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute inset-0 -m-3 sm:-m-4 lg:-m-5 xl:-m-6 rounded-full bg-[#D97706]/25 border-2 border-[#D97706]/40 pointer-events-none"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.04, 1], rotate: [0, -2, 2, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
-        >
-          <HeartHandshake className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#D97706]" />
-        </motion.div>
-      </div>
-      <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
-        ✨ The Vision
-      </span>
-    </div>
-  );
+  return <SubtleIllustration color="#D97706" Icon={HeartHandshake} />;
 }

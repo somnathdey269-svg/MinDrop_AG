@@ -151,7 +151,7 @@ export function MobileShowcase() {
             className="w-full h-full flex flex-col items-center justify-center relative"
           >
             {/* Mobile Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(290px,85vw,360px)] h-[clamp(400px,60vh,490px)] flex items-center justify-center">
+            <div className="relative w-[clamp(275px,80vw,340px)] h-[clamp(350px,55vh,440px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -180,19 +180,19 @@ export function MobileShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Centered Hero Graphic — capped so icon never floats in a sea of whitespace */}
-                  <div className="flex-1 min-h-0 max-h-[48%] flex items-center justify-center py-1 overflow-hidden w-full">
+                  {/* Section 2: Subtle Icon Accent — capped at 38% so content dominates */}
+                  <div className="flex-1 min-h-0 max-h-[38%] flex items-center justify-center py-1 overflow-hidden w-full">
                     <div className="w-full h-full transform-gpu flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
-                  {/* Section 3: Title & Description */}
-                  <div className="shrink-0 mt-1">
-                    <h3 className="text-2xl sm:text-3xl font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {/* Section 3: Content — PRIORITY */}
+                  <div className="shrink-0 mt-2">
+                    <h3 className="text-[1.35rem] sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5">
                       {currentCard.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-ink font-medium leading-snug">
+                    <p className="text-sm sm:text-[0.95rem] text-ink/80 font-normal leading-snug">
                       {currentCard.description}
                     </p>
                   </div>
@@ -212,7 +212,7 @@ export function MobileShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink p-4 sm:p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[clamp(300px,42vh,400px)] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink p-4 sm:p-5 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform h-[clamp(280px,38vh,360px)] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="shrink-0 flex items-center justify-between h-7 mb-1">
@@ -229,11 +229,11 @@ export function MobileShowcase() {
                     </div>
 
                     {/* Content Section */}
-                    <div className="shrink-0 mt-1">
-                      <h3 className="text-xl sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <div className="shrink-0 mt-2">
+                      <h3 className="text-xl sm:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5">
                         {card.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-ink/80 font-medium leading-snug line-clamp-3">
+                      <p className="text-sm sm:text-base text-ink/80 font-normal leading-snug line-clamp-3">
                         {card.description}
                       </p>
                     </div>

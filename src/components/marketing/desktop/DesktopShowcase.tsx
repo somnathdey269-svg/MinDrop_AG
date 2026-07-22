@@ -239,7 +239,7 @@ export function DesktopShowcase() {
             </div>
 
             {/* Web Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(400px,34vw,510px)] h-[clamp(500px,70vh,650px)] flex items-center justify-center">
+            <div className="relative w-[clamp(380px,32vw,470px)] h-[clamp(460px,66vh,590px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -258,8 +258,8 @@ export function DesktopShowcase() {
                     <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  {/* Section 2 (Behind): Illustration — capped so it never dominates */}
-                  <div className="flex-1 min-h-0 max-h-[50%] flex items-center justify-center py-2 overflow-hidden w-full opacity-40 pointer-events-none">
+                  {/* Section 2 (Behind): Subtle Icon Accent */}
+                  <div className="flex-1 min-h-0 max-h-[38%] flex items-center justify-center py-2 overflow-hidden w-full opacity-40 pointer-events-none">
                     <div className="w-full h-full transform-gpu flex items-center justify-center">
                       {renderIllustration(nextCard.id)}
                     </div>
@@ -295,19 +295,19 @@ export function DesktopShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Centered Hero Graphic — capped so icon never floats in whitespace */}
-                  <div className="flex-1 min-h-0 max-h-[50%] flex items-center justify-center py-2 overflow-hidden w-full relative">
+                  {/* Section 2: Subtle Icon Accent — capped, content is priority */}
+                  <div className="flex-1 min-h-0 max-h-[38%] flex items-center justify-center py-2 overflow-hidden w-full relative">
                     <div className="w-full h-full transform-gpu flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
-                  {/* Section 3: Title & Description */}
-                  <div className="shrink-0 mt-2">
-                    <h3 className="text-3xl lg:text-4xl xl:text-5xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {/* Section 3: Content — PRIORITY */}
+                  <div className="shrink-0 mt-3">
+                    <h3 className="text-3xl lg:text-[2.1rem] xl:text-4xl font-black text-ink leading-tight tracking-tight mb-2">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base lg:text-lg xl:text-xl text-ink font-medium leading-relaxed">
+                    <p className="text-base lg:text-lg text-ink/80 font-normal leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -346,7 +346,7 @@ export function DesktopShowcase() {
                     search={{ from: "grid" }}
                     viewTransition
                     style={{ viewTransitionName: `card-${card.id}` } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink p-4 lg:p-5 xl:p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[clamp(340px,38vh,480px)] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink p-4 lg:p-5 xl:p-6 flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer h-[clamp(300px,34vh,420px)] ${card.bgClass}`}
                   >
                     {/* Top Chapter Tag Pill */}
                     <div className="shrink-0 flex items-center justify-between h-7 mb-1">
@@ -362,12 +362,12 @@ export function DesktopShowcase() {
                       </div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="shrink-0 mt-1">
-                      <h3 className="text-xl lg:text-2xl xl:text-3xl font-black text-ink leading-tight tracking-tight mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {/* Content Section — title wraps, description visible */}
+                    <div className="shrink-0 mt-2">
+                      <h3 className="text-lg lg:text-xl xl:text-2xl font-black text-ink leading-tight tracking-tight mb-1.5">
                         {card.title}
                       </h3>
-                      <p className="text-sm lg:text-base xl:text-lg text-ink/80 font-normal leading-relaxed line-clamp-2">
+                      <p className="text-sm lg:text-base text-ink/70 font-normal leading-snug line-clamp-3">
                         {card.description}
                       </p>
                     </div>
