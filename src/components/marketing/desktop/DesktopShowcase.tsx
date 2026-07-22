@@ -289,37 +289,31 @@ export function DesktopShowcase() {
                   exit={{ x: -400, rotate: -18, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 100, damping: 16 }}
                   onClick={handleShowMe}
-                  style={{ viewTransitionName: `card-${currentCard.id}`, padding: '6%', containerType: 'inline-size' } as React.CSSProperties}
-                  className={`absolute inset-0 rounded-[2.5rem] border-3 lg:border-4 border-ink flex flex-col justify-between shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
+                  style={{ viewTransitionName: `card-${currentCard.id}`, paddingTop: '5%', paddingBottom: '5%', paddingLeft: '6%', paddingRight: '6%' } as React.CSSProperties}
+                  className={`absolute inset-0 w-full h-full rounded-[2.5rem] border-3 lg:border-4 border-ink flex flex-col justify-between shadow-[9px_9px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.99] transition-transform duration-100 ${currentCard.bgClass}`}
                 >
                   {/* Section 1: Header Tag Pill (15% height) */}
-                  <div className="h-[15%] shrink-0 flex items-center">
+                  <div className="h-[15%] w-full shrink-0 flex items-center">
                     <span className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm">
                       {currentCard.tag}
                     </span>
                   </div>
 
-                  {/* Section 2: Body Area (80% height) */}
-                  <div className="h-[80%] shrink-0 flex flex-col justify-between">
-                    {/* Icon Area: 30% height, centered cleanly */}
+                  {/* Section 2: Body Area (75% height) */}
+                  <div className="h-[75%] w-full shrink-0 flex flex-col justify-between">
+                    {/* Icon Area: 30% of Section 2 = 22.5% of total card height */}
                     <div className="h-[30%] w-full flex items-center justify-center">
-                      <div className="h-full aspect-square flex items-center justify-center p-1">
+                      <div className="h-full aspect-square flex items-center justify-center">
                         {renderIllustration(currentCard.id)}
                       </div>
                     </div>
 
-                    {/* Content Area: 65% height — Title (Bold) + Description */}
-                    <div className="h-[65%] w-full flex flex-col justify-center">
-                      <h3
-                        className="font-black text-ink leading-tight tracking-tight mb-3"
-                        style={{ fontSize: 'clamp(1.5rem, 8cqw, 3.2rem)' }}
-                      >
+                    {/* Content Area: 65% of Section 2 — Title + Description */}
+                    <div className="h-[65%] w-full flex flex-col justify-center gap-2">
+                      <h3 className="text-2xl lg:text-3xl xl:text-4xl font-black text-ink leading-tight tracking-tight">
                         {currentCard.title}
                       </h3>
-                      <p
-                        className="text-ink/80 font-normal leading-relaxed"
-                        style={{ fontSize: 'clamp(0.95rem, 4.2cqw, 1.4rem)' }}
-                      >
+                      <p className="text-sm lg:text-base xl:text-lg text-ink/80 font-normal leading-relaxed">
                         {currentCard.description}
                       </p>
                     </div>
