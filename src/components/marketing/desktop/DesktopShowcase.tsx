@@ -239,7 +239,7 @@ export function DesktopShowcase() {
             </div>
 
             {/* Web Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(420px,38vw,600px)] h-[clamp(520px,75vh,740px)] flex items-center justify-center">
+            <div className="relative w-[clamp(400px,34vw,510px)] h-[clamp(500px,70vh,650px)] flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Stacked Preview Card */}
                 <motion.div
@@ -258,8 +258,9 @@ export function DesktopShowcase() {
                     <span className="text-xs lg:text-sm uppercase font-black tracking-wider text-ink/40">{nextCard.tag}</span>
                   </div>
 
-                  <div className="flex-1 min-h-0 flex items-center justify-center py-3 overflow-hidden w-full opacity-40 pointer-events-none">
-                    <div className="transform-gpu origin-center flex items-center justify-center">
+                  {/* Section 2 (Behind): Illustration — capped so it never dominates */}
+                  <div className="flex-1 min-h-0 max-h-[50%] flex items-center justify-center py-2 overflow-hidden w-full opacity-40 pointer-events-none">
+                    <div className="w-full h-full transform-gpu flex items-center justify-center">
                       {renderIllustration(nextCard.id)}
                     </div>
                   </div>
@@ -294,19 +295,19 @@ export function DesktopShowcase() {
                     </span>
                   </div>
 
-                  {/* Section 2: Centered Hero Graphic Area */}
-                  <div className="flex-1 min-h-0 flex items-center justify-center py-3 overflow-hidden w-full relative">
-                    <div className="transform-gpu origin-center flex items-center justify-center">
+                  {/* Section 2: Centered Hero Graphic — capped so icon never floats in whitespace */}
+                  <div className="flex-1 min-h-0 max-h-[50%] flex items-center justify-center py-2 overflow-hidden w-full relative">
+                    <div className="w-full h-full transform-gpu flex items-center justify-center">
                       {renderIllustration(currentCard.id)}
                     </div>
                   </div>
 
                   {/* Section 3: Title & Description */}
-                  <div className="shrink-0 mt-3">
+                  <div className="shrink-0 mt-2">
                     <h3 className="text-3xl lg:text-4xl xl:text-5xl font-black text-ink leading-tight tracking-tight mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                       {currentCard.title}
                     </h3>
-                    <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-ink font-medium leading-relaxed">
+                    <p className="text-base lg:text-lg xl:text-xl text-ink font-medium leading-relaxed">
                       {currentCard.description}
                     </p>
                   </div>
@@ -354,9 +355,9 @@ export function DesktopShowcase() {
                       </span>
                     </div>
 
-                    {/* Fluid Graphic Area */}
-                    <div className="flex-1 min-h-0 flex items-center justify-center py-2 overflow-hidden w-full pointer-events-none">
-                      <div className="scale-100 lg:scale-110 transform-gpu origin-center flex items-center justify-center">
+                    {/* Fluid Graphic Area — capped to prevent blank space */}
+                    <div className="flex-1 min-h-0 max-h-[50%] flex items-center justify-center py-2 overflow-hidden w-full pointer-events-none">
+                      <div className="w-full h-full transform-gpu flex items-center justify-center">
                         {renderIllustration(card.id)}
                       </div>
                     </div>

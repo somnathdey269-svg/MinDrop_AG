@@ -110,7 +110,7 @@ export function AboutAppIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BookOpen className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#6366F1]" />
+          <BookOpen className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#6366F1]" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
@@ -134,7 +134,7 @@ export function LaterAlarmIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <AlarmClock className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#10B981]" />
+          <AlarmClock className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#10B981]" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
@@ -158,7 +158,7 @@ export function SmartFiltersIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <BellRing className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#F59E0B]" />
+          <BellRing className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#F59E0B]" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
@@ -182,7 +182,7 @@ export function PlacesMappingIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Navigation className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#8B5CF6] transform rotate-45" />
+          <Navigation className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#8B5CF6] transform rotate-45" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
@@ -206,7 +206,7 @@ export function FutureActionsIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Compass className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#2563EB]" />
+          <Compass className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#2563EB]" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
@@ -230,7 +230,7 @@ export function PrivacyManifestoIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <ShieldCheck className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#059669]" />
+          <ShieldCheck className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#059669]" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
@@ -254,7 +254,7 @@ export function PricingTierIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <Sparkles className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#EC4899]" />
+          <Sparkles className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#EC4899]" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
@@ -278,7 +278,7 @@ export function ClosureVisionIllustration() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="size-36 sm:size-40 lg:size-44 xl:size-52 2xl:size-60 rounded-[2.2rem] bg-white/95 border-3 lg:border-4 border-ink shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] grid place-items-center relative z-10"
         >
-          <HeartHandshake className="size-16 sm:size-19 lg:size-22 xl:size-26 2xl:size-30 text-[#D97706]" />
+          <HeartHandshake className="size-18 sm:size-20 lg:size-22 xl:size-26 2xl:size-30 text-[#D97706]" />
         </motion.div>
       </div>
       <span className="text-xs sm:text-sm lg:text-base xl:text-lg font-black uppercase tracking-wider text-ink/80 bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm mt-3.5 relative z-10 whitespace-nowrap">
