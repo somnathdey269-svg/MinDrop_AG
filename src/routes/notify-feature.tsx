@@ -78,24 +78,65 @@ function SlideConflict() {
 
 /* Slide 3: The MinDrop Solution */
 function SlideSolution() {
+  const [activeCard, setActiveCard] = useState(0);
+
+  const solutionItems = [
+    { icon: Filter, title: "You Decide What Matters", body: "Choose which types of messages wake you up. Sales offers stay silent. Your bank alerts ring loudly." },
+    { icon: ShieldAlert, title: "Bypasses Silent Mode", body: "When your phone is on silent, important alerts still ring through. Nothing slips past unnoticed." },
+    { icon: Sparkles, title: "Stays on Your Phone", body: "MinDrop reads your alerts right there on your phone. Nothing is sent to any server. Your messages stay private." },
+  ];
+
   return (
-    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
+    <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center text-center gap-4 sm:gap-10">
         <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-4">
+          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1 sm:mb-3">
             How MinDrop Handles This
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#78350F] leading-tight tracking-tight">
+          <h2 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#78350F] leading-tight tracking-tight">
             MinDrop watches your alerts.<br className="hidden sm:block"/>
             <span className="text-[#D97706]">The important ones become an alarm.</span>
           </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 w-full">
-          {[
-            { icon: Filter, title: "You Decide What Matters", body: "Choose which types of messages wake you up. Sales offers stay silent. Your bank alerts ring loudly." },
-            { icon: ShieldAlert, title: "Bypasses Silent Mode", body: "When your phone is on silent, important alerts still ring through. Nothing slips past unnoticed." },
-            { icon: Sparkles, title: "Stays on Your Phone", body: "MinDrop reads your alerts right there on your phone. Nothing is sent to any server. Your messages stay private." },
-          ].map(({ icon: Icon, title, body }) => (
+
+        {/* Mobile Horizontal Carousel (< sm) */}
+        <div className="w-full block sm:hidden">
+          <div className="w-full max-w-sm mx-auto bg-white border-3 border-[#F59E0B] rounded-[1.8rem] p-4 shadow-md text-left flex flex-col gap-2 min-h-[150px]">
+            {(() => {
+              const { icon: Icon, title, body } = solutionItems[activeCard];
+              return (
+                <>
+                  <div className="flex items-center justify-between">
+                    <div className="size-9 rounded-xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
+                      <Icon className="size-5 stroke-[2.5px]" />
+                    </div>
+                    <span className="text-[10px] font-black text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full">
+                      {activeCard + 1} / {solutionItems.length}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-black text-[#78350F]">{title}</h3>
+                  <p className="text-xs font-medium text-[#78350F]/80 leading-relaxed">{body}</p>
+                </>
+              );
+            })()}
+          </div>
+          {/* Mobile Navigation Dots */}
+          <div className="flex justify-center items-center gap-2 mt-3">
+            {solutionItems.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveCard(i)}
+                className={`rounded-full transition-all duration-300 cursor-pointer ${
+                  i === activeCard ? "w-6 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/30"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop 3-Column Grid (>= sm) */}
+        <div className="hidden sm:grid grid-cols-3 gap-6 sm:gap-8 w-full">
+          {solutionItems.map(({ icon: Icon, title, body }) => (
             <div key={title} className="bg-white border-3 border-[#F59E0B] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] text-left flex flex-col gap-3">
               <div className="size-12 rounded-2xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
                 <Icon className="size-6 stroke-[2.5px]" />

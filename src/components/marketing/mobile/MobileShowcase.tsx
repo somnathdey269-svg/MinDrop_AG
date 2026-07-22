@@ -236,50 +236,52 @@ export function MobileShowcase() {
         )}
       </main>
 
-      {/* 3. BOTTOM FLOATING CONTROLS (Perfectly aligned flex baseline) */}
-      <footer className="w-full flex items-center justify-between px-6 z-30 shrink-0 h-14 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <Link 
-          to="/about"
-          className="text-xs uppercase font-black tracking-widest text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center cursor-pointer shrink-0"
-        >
-          ABOUT
-        </Link>
-
-        {/* Premium Segmented View Switcher */}
-        <div className="bg-ink border-2 border-ink rounded-full p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1 shrink-0">
-          <button
-            onClick={() => handleToggleView("deck")}
-            className={`px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer leading-none ${
-              viewMode === "deck" 
-                ? "bg-white text-ink shadow-sm" 
-                : "text-white/70 hover:text-white"
-            }`}
-            aria-label="Switch to Deck View"
+      {/* 3. ELEVATED FLOATING ISLAND DOCK FOOTER */}
+      <div className="w-full flex items-center justify-center shrink-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1">
+        <footer className="w-full max-w-sm bg-white border-3 border-ink rounded-full px-4 py-1.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between select-none">
+          <Link 
+            to="/about"
+            className="text-[11px] uppercase font-black tracking-widest text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center shrink-0 cursor-pointer"
           >
-            <Layers className="size-3.5" />
-            <span>DECK</span>
-          </button>
-          <button
-            onClick={() => handleToggleView("grid")}
-            className={`px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer leading-none ${
-              viewMode === "grid" 
-                ? "bg-white text-ink shadow-sm" 
-                : "text-white/70 hover:text-white"
-            }`}
-            aria-label="Switch to Grid View"
-          >
-            <LayoutGrid className="size-3.5" />
-            <span>GRID</span>
-          </button>
-        </div>
+            ABOUT
+          </Link>
 
-        <Link
-          to="/download"
-          className="text-xs uppercase tracking-widest font-black text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center cursor-pointer shrink-0"
-        >
-          GET APP
-        </Link>
-      </footer>
+          {/* Premium Segmented View Switcher */}
+          <div className="bg-ink border-2 border-ink rounded-full p-0.5 flex items-center gap-1 shrink-0">
+            <button
+              onClick={() => handleToggleView("deck")}
+              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer leading-none ${
+                viewMode === "deck" 
+                  ? "bg-white text-ink shadow-xs" 
+                  : "text-white/70 hover:text-white"
+              }`}
+              aria-label="Switch to Deck View"
+            >
+              <Layers className="size-3" />
+              <span>DECK</span>
+            </button>
+            <button
+              onClick={() => handleToggleView("grid")}
+              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer leading-none ${
+                viewMode === "grid" 
+                  ? "bg-white text-ink shadow-xs" 
+                  : "text-white/70 hover:text-white"
+              }`}
+              aria-label="Switch to Grid View"
+            >
+              <LayoutGrid className="size-3" />
+              <span>GRID</span>
+            </button>
+          </div>
+
+          <Link
+            to="/download"
+            className="text-[11px] uppercase tracking-widest font-black text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center shrink-0 cursor-pointer"
+          >
+            GET APP
+          </Link>
+        </footer>
+      </div>
     </div>
   );
 }
