@@ -236,7 +236,7 @@ export function MobileShowcase() {
                       paddingLeft: '6%',
                       paddingRight: '6%',
                     } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform aspect-[3/4.2] min-h-[320px] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] active:scale-[0.98] transition-transform aspect-[3/3.6] min-h-[290px] ${card.bgClass}`}
                   >
                     {/* Section 1: Tag Pill (15% height) */}
                     <div className="h-[15%] w-full shrink-0 flex items-center">
@@ -258,16 +258,16 @@ export function MobileShowcase() {
                       <div className="h-[20%] w-full flex items-center">
                         <h3
                           className="font-black text-ink leading-tight tracking-tight"
-                          style={{ fontSize: 'clamp(1.1rem, 2.8vh, 1.55rem)' }}
+                          style={{ fontSize: 'clamp(1.15rem, 2.8vh, 1.6rem)' }}
                         >
                           {card.title}
                         </h3>
                       </div>
-                      {/* Description: 80% of Content Area — full text, no ellipsis (...) */}
+                      {/* Description: 80% of Content Area — full text, exact 2.5% bottom pad */}
                       <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-0.5">
                         <p
-                          className="text-ink/80 font-normal leading-snug"
-                          style={{ fontSize: 'clamp(0.72rem, 1.5vh, 0.95rem)', lineHeight: '1.4' }}
+                          className="text-ink/80 font-normal leading-relaxed"
+                          style={{ fontSize: 'clamp(0.85rem, 1.9vh, 1.08rem)', lineHeight: '1.5' }}
                         >
                           {card.description}
                         </p>

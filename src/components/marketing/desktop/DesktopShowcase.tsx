@@ -374,7 +374,7 @@ export function DesktopShowcase() {
                       paddingLeft: '6%',
                       paddingRight: '6%',
                     } as React.CSSProperties}
-                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer aspect-[3/4.2] min-h-[340px] ${card.bgClass}`}
+                    className={`rounded-[1.8rem] border-3 border-ink flex flex-col justify-between shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer aspect-[3/3.6] min-h-[300px] ${card.bgClass}`}
                   >
                     {/* Section 1: Tag Pill (15% height) */}
                     <div className="h-[15%] w-full shrink-0 flex items-center">
@@ -396,16 +396,16 @@ export function DesktopShowcase() {
                       <div className="h-[20%] w-full flex items-center">
                         <h3
                           className="font-black text-ink leading-tight tracking-tight"
-                          style={{ fontSize: 'clamp(1.15rem, 2.6vh, 1.65rem)' }}
+                          style={{ fontSize: 'clamp(1.2rem, 2.8vh, 1.7rem)' }}
                         >
                           {card.title}
                         </h3>
                       </div>
-                      {/* Description: 80% of Content Area — full text, no ellipsis (...) */}
+                      {/* Description: 80% of Content Area — full text, exact 2.5% bottom pad */}
                       <div className="h-[80%] w-full flex flex-col justify-between overflow-hidden pt-0.5">
                         <p
-                          className="text-ink/80 font-normal leading-snug"
-                          style={{ fontSize: 'clamp(0.75rem, 1.55vh, 0.98rem)', lineHeight: '1.4' }}
+                          className="text-ink/80 font-normal leading-relaxed"
+                          style={{ fontSize: 'clamp(0.88rem, 2.0vh, 1.15rem)', lineHeight: '1.5' }}
                         >
                           {card.description}
                         </p>
