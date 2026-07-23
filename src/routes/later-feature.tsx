@@ -138,6 +138,8 @@ function SlideScenarios() {
   const prev = () => setCardIdx(i => Math.max(0, i - 1));
   const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
 
+  const touchStartX = useRef<number | null>(null);
+
   return (
     <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-5xl">
@@ -150,7 +152,19 @@ function SlideScenarios() {
           </h2>
         </div>
 
-        <div className="w-full relative overflow-hidden min-h-[260px] flex items-center justify-center">
+        <div 
+          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => {
+            if (touchStartX.current === null) return;
+            const diff = touchStartX.current - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 35) {
+              if (diff > 0) next();
+              else prev();
+            }
+            touchStartX.current = null;
+          }}
+          className="w-full relative overflow-hidden flex items-center justify-center cursor-pointer select-none"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={cardIdx}
@@ -158,33 +172,39 @@ function SlideScenarios() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`w-full rounded-[2.5rem] border-3 border-[#10B981] p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(16,185,129,0.15)] ${scenarios[cardIdx].color} text-left flex gap-6 items-start`}
+              className={`w-full rounded-[2.5rem] border-3 border-[#10B981] p-6 sm:p-12 shadow-[8px_8px_0px_0px_rgba(16,185,129,0.15)] ${scenarios[cardIdx].color} text-left flex gap-4 sm:gap-6 items-start`}
             >
-              <div className="size-14 bg-white border-2 border-[#10B981] rounded-2xl grid place-items-center text-[#047857] shrink-0 shadow-sm">
-                {(() => { const Icon = scenarios[cardIdx].icon; return <Icon className="size-7 text-[#10B981]"/>; })()}
+              <div className="size-12 sm:size-14 bg-white border-2 border-[#10B981] rounded-2xl grid place-items-center text-[#047857] shrink-0 shadow-sm">
+                {(() => { const Icon = scenarios[cardIdx].icon; return <Icon className="size-6 sm:size-7 text-[#10B981]"/>; })()}
               </div>
               <div>
-                <h3 className="text-2xl sm:text-3xl font-black text-[#064E3B] mb-2">{scenarios[cardIdx].title}</h3>
-                <p className="text-base sm:text-xl font-semibold text-[#064E3B]/80 leading-relaxed">{scenarios[cardIdx].scene}</p>
+                <h3 className="text-xl sm:text-3xl font-black text-[#064E3B] mb-1 sm:mb-2">{scenarios[cardIdx].title}</h3>
+                <p className="text-sm sm:text-xl font-semibold text-[#064E3B]/80 leading-relaxed">{scenarios[cardIdx].scene}</p>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
           <button onClick={prev} disabled={cardIdx === 0}
-            className="size-12 rounded-full border-2 border-[#064E3B] bg-white text-[#064E3B] grid place-items-center disabled:opacity-30 hover:bg-[#D1FAE5] transition cursor-pointer shadow-sm">
-            <ChevronLeft className="size-6" />
+            className="size-9 sm:size-12 rounded-full border-2 border-[#064E3B] bg-white text-[#064E3B] grid place-items-center disabled:opacity-30 hover:bg-[#D1FAE5] transition cursor-pointer shadow-sm"
+            aria-label="Previous scenario"
+          >
+            <ChevronLeft className="size-5 sm:size-6" />
           </button>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-1.5">
             {scenarios.map((_, i) => (
               <button key={i} onClick={() => setCardIdx(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-8 h-2.5 bg-[#10B981]" : "size-2.5 bg-[#10B981]/30 hover:bg-[#10B981]/60"}`} />
+                className={`shrink-0 rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-5 h-2 bg-[#10B981]" : "size-2 bg-[#10B981]/30 hover:bg-[#10B981]/60"}`}
+                aria-label={`Go to scenario ${i + 1}`}
+              />
             ))}
           </div>
           <button onClick={next} disabled={cardIdx === scenarios.length - 1}
-            className="size-12 rounded-full border-2 border-[#064E3B] bg-white text-[#064E3B] grid place-items-center disabled:opacity-30 hover:bg-[#D1FAE5] transition cursor-pointer shadow-sm">
-            <ChevronRight className="size-6" />
+            className="size-9 sm:size-12 rounded-full border-2 border-[#064E3B] bg-white text-[#064E3B] grid place-items-center disabled:opacity-30 hover:bg-[#D1FAE5] transition cursor-pointer shadow-sm"
+            aria-label="Next scenario"
+          >
+            <ChevronRight className="size-5 sm:size-6" />
           </button>
         </div>
       </div>

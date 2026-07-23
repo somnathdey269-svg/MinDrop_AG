@@ -101,7 +101,19 @@ function SlideSolution() {
 
         {/* Mobile Horizontal Carousel (< sm) */}
         <div className="w-full block sm:hidden">
-          <div className="w-full max-w-sm mx-auto bg-white border-3 border-[#F59E0B] rounded-[1.8rem] p-4 shadow-md text-left flex flex-col gap-2 min-h-[150px]">
+          <div 
+            onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+            onTouchEnd={(e) => {
+              if (touchStartX.current === null) return;
+              const diff = touchStartX.current - e.changedTouches[0].clientX;
+              if (Math.abs(diff) > 35) {
+                if (diff > 0) setActiveCard((prev) => (prev + 1) % solutionItems.length);
+                else setActiveCard((prev) => (prev - 1 + solutionItems.length) % solutionItems.length);
+              }
+              touchStartX.current = null;
+            }}
+            className="w-full max-w-sm mx-auto bg-white border-3 border-[#F59E0B] rounded-[1.8rem] p-4 shadow-md text-left flex flex-col gap-2 cursor-pointer select-none"
+          >
             {(() => {
               const { icon: Icon, title, body } = solutionItems[activeCard];
               return (
@@ -120,15 +132,16 @@ function SlideSolution() {
               );
             })()}
           </div>
-          {/* Mobile Navigation Dots */}
-          <div className="flex justify-center items-center gap-2 mt-3">
+          {/* Subtle Mobile Navigation Dots */}
+          <div className="flex justify-center items-center gap-1.5 mt-3">
             {solutionItems.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveCard(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${
-                  i === activeCard ? "w-6 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/30"
+                className={`shrink-0 rounded-full transition-all duration-300 cursor-pointer ${
+                  i === activeCard ? "w-5 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/30 hover:bg-[#D97706]/60"
                 }`}
+                aria-label={`Go to slide ${i + 1}`}
               />
             ))}
           </div>
@@ -276,7 +289,19 @@ function SlideScenarios() {
           </h2>
         </div>
 
-        <div className="w-full relative overflow-hidden min-h-[160px] sm:min-h-[260px] flex items-center justify-center">
+        <div 
+          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => {
+            if (touchStartX.current === null) return;
+            const diff = touchStartX.current - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 35) {
+              if (diff > 0) next();
+              else prev();
+            }
+            touchStartX.current = null;
+          }}
+          className="w-full relative overflow-hidden flex items-center justify-center cursor-pointer select-none"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={cardIdx}
@@ -305,17 +330,23 @@ function SlideScenarios() {
         {/* Ultra-subtle Mini Controls */}
         <div className="flex items-center gap-3">
           <button onClick={prev} disabled={cardIdx === 0}
-            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
+            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs"
+            aria-label="Previous scenario"
+          >
             <ChevronLeft className="size-4" />
           </button>
           <div className="flex items-center gap-1.5">
             {scenarios.map((_, i) => (
               <button key={i} onClick={() => setCardIdx(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-4 h-1.5 bg-[#D97706]" : "size-1.5 bg-[#D97706]/25 hover:bg-[#D97706]/50"}`} />
+                className={`shrink-0 rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-5 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/25 hover:bg-[#D97706]/50"}`}
+                aria-label={`Go to scenario ${i + 1}`}
+              />
             ))}
           </div>
           <button onClick={next} disabled={cardIdx === scenarios.length - 1}
-            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
+            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs"
+            aria-label="Next scenario"
+          >
             <ChevronRight className="size-4" />
           </button>
         </div>
@@ -349,7 +380,19 @@ function SlideRuleTypes() {
 
         {/* Mobile Horizontal Carousel (< sm) */}
         <div className="w-full block sm:hidden">
-          <div className="w-full max-w-sm mx-auto bg-white border-3 border-[#78350F] rounded-[1.6rem] p-4 shadow-md text-left flex flex-col gap-2 min-h-[130px]">
+          <div 
+            onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+            onTouchEnd={(e) => {
+              if (touchStartX.current === null) return;
+              const diff = touchStartX.current - e.changedTouches[0].clientX;
+              if (Math.abs(diff) > 35) {
+                if (diff > 0) setActiveIdx((prev) => (prev + 1) % ruleTypes.length);
+                else setActiveIdx((prev) => (prev - 1 + ruleTypes.length) % ruleTypes.length);
+              }
+              touchStartX.current = null;
+            }}
+            className="w-full max-w-sm mx-auto bg-white border-3 border-[#78350F] rounded-[1.6rem] p-4 shadow-md text-left flex flex-col gap-2 cursor-pointer select-none"
+          >
             {(() => {
               const { tag, title, body } = ruleTypes[activeIdx];
               return (
@@ -375,9 +418,10 @@ function SlideRuleTypes() {
               <button
                 key={i}
                 onClick={() => setActiveIdx(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${
-                  i === activeIdx ? "w-4 h-1.5 bg-[#D97706]" : "size-1.5 bg-[#D97706]/25 hover:bg-[#D97706]/50"
+                className={`shrink-0 rounded-full transition-all duration-300 cursor-pointer ${
+                  i === activeIdx ? "w-5 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/25 hover:bg-[#D97706]/50"
                 }`}
+                aria-label={`Go to rule type ${i + 1}`}
               />
             ))}
           </div>
