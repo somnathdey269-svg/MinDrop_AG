@@ -106,13 +106,20 @@ export function MobileShowcase() {
   };
 
   const currentCard = DECK_CARDS[activeIdx];
+  const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFC935";
 
   const handleShowMe = () => {
     navigate({ to: currentCard.to, search: { from: "deck" } });
   };
 
   return (
-    <div className="fixed inset-0 w-screen h-[100dvh] overflow-hidden bg-[#FFC935] flex flex-col justify-between select-none font-sans p-2 sm:p-4">
+    <div 
+      style={{
+        backgroundColor: activeBgColor,
+        transition: "background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+      }}
+      className="fixed inset-0 w-screen h-[100dvh] overflow-hidden flex flex-col justify-between select-none font-sans p-2 sm:p-4"
+    >
       {/* 1. TOP NAV BAR (Aligned Terms, Logo, Privacy) */}
       <header className="w-full px-5 pt-3 pb-1 flex items-center justify-between z-30 shrink-0 h-12">
         <Link 
