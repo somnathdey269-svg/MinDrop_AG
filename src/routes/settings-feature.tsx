@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
+import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import {
   Settings, Check, X, ChevronDown, Bell, Moon,
   Sun, Smartphone, User, Shield, RefreshCw, Sliders, ChevronLeft, ChevronRight

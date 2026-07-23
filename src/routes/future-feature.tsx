@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
+import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import {
   Compass, PhoneCall, Layers, Mic, SlidersHorizontal, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
 } from "lucide-react";
@@ -330,58 +331,13 @@ function FutureFeatureDetailView() {
       </main>
 
       {/* 3. ELEVATED FLOATING ISLAND DOCK FOOTER (Mobile Only) */}
-      <div className="md:hidden w-full flex items-center justify-center shrink-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1">
-        <footer className="w-full max-w-sm bg-white border-3 border-ink rounded-full px-4 py-1.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between select-none">
-          <Link 
-            to="/"
-            hash={backHash}
-            viewTransition
-            className="text-[11px] uppercase font-black tracking-widest text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center shrink-0 cursor-pointer"
-          >
-            HOME
-          </Link>
-
-          {/* Segmented UP / DOWN Controls */}
-          <div className="bg-ink border-2 border-ink rounded-full p-0.5 flex items-center gap-1 shrink-0">
-            <button
-              type="button"
-              onClick={() => goTo(current - 1)}
-              disabled={current === 0}
-              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1 cursor-pointer leading-none ${
-                current === 0 
-                  ? "opacity-30 text-white/50 cursor-not-allowed" 
-                  : "bg-white text-ink shadow-xs"
-              }`}
-              aria-label="Previous Slide (UP)"
-            >
-              <ChevronUp className="size-3 stroke-[2.5px]" />
-              <span>UP</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => goTo(current + 1)}
-              disabled={current === TOTAL - 1}
-              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1 cursor-pointer leading-none ${
-                current === TOTAL - 1 
-                  ? "opacity-30 text-white/50 cursor-not-allowed" 
-                  : "bg-white text-ink shadow-xs"
-              }`}
-              aria-label="Next Slide (DOWN)"
-            >
-              <ChevronDown className="size-3 stroke-[2.5px]" />
-              <span>DOWN</span>
-            </button>
-          </div>
-
-          <Link
-            to="/download"
-            viewTransition
-            className="text-[11px] uppercase tracking-widest font-black text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center shrink-0 cursor-pointer"
-          >
-            GET APP
-          </Link>
-        </footer>
-      </div>
+      <MobileFeatureDock
+        current={current}
+        total={TOTAL}
+        goTo={goTo}
+        backHash={backHash}
+        isDark={isDark}
+      />
     </div>
   );
 }
