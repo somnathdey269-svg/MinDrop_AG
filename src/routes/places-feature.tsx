@@ -375,25 +375,17 @@ function PlacesFeatureDetailView() {
       className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-places" } as React.CSSProperties}
     >
-      {/* 1. Header (Fixed Top Bar) */}
-      <header className="shrink-0 h-12 border-b-2 border-[#8B5CF6]/10 z-50 px-4 sm:px-6 flex items-center"
-        style={{ backgroundColor: isDark ? "rgba(46,16,101,0.96)" : "rgba(245,243,255,0.96)", backdropFilter: "blur(12px)", transition: "background-color 0.4s ease" }}>
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2">
-          <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1 text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#DDD6FE]/70 hover:text-white" : "text-[#8B5CF6]/70 hover:text-[#4C1D95]"}`}>
-            <X className="size-3.5"/> Close
-          </Link>
+      {/* 1. Header (Centered Logo Only) */}
+      <header className="shrink-0 h-12 border-b-2 border-[#8B5CF6]/10 z-50 px-4 flex items-center justify-center backdrop-blur-md"
+        style={{ backgroundColor: isDark ? "rgba(46,16,101,0.96)" : "rgba(245,243,255,0.96)", transition: "background-color 0.4s ease" }}>
+        <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home">
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
-          <Link to="/download"
-            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#8B5CF6] hover:text-white hover:border-[#8B5CF6]" : "bg-ink text-white border-ink hover:bg-[#8B5CF6] hover:border-[#8B5CF6]"}`}>
-            Get App
-          </Link>
-        </div>
+        </Link>
       </header>
 
-      {/* 2. Full-Screen Slide Stage */}
+      {/* 2. Main Content Stage */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center px-3 sm:px-6 pr-14 sm:pr-16 py-2"
+        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center px-3 sm:px-6 py-2"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
@@ -428,41 +420,58 @@ function PlacesFeatureDetailView() {
         </div>
       </main>
 
-      {/* 3. Subtle & Attractive Bottom-Right Floating Navigation Dock */}
-      <div className="fixed right-3.5 sm:right-6 bottom-5 sm:bottom-6 z-50 flex flex-col items-center gap-1.5 p-1.5 rounded-full bg-white/90 dark:bg-ink/90 border-2 border-ink/30 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] backdrop-blur-lg select-none transition-all">
-        <button
-          type="button"
-          onClick={() => goTo(current - 1)}
-          disabled={current === 0}
-          className={`size-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-            current === 0
-              ? "opacity-25 cursor-not-allowed"
-              : isDark
-              ? "bg-white/10 hover:bg-white/20 text-[#DDD6FE] active:scale-95"
-              : "bg-ink/5 hover:bg-ink/10 text-[#4C1D95] active:scale-95"
-          }`}
-          aria-label="Previous Slide"
-        >
-          <ChevronUp className="size-4 stroke-[2.5px]" />
-        </button>
+      {/* 3. ELEVATED FLOATING ISLAND DOCK FOOTER */}
+      <div className="w-full flex items-center justify-center shrink-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1">
+        <footer className="w-full max-w-sm bg-white border-3 border-ink rounded-full px-4 py-1.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between select-none">
+          <Link 
+            to="/"
+            hash={backHash}
+            viewTransition
+            className="text-[11px] uppercase font-black tracking-widest text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center shrink-0 cursor-pointer"
+          >
+            HOME
+          </Link>
 
-        <span className={`w-4 h-[1px] ${isDark ? "bg-white/20" : "bg-ink/20"}`} />
+          {/* Segmented UP / DOWN Controls */}
+          <div className="bg-ink border-2 border-ink rounded-full p-0.5 flex items-center gap-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => goTo(current - 1)}
+              disabled={current === 0}
+              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1 cursor-pointer leading-none ${
+                current === 0 
+                  ? "opacity-30 text-white/50 cursor-not-allowed" 
+                  : "bg-white text-ink shadow-xs"
+              }`}
+              aria-label="Previous Slide (UP)"
+            >
+              <ChevronUp className="size-3 stroke-[2.5px]" />
+              <span>UP</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => goTo(current + 1)}
+              disabled={current === TOTAL - 1}
+              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1 cursor-pointer leading-none ${
+                current === TOTAL - 1 
+                  ? "opacity-30 text-white/50 cursor-not-allowed" 
+                  : "bg-white text-ink shadow-xs"
+              }`}
+              aria-label="Next Slide (DOWN)"
+            >
+              <ChevronDown className="size-3 stroke-[2.5px]" />
+              <span>DOWN</span>
+            </button>
+          </div>
 
-        <button
-          type="button"
-          onClick={() => goTo(current + 1)}
-          disabled={current === TOTAL - 1}
-          className={`size-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-            current === TOTAL - 1
-              ? "opacity-25 cursor-not-allowed"
-              : isDark
-              ? "bg-white/10 hover:bg-white/20 text-[#DDD6FE] active:scale-95"
-              : "bg-ink/5 hover:bg-ink/10 text-[#4C1D95] active:scale-95"
-          }`}
-          aria-label="Next Slide"
-        >
-          <ChevronDown className="size-4 stroke-[2.5px]" />
-        </button>
+          <Link
+            to="/download"
+            viewTransition
+            className="text-[11px] uppercase tracking-widest font-black text-ink hover:text-[#FF671F] transition-colors leading-none flex items-center shrink-0 cursor-pointer"
+          >
+            GET APP
+          </Link>
+        </footer>
       </div>
     </div>
   );
