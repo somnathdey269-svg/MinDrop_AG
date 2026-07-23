@@ -370,13 +370,13 @@ function PricingDetailView() {
     >
       {/* 1. Header (Desktop: Close + Logo + Get App | Mobile: Logo Only) */}
       <header className="shrink-0 h-12 border-b-2 border-[#EC4899]/10 z-50 bg-[#FFF2F7]/95 backdrop-blur-md px-4 sm:px-6 flex items-center">
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-2">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
             className="hidden md:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#DB2777]/70 hover:text-[#831843]">
             <X className="size-3.5"/> Close
           </Link>
 
-          <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home">
+          <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
             <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
           </Link>
 

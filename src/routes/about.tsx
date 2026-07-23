@@ -262,13 +262,13 @@ function AboutDetailView() {
       {/* 1. Header (Desktop: Close + Logo + Get App | Mobile: Logo Only) */}
       <header className="shrink-0 h-12 border-b-2 border-ink/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(15,23,42,0.96)" : "rgba(248,250,252,0.96)", transition: "background-color 0.4s ease" }}>
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-2">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
             className={`hidden md:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-slate-300 hover:text-white" : "text-ink/70 hover:text-ink"}`}>
             <X className="size-3.5"/> Close
           </Link>
 
-          <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home">
+          <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
             <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           </Link>
 
