@@ -165,23 +165,23 @@ function SlideInteractiveBuilder() {
   ];
 
   return (
-    <div className="h-full bg-[#FEF3C7] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
-        <div className="flex-1 text-left">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-3">
+    <div className="h-full w-full bg-[#FEF3C7] flex items-center justify-center px-4 sm:px-6 py-2">
+      <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-4 lg:gap-12">
+        <div className="flex-1 text-center lg:text-left">
+          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1 sm:mb-2">
             Interactive Rule Engine
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight mb-4 tracking-tight">
+          <h2 className="text-xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight mb-2 tracking-tight">
             Create your first notification filter rule right now.
           </h2>
-          <p className="text-base sm:text-lg font-semibold text-[#78350F]/75 leading-relaxed mb-6">
+          <p className="text-xs sm:text-base font-semibold text-[#78350F]/75 leading-relaxed mb-3 sm:mb-5 hidden sm:block">
             Tell MinDrop which app to watch and what magic word turns a standard message into a full-screen alarm.
           </p>
 
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 sm:gap-2.5">
             {presets.map((p) => (
               <button key={p.label} onClick={() => { setKeyword(p.kw); setSelectedApp(p.app); setVolumeLevel(p.vol); setSaved(false); }}
-                className={`px-4 py-2 rounded-full border-2 border-[#78350F] font-black text-xs uppercase tracking-wider transition cursor-pointer ${
+                className={`px-3 py-1 sm:px-4 sm:py-2 rounded-full border-2 border-[#78350F] font-black text-[10px] sm:text-xs uppercase tracking-wider transition cursor-pointer ${
                   keyword === p.kw ? "bg-[#78350F] text-white" : "bg-white text-[#78350F] hover:bg-[#FEF3C7]"
                 }`}>
                 {p.label}
@@ -190,30 +190,30 @@ function SlideInteractiveBuilder() {
           </div>
         </div>
 
-        <div className="w-full lg:w-[440px] bg-white border-3 border-[#78350F] rounded-[2.5rem] p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(120,53,15,0.2)] text-left flex flex-col gap-5">
-          <div className="flex items-center justify-between border-b-2 border-[#FEF3C7] pb-4">
-            <span className="font-black text-sm uppercase tracking-wider text-[#78350F] flex items-center gap-2">
+        <div className="w-full max-w-sm lg:w-[420px] bg-white border-3 border-[#78350F] rounded-[1.8rem] sm:rounded-[2.2rem] p-4 sm:p-6 shadow-md text-left flex flex-col gap-3">
+          <div className="flex items-center justify-between border-b-2 border-[#FEF3C7] pb-2.5">
+            <span className="font-black text-xs sm:text-sm uppercase tracking-wider text-[#78350F] flex items-center gap-1.5">
               <SlidersHorizontal className="size-4 text-[#D97706]" /> Rule Configuration
             </span>
-            <span className="text-xs font-bold text-[#D97706] bg-[#FEF3C7] px-3 py-1 rounded-full">ACTIVE</span>
+            <span className="text-[10px] font-bold text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full">ACTIVE</span>
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-black uppercase text-[#78350F]/70">Target Application</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] sm:text-xs font-black uppercase text-[#78350F]/70">Target Application</label>
             <input type="text" value={selectedApp} onChange={(e) => { setSelectedApp(e.target.value); setSaved(false); }}
-              className="w-full border-2 border-[#78350F]/20 rounded-xl px-4 py-2.5 text-sm font-bold text-[#78350F] focus:outline-none focus:border-[#D97706]" />
+              className="w-full border-2 border-[#78350F]/20 rounded-lg px-3 py-1.5 text-xs font-bold text-[#78350F] focus:outline-none focus:border-[#D97706]" />
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-black uppercase text-[#78350F]/70">Trigger Keyword</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] sm:text-xs font-black uppercase text-[#78350F]/70">Trigger Keyword</label>
             <input type="text" value={keyword} onChange={(e) => { setKeyword(e.target.value.toUpperCase()); setSaved(false); }}
-              className="w-full border-2 border-[#78350F]/20 rounded-xl px-4 py-2.5 text-sm font-black text-[#D97706] uppercase tracking-wider focus:outline-none focus:border-[#D97706]" />
+              className="w-full border-2 border-[#78350F]/20 rounded-lg px-3 py-1.5 text-xs font-black text-[#D97706] uppercase tracking-wider focus:outline-none focus:border-[#D97706]" />
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-black uppercase text-[#78350F]/70">Alarm Volume Behavior</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] sm:text-xs font-black uppercase text-[#78350F]/70">Alarm Volume Behavior</label>
             <select value={volumeLevel} onChange={(e) => { setVolumeLevel(e.target.value); setSaved(false); }}
-              className="w-full border-2 border-[#78350F]/20 rounded-xl px-4 py-2.5 text-sm font-bold text-[#78350F] focus:outline-none focus:border-[#D97706]">
+              className="w-full border-2 border-[#78350F]/20 rounded-lg px-3 py-1.5 text-xs font-bold text-[#78350F] focus:outline-none focus:border-[#D97706]">
               <option>Maximum (Loud)</option>
               <option>Medium</option>
               <option>Soft Tone</option>
@@ -221,8 +221,8 @@ function SlideInteractiveBuilder() {
           </div>
 
           <button onClick={() => setSaved(true)}
-            className="mt-2 w-full py-3.5 bg-[#78350F] text-white font-black text-sm uppercase tracking-wider rounded-xl border-2 border-[#78350F] hover:bg-[#D97706] hover:border-[#D97706] transition flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,0.8)]">
-            {saved ? <><Check className="size-4" /> Rule Saved to Local Device</> : "Test & Save Rule"}
+            className="mt-1 w-full py-2.5 bg-[#78350F] text-white font-black text-xs uppercase tracking-wider rounded-lg border-2 border-[#78350F] hover:bg-[#D97706] hover:border-[#D97706] transition flex items-center justify-center gap-2 cursor-pointer shadow-xs">
+            {saved ? <><Check className="size-3.5" /> Rule Saved to Local Device</> : "Test & Save Rule"}
           </button>
         </div>
       </div>
@@ -266,9 +266,9 @@ function SlideScenarios() {
 
   return (
     <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
-      <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center gap-4 sm:gap-6">
+      <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
         <div>
-          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1">
+          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-0.5">
             Real-World Protection Scenarios
           </p>
           <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-[#78350F] leading-tight tracking-tight">
@@ -276,7 +276,7 @@ function SlideScenarios() {
           </h2>
         </div>
 
-        <div className="w-full relative overflow-hidden min-h-[220px] sm:min-h-[280px] flex items-center justify-center">
+        <div className="w-full relative overflow-hidden min-h-[160px] sm:min-h-[260px] flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={cardIdx}
@@ -284,38 +284,39 @@ function SlideScenarios() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`w-full rounded-[1.8rem] sm:rounded-[2.2rem] border-3 ${scenarios[cardIdx].borderColor} p-5 sm:p-8 shadow-md ${scenarios[cardIdx].color} text-left flex flex-col gap-3 sm:gap-5`}
+              className={`w-full max-w-sm sm:max-w-none rounded-[1.6rem] sm:rounded-[2.2rem] border-3 ${scenarios[cardIdx].borderColor} p-4 sm:p-8 shadow-md ${scenarios[cardIdx].color} text-left flex flex-col gap-2.5 sm:gap-5`}
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-3 py-0.5 sm:py-1 rounded-full shadow-xs">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-2.5 py-0.5 rounded-full shadow-xs">
                   {scenarios[cardIdx].app}
                 </span>
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-3 py-0.5 sm:py-1 rounded-full">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-2.5 py-0.5 rounded-full">
                   KEYWORD: {scenarios[cardIdx].kw}
                 </span>
               </div>
               <div>
-                <h3 className="text-lg sm:text-2xl md:text-3xl font-black text-[#78350F] mb-1.5 sm:mb-2">{scenarios[cardIdx].title}</h3>
-                <p className="text-xs sm:text-base font-semibold text-[#78350F]/85 leading-relaxed">{scenarios[cardIdx].desc}</p>
+                <h3 className="text-base sm:text-2xl md:text-3xl font-black text-[#78350F] mb-1 sm:mb-2">{scenarios[cardIdx].title}</h3>
+                <p className="text-xs sm:text-base font-medium text-[#78350F]/85 leading-relaxed">{scenarios[cardIdx].desc}</p>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Ultra-subtle Mini Controls */}
+        <div className="flex items-center gap-3">
           <button onClick={prev} disabled={cardIdx === 0}
-            className="size-9 sm:size-11 rounded-full border-2 border-[#78350F] bg-white text-[#78350F] grid place-items-center disabled:opacity-30 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
-            <ChevronLeft className="size-4 sm:size-5" />
+            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
+            <ChevronLeft className="size-4" />
           </button>
-          <div className="flex gap-1.5">
+          <div className="flex items-center gap-1.5">
             {scenarios.map((_, i) => (
               <button key={i} onClick={() => setCardIdx(i)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-6 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/30 hover:bg-[#D97706]/60"}`} />
+                className={`rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-4 h-1.5 bg-[#D97706]" : "size-1.5 bg-[#D97706]/25 hover:bg-[#D97706]/50"}`} />
             ))}
           </div>
           <button onClick={next} disabled={cardIdx === scenarios.length - 1}
-            className="size-9 sm:size-11 rounded-full border-2 border-[#78350F] bg-white text-[#78350F] grid place-items-center disabled:opacity-30 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
-            <ChevronRight className="size-4 sm:size-5" />
+            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs">
+            <ChevronRight className="size-4" />
           </button>
         </div>
       </div>
@@ -325,25 +326,66 @@ function SlideScenarios() {
 
 /* Slide 6: Rule Types Grid */
 function SlideRuleTypes() {
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  const ruleTypes = [
+    { tag: "Exact Match", title: "Literal Keyword Match", body: "Triggers when exact text strings appear in title or message body (e.g. 'DEBITED')." },
+    { tag: "Contact Filter", title: "Sender Identification", body: "Restricts notification alerts to specific contacts or sender names while ignoring general broadcasts." },
+    { tag: "Volume Boost", title: "Silent Mode Override", body: "Bypasses system DND settings to play a loud ringtone for critical emergency alerts." },
+    { tag: "Auto-Dismiss", title: "Spam Suppression", body: "Automatically marks promotional notifications as read so your notification drawer stays clean." },
+  ];
+
   return (
-    <div className="h-full bg-[#FEF3C7] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-6xl">
+    <div className="h-full w-full bg-[#FEF3C7] flex items-center justify-center px-4 sm:px-6 py-2">
+      <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-8">
         <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-2">
+          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1 sm:mb-2">
             Engineered For Precision
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
+          <h2 className="text-xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
             Four powerful matching modes.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full text-left">
-          {[
-            { tag: "Exact Match", title: "Literal Keyword Match", body: "Triggers when exact text strings appear in title or message body (e.g. 'DEBITED')." },
-            { tag: "Contact Filter", title: "Sender Identification", body: "Restricts notification alerts to specific contacts or sender names while ignoring general broadcasts." },
-            { tag: "Volume Boost", title: "Silent Mode Override", body: "Bypasses system DND settings to play a loud ringtone for critical emergency alerts." },
-            { tag: "Auto-Dismiss", title: "Spam Suppression", body: "Automatically marks promotional notifications as read so your notification drawer stays clean." },
-          ].map(({ tag, title, body }) => (
+        {/* Mobile Horizontal Carousel (< sm) */}
+        <div className="w-full block sm:hidden">
+          <div className="w-full max-w-sm mx-auto bg-white border-3 border-[#78350F] rounded-[1.6rem] p-4 shadow-md text-left flex flex-col gap-2 min-h-[130px]">
+            {(() => {
+              const { tag, title, body } = ruleTypes[activeIdx];
+              return (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full">
+                      {tag}
+                    </span>
+                    <span className="text-[10px] font-bold text-[#78350F]/60">
+                      {activeIdx + 1} / {ruleTypes.length}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-black text-[#78350F]">{title}</h3>
+                  <p className="text-xs font-medium text-[#78350F]/80 leading-relaxed">{body}</p>
+                </>
+              );
+            })()}
+          </div>
+
+          {/* Ultra-subtle Mini Dots */}
+          <div className="flex justify-center items-center gap-1.5 mt-3">
+            {ruleTypes.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveIdx(i)}
+                className={`rounded-full transition-all duration-300 cursor-pointer ${
+                  i === activeIdx ? "w-4 h-1.5 bg-[#D97706]" : "size-1.5 bg-[#D97706]/25 hover:bg-[#D97706]/50"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop 2-Column Grid (>= sm) */}
+        <div className="hidden sm:grid grid-cols-2 gap-6 w-full text-left">
+          {ruleTypes.map(({ tag, title, body }) => (
             <div key={title} className="bg-white border-3 border-[#78350F] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2">
               <span className="text-[11px] font-black uppercase tracking-widest text-[#D97706] bg-[#FEF3C7] px-3 py-1 rounded-full w-fit">{tag}</span>
               <h3 className="text-lg sm:text-xl font-black text-[#78350F]">{title}</h3>
@@ -356,154 +398,92 @@ function SlideRuleTypes() {
   );
 }
 
-/* Slide 7: Technical Security & On-Device Parsing */
-function SlideSecurity() {
+/* Slide 7: Closing Statement & Action */
+function SlideClosing() {
   return (
-    <div className="h-full bg-[#451A03] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
-        <div className="flex-1 text-left">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A] mb-4">
-            Zero Telemetry Security Guarantee
-          </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6 tracking-tight">
-            100% On-Device Parsing.<br />
-            <span className="text-[#F59E0B]">No Cloud Transmission.</span>
-          </h2>
-          <p className="text-base sm:text-lg font-semibold text-[#FEF3C7] leading-relaxed mb-6">
-            MinDrop processes your notification stream strictly within Android's local memory. Your messages, OTPs, and bank transactions are never sent to external servers or stored on remote databases.
-          </p>
-          <div className="inline-flex items-center gap-2 bg-white border-2 border-white px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-[#78350F] shadow-sm">
-            <ShieldAlert className="size-4 text-[#D97706]" /> Local SQLite Encrypted Storage
-          </div>
-        </div>
-        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-[#F59E0B]/30 bg-white/5 backdrop-blur-md shadow-2xl">
-          <Filter className="size-28 sm:size-36 text-[#F59E0B]" />
-        </div>
-      </div>
+    <div className="h-full bg-[#451A03] flex flex-col items-center justify-center text-center px-6">
+      <motion.span
+        initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+        className="inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/30 bg-white/5 backdrop-blur-md px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A] mb-8 shadow-sm">
+        🔒 PRIVACY FIRST · ZERO TELEMETRY
+      </motion.span>
+
+      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 max-w-4xl tracking-tight">
+        Never miss an emergency.<br />
+        <span className="text-[#F59E0B]">Never get distracted by noise.</span>
+      </h2>
+
+      <p className="text-sm sm:text-base md:text-lg font-semibold text-[#FEF3C7]/80 leading-relaxed max-w-xl mb-8 sm:mb-12">
+        MinDrop notification rules execute 100% offline on your device using Android&apos;s native notification listener service. No servers, no tracking.
+      </p>
+
+      <Link to="/download"
+        className="px-8 py-4 bg-[#F59E0B] text-ink font-black text-base uppercase tracking-wider rounded-2xl border-3 border-white hover:bg-white transition flex items-center gap-3 shadow-[6px_6px_0px_0px_rgba(255,255,255,0.2)] cursor-pointer">
+        Get MinDrop For Android
+      </Link>
     </div>
   );
 }
 
-/* Slide 8: FAQs */
-function SlideFAQ() {
-  const faqs = [
-    { q: "Does MinDrop read all my notifications?", a: "MinDrop only inspects notification titles and text against your custom keyword rules locally on your phone. Nothing leaves your device." },
-    { q: "Will this drain my battery?", a: "No. MinDrop uses native Android NotificationListenerService, consuming under 1% battery per day." },
-    { q: "What if my phone is on silent mode?", a: "MinDrop can be configured to request DND policy permission to ring loudly for high-priority matching rules." },
-  ];
-
-  return (
-    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-4xl">
-        <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-2">
-            Common Questions
-          </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
-            Frequently Asked Questions
-          </h2>
-        </div>
-
-        <div className="flex flex-col gap-4 w-full text-left">
-          {faqs.map(({ q, a }) => (
-            <div key={q} className="bg-white border-3 border-[#78350F] rounded-[2rem] p-6 sm:p-8 shadow-[4px_4px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2">
-              <h3 className="text-lg sm:text-xl font-black text-[#78350F]">{q}</h3>
-              <p className="text-sm sm:text-base font-semibold text-[#78350F]/75 leading-relaxed">{a}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* Slide 9: Motivated Transition Bridge to Chapter 02 (Location Reminder) */
-function SlideCloser() {
-  return (
-    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
-        <span className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/30 bg-[#FEF3C7] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#D97706] shadow-sm">
-          <Sparkles className="size-4" /> UP NEXT · CHAPTER 02
-        </span>
-        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#78350F] leading-none tracking-tighter">
-          What happens when tasks depend on location?
-        </h2>
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#78350F]/60 leading-relaxed max-w-2xl">
-          Filtered alerts protect your focus at home. Now discover how MinDrop triggers reminders as you enter or leave physical radii.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link to="/places-feature" viewTransition style={{ viewTransitionName: 'card-places' } as React.CSSProperties}
-            className="inline-flex items-center justify-center gap-3 px-10 sm:px-12 py-4.5 sm:py-5 bg-[#78350F] text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-2xl border-3 border-[#78350F] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Continue to Chapter 02: Location Reminder <ArrowRight className="size-5" />
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function NotifyFeatureDetailView() {
-  const { from } = Route.useSearch();
-  const backHash = from === "grid" ? "grid" : undefined;
+export function NotifyFeatureDetailView() {
   const [current, setCurrent] = useState(0);
-  const currentRef = useRef(0);
-  currentRef.current = current;
-
-  const touchStartY = useRef(0);
-  const isWheelActive = useRef(false);
+  const search = Route.useSearch();
+  const backHash = search.from === "grid" ? "grid" : "";
+  const touchStartY = useRef<number>(0);
   const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
-    <SlideOpening />,
-    <SlideConflict />,
-    <SlideSolution />,
-    <SlideInteractiveBuilder />,
-    <SlideScenarios />,
-    <SlideRuleTypes />,
-    <SlideSecurity />,
-    <SlideFAQ />,
-    <SlideCloser />,
+    <SlideOpening key="1" />,
+    <SlideConflict key="2" />,
+    <SlideSolution key="3" />,
+    <SlideInteractiveBuilder key="4" />,
+    <SlideScenarios key="5" />,
+    <SlideRuleTypes key="6" />,
+    <SlideClosing key="7" />,
   ];
+
   const TOTAL = slides.length;
   const isDark = current === 1 || current === 6;
 
+  const currentRef = useRef(current);
+  useEffect(() => {
+    currentRef.current = current;
+  }, [current]);
+
   const goTo = (idx: number) => {
-    if (idx < 0 || idx >= TOTAL) return;
-    setCurrent(idx);
+    if (idx >= 0 && idx < TOTAL) {
+      setCurrent(idx);
+    }
   };
 
-  // Debounced Gesture Engine: Exactly 1 page per continuous scroll gesture
   useEffect(() => {
-    const wheelHandler = (e: WheelEvent) => {
-      e.preventDefault();
-      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
-
-      if (!isWheelActive.current) {
-        isWheelActive.current = true;
-        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        if (delta > 0) goTo(currentRef.current + 1);
-        else if (delta < 0) goTo(currentRef.current - 1);
-      }
-
-      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
-      wheelDebounceTimer.current = setTimeout(() => {
-        isWheelActive.current = false;
-      }, 250);
-    };
-
     const keyHandler = (e: KeyboardEvent) => {
-      if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
+      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
         e.preventDefault();
         goTo(currentRef.current + 1);
-      }
-      if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
+      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
         e.preventDefault();
         goTo(currentRef.current - 1);
       }
     };
 
-    window.addEventListener("wheel", wheelHandler, { passive: false });
+    const wheelHandler = (e: WheelEvent) => {
+      e.preventDefault();
+      if (wheelDebounceTimer.current) return;
+
+      if (Math.abs(e.deltaY) > 25) {
+        if (e.deltaY > 0) goTo(currentRef.current + 1);
+        else goTo(currentRef.current - 1);
+
+        wheelDebounceTimer.current = setTimeout(() => {
+          wheelDebounceTimer.current = null;
+        }, 500);
+      }
+    };
+
     window.addEventListener("keydown", keyHandler);
+    window.addEventListener("wheel", wheelHandler, { passive: false });
+
     return () => {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
@@ -532,24 +512,28 @@ function NotifyFeatureDetailView() {
         </div>
       </header>
 
-      {/* 2. Floating Subtle Top UP Control */}
-      {current > 0 && (
-        <button
-          type="button"
-          onClick={() => goTo(current - 1)}
-          className="absolute top-14 left-1/2 -translate-x-1/2 z-40 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
-          aria-label="Previous Slide"
-        >
-          <div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-current/10">
-            <ChevronUp className={`size-3.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
-            <span className={`text-[9px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>UP</span>
-          </div>
-        </button>
-      )}
+      {/* 2. Structural UP Bar (Dedicated Flex Item - CANNOT BE OVERWRITTEN!) */}
+      <div className="shrink-0 h-8 flex items-center justify-center z-40">
+        {current > 0 ? (
+          <button
+            type="button"
+            onClick={() => goTo(current - 1)}
+            className="cursor-pointer opacity-75 hover:opacity-100 transition-opacity"
+            aria-label="Previous Slide"
+          >
+            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
+              <ChevronUp className={`size-3.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+              <span className={`text-[9px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>UP</span>
+            </div>
+          </button>
+        ) : (
+          <div className="h-6" />
+        )}
+      </div>
 
-      {/* 3. Center Middle Stage (Seamless Background) */}
+      {/* 3. Center Middle Stage (Content is strictly bounded between UP and DOWN!) */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center p-3 sm:p-6"
+        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center px-3 sm:px-6 py-1"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
@@ -584,20 +568,24 @@ function NotifyFeatureDetailView() {
         </div>
       </main>
 
-      {/* 4. Floating Subtle Bottom DOWN Control */}
-      {current < TOTAL - 1 && (
-        <button
-          type="button"
-          onClick={() => goTo(current + 1)}
-          className="absolute bottom-3 left-1/2 -translate-x-1/2 z-40 cursor-pointer opacity-50 hover:opacity-100 transition-opacity pb-[env(safe-area-inset-bottom,0px)]"
-          aria-label="Next Slide"
-        >
-          <div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-current/10">
-            <ChevronDown className={`size-3.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
-            <span className={`text-[9px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>DOWN</span>
-          </div>
-        </button>
-      )}
+      {/* 4. Structural DOWN Bar (Dedicated Flex Item - CANNOT BE OVERWRITTEN!) */}
+      <div className="shrink-0 h-8 flex items-center justify-center z-40 pb-[env(safe-area-inset-bottom,0px)]">
+        {current < TOTAL - 1 ? (
+          <button
+            type="button"
+            onClick={() => goTo(current + 1)}
+            className="cursor-pointer opacity-75 hover:opacity-100 transition-opacity"
+            aria-label="Next Slide"
+          >
+            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
+              <ChevronDown className={`size-3.5 ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`} />
+              <span className={`text-[9px] font-black uppercase tracking-wider ${isDark ? "text-[#FEF3C7]" : "text-[#78350F]"}`}>DOWN</span>
+            </div>
+          </button>
+        ) : (
+          <div className="h-6" />
+        )}
+      </div>
     </div>
   );
 }
