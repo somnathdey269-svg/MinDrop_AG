@@ -200,8 +200,8 @@ export function MobileShowcase() {
           </div>
         ) : (
           /* GRID VIEW MODE */
-          <div className="w-full h-full overflow-y-auto px-1 pt-1 pb-24 z-20 no-scrollbar">
-            <div className="flex flex-col gap-4">
+          <div className="w-full h-full overflow-y-auto px-2 pt-2 pb-28 z-20 no-scrollbar">
+            <div className="flex flex-col gap-4 max-w-md mx-auto">
               {DECK_CARDS.map((card) => {
                 return (
                   <Link
@@ -212,25 +212,25 @@ export function MobileShowcase() {
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
                     } as React.CSSProperties}
-                    className="aspect-[3/3.6] min-h-[290px] block"
+                    className="w-full h-auto block"
                   >
                     <ShowcaseCardLayoutPrimitive
-                      mode="grid"
+                      mode="mobile-grid"
                       bgClass={card.bgClass}
                       className="active:scale-[0.98] transition-transform cursor-pointer"
                       headerSlot={
-                        <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
+                        <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
                           {card.tag}
                         </span>
                       }
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
-                        <h3 className={CARD_TOKENS.typography.grid.title}>
+                        <h3 className={CARD_TOKENS.typography.deck.title}>
                           {card.title}
                         </h3>
                       }
                       descriptionSlot={
-                        <p className={CARD_TOKENS.typography.grid.description}>
+                        <p className={CARD_TOKENS.typography.deck.description}>
                           {card.description}
                         </p>
                       }
