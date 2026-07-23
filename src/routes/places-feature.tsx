@@ -391,28 +391,9 @@ function PlacesFeatureDetailView() {
         </div>
       </header>
 
-      {/* 2. Dedicated Top UP Navigation Bar */}
-      <div className="shrink-0 h-9 flex items-center justify-center z-40">
-        {current > 0 ? (
-          <button
-            type="button"
-            onClick={() => goTo(current - 1)}
-            className="cursor-pointer group opacity-80 hover:opacity-100 transition-opacity"
-            aria-label="Previous Slide"
-          >
-            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
-              <ChevronUp className={`size-4 transition group-hover:-translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
-              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`}>UP</span>
-            </div>
-          </button>
-        ) : (
-          <div className="h-6" />
-        )}
-      </div>
-
-      {/* 3. Center Middle Stage (Content perfectly centered between UP & DOWN) */}
+      {/* 2. Full-Screen Slide Stage */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center px-3 sm:px-6 py-1"
+        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center px-3 sm:px-6 pr-14 sm:pr-16 py-2"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
@@ -435,8 +416,8 @@ function PlacesFeatureDetailView() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Right Dot Navigation */}
-        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-50">
+        {/* Right Dot Navigation (Desktop) */}
+        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-40">
           {slides.map((_, i) => (
             <button key={i} onClick={() => goTo(i)}
               className={`rounded-full transition-all duration-300 cursor-pointer ${
@@ -447,23 +428,41 @@ function PlacesFeatureDetailView() {
         </div>
       </main>
 
-      {/* 4. Dedicated Bottom DOWN Navigation Bar */}
-      <div className="shrink-0 h-9 flex items-center justify-center z-40 pb-[env(safe-area-inset-bottom,0.25rem)]">
-        {current < TOTAL - 1 ? (
-          <button
-            type="button"
-            onClick={() => goTo(current + 1)}
-            className="cursor-pointer group opacity-80 hover:opacity-100 transition-opacity"
-            aria-label="Next Slide"
-          >
-            <div className="flex items-center gap-1.5 bg-black/10 dark:bg-white/10 backdrop-blur-md px-3 py-0.5 rounded-full border border-current/10 shadow-xs">
-              <ChevronDown className={`size-4 transition group-hover:translate-y-0.5 ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`} />
-              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#DDD6FE]" : "text-[#4C1D95]"}`}>DOWN</span>
-            </div>
-          </button>
-        ) : (
-          <div className="h-6" />
-        )}
+      {/* 3. Subtle & Attractive Bottom-Right Floating Navigation Dock */}
+      <div className="fixed right-3.5 sm:right-6 bottom-5 sm:bottom-6 z-50 flex flex-col items-center gap-1.5 p-1.5 rounded-full bg-white/90 dark:bg-ink/90 border-2 border-ink/30 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] backdrop-blur-lg select-none transition-all">
+        <button
+          type="button"
+          onClick={() => goTo(current - 1)}
+          disabled={current === 0}
+          className={`size-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+            current === 0
+              ? "opacity-25 cursor-not-allowed"
+              : isDark
+              ? "bg-white/10 hover:bg-white/20 text-[#DDD6FE] active:scale-95"
+              : "bg-ink/5 hover:bg-ink/10 text-[#4C1D95] active:scale-95"
+          }`}
+          aria-label="Previous Slide"
+        >
+          <ChevronUp className="size-4 stroke-[2.5px]" />
+        </button>
+
+        <span className={`w-4 h-[1px] ${isDark ? "bg-white/20" : "bg-ink/20"}`} />
+
+        <button
+          type="button"
+          onClick={() => goTo(current + 1)}
+          disabled={current === TOTAL - 1}
+          className={`size-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+            current === TOTAL - 1
+              ? "opacity-25 cursor-not-allowed"
+              : isDark
+              ? "bg-white/10 hover:bg-white/20 text-[#DDD6FE] active:scale-95"
+              : "bg-ink/5 hover:bg-ink/10 text-[#4C1D95] active:scale-95"
+          }`}
+          aria-label="Next Slide"
+        >
+          <ChevronDown className="size-4 stroke-[2.5px]" />
+        </button>
       </div>
     </div>
   );
