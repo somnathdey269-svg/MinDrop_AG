@@ -272,11 +272,21 @@ function FutureFeatureDetailView() {
       className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-future" } as React.CSSProperties}
     >
-      {/* 1. Header (Centered Logo Only) */}
-      <header className="shrink-0 h-12 border-b-2 border-ink/10 z-50 px-4 flex items-center justify-center backdrop-blur-md"
+      {/* 1. Header (Responsive: Logo-only on Mobile, Close + Logo + Get App on Desktop) */}
+      <header className="shrink-0 h-12 border-b-2 border-ink/10 z-50 px-4 sm:px-6 flex items-center justify-center sm:justify-between backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(15,23,42,0.96)" : "rgba(239,246,255,0.96)", transition: "background-color 0.4s ease" }}>
+        <Link to="/" hash={backHash} viewTransition
+          className={`hidden sm:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#60A5FA] hover:text-white" : "text-ink/70 hover:text-ink"}`}>
+          <X className="size-3.5"/> Close
+        </Link>
+
         <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home">
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
+        </Link>
+
+        <Link to="/download" viewTransition
+          className={`hidden sm:inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB]" : "bg-ink text-white border-ink hover:bg-[#2563EB] hover:border-[#2563EB]"}`}>
+          Get App
         </Link>
       </header>
 
@@ -317,8 +327,8 @@ function FutureFeatureDetailView() {
         </div>
       </main>
 
-      {/* 3. ELEVATED FLOATING ISLAND DOCK FOOTER */}
-      <div className="w-full flex items-center justify-center shrink-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1">
+      {/* 3. ELEVATED FLOATING ISLAND DOCK FOOTER (Mobile Only) */}
+      <div className="sm:hidden w-full flex items-center justify-center shrink-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1">
         <footer className="w-full max-w-sm bg-white border-3 border-ink rounded-full px-4 py-1.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between select-none">
           <Link 
             to="/"
