@@ -18,13 +18,13 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
   isDark = false,
 }) => {
   return (
-    <div className="md:hidden fixed bottom-4 sm:bottom-6 left-4 right-4 z-50 pointer-events-none select-none flex items-center justify-between gap-3">
+    <div className="md:hidden fixed bottom-4 sm:bottom-6 left-4 right-4 z-50 pointer-events-none select-none flex items-end justify-between gap-3">
       {/* LEFT ISLAND: NAVIGATION (HOME & GET APP) */}
       <footer
-        className={`pointer-events-auto h-11 rounded-full px-4 flex items-center gap-3.5 transition-all duration-300 backdrop-blur-xl border shadow-xl ${
+        className={`pointer-events-auto h-10 rounded-full px-4 flex items-center gap-3.5 backdrop-blur-xl border shadow-lg transition-all duration-300 ${
           isDark
-            ? "bg-[#121214]/90 border-white/20 text-white shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
-            : "bg-white/95 border-ink/20 text-ink shadow-[0_8px_28px_rgba(0,0,0,0.15)]"
+            ? "bg-[#18181B]/95 border-white/20 text-white shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
+            : "bg-white/95 border-ink/20 text-ink shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
         }`}
       >
         <Link
@@ -51,46 +51,46 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
         </Link>
       </footer>
 
-      {/* RIGHT ISLAND: VERTICAL THUMB STEPPER (UP / DOWN) */}
+      {/* RIGHT ISLAND: TALL VERTICAL THUMB STEPPER CAPSULE (UP / DOWN) */}
       <div
-        className={`pointer-events-auto h-12 w-11 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-xl border shadow-xl ${
+        className={`pointer-events-auto w-10 h-20 rounded-full flex flex-col items-center justify-between p-1 backdrop-blur-xl border shadow-xl transition-all duration-300 ${
           isDark
-            ? "bg-white text-ink border-white shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
-            : "bg-ink text-white border-ink shadow-[0_8px_28px_rgba(0,0,0,0.2)]"
+            ? "bg-[#18181B]/95 border-white/20 text-white shadow-[0_8px_28px_rgba(0,0,0,0.6)]"
+            : "bg-white/95 border-ink/20 text-ink shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
         }`}
       >
         <button
           type="button"
           onClick={() => goTo(current - 1)}
           disabled={current === 0}
-          className={`w-full flex-1 flex items-center justify-center rounded-t-2xl transition-all cursor-pointer ${
+          className={`w-full flex-1 flex items-center justify-center rounded-t-full transition-all cursor-pointer ${
             current === 0
-              ? "opacity-25 cursor-not-allowed"
+              ? "opacity-20 cursor-not-allowed"
               : isDark
-              ? "hover:bg-ink/10 active:scale-90"
-              : "hover:bg-white/20 active:scale-90"
+              ? "hover:bg-white/20 active:scale-90 text-white"
+              : "hover:bg-ink/10 active:scale-90 text-ink"
           }`}
           aria-label="Previous Slide (UP)"
         >
-          <ChevronUp className="size-4 stroke-[3px]" />
+          <ChevronUp className="size-4 stroke-[2.8px]" />
         </button>
 
-        <span className={`w-5 h-[1px] ${isDark ? "bg-ink/20" : "bg-white/20"}`} />
+        <span className={`w-5 h-[1px] shrink-0 ${isDark ? "bg-white/20" : "bg-ink/20"}`} />
 
         <button
           type="button"
           onClick={() => goTo(current + 1)}
           disabled={current === total - 1}
-          className={`w-full flex-1 flex items-center justify-center rounded-b-2xl transition-all cursor-pointer ${
+          className={`w-full flex-1 flex items-center justify-center rounded-b-full transition-all cursor-pointer ${
             current === total - 1
-              ? "opacity-25 cursor-not-allowed"
+              ? "opacity-20 cursor-not-allowed"
               : isDark
-              ? "hover:bg-ink/10 active:scale-90"
-              : "hover:bg-white/20 active:scale-90"
+              ? "hover:bg-white/20 active:scale-90 text-white"
+              : "hover:bg-ink/10 active:scale-90 text-ink"
           }`}
           aria-label="Next Slide (DOWN)"
         >
-          <ChevronDown className="size-4 stroke-[3px]" />
+          <ChevronDown className="size-4 stroke-[2.8px]" />
         </button>
       </div>
     </div>
