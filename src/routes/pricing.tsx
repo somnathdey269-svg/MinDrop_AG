@@ -368,11 +368,11 @@ function PricingDetailView() {
       className="h-[100dvh] flex flex-col overflow-hidden"
       style={{ viewTransitionName: "card-pricing" } as React.CSSProperties}
     >
-      {/* 1. Header (Desktop: Close + Logo + Get App | Mobile: Logo Only) */}
+      {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
       <header className="shrink-0 h-12 border-b-2 border-[#EC4899]/10 z-50 bg-[#FFF2F7]/95 backdrop-blur-md px-4 sm:px-6 flex items-center">
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-2 h-full">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
-            className="hidden md:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#DB2777]/70 hover:text-[#831843]">
+            className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#DB2777]/70 hover:text-[#831843]">
             <X className="size-3.5"/> Close
           </Link>
 
@@ -381,7 +381,7 @@ function PricingDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className="hidden md:inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 bg-ink text-white border-ink hover:bg-[#EC4899] hover:border-[#EC4899] shrink-0 leading-none whitespace-nowrap shadow-sm transition">
+            className="inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 bg-ink text-white border-ink hover:bg-[#EC4899] hover:border-[#EC4899] shrink-0 leading-none whitespace-nowrap shadow-sm transition">
             Get App
           </Link>
         </div>

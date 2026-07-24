@@ -410,12 +410,12 @@ function SettingsDetailView() {
       className="h-[100dvh] flex flex-col overflow-hidden"
       style={{ viewTransitionName: "card-settings" } as React.CSSProperties}
     >
-      {/* 1. Header (Desktop: Close + Logo + Get App | Mobile: Logo Only) */}
+      {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
       <header className="shrink-0 h-12 border-b-2 border-[#EA580C]/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(67,20,7,0.96)" : "rgba(255,247,237,0.96)", transition: "background-color 0.4s ease" }}>
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-2 h-full">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
-            className={`hidden md:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FFEDD5]/70 hover:text-white" : "text-[#C2410C]/70 hover:text-[#7C2D12]"}`}>
+            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FFEDD5]/70 hover:text-white" : "text-[#EA580C]/70 hover:text-[#7C2D12]"}`}>
             <X className="size-3.5"/> Close
           </Link>
 
@@ -424,7 +424,7 @@ function SettingsDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`hidden md:inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#EA580C] hover:text-white hover:border-[#EA580C]" : "bg-ink text-white border-ink hover:bg-[#EA580C] hover:border-[#EA580C]"}`}>
+            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#EA580C] hover:text-white hover:border-[#EA580C]" : "bg-ink text-white border-ink hover:bg-[#EA580C] hover:border-[#EA580C]"}`}>
             Get App
           </Link>
         </div>

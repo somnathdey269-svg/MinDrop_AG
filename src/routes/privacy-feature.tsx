@@ -239,12 +239,12 @@ function PrivacyFeatureDetailView() {
       className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-privacy-manifesto" } as React.CSSProperties}
     >
-      {/* 1. Header (Desktop: Close + Logo + Get App | Mobile: Logo Only) */}
-      <header className="shrink-0 h-12 border-b-2 border-ink/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
+      {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
+      <header className="shrink-0 h-12 border-b-2 border-[#059669]/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(6,78,59,0.96)" : "rgba(240,253,244,0.96)", transition: "background-color 0.4s ease" }}>
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-2 h-full">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
-            className={`hidden md:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-emerald-200 hover:text-white" : "text-ink/70 hover:text-ink"}`}>
+            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#A7F3D0]/70 hover:text-white" : "text-[#059669]/70 hover:text-[#064E3B]"}`}>
             <X className="size-3.5"/> Close
           </Link>
 
@@ -253,7 +253,7 @@ function PrivacyFeatureDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`hidden md:inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-[#059669] hover:border-[#059669]" : "bg-ink text-white border-ink hover:bg-[#059669] hover:border-[#059669]"}`}>
+            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-white hover:border-[#059669]" : "bg-ink text-white border-ink hover:bg-[#059669] hover:border-[#059669]"}`}>
             Get App
           </Link>
         </div>
