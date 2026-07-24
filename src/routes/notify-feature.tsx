@@ -23,7 +23,7 @@ export const Route = createFileRoute("/notify-feature")({
 /* Slide 1: Opening Statement */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#FFFBEB] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#FFFBEB] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-8 sm:mb-12 shadow-sm">
@@ -55,7 +55,7 @@ function SlideOpening() {
 /* Slide 2: The Core Conflict (Dark Theme) */
 function SlideConflict() {
   return (
-    <div className="h-full bg-[#451A03] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#451A03] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A] mb-4">

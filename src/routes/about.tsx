@@ -23,7 +23,7 @@ export const Route = createFileRoute("/about")({
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#F8FAFC] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#F8FAFC] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#4F46E5] mb-8 sm:mb-12 shadow-sm">
@@ -55,7 +55,7 @@ function SlideOpening() {
 /* Slide 2: Mental Overload (Dark Theme) */
 function SlideProblem() {
   return (
-    <div className="h-full bg-[#0F172A] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#0F172A] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#818CF8] mb-4">
@@ -80,7 +80,7 @@ function SlideProblem() {
 /* Slide 3: Speed & Frictionless Capture */
 function SlideCapture() {
   return (
-    <div className="h-full bg-[#F8FAFC] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F8FAFC] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4F46E5] mb-4">
@@ -113,7 +113,7 @@ function SlideCapture() {
 /* Slide 4: Native Android Power */
 function SlideArchitecture() {
   return (
-    <div className="h-full bg-[#EEF2FF] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#EEF2FF] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4F46E5] mb-4">
@@ -140,7 +140,7 @@ function SlideArchitecture() {
 /* Slide 5: Data Sovereignty */
 function SlideSovereignty() {
   return (
-    <div className="h-full bg-[#0F172A] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#0F172A] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#818CF8]">
           <Lock className="size-3.5" /> 100% LOCAL PRIVACY
@@ -159,7 +159,7 @@ function SlideSovereignty() {
 /* Slide 6: Motivated Transition Bridge to Chapter 01 (Smart Notification) */
 function SlideNextBridge() {
   return (
-    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#FFFBEB] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/30 bg-[#FEF3C7] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#D97706] shadow-sm">
           <Sparkles className="size-4" /> UP NEXT · CHAPTER 01

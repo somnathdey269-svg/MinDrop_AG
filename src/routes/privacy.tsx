@@ -55,7 +55,7 @@ function ShieldIllustration() {
 /* Slide 1: Core Philosophy */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#F1F5F9] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F1F5F9] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto max-w-6xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
         <div className="flex-1 text-left">
           <motion.span
@@ -97,7 +97,7 @@ function SlideOpening() {
 /* Slide 2: Plain English Summary */
 function SlideSummary() {
   return (
-    <div className="h-full bg-[#E2E8F0] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#E2E8F0] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-8 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-500 mb-2 sm:mb-3">
@@ -134,7 +134,7 @@ interface SlideLegalDocProps {
 }
 function SlideLegalDoc({ officer, officerEmail, address }: SlideLegalDocProps) {
   return (
-    <div className="h-full bg-[#F1F5F9] overflow-y-auto py-16 px-6">
+    <div className="w-full h-full bg-[#F1F5F9] overflow-y-auto py-16 px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-6 max-w-4xl">
         <div className="text-center">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-500">

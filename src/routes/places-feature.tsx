@@ -23,7 +23,7 @@ export const Route = createFileRoute("/places-feature")({
 /* Slide 1: Opening Statement */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#F5F3FF] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#F5F3FF] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#8B5CF6]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#8B5CF6] mb-8 sm:mb-12 shadow-sm">
@@ -55,7 +55,7 @@ function SlideOpening() {
 /* Slide 2: The Core Problem (Dark Theme) */
 function SlideConflict() {
   return (
-    <div className="h-full bg-[#2E1065] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#2E1065] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DDD6FE] mb-4">
@@ -80,7 +80,7 @@ function SlideConflict() {
 /* Slide 3: The MinDrop Solution */
 function SlideSolution() {
   return (
-    <div className="h-full bg-[#F5F3FF] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F5F3FF] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#8B5CF6] mb-4">
@@ -117,7 +117,7 @@ function SlideRadiusDemo() {
   const [triggerMode, setTriggerMode] = useState<"enter" | "exit">("enter");
 
   return (
-    <div className="h-full bg-[#EDE9FE] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#EDE9FE] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#8B5CF6] mb-3">
@@ -209,7 +209,7 @@ function SlideScenarios() {
   const touchStartX = useRef<number | null>(null);
 
   return (
-    <div className="h-full bg-[#F5F3FF] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F5F3FF] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-5xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#8B5CF6] mb-2">
@@ -283,7 +283,7 @@ function SlideScenarios() {
 /* Slide 6: Motivated Transition Bridge to Chapter 03 (Looping Alarm) */
 function SlideCloser() {
   return (
-    <div className="h-full bg-[#F5F3FF] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#F5F3FF] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#8B5CF6]/30 bg-[#EDE9FE] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#8B5CF6] shadow-sm">
           <Sparkles className="size-4" /> UP NEXT · CHAPTER 03

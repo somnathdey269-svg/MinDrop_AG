@@ -23,7 +23,7 @@ export const Route = createFileRoute("/vision")({
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#FFFBEB] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#FFFBEB] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-8 sm:mb-12 shadow-sm">
@@ -55,7 +55,7 @@ function SlideOpening() {
 /* Slide 2: Why Traditional Apps Cause Guilt (Dark Theme) */
 function SlideProblem() {
   return (
-    <div className="h-full bg-[#451A03] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#451A03] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A] mb-4">
@@ -80,7 +80,7 @@ function SlideProblem() {
 /* Slide 3: Paradigm Shift */
 function SlideParadigm() {
   return (
-    <div className="h-full bg-[#FFFBEB] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#FFFBEB] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-4">
@@ -113,7 +113,7 @@ function SlideParadigm() {
 /* Slide 4: The Founder's Commitment */
 function SlideCommitment() {
   return (
-    <div className="h-full bg-[#451A03] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#451A03] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/30 bg-white/10 px-5 py-2 text-xs font-black uppercase tracking-widest text-[#FDE68A]">
           <Sparkles className="size-4" /> OUR PROMISE TO YOU
@@ -132,7 +132,7 @@ function SlideCommitment() {
 /* Slide 5: Grand Finale & Replay Bridge */
 function SlideCloser() {
   return (
-    <div className="h-full bg-[#FEF3C7] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#FEF3C7] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706]">
           Your second brain is ready

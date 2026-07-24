@@ -23,7 +23,7 @@ export const Route = createFileRoute("/later-feature")({
 /* Slide 1: Opening Statement */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#E2F5EC] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#E2F5EC] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-8 sm:mb-12 shadow-sm">
@@ -55,7 +55,7 @@ function SlideOpening() {
 /* Slide 2: The Core Problem (Dark Theme) */
 function SlideConflict() {
   return (
-    <div className="h-full bg-[#022C22] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#022C22] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#A7F3D0] mb-4">
@@ -80,7 +80,7 @@ function SlideConflict() {
 /* Slide 3: The MinDrop Solution */
 function SlideSolution() {
   return (
-    <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#E2F5EC] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-4">
@@ -142,7 +142,7 @@ function SlideScenarios() {
   const touchStartX = useRef<number | null>(null);
 
   return (
-    <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#E2F5EC] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-5xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-2">
@@ -216,7 +216,7 @@ function SlideScenarios() {
 /* Slide 5: Motivated Transition Bridge to Chapter 04 (Future Actions) */
 function SlideCloser() {
   return (
-    <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#E2F5EC] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/30 bg-[#D1FAE5] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#047857] shadow-sm">
           <Sparkles className="size-4" /> UP NEXT · CHAPTER 04

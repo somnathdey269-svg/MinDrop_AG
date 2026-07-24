@@ -104,7 +104,7 @@ function AlarmIllustration() {
 /* Slide 1: Help Hero */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#E2F5EC] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto max-w-6xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
         <div className="flex-1 text-left">
           <motion.span
@@ -158,7 +158,7 @@ function SlidePrivacyFAQ() {
   ];
 
   return (
-    <div className="h-full bg-[#F0FDF4] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F0FDF4] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-3">01 / Privacy & Storage</p>
@@ -211,7 +211,7 @@ function SlideBatteryFAQ() {
   ];
 
   return (
-    <div className="h-full bg-[#E2F5EC] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#E2F5EC] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-3">02 / Location & Battery</p>
@@ -264,7 +264,7 @@ function SlideAlarmsFAQ({ backHash }: { backHash?: string }) {
   ];
 
   return (
-    <div className="h-full bg-[#F0FDF4] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F0FDF4] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-3">03 / Alarms & Filters</p>

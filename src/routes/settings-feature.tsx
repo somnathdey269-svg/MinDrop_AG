@@ -121,7 +121,7 @@ function SettingsPlayground() {
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#FFF7ED] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#FFF7ED] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -155,7 +155,7 @@ function SlideOpening() {
 /* Slide 2: The Problem */
 function SlideProblem() {
   return (
-    <div className="h-full bg-[#431407] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#431407] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDBA74]/30 mb-4">
@@ -189,7 +189,7 @@ function SlideProblem() {
 /* Slide 3: The Playground */
 function SlidePlayground() {
   return (
-    <div className="h-full bg-[#FFF7ED] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#FFF7ED] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-20 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#EA580C] mb-4">
@@ -225,7 +225,7 @@ function SlidePlayground() {
 /* Slide 4: Everything You Can Adjust */
 function SlideDifference() {
   return (
-    <div className="h-full bg-[#FFEDD5] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#FFEDD5] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#C2410C] mb-4">
@@ -270,7 +270,7 @@ function SlideScenarios() {
   const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
 
   return (
-    <div className="h-full bg-[#431407] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#431407] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-3xl">
         <div className="text-center">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FFEDD5]/30 mb-4">
@@ -324,7 +324,7 @@ function SlideScenarios() {
 /* Slide 6: Closer */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
-    <div className="h-full bg-[#FFF7ED] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#FFF7ED] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 sm:gap-10 max-w-4xl">
         <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#EA580C]/45">
           An app that adapts to you

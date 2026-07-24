@@ -59,7 +59,7 @@ function FloatingGem() {
 /* Slide 1: Opening Hero */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10 lg:px-16">
+    <div className="w-full h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10 lg:px-16">
       <div className="w-[95%] mx-auto max-w-7xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
         <div className="flex-1 text-left">
           <motion.span
@@ -110,7 +110,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
   const priceDisplay = selected ? `${selected.symbol}${selected.displayed}` : "₹999";
 
   return (
-    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
+    <div className="w-full h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-10 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2 sm:mb-3">
@@ -207,7 +207,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
 /* Slide 3: Flow diagram */
 function SlideFlow() {
   return (
-    <div className="h-full bg-[#FCE7F3] flex items-center justify-center px-6 sm:px-10">
+    <div className="w-full h-full bg-[#FCE7F3] flex items-center justify-center px-6 sm:px-10">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2 sm:mb-3">
@@ -253,7 +253,7 @@ function SlideFlow() {
 /* Slide 4: Specs closer */
 function SlideCloser({ backHash }: { backHash?: string }) {
   return (
-    <div className="h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
+    <div className="w-full h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-10 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-3">

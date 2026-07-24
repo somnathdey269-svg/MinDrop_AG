@@ -23,7 +23,7 @@ export const Route = createFileRoute("/future-feature")({
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="h-full bg-[#EFF6FF] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#EFF6FF] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#2563EB]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB] mb-8 sm:mb-12 shadow-sm">
@@ -55,7 +55,7 @@ function SlideOpening() {
 /* Slide 2: Unconnected Island Problem (Dark Theme) */
 function SlideProblem() {
   return (
-    <div className="h-full bg-[#0F172A] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#0F172A] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#60A5FA] mb-4">
@@ -80,7 +80,7 @@ function SlideProblem() {
 /* Slide 3: Topic 1 - Contact Triggers */
 function SlideContactTriggers() {
   return (
-    <div className="h-full bg-[#EFF6FF] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#EFF6FF] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB] mb-4">
@@ -104,7 +104,7 @@ function SlideContactTriggers() {
 /* Slide 4: Topic 2 & 3 - Cross-App Bridge & Voice Drops */
 function SlideCrossAppVoice() {
   return (
-    <div className="h-full bg-[#DBEAFE] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#DBEAFE] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB] mb-3">
@@ -148,7 +148,7 @@ function SlideCrossAppVoice() {
 /* Slide 5: Topic 4 - Context Sweeps */
 function SlideContextSweeps() {
   return (
-    <div className="h-full bg-[#0F172A] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#0F172A] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#60A5FA] mb-4">
@@ -173,7 +173,7 @@ function SlideContextSweeps() {
 /* Slide 6: Motivated Transition Bridge to Chapter 05 (Absolute Privacy) */
 function SlideNextBridge() {
   return (
-    <div className="h-full bg-[#F0FDF4] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#F0FDF4] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#059669]/30 bg-[#DCFCE7] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#059669] shadow-sm">
           <Sparkles className="size-4" /> UP NEXT · CHAPTER 05
