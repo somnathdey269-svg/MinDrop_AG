@@ -287,7 +287,7 @@ function FutureFeatureDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB]" : "bg-ink text-white border-ink hover:bg-[#2563EB] hover:border-[#2563EB]"}`}>
+            className={`inline-flex items-center justify-center text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB]" : "bg-[#2563EB] text-white border-[#2563EB] hover:bg-ink hover:border-ink"}`}>
             Get App
           </Link>
         </div>

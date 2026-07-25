@@ -381,7 +381,7 @@ function PricingDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className="inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 bg-ink text-white border-ink hover:bg-[#EC4899] hover:border-[#EC4899] shrink-0 leading-none whitespace-nowrap shadow-sm transition">
+            className="inline-flex items-center justify-center text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border-2 bg-[#DB2777] text-white border-[#DB2777] hover:bg-ink hover:border-ink shrink-0 leading-none whitespace-nowrap shadow-sm transition">
             Get App
           </Link>
         </div>

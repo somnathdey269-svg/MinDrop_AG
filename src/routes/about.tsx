@@ -273,7 +273,7 @@ function AboutDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-black uppercase tracking-wider px-3.5 sm:px-4 py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#4F46E5] hover:text-white hover:border-[#4F46E5]" : "bg-ink text-white border-ink hover:bg-[#4F46E5] hover:border-[#4F46E5]"}`}>
+            className={`inline-flex items-center justify-center text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#4F46E5] hover:text-white hover:border-[#4F46E5]" : "bg-[#4F46E5] text-white border-[#4F46E5] hover:bg-ink hover:border-ink"}`}>
             Get App
           </Link>
         </div>
