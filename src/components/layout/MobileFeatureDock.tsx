@@ -18,10 +18,10 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
   return (
     <div className="md:hidden fixed bottom-4 right-4 z-50 pointer-events-none select-none">
       <div
-        className={`pointer-events-auto w-10 h-20 rounded-full flex flex-col items-center justify-between p-1 transition-all duration-300 backdrop-blur-2xl border shadow-xl ${
+        className={`pointer-events-auto w-9 h-[4.5rem] rounded-full flex flex-col items-center justify-between p-1 transition-all duration-300 backdrop-blur-2xl border shadow-xl ${
           isDark
-            ? "bg-[#18181B]/90 border-white/20 text-white shadow-[0_10px_30px_rgba(0,0,0,0.6)]"
-            : "bg-white/95 border-ink/15 text-ink shadow-[0_10px_25px_rgba(0,0,0,0.15)]"
+            ? "bg-[#18181B]/90 border-white/25 text-white shadow-[0_8px_30px_rgba(0,0,0,0.65)]"
+            : "bg-white/95 border-ink/20 text-ink shadow-[0_8px_25px_rgba(0,0,0,0.18)]"
         }`}
       >
         {/* TOP BUTTON (UP) */}
@@ -29,36 +29,36 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
           type="button"
           onClick={() => goTo(current - 1)}
           disabled={current === 0}
-          className={`size-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+          className={`size-7 rounded-full flex items-center justify-center transition-all cursor-pointer ${
             current === 0
               ? "opacity-20 cursor-not-allowed"
               : isDark
-              ? "hover:bg-white/20 active:scale-85 text-white"
+              ? "hover:bg-white/25 active:scale-85 text-white"
               : "hover:bg-ink/10 active:scale-85 text-ink"
           }`}
           aria-label="Previous Slide (UP)"
         >
-          <ChevronUp className="size-4 stroke-[3px]" />
+          <ChevronUp className="size-3.5 stroke-[3px]" />
         </button>
 
-        {/* SUBTLE SEPARATOR LINE */}
-        <span className={`w-4 h-[1px] shrink-0 opacity-25 ${isDark ? "bg-white" : "bg-ink"}`} />
+        {/* ELEGANT CENTER GLOW DOT */}
+        <span className={`size-1 rounded-full shrink-0 ${isDark ? "bg-white/40" : "bg-ink/30"}`} />
 
         {/* BOTTOM BUTTON (DOWN) */}
         <button
           type="button"
           onClick={() => goTo(current + 1)}
           disabled={current === total - 1}
-          className={`size-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+          className={`size-7 rounded-full flex items-center justify-center transition-all cursor-pointer ${
             current === total - 1
               ? "opacity-20 cursor-not-allowed"
               : isDark
-              ? "hover:bg-white/20 active:scale-85 text-white"
+              ? "hover:bg-white/25 active:scale-85 text-white"
               : "hover:bg-ink/10 active:scale-85 text-ink"
           }`}
           aria-label="Next Slide (DOWN)"
         >
-          <ChevronDown className="size-4 stroke-[3px]" />
+          <ChevronDown className="size-3.5 stroke-[3px]" />
         </button>
       </div>
     </div>
