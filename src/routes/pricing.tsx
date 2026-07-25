@@ -381,7 +381,7 @@ function PricingDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className="inline-flex items-center justify-center text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border-2 bg-[#DB2777] text-white border-[#DB2777] hover:bg-ink hover:border-ink shrink-0 leading-none whitespace-nowrap shadow-sm transition">
+            className="inline-flex items-center justify-center h-6 text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-3.5 rounded-full border-1.5 bg-[#DB2777] text-white border-[#DB2777] hover:bg-ink hover:border-ink shrink-0 leading-none whitespace-nowrap shadow-sm transition">
             Get App
           </Link>
         </div>
@@ -390,13 +390,13 @@ function PricingDetailView() {
       {/* 2. Main Content Stage */}
       <main 
         ref={containerRef}
-        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center p-0"
+        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 50) {
+          if (Math.abs(delta) > 30) {
             if (delta > 0) goTo(current + 1);
-            else goTo(current - 1);
+            else if (delta < 0) goTo(current - 1);
           }
         }}
       >

@@ -253,7 +253,7 @@ function PrivacyFeatureDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border-2 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-white hover:border-[#059669]" : "bg-[#059669] text-white border-[#059669] hover:bg-ink hover:border-ink"}`}>
+            className={`inline-flex items-center justify-center h-6 text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-3.5 rounded-full border-1.5 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-white hover:border-[#059669]" : "bg-[#059669] text-white border-[#059669] hover:bg-ink hover:border-ink"}`}>
             Get App
           </Link>
         </div>
@@ -261,13 +261,13 @@ function PrivacyFeatureDetailView() {
 
       {/* 2. Main Content Stage */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-y-auto sm:overflow-hidden flex items-center justify-center p-0"
+        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 35) {
+          if (Math.abs(delta) > 30) {
             if (delta > 0) goTo(currentRef.current + 1);
-            else goTo(currentRef.current - 1);
+            else if (delta < 0) goTo(currentRef.current - 1);
           }
         }}
       >
