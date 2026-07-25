@@ -89,6 +89,7 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern", "liga", "calt", "ss01";
+    overscroll-behavior-y: none;
   }
   body {
     overflow-x: hidden;

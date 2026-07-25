@@ -401,13 +401,20 @@ function SettingsDetailView() {
       if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
       if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
     };
+    const touchMoveHandler = (e: TouchEvent) => {
+      if (e.cancelable) e.preventDefault();
+    };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener("touchmove", touchMoveHandler, { passive: false });
+    return () => {
+      window.removeEventListener("keydown", handler);
+      window.removeEventListener("touchmove", touchMoveHandler);
+    };
   }, [current]);
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none overscroll-none touch-none"
       style={{ viewTransitionName: "card-settings" } as React.CSSProperties}
     >
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
@@ -424,7 +431,7 @@ function SettingsDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center h-6 text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-3.5 rounded-full border-1.5 shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#EA580C] hover:text-white hover:border-[#EA580C]" : "bg-[#EA580C] text-white border-[#EA580C] hover:bg-ink hover:border-ink"}`}>
+            className={`inline-flex items-center justify-center h-5.5 sm:h-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2.5 sm:px-3.5 rounded-full border shrink-0 leading-none whitespace-nowrap shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#EA580C] hover:text-white hover:border-[#EA580C]" : "bg-[#EA580C] text-white border-[#EA580C] hover:bg-ink hover:border-ink"}`}>
             Get App
           </Link>
         </div>
@@ -433,7 +440,7 @@ function SettingsDetailView() {
       {/* 2. Main Content Stage */}
       <main 
         ref={containerRef}
-        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0"
+        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;

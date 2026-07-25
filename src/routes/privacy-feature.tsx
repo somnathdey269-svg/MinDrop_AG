@@ -227,16 +227,22 @@ function PrivacyFeatureDetailView() {
 
     window.addEventListener("wheel", wheelHandler, { passive: false });
     window.addEventListener("keydown", keyHandler);
+    const touchMoveHandler = (e: TouchEvent) => {
+      if (e.cancelable) e.preventDefault();
+    };
+    window.addEventListener("touchmove", touchMoveHandler, { passive: false });
+
     return () => {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
+      window.removeEventListener("touchmove", touchMoveHandler);
       if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
   }, []);
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden select-none"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none overscroll-none touch-none"
       style={{ viewTransitionName: "card-privacy-manifesto" } as React.CSSProperties}
     >
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
@@ -253,7 +259,7 @@ function PrivacyFeatureDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center h-6 text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-3.5 rounded-full border-1.5 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-white hover:border-[#059669]" : "bg-[#059669] text-white border-[#059669] hover:bg-ink hover:border-ink"}`}>
+            className={`inline-flex items-center justify-center h-5.5 sm:h-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2.5 sm:px-3.5 rounded-full border shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#059669] hover:text-white hover:border-[#059669]" : "bg-[#059669] text-white border-[#059669] hover:bg-ink hover:border-ink"}`}>
             Get App
           </Link>
         </div>
@@ -261,7 +267,7 @@ function PrivacyFeatureDetailView() {
 
       {/* 2. Main Content Stage */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0"
+        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
