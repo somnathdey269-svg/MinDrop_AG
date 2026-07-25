@@ -328,7 +328,7 @@ function LaterFeatureDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center h-5.5 sm:h-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2.5 sm:px-3.5 rounded-full border shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#10B981] hover:text-white hover:border-[#10B981]" : "bg-[#047857] text-white border-[#047857] hover:bg-ink hover:border-ink"}`}>
+            className={`inline-flex items-center justify-center h-[20px] sm:h-[22px] text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest px-2.5 sm:px-3 rounded-full border shrink-0 leading-none shadow-xs transition ${isDark ? "bg-white text-ink border-white hover:bg-[#10B981] hover:text-white hover:border-[#10B981]" : "bg-[#047857] text-white border-[#047857] hover:bg-ink hover:border-ink"}`}>
             Get App
           </Link>
         </div>
