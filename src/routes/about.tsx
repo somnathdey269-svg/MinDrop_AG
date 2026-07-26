@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import { AnimatedIcon } from "@/components/common/AnimatedIcon";
+import { AboutMascotBackground } from "@/components/about/AboutMascotBackground";
 import {
   BookOpen, Brain, Zap, Shield, Cpu, Lock, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
 } from "lucide-react";
@@ -259,9 +260,11 @@ function AboutDetailView() {
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden select-none"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none relative"
       style={{ viewTransitionName: "card-about" } as React.CSSProperties}
     >
+      {/* Subtle Interactive Mascot Background Layer */}
+      <AboutMascotBackground currentSlide={current} isDark={isDark} />
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
       <header className="shrink-0 h-12 border-b-2 border-[#0284C7]/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(12,74,110,0.96)" : "rgba(240,249,255,0.96)", transition: "background-color 0.4s ease" }}>
