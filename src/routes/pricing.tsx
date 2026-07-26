@@ -280,12 +280,13 @@ function SlideCloser({ backHash }: { backHash?: string }) {
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4 justify-center">
           <Link
-            to="/about"
+            to="/download"
+            resetScroll={true}
             viewTransition
-            style={{ viewTransitionName: 'card-about' } as React.CSSProperties}
+            style={{ viewTransitionName: 'card-download' } as React.CSSProperties}
             className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#EC4899] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#BE185D] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap"
           >
-            About The App <ArrowRight className="size-5" />
+            Take MinDrop Home <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>
