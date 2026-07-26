@@ -28,7 +28,7 @@ function SlideOpening() {
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-8 sm:mb-12 shadow-sm">
-        ⏰ CHAPTER 03/05 · CRITICAL TASKS
+        ⏰ NEVER MISS A CRITICAL TASK
       </motion.span>
 
       <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
