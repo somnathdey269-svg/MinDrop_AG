@@ -6,7 +6,7 @@ import {
   Compass, PhoneCall, Layers, Mic, ArrowRight, X, Sparkles, SlidersHorizontal, ChevronDown, ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 export const Route = createFileRoute("/future-feature")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -213,11 +213,25 @@ function FutureFeatureDetailView() {
   const [current, setCurrent] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
-    }
-    setCurrent(0);
+  useLayoutEffect(() => {
+    const resetScroll = () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = 0;
+      }
+      window.scrollTo(0, 0);
+      setCurrent(0);
+    };
+    resetScroll();
+    const rafId = requestAnimationFrame(resetScroll);
+    const t1 = setTimeout(resetScroll, 0);
+    const t2 = setTimeout(resetScroll, 50);
+    const t3 = setTimeout(resetScroll, 150);
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, []);
 
   const slides = [
@@ -258,16 +272,16 @@ function FutureFeatureDetailView() {
       <header className="shrink-0 h-12 border-b-2 border-[#2563EB]/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(15,23,42,0.96)" : "rgba(239,246,255,0.96)", transition: "background-color 0.4s ease" }}>
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
-          <Link to="/" hash={backHash} viewTransition
+          <Link to="/" hash={backHash} resetScroll={true} viewTransition
             className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#60A5FA]/70 hover:text-white" : "text-[#2563EB]/70 hover:text-ink"}`}>
             <X className="size-3.5"/> Close
           </Link>
 
-          <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
+          <Link to="/" hash={backHash} resetScroll={true} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
             <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           </Link>
 
-          <Link to="/download" viewTransition
+          <Link to="/download" resetScroll={true} viewTransition
             className={`inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-md border shrink-0 transition-all duration-200 cursor-pointer ${
               isDark
                 ? "bg-white text-ink border-white hover:bg-[#60A5FA] hover:text-white"
@@ -286,12 +300,15 @@ function FutureFeatureDetailView() {
       >
         {slides.map((slide, idx) => (
           <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden perspective-[1200px]">
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+              <div className={`w-[450px] h-[450px] rounded-full blur-3xl opacity-20 animate-pulse ${isDark ? "bg-blue-400" : "bg-[#2563EB]"}`} />
+            </div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.93, y: 25, rotateX: 5 }}
+              initial={{ opacity: 0, scale: 0.90, y: 30, rotateX: 6 }}
               whileInView={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-              viewport={{ amount: 0.4 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full h-full flex items-center justify-center"
+              viewport={{ amount: 0.35 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full flex items-center justify-center relative z-10"
             >
               {slide}
             </motion.div>

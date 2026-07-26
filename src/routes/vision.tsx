@@ -5,7 +5,7 @@ import {
   HeartHandshake, Sparkles, CheckCircle2, ArrowRight, X, ChevronDown, ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 export const Route = createFileRoute("/vision")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -164,11 +164,25 @@ function VisionDetailView() {
   const [current, setCurrent] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
-    }
-    setCurrent(0);
+  useLayoutEffect(() => {
+    const resetScroll = () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = 0;
+      }
+      window.scrollTo(0, 0);
+      setCurrent(0);
+    };
+    resetScroll();
+    const rafId = requestAnimationFrame(resetScroll);
+    const t1 = setTimeout(resetScroll, 0);
+    const t2 = setTimeout(resetScroll, 50);
+    const t3 = setTimeout(resetScroll, 150);
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, []);
 
   const slides = [
@@ -208,16 +222,16 @@ function VisionDetailView() {
       <header className="shrink-0 h-12 border-b-2 border-amber-500/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(24,15,6,0.96)" : "rgba(254,243,199,0.96)", transition: "background-color 0.4s ease" }}>
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
-          <Link to="/" hash={backHash} viewTransition
+          <Link to="/" hash={backHash} resetScroll={true} viewTransition
             className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-amber-200 hover:text-white" : "text-amber-700/70 hover:text-amber-900"}`}>
             <X className="size-3.5"/> Close
           </Link>
 
-          <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
+          <Link to="/" hash={backHash} resetScroll={true} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
             <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           </Link>
 
-          <Link to="/download" viewTransition
+          <Link to="/download" resetScroll={true} viewTransition
             className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
             Get App
           </Link>
@@ -232,12 +246,15 @@ function VisionDetailView() {
       >
         {slides.map((slide, idx) => (
           <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden perspective-[1200px]">
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+              <div className={`w-[450px] h-[450px] rounded-full blur-3xl opacity-20 animate-pulse ${isDark ? "bg-amber-400" : "bg-[#D97706]"}`} />
+            </div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.93, y: 25, rotateX: 5 }}
+              initial={{ opacity: 0, scale: 0.90, y: 30, rotateX: 6 }}
               whileInView={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-              viewport={{ amount: 0.4 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full h-full flex items-center justify-center"
+              viewport={{ amount: 0.35 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full flex items-center justify-center relative z-10"
             >
               {slide}
             </motion.div>

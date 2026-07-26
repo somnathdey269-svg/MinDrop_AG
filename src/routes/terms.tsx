@@ -4,7 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { getPublicSettings } from "@/lib/platformSettings.functions";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronDown, Check, Scale, BookOpen, AlertTriangle } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 const SITE = "https://getmindrop.lovable.app";
 const LAST_UPDATED = "November 2025";
