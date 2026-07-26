@@ -1,181 +1,234 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Zap, Shield, Sparkles, BookOpen, Lock, CheckCircle2 } from "lucide-react";
 
-interface AboutMascotBackgroundProps {
+interface AboutSketchBackgroundProps {
   currentSlide: number;
   isDark: boolean;
 }
 
-export function AboutMascotBackground({ currentSlide, isDark }: AboutMascotBackgroundProps) {
-  // Mascot contextual poses & speech bubbles per slide
-  const mascotStates = [
-    {
-      // Slide 0: Opening / Second Brain
-      badge: "Meet Droppy!",
-      thought: "Hi! I'm Droppy. Your mind is for thinking, not holding tasks!",
-      icon: Sparkles,
-      color: "#0284C7",
-      positionClass: "bottom-20 right-4 sm:right-12 md:right-16",
-    },
-    {
-      // Slide 1: Problem / Mental Overload
-      badge: "Mental Relief",
-      thought: "Micro-tasks fatigue your brain. MinDrop unburdens you!",
-      icon: Brain,
-      color: "#38BDF8",
-      positionClass: "bottom-20 right-4 sm:right-12 md:right-16",
-    },
-    {
-      // Slide 2: Speed & Frictionless Capture
-      badge: "Lightning Fast",
-      thought: "Drop notes in under 2 seconds without form friction!",
-      icon: Zap,
-      color: "#0284C7",
-      positionClass: "bottom-20 right-4 sm:right-12 md:right-16",
-    },
-    {
-      // Slide 3: Native Android Power
-      badge: "100% Native",
-      thought: "Built with WorkManager & SQLite so alerts survive reboots!",
-      icon: BookOpen,
-      color: "#0284C7",
-      positionClass: "bottom-20 right-4 sm:right-12 md:right-16",
-    },
-    {
-      // Slide 4: Data Sovereignty / Privacy
-      badge: "100% Private",
-      thought: "Zero cloud tracking! Your thoughts stay locked on device.",
-      icon: Lock,
-      color: "#38BDF8",
-      positionClass: "bottom-20 right-4 sm:right-12 md:right-16",
-    },
-    {
-      // Slide 5: Transition Bridge
-      badge: "Up Next",
-      thought: "Let's discover Chapter 01 Smart Notifications!",
-      icon: CheckCircle2,
-      color: "#0284C7",
-      positionClass: "bottom-24 right-4 sm:right-12 md:right-16",
-    },
-  ];
-
-  const currentState = mascotStates[currentSlide] || mascotStates[0];
-  const IconComponent = currentState.icon;
+export function AboutMascotBackground({ currentSlide, isDark }: AboutSketchBackgroundProps) {
+  // Stroke colors based on light vs dark slide background
+  const strokeColor = isDark ? "#FFFFFF" : "#000000";
+  const accentStroke = isDark ? "#7DD3FC" : "#0284C7";
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-30 select-none">
-      {/* 1. Subtle Animated Background Lines */}
-      <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
+      {/* Subtle Black & White Architectural Blueprint Grid Pattern */}
+      <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <pattern id="sketch-grid-vibrant" width="50" height="50" patternUnits="userSpaceOnUse">
-            <circle cx="25" cy="25" r="1.5" fill={isDark ? "#38BDF8" : "#0284C7"} />
+          <pattern id="bw-dot-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="20" cy="20" r="1.2" fill={strokeColor} opacity="0.6" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#sketch-grid-vibrant)" />
+        <rect width="100%" height="100%" fill="url(#bw-dot-grid)" />
       </svg>
 
-      {/* 2. Vibrant Interactive Mascot Floating Companion ("Droppy") */}
+      {/* Main Meaningful SVG Vector Sketch (Responsive for all screen sizes) */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={`mascot-vibrant-${currentSlide}`}
-          initial={{ opacity: 0, scale: 0.7, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.7, y: -30 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className={`absolute ${currentState.positionClass} flex flex-col items-end gap-2 max-w-[280px] sm:max-w-[320px] pointer-events-auto`}
+          key={`sketch-slide-${currentSlide}`}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: isDark ? 0.22 : 0.16, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute inset-0 flex items-center justify-center p-4 sm:p-8"
         >
-          {/* Speech Bubble floating above mascot */}
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.15, duration: 0.35 }}
-            className={`px-4 py-3 rounded-2xl border-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] backdrop-blur-md flex items-start gap-2.5 ${
-              isDark
-                ? "bg-[#0C4A6E] border-white text-white"
-                : "bg-white border-[#0284C7] text-ink"
-            }`}
+          <svg
+            viewBox="0 0 1000 800"
+            preserveAspectRatio="xMidYMid meet"
+            className="w-full h-full max-w-5xl max-h-[85vh] transition-all duration-500"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <div className="p-1 rounded-lg bg-[#0284C7]/15 shrink-0 mt-0.5">
-              <IconComponent className="size-4 text-[#0284C7]" />
-            </div>
-            <div className="flex flex-col gap-0.5 text-left">
-              <span className={`text-[10px] font-black uppercase tracking-wider ${isDark ? "text-[#38BDF8]" : "text-[#0284C7]"}`}>
-                {currentState.badge}
-              </span>
-              <p className="text-xs sm:text-sm font-extrabold leading-snug">
-                {currentState.thought}
-              </p>
-            </div>
-          </motion.div>
+            {/* ────── SLIDE 0: Tangled Mind -> Organized Second Brain ────── */}
+            {currentSlide === 0 && (
+              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                {/* Tangled chaotic thoughts on left */}
+                <motion.path
+                  d="M 120 400 Q 180 320 220 440 T 280 340 T 320 460 T 380 380"
+                  strokeDasharray="6 6"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 2.5, repeat: Infinity, repeatType: "reverse" }}
+                />
+                {/* Connecting arrow/funnel */}
+                <motion.path
+                  d="M 380 400 C 450 400, 480 300, 550 300 M 380 400 C 450 400, 480 500, 550 500"
+                  strokeDasharray="4 4"
+                />
+                {/* Harmonious organized Second Brain node matrix on right */}
+                <circle cx="700" cy="300" r="35" strokeWidth="2.5" />
+                <circle cx="700" cy="500" r="35" strokeWidth="2.5" />
+                <circle cx="850" cy="400" r="45" strokeWidth="3" />
 
-          {/* Droppy Mascot Character */}
-          <motion.div
-            animate={{
-              y: [0, -12, 0],
-              rotate: [0, 2, -2, 0]
-            }}
-            transition={{
-              duration: 3.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="relative size-24 sm:size-32 md:size-36 cursor-pointer drop-shadow-2xl shrink-0"
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <svg viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              <defs>
-                <linearGradient id="droppyBodyGrad" x1="100" y1="10" x2="100" y2="200" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#38BDF8" />
-                  <stop offset="50%" stopColor="#0284C7" />
-                  <stop offset="100%" stopColor="#0369A1" />
-                </linearGradient>
-                <filter id="droppyShadow" x="-10%" y="-10%" width="120%" height="120%">
-                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.3" />
-                </filter>
-              </defs>
+                {/* Connecting node lines */}
+                <line x1="735" y1="300" x2="805" y2="400" strokeDasharray="5 5" />
+                <line x1="735" y1="500" x2="805" y2="400" strokeDasharray="5 5" />
+                <line x1="700" y1="335" x2="700" y2="465" />
 
-              {/* Glowing Halo */}
-              <circle cx="100" cy="120" r="82" stroke="#38BDF8" strokeWidth="3" strokeDasharray="6 6" opacity="0.7">
-                <animateTransform attributeName="transform" type="rotate" from="0 100 120" to="360 100 120" dur="14s" repeatCount="indefinite" />
-              </circle>
+                {/* Lightbulb sketch inside central node */}
+                <path d="M 850 380 C 840 380, 835 390, 840 400 C 845 408, 848 412, 848 418 L 852 418 C 852 412, 855 408, 860 400 C 865 390, 860 380, 850 380 Z" strokeWidth="2" />
 
-              {/* Waterdrop Body */}
-              <path
-                d="M 100 15 C 138 65, 180 105, 180 145 C 180 188, 144 208, 100 208 C 56 208, 20 188, 20 145 C 20 105, 62 65, 100 15 Z"
-                fill="url(#droppyBodyGrad)"
-                stroke="#000000"
-                strokeWidth="6"
-                filter="url(#droppyShadow)"
-              />
-
-              {/* White Belly Accent */}
-              <path
-                d="M 60 145 C 60 175, 80 190, 100 190 C 120 190, 140 175, 140 145 C 140 135, 130 125, 100 125 C 70 125, 60 135, 60 145 Z"
-                fill="#FFFFFF"
-                opacity="0.25"
-              />
-
-              {/* Expressive Eyes */}
-              <g>
-                <ellipse cx="72" cy="125" rx="12" ry="14" fill="#FFFFFF" stroke="#000000" strokeWidth="4" />
-                <ellipse cx="128" cy="125" rx="12" ry="14" fill="#FFFFFF" stroke="#000000" strokeWidth="4" />
-                <circle cx="75" cy="126" r="6" fill="#0C4A6E" />
-                <circle cx="131" cy="126" r="6" fill="#0C4A6E" />
-                <circle cx="77" cy="123" r="2.5" fill="#FFFFFF" />
-                <circle cx="133" cy="123" r="2.5" fill="#FFFFFF" />
+                {/* Orbiting idea rings */}
+                <motion.ellipse
+                  cx="850" cy="400" rx="90" ry="40"
+                  strokeDasharray="8 8"
+                  animate={{ rotate: 360 }}
+                  style={{ transformOrigin: "850px 400px" }}
+                  transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+                />
               </g>
+            )}
 
-              {/* Cheerful Smile */}
-              <path d="M 82 152 Q 100 168 118 152" stroke="#FFFFFF" strokeWidth="5" strokeLinecap="round" fill="none" />
-              <path d="M 82 152 Q 100 168 118 152" stroke="#000000" strokeWidth="2" strokeLinecap="round" fill="none" />
+            {/* ────── SLIDE 1: Unburdening Mental Fatigue ────── */}
+            {currentSlide === 1 && (
+              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
+                {/* Heavy mental weight balance scale */}
+                <line x1="200" y1="400" x2="800" y2="400" strokeWidth="3" />
+                <line x1="500" y1="400" x2="500" y2="600" strokeWidth="4" />
+                <path d="M 440 600 L 560 600" strokeWidth="4" />
 
-              {/* Sparkle Brain Antenna */}
-              <path d="M 100 15 L 100 0" stroke="#000000" strokeWidth="5" strokeLinecap="round" />
-              <circle cx="100" cy="0" r="7" fill="#FACC15" stroke="#000000" strokeWidth="3" />
-            </svg>
-          </motion.div>
+                {/* Left side: Heavy stack of mental tasks */}
+                <g opacity="0.8">
+                  <rect x="220" y="320" width="120" height="70" rx="8" strokeDasharray="4 4" />
+                  <rect x="235" y="240" width="90" height="70" rx="8" />
+                  <rect x="250" y="170" width="60" height="60" rx="8" />
+                </g>
+
+                {/* Right side: MinDrop feather-light floating notes unburdening */}
+                <motion.g
+                  animate={{ y: [-10, 10, -10] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <rect x="660" y="260" width="110" height="80" rx="16" strokeWidth="3" />
+                  <path d="M 690 290 L 740 290 M 690 310 L 720 310" strokeWidth="2.5" />
+                  {/* Floating upward arrow */}
+                  <path d="M 715 220 L 715 160 M 700 175 L 715 160 L 730 175" strokeWidth="2.5" />
+                </motion.g>
+
+                {/* Gentle ripple waves below */}
+                <path d="M 150 650 Q 500 620 850 650" strokeDasharray="6 6" />
+              </g>
+            )}
+
+            {/* ────── SLIDE 2: Frictionless 2-Second Capture ────── */}
+            {currentSlide === 2 && (
+              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round">
+                {/* Lightning Speed path */}
+                <motion.path
+                  d="M 150 200 L 450 380 L 400 420 L 700 600"
+                  strokeWidth="3"
+                  strokeDasharray="10 10"
+                  initial={{ pathOffset: 0 }}
+                  animate={{ pathOffset: [0, 1] }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* Minimalist Note Pad Sketch */}
+                <rect x="350" y="220" width="300" height="360" rx="24" strokeWidth="3.5" fill="none" />
+                {/* Note lines */}
+                <line x1="400" y1="300" x2="600" y2="300" strokeWidth="3" />
+                <line x1="400" y1="360" x2="560" y2="360" strokeWidth="2.5" strokeDasharray="5 5" />
+                <line x1="400" y1="420" x2="520" y2="420" strokeWidth="2.5" strokeDasharray="5 5" />
+
+                {/* Instant Checkmark */}
+                <motion.path
+                  d="M 390 490 L 420 520 L 480 460"
+                  strokeWidth="4"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                />
+
+                {/* Stopwatch dial in background */}
+                <circle cx="750" cy="300" r="70" strokeDasharray="6 6" />
+                <line x1="750" y1="300" x2="750" y2="250" strokeWidth="3" />
+                <line x1="750" y1="300" x2="780" y2="320" strokeWidth="3" />
+              </g>
+            )}
+
+            {/* ────── SLIDE 3: Hardware-Native Android Architecture ────── */}
+            {currentSlide === 3 && (
+              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
+                {/* Android Phone outline sketch */}
+                <rect x="180" y="160" width="280" height="480" rx="36" strokeWidth="3.5" />
+                <line x1="280" y1="190" x2="360" y2="190" strokeWidth="3" />
+
+                {/* Internal SQLite Cylinder Database blueprint */}
+                <g opacity="0.9">
+                  <ellipse cx="680" cy="240" rx="100" ry="30" strokeWidth="3" />
+                  <line x1="580" y1="240" x2="580" y2="440" strokeWidth="3" />
+                  <line x1="780" y1="240" x2="780" y2="440" strokeWidth="3" />
+                  <ellipse cx="680" cy="340" rx="100" ry="30" strokeDasharray="6 6" />
+                  <ellipse cx="680" cy="440" rx="100" ry="30" strokeWidth="3" />
+                </g>
+
+                {/* Inter-connecting WorkManager gear lines */}
+                <path d="M 460 300 C 520 300, 520 280, 580 280" strokeWidth="2.5" strokeDasharray="6 6" />
+                <path d="M 460 440 C 520 440, 520 400, 580 400" strokeWidth="2.5" strokeDasharray="6 6" />
+
+                {/* Rotating gear wheel */}
+                <motion.g
+                  animate={{ rotate: 360 }}
+                  style={{ transformOrigin: "520px 370px" }}
+                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                >
+                  <circle cx="520" cy="370" r="30" strokeDasharray="4 4" strokeWidth="2.5" />
+                  <circle cx="520" cy="370" r="10" />
+                </motion.g>
+              </g>
+            )}
+
+            {/* ────── SLIDE 4: Data Sovereignty & 100% Local Privacy ────── */}
+            {currentSlide === 4 && (
+              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round">
+                {/* Hand-drawn Privacy Shield Vault */}
+                <path
+                  d="M 500 160 C 650 160, 750 200, 750 350 C 750 520, 580 620, 500 660 C 420 620, 250 520, 250 350 C 250 200, 350 160, 500 160 Z"
+                  strokeWidth="4"
+                  fill="none"
+                />
+
+                {/* Inner Lock Mechanism Sketch */}
+                <rect x="440" y="380" width="120" height="100" rx="16" strokeWidth="3.5" />
+                <path d="M 465 380 V 330 C 465 305, 535 305, 535 330 V 380" strokeWidth="3.5" fill="none" />
+                <circle cx="500" cy="425" r="10" />
+                <line x1="500" y1="435" x2="500" y2="455" strokeWidth="3" />
+
+                {/* Encrypted data particles orbiting within vault */}
+                <motion.circle
+                  cx="500" cy="400" r="160"
+                  strokeDasharray="8 8"
+                  animate={{ rotate: -360 }}
+                  style={{ transformOrigin: "500px 400px" }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                />
+              </g>
+            )}
+
+            {/* ────── SLIDE 5: Chapter 01 Transition Bridge ────── */}
+            {currentSlide === 5 && (
+              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round">
+                {/* Forward flowing trajectory path */}
+                <motion.path
+                  d="M 200 400 C 400 250, 600 550, 800 400"
+                  strokeWidth="3"
+                  strokeDasharray="8 8"
+                  initial={{ pathOffset: 0 }}
+                  animate={{ pathOffset: [0, 1] }}
+                  transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* Chapter Doorway portal frame */}
+                <rect x="720" y="260" width="160" height="280" rx="20" strokeWidth="3.5" />
+                <circle cx="750" cy="400" r="6" strokeWidth="3" />
+
+                {/* Sparkle constellation icons leading into doorway */}
+                <path d="M 300 350 L 310 370 L 330 380 L 310 390 L 300 410 L 290 390 L 270 380 L 290 370 Z" strokeWidth="2" />
+                <path d="M 500 420 L 507 435 L 522 442 L 507 449 L 500 464 L 493 449 L 478 442 L 493 435 Z" strokeWidth="2" />
+              </g>
+            )}
+          </svg>
         </motion.div>
       </AnimatePresence>
     </div>

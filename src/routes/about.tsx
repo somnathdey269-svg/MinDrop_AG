@@ -25,7 +25,7 @@ export const Route = createFileRoute("/about")({
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="w-full h-full bg-[#F0F9FF] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#F0F9FF]/80 backdrop-blur-[2px] flex flex-col items-center justify-center text-center px-5 relative z-20">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-8 sm:mb-12 shadow-sm">
@@ -57,7 +57,7 @@ function SlideOpening() {
 /* Slide 2: Mental Overload (Dark Theme) */
 function SlideProblem() {
   return (
-    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#0C4A6E]/85 backdrop-blur-[2px] flex items-center justify-center px-6 relative z-20">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#38BDF8] mb-4">
@@ -84,7 +84,7 @@ function SlideProblem() {
 /* Slide 3: Speed & Frictionless Capture */
 function SlideCapture() {
   return (
-    <div className="w-full h-full bg-[#F0F9FF] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F0F9FF]/80 backdrop-blur-[2px] flex items-center justify-center px-6 relative z-20">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
@@ -119,7 +119,7 @@ function SlideCapture() {
 /* Slide 4: Native Android Power */
 function SlideArchitecture() {
   return (
-    <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#E0F2FE]/80 backdrop-blur-[2px] flex items-center justify-center px-6 relative z-20">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
@@ -150,7 +150,7 @@ function SlideArchitecture() {
 /* Slide 5: Data Sovereignty */
 function SlideSovereignty() {
   return (
-    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#0C4A6E]/85 backdrop-blur-[2px] flex items-center justify-center px-6 text-center relative z-20">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#38BDF8]">
           <AnimatedIcon animation="pulse">
@@ -171,7 +171,7 @@ function SlideSovereignty() {
 /* Slide 6: Motivated Transition Bridge to Chapter 01 (Smart Notification) */
 function SlideNextBridge() {
   return (
-    <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#E0F2FE]/80 backdrop-blur-[2px] flex items-center justify-center px-6 text-center relative z-20">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#0284C7] shadow-sm">
           <AnimatedIcon animation="pulse">
