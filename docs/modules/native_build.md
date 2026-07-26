@@ -65,3 +65,5 @@ Coordinates platform compiles, package manifests, podfiles, and build automation
   * **Change**: Executed requirements: 'Refactor all 8 marketing route files (about.tsx, notify-feature.tsx, places-feature.tsx, later-feature.tsx, future-feature.tsx, privacy-feature.tsx, vision.tsx, pricing.tsx) to use Native CSS Scroll Snap (scroll-snap-type: y mandatory, scroll-snap-align: start) instead of custom JS wheel/touch event listeners. Hides scrollbars with CSS and relies on browser-native smooth snap navigation.'
 - **2026-07-26 16:36:11** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Refactor terms.tsx (Terms), privacy.tsx (Privacy Policy), and download.tsx (Get App / Download) to Native CSS Scroll Snap (scroll-snap-type: y mandatory, scroll-snap-align: start) to match all other marketing pages.'
+- **2026-07-26 16:39:48** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix runtime error 'Something went wrong!' in Chapter 1 (notify-feature.tsx) and Chapter 3 (later-feature.tsx) while strictly keeping the Native CSS Scroll Snap approach.'

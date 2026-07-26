@@ -3,7 +3,7 @@ import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
-  Bell, ShieldAlert, Sparkles, Filter, ChevronLeft, ChevronRight, Check, X, SlidersHorizontal, ChevronDown, ChevronUp
+  Bell, ShieldAlert, Sparkles, Filter, ChevronLeft, ChevronRight, Check, X, SlidersHorizontal, ChevronDown, ChevronUp, ArrowRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";

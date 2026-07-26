@@ -3,7 +3,7 @@ import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
-  AlarmClock, ShieldAlert, Sparkles, Volume2, ChevronLeft, ChevronRight, X, ArrowRight, Pill, MessageSquare, Utensils, ChevronDown, ChevronUp
+  AlarmClock, ShieldAlert, Sparkles, Volume2, ChevronLeft, ChevronRight, X, ArrowRight, Pill, MessageSquare, Utensils, ChevronDown, ChevronUp, Phone, Flame
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
