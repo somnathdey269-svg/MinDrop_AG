@@ -62,7 +62,15 @@ export interface NotifyRule {
   lastFiredAt?: number;
 }
 
+export type MatchMode = "all" | "any" | "sender" | "topic";
+export type PresetId = string;
+export type RemindMode = "relative" | "timeWindow" | "immediate" | "off" | "after";
+export type FrequencyMode = "once" | "daily" | "always";
+export type RuleDelivery = "alarm" | "persistent" | "badge" | "silent" | "notification";
+export type RuleStatus = "active" | "snoozed" | "dismissed" | "expired" | "archived" | "erased";
+
 export interface KnownApp {
   pkg: string;
   appName: string;
+  category?: "chat" | "finance" | "social" | "system" | "other";
 }

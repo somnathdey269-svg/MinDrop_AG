@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/packs/custom/$customId")({
 });
 
 function CustomPackDetail() {
-  const { customId } = useParams({ from: "/packs/custom/$customId" });
+  const { customId } = useParams({ from: "/_authenticated/packs/custom/$customId" });
   const { start } = Route.useSearch();
   const navigate = useNavigate();
   const { list, addSection, updateSection } = useCustomPacks();

@@ -41,7 +41,7 @@ function Quiz() {
  const { config, hydrated } = useQuizConfig();
  const { config: pConfig } = usePersonalityConfig();
  const { markTaken } = useRechallenge();
- const { short } = useSearch({ from: "/quiz" });
+ const { short } = Route.useSearch();
  const isRetake = !!state.personality;
  const showWhy = !isRetake && !short;
  const [whyDismissed, setWhyDismissed] = useState(false);

@@ -146,7 +146,7 @@ function NotifyPage() {
    setPrefill(pf);
    setEditorOpen(true);
    // Clear the query so refresh doesn't re-open.
-   void navigate({ to: "/notify", search: { tab: "rules" as const }, replace: true });
+   void navigate({ to: "/notify", search: { tab: "rules", open: undefined, title: undefined, note: undefined }, replace: true });
  }
  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [search.open, search.tab, search.title, search.note]);

@@ -123,7 +123,7 @@ function buildMemoryFromRule(rule: NotifyRule, n: CapturedNotification, dueAt: D
     date: dateStr,
     text: `${n.appName} · ${n.title}: ${n.text}`.slice(0, 240),
     tags: ["Actionable"],
-    notify: rule.delivery ?? "notification",
+    notify: rule.delivery === "alarm" ? "alarm" : "notification",
     dueAt: dueAt.toISOString(),
     source: { kind: "capture" },
   };

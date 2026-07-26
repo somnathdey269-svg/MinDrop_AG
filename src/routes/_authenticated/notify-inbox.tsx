@@ -113,7 +113,7 @@ function NotifyInbox() {
                 <p className="t-meta text-ink/40 mt-1">Matched {e.matchedRuleIds.length} rule{e.matchedRuleIds.length > 1 ? "s" : ""}</p>
               )}
               <div className="mt-2">
-                <Link to="/notify" className="t-eyebrow text-ink/60 underline">
+                <Link to="/notify" search={{ tab: "rules", open: undefined, title: undefined, note: undefined }} className="t-eyebrow text-ink/60 underline">
                   Create rule from this
                 </Link>
               </div>

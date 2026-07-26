@@ -200,40 +200,6 @@ function SlideDownloadAction() {
   );
 }
 
-/* Slide 5: Transition / Return to Story Book */
-function SlideReturnBridge() {
-  return (
-    <div className="w-full h-full bg-[#EFF6FF] flex items-center justify-center px-6 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
-        <span className="inline-flex items-center gap-2 rounded-full border border-[#2563EB]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#2563EB] shadow-sm">
-          <AnimatedIcon animation="pulse">
-            <Brain className="size-4 text-[#2563EB]" />
-          </AnimatedIcon> THE MINSTORY BOOK
-        </span>
-
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-ink leading-tight tracking-tight max-w-3xl">
-          Want to experience the story from Chapter 01?
-        </h2>
-
-        <p className="text-base sm:text-xl font-semibold text-ink/80 leading-relaxed max-w-2xl">
-          Explore how MinDrop turns daily mental clutter into calm, actionable drops.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link
-            to="/"
-            resetScroll={true}
-            viewTransition
-            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#2563EB] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#1D4ED8] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap"
-          >
-            Start Chapter 01: The Overwhelm <ArrowRight className="size-5" />
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function DownloadStoryView() {
   const { from } = Route.useSearch();
   const backHash = from === "grid" ? "grid" : undefined;
@@ -266,7 +232,6 @@ function DownloadStoryView() {
     <SlideHardwarePower key="2" />,
     <SlidePrivacySovereignty key="3" />,
     <SlideDownloadAction key="4" />,
-    <SlideReturnBridge key="5" />,
   ];
   const TOTAL = slides.length;
   const isDark = current === 1;

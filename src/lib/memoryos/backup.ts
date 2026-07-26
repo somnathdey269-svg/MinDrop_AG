@@ -273,11 +273,9 @@ export async function scheduleDailyBackupNotification() {
       id: 9999,
       title: "Backup Reminder",
       body: "Export your MinDrop data to keep it safe.",
-      schedule: { at: new Date(Date.now() + 1000 * 60 * 5) }, // first in 5 min, then repeat daily via repeat
-      sound: null,
+      schedule: { at: new Date(Date.now() + 1000 * 60 * 5), every: "day" },
+      sound: undefined,
       actionTypeId: "backup_reminder",
-      // repeat daily
-      every: "day",
     }]
   });
 }

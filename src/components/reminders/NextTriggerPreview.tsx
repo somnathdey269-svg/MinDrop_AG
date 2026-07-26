@@ -3,8 +3,8 @@ import { Bell, BellRing, Sparkles } from "lucide-react";
 interface Props {
   /** Short line describing when/why it will fire next. */
   trigger: string;
-  /** "alarm" = loud full-screen ring; "notification" = silent heads-up. */
-  delivery: "alarm" | "notification";
+  /** Delivery mode string (e.g. alarm, notification, silent, badge, etc). */
+  delivery: string;
   /** Optional secondary detail (e.g. frequency). */
   detail?: string;
   className?: string;

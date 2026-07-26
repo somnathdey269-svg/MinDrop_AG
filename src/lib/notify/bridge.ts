@@ -22,14 +22,14 @@ export interface NativeRuleSnapshot {
   priorityOnly?: boolean;
   title?: string;           // shown in the native alarm
   body?: string;            // ditto
-  delivery?: "alarm" | "notification"; // native listener uses this to pick loud vs silent
+  delivery?: "alarm" | "notification" | "persistent" | "badge" | "silent"; // native listener uses this to pick loud vs silent
   toneId?: string;          // when delivery = "alarm"
   /** "once" → archive rule after first fire and never trigger again.
    *  "always" → keep rule active; each new matching message fires the alarm. */
   frequency?: "once" | "always";
   conditions?: RuleCondition[];
   logicalOperator?: "AND" | "OR";
-  remindMode?: "immediate" | "after";
+  remindMode?: "immediate" | "after" | "relative" | "timeWindow" | "off";
   afterHours?: number;
   afterMinutes?: number;
   remindNote?: string;

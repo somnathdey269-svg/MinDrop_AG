@@ -86,7 +86,7 @@ export const AnimatedIcon: React.FC<AnimatedIconProps> = ({
   return (
     <motion.div
       animate={anim.animate}
-      transition={anim.transition}
+      transition={anim.transition as any}
       whileHover={{ scale: 1.12, rotate: 3, transition: { duration: 0.2 } }}
       className={`inline-flex items-center justify-center shrink-0 ${className}`}
       {...props}
