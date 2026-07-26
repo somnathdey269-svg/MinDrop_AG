@@ -31,3 +31,5 @@ Manages pricing structures, active user limits, stripe/payment gateways, and lim
   * **Change**: Executed requirements: 'Fix 404 card navigation error by updating ShowcaseCardData.tsx target routes to /later-feature, /notify-feature, and /places-feature, and creating route aliases in src/routes'
 - **2026-07-26 23:06:35** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Implement complete dynamic CMS system: Supabase SQL migration for marketing_pages, CMS types and server functions, dynamic frontend renderers with dynamic typography (H1-H5, font size, color, bold, italic) and adaptive box/grid layouts, Super Admin CMS portal UI under ctrl-vx9k2m7fq3z.cms, and wire all marketing routes with zero-downtime static fallbacks.'
+- **2026-07-26 23:24:32** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Fix TanStack Start server function error response format in adminAuth.functions.ts and ctrl-vx9k2m7fq3z.signin.tsx so error messages render as readable strings instead of {}.'
