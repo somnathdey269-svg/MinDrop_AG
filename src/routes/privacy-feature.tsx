@@ -142,21 +142,23 @@ function SlideCompliance() {
   );
 }
 
-/* Slide 5: Motivated Transition Bridge to The Closure */
+/* Slide 5: Motivated Transition Bridge to Vision */
 function SlideNextBridge() {
   return (
-    <div className="w-full h-full bg-[#FFFBEB] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#F0FDF4] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
-        <span className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/30 bg-[#FEF3C7] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#D97706] shadow-sm">
-          <Sparkles className="size-4" /> UP NEXT · THE CLOSURE
+        <span className="inline-flex items-center gap-2 rounded-full border border-[#059669]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#059669] shadow-sm">
+          <AnimatedIcon animation="pulse">
+            <Sparkles className="size-4 text-[#059669]" />
+          </AnimatedIcon> UP NEXT · THE VISION
         </span>
 
-        <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#78350F] leading-none tracking-tighter max-w-3xl">
-          Complete privacy secured. Step into the vision.
+        <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tighter max-w-3xl">
+          Ready for a quiet, clutter-free mind?
         </h2>
 
-        <p className="text-base sm:text-xl md:text-2xl font-semibold text-[#78350F]/75 leading-relaxed max-w-2xl">
-          Now that you know your data is 100% private, enter the final chapter: how MinDrop revolutionizes task management for crowded minds.
+        <p className="text-base sm:text-xl md:text-2xl font-semibold text-ink/80 leading-relaxed max-w-2xl">
+          Now that you know your data is 100% private, step into the final chapter to discover MinDrop's overarching philosophy.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
@@ -164,9 +166,9 @@ function SlideNextBridge() {
             to="/vision"
             viewTransition
             style={{ viewTransitionName: 'card-vision' } as React.CSSProperties}
-            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-ink text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center"
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#059669] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#047857] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center"
           >
-            Continue to The Closure <ArrowRight className="size-5" />
+            Explore The Vision <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>

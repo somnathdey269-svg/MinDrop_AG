@@ -304,9 +304,6 @@ function SlideRuleTypes() {
   );
 }
 
-/* Slide 7: Closing Statement & Action */
-function SlideClosing() {
-  return (
 /* Slide 7: Motivated Transition Bridge to Chapter 02 (Location Reminder) */
 function SlideClosing() {
   return (
