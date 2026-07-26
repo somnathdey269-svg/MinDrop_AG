@@ -342,7 +342,8 @@ export function NotifyFeatureDetailView() {
   const [current, setCurrent] = useState(0);
   const search = Route.useSearch();
   const backHash = search.from === "grid" ? "grid" : "";
-  const touchStartY = useRef<number>(0);
+  const touchStartY = useRef<number | null>(null);
+  const isWheelActive = useRef(false);
   const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const slides = [
@@ -370,27 +371,35 @@ export function NotifyFeatureDetailView() {
   };
 
   useEffect(() => {
-    const keyHandler = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
-        e.preventDefault();
-        goTo(currentRef.current + 1);
-      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-        e.preventDefault();
-        goTo(currentRef.current - 1);
-      }
-    };
-
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (wheelDebounceTimer.current) return;
+      const deltaY = e.deltaY;
+      const deltaX = e.deltaX;
+      if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
 
-      if (Math.abs(e.deltaY) > 25) {
-        if (e.deltaY > 0) goTo(currentRef.current + 1);
-        else goTo(currentRef.current - 1);
+      if (!isWheelActive.current) {
+        isWheelActive.current = true;
+        const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+        if (mainDelta > 0) {
+          goTo(currentRef.current + 1);
+        } else if (mainDelta < 0) {
+          goTo(currentRef.current - 1);
+        }
+      }
 
-        wheelDebounceTimer.current = setTimeout(() => {
-          wheelDebounceTimer.current = null;
-        }, 500);
+      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
+      wheelDebounceTimer.current = setTimeout(() => {
+        isWheelActive.current = false;
+      }, 300);
+    };
+
+    const keyHandler = (e: KeyboardEvent) => {
+      if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
+        e.preventDefault();
+        goTo(currentRef.current + 1);
+      } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
+        e.preventDefault();
+        goTo(currentRef.current - 1);
       }
     };
 
@@ -443,8 +452,10 @@ export function NotifyFeatureDetailView() {
         className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
+          if (touchStartY.current === null) return;
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 30) {
+          touchStartY.current = null;
+          if (Math.abs(delta) > 40) {
             if (delta > 0) goTo(currentRef.current + 1);
             else if (delta < 0) goTo(currentRef.current - 1);
           }

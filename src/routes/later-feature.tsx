@@ -211,7 +211,7 @@ function LaterFeatureDetailView() {
   const currentRef = useRef(0);
   currentRef.current = current;
 
-  const touchStartY = useRef(0);
+  const touchStartY = useRef<number | null>(null);
   const isWheelActive = useRef(false);
   const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -309,8 +309,10 @@ function LaterFeatureDetailView() {
         className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
+          if (touchStartY.current === null) return;
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 30) {
+          touchStartY.current = null;
+          if (Math.abs(delta) > 40) {
             if (delta > 0) goTo(currentRef.current + 1);
             else if (delta < 0) goTo(currentRef.current - 1);
           }
