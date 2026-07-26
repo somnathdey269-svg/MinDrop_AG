@@ -7,225 +7,223 @@ interface AboutSketchBackgroundProps {
 }
 
 export function AboutMascotBackground({ currentSlide, isDark }: AboutSketchBackgroundProps) {
-  // Stroke colors based on light vs dark slide background
-  const strokeColor = isDark ? "#FFFFFF" : "#000000";
-  const accentStroke = isDark ? "#7DD3FC" : "#0284C7";
+  // Stroke colors based on light vs dark slide background with crisp contrast
+  const strokeColor = isDark ? "#FFFFFF" : "#0284C7";
+  const dimStroke = isDark ? "#38BDF8" : "#0369A1";
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
-      {/* Subtle Black & White Architectural Blueprint Grid Pattern */}
-      <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 select-none w-full h-full">
+      {/* 1. Full-Screen Architectural Grid Pattern */}
+      <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <pattern id="bw-dot-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="1.2" fill={strokeColor} opacity="0.6" />
+          <pattern id="full-sketch-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <circle cx="30" cy="30" r="1.8" fill={strokeColor} />
+            <line x1="0" y1="30" x2="60" y2="30" stroke={strokeColor} strokeWidth="0.5" opacity="0.3" strokeDasharray="4 4" />
+            <line x1="30" y1="0" x2="30" y2="60" stroke={strokeColor} strokeWidth="0.5" opacity="0.3" strokeDasharray="4 4" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#bw-dot-grid)" />
+        <rect width="100%" height="100%" fill="url(#full-sketch-grid)" />
       </svg>
 
-      {/* Main Meaningful SVG Vector Sketch (Responsive for all screen sizes) */}
+      {/* 2. Full-Screen Full-Bleed Edge-to-Edge Animated Vector Schematics */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={`sketch-slide-${currentSlide}`}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: isDark ? 0.22 : 0.16, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute inset-0 flex items-center justify-center p-4 sm:p-8"
+          key={`full-sketch-slide-${currentSlide}`}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: isDark ? 0.45 : 0.38, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute inset-0 w-full h-full"
         >
           <svg
-            viewBox="0 0 1000 800"
-            preserveAspectRatio="xMidYMid meet"
-            className="w-full h-full max-w-5xl max-h-[85vh] transition-all duration-500"
+            viewBox="0 0 1400 900"
+            preserveAspectRatio="none"
+            className="w-full h-full absolute inset-0 transition-all duration-500"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* ────── SLIDE 0: Tangled Mind -> Organized Second Brain ────── */}
+            {/* ────── SLIDE 0: Full-Screen Neural Thought Web -> Second Brain ────── */}
             {currentSlide === 0 && (
-              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                {/* Tangled chaotic thoughts on left */}
+              <g stroke={strokeColor} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                {/* Full-width chaotic squiggles starting from top-left */}
                 <motion.path
-                  d="M 120 400 Q 180 320 220 440 T 280 340 T 320 460 T 380 380"
-                  strokeDasharray="6 6"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 2.5, repeat: Infinity, repeatType: "reverse" }}
-                />
-                {/* Connecting arrow/funnel */}
-                <motion.path
-                  d="M 380 400 C 450 400, 480 300, 550 300 M 380 400 C 450 400, 480 500, 550 500"
-                  strokeDasharray="4 4"
-                />
-                {/* Harmonious organized Second Brain node matrix on right */}
-                <circle cx="700" cy="300" r="35" strokeWidth="2.5" />
-                <circle cx="700" cy="500" r="35" strokeWidth="2.5" />
-                <circle cx="850" cy="400" r="45" strokeWidth="3" />
-
-                {/* Connecting node lines */}
-                <line x1="735" y1="300" x2="805" y2="400" strokeDasharray="5 5" />
-                <line x1="735" y1="500" x2="805" y2="400" strokeDasharray="5 5" />
-                <line x1="700" y1="335" x2="700" y2="465" />
-
-                {/* Lightbulb sketch inside central node */}
-                <path d="M 850 380 C 840 380, 835 390, 840 400 C 845 408, 848 412, 848 418 L 852 418 C 852 412, 855 408, 860 400 C 865 390, 860 380, 850 380 Z" strokeWidth="2" />
-
-                {/* Orbiting idea rings */}
-                <motion.ellipse
-                  cx="850" cy="400" rx="90" ry="40"
-                  strokeDasharray="8 8"
-                  animate={{ rotate: 360 }}
-                  style={{ transformOrigin: "850px 400px" }}
-                  transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-                />
-              </g>
-            )}
-
-            {/* ────── SLIDE 1: Unburdening Mental Fatigue ────── */}
-            {currentSlide === 1 && (
-              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-                {/* Heavy mental weight balance scale */}
-                <line x1="200" y1="400" x2="800" y2="400" strokeWidth="3" />
-                <line x1="500" y1="400" x2="500" y2="600" strokeWidth="4" />
-                <path d="M 440 600 L 560 600" strokeWidth="4" />
-
-                {/* Left side: Heavy stack of mental tasks */}
-                <g opacity="0.8">
-                  <rect x="220" y="320" width="120" height="70" rx="8" strokeDasharray="4 4" />
-                  <rect x="235" y="240" width="90" height="70" rx="8" />
-                  <rect x="250" y="170" width="60" height="60" rx="8" />
-                </g>
-
-                {/* Right side: MinDrop feather-light floating notes unburdening */}
-                <motion.g
-                  animate={{ y: [-10, 10, -10] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <rect x="660" y="260" width="110" height="80" rx="16" strokeWidth="3" />
-                  <path d="M 690 290 L 740 290 M 690 310 L 720 310" strokeWidth="2.5" />
-                  {/* Floating upward arrow */}
-                  <path d="M 715 220 L 715 160 M 700 175 L 715 160 L 730 175" strokeWidth="2.5" />
-                </motion.g>
-
-                {/* Gentle ripple waves below */}
-                <path d="M 150 650 Q 500 620 850 650" strokeDasharray="6 6" />
-              </g>
-            )}
-
-            {/* ────── SLIDE 2: Frictionless 2-Second Capture ────── */}
-            {currentSlide === 2 && (
-              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round">
-                {/* Lightning Speed path */}
-                <motion.path
-                  d="M 150 200 L 450 380 L 400 420 L 700 600"
-                  strokeWidth="3"
+                  d="M 50 150 Q 200 40 350 250 T 650 120 T 950 300 T 1350 180"
                   strokeDasharray="10 10"
                   initial={{ pathOffset: 0 }}
                   animate={{ pathOffset: [0, 1] }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 />
 
-                {/* Minimalist Note Pad Sketch */}
-                <rect x="350" y="220" width="300" height="360" rx="24" strokeWidth="3.5" fill="none" />
-                {/* Note lines */}
-                <line x1="400" y1="300" x2="600" y2="300" strokeWidth="3" />
-                <line x1="400" y1="360" x2="560" y2="360" strokeWidth="2.5" strokeDasharray="5 5" />
-                <line x1="400" y1="420" x2="520" y2="420" strokeWidth="2.5" strokeDasharray="5 5" />
+                {/* Sweeping diagonal thought funnel connecting edge to edge */}
+                <path d="M 100 800 C 400 650, 700 750, 1300 450" strokeWidth="4" strokeDasharray="8 8" />
 
-                {/* Instant Checkmark */}
-                <motion.path
-                  d="M 390 490 L 420 520 L 480 460"
-                  strokeWidth="4"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
-                />
+                {/* Massive Second Brain Central & Corner Nodes */}
+                <circle cx="200" cy="450" r="60" strokeWidth="4" />
+                <circle cx="700" cy="450" r="90" strokeWidth="5" />
+                <circle cx="1200" cy="500" r="75" strokeWidth="4" />
 
-                {/* Stopwatch dial in background */}
-                <circle cx="750" cy="300" r="70" strokeDasharray="6 6" />
-                <line x1="750" y1="300" x2="750" y2="250" strokeWidth="3" />
-                <line x1="750" y1="300" x2="780" y2="320" strokeWidth="3" />
+                {/* Edge-to-Edge Connecting Node Cables */}
+                <line x1="260" y1="450" x2="610" y2="450" strokeWidth="4" strokeDasharray="12 12" />
+                <line x1="790" y1="450" x2="1125" y2="500" strokeWidth="4" strokeDasharray="12 12" />
+
+                {/* Central Lightbulb & Synapses */}
+                <path d="M 700 410 C 680 410, 670 430, 680 450 C 690 466, 695 474, 695 486 L 705 486 C 705 474, 710 466, 720 450 C 730 430, 720 410, 700 410 Z" strokeWidth="3.5" />
+                <circle cx="700" cy="450" r="160" strokeDasharray="10 10" strokeWidth="3" opacity="0.7">
+                  <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="25s" repeatCount="indefinite" />
+                </circle>
               </g>
             )}
 
-            {/* ────── SLIDE 3: Hardware-Native Android Architecture ────── */}
-            {currentSlide === 3 && (
-              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-                {/* Android Phone outline sketch */}
-                <rect x="180" y="160" width="280" height="480" rx="36" strokeWidth="3.5" />
-                <line x1="280" y1="190" x2="360" y2="190" strokeWidth="3" />
+            {/* ────── SLIDE 1: Full-Screen Balance Scale & Unburdening Waves ────── */}
+            {currentSlide === 1 && (
+              <g stroke={strokeColor} strokeWidth="3.5" strokeLinecap="round">
+                {/* Full-width baseline scale beam across entire screen */}
+                <line x1="80" y1="480" x2="1320" y2="480" strokeWidth="5" />
+                <line x1="700" y1="480" x2="700" y2="820" strokeWidth="6" />
+                <path d="M 600 820 L 800 820" strokeWidth="6" />
 
-                {/* Internal SQLite Cylinder Database blueprint */}
-                <g opacity="0.9">
-                  <ellipse cx="680" cy="240" rx="100" ry="30" strokeWidth="3" />
-                  <line x1="580" y1="240" x2="580" y2="440" strokeWidth="3" />
-                  <line x1="780" y1="240" x2="780" y2="440" strokeWidth="3" />
-                  <ellipse cx="680" cy="340" rx="100" ry="30" strokeDasharray="6 6" />
-                  <ellipse cx="680" cy="440" rx="100" ry="30" strokeWidth="3" />
+                {/* Heavy mental fatigue boxes on left quadrant */}
+                <g opacity="0.95">
+                  <rect x="150" y="320" width="220" height="150" rx="16" strokeWidth="4" strokeDasharray="6 6" />
+                  <rect x="180" y="190" width="160" height="120" rx="16" strokeWidth="4" />
+                  <rect x="210" y="80" width="100" height="100" rx="16" strokeWidth="4" />
                 </g>
 
-                {/* Inter-connecting WorkManager gear lines */}
-                <path d="M 460 300 C 520 300, 520 280, 580 280" strokeWidth="2.5" strokeDasharray="6 6" />
-                <path d="M 460 440 C 520 440, 520 400, 580 400" strokeWidth="2.5" strokeDasharray="6 6" />
-
-                {/* Rotating gear wheel */}
+                {/* Light floating notes ascending on right quadrant */}
                 <motion.g
-                  animate={{ rotate: 360 }}
-                  style={{ transformOrigin: "520px 370px" }}
-                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                  animate={{ y: [-15, 15, -15] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <circle cx="520" cy="370" r="30" strokeDasharray="4 4" strokeWidth="2.5" />
-                  <circle cx="520" cy="370" r="10" />
+                  <rect x="1000" y="240" width="220" height="160" rx="24" strokeWidth="4.5" />
+                  <line x1="1040" y1="290" x2="1180" y2="290" strokeWidth="4" />
+                  <line x1="1040" y1="340" x2="1140" y2="340" strokeWidth="3.5" strokeDasharray="6 6" />
+                  {/* Upward unburdening arrow spanning to top right */}
+                  <path d="M 1110 200 L 1110 80 M 1080 110 L 1110 80 L 1140 110" strokeWidth="5" />
                 </motion.g>
+
+                {/* Full-width ocean waves across bottom viewport */}
+                <path d="M 0 850 Q 350 780 700 850 T 1400 850" strokeDasharray="12 12" strokeWidth="3.5" />
               </g>
             )}
 
-            {/* ────── SLIDE 4: Data Sovereignty & 100% Local Privacy ────── */}
-            {currentSlide === 4 && (
-              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round">
-                {/* Hand-drawn Privacy Shield Vault */}
-                <path
-                  d="M 500 160 C 650 160, 750 200, 750 350 C 750 520, 580 620, 500 660 C 420 620, 250 520, 250 350 C 250 200, 350 160, 500 160 Z"
-                  strokeWidth="4"
-                  fill="none"
-                />
-
-                {/* Inner Lock Mechanism Sketch */}
-                <rect x="440" y="380" width="120" height="100" rx="16" strokeWidth="3.5" />
-                <path d="M 465 380 V 330 C 465 305, 535 305, 535 330 V 380" strokeWidth="3.5" fill="none" />
-                <circle cx="500" cy="425" r="10" />
-                <line x1="500" y1="435" x2="500" y2="455" strokeWidth="3" />
-
-                {/* Encrypted data particles orbiting within vault */}
-                <motion.circle
-                  cx="500" cy="400" r="160"
-                  strokeDasharray="8 8"
-                  animate={{ rotate: -360 }}
-                  style={{ transformOrigin: "500px 400px" }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                />
-              </g>
-            )}
-
-            {/* ────── SLIDE 5: Chapter 01 Transition Bridge ────── */}
-            {currentSlide === 5 && (
-              <g stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round">
-                {/* Forward flowing trajectory path */}
+            {/* ────── SLIDE 2: Full-Screen Lightning 2-Second Speed Track ────── */}
+            {currentSlide === 2 && (
+              <g stroke={strokeColor} strokeWidth="4" strokeLinecap="round">
+                {/* Z-shaped lightning trajectory spanning all four corners */}
                 <motion.path
-                  d="M 200 400 C 400 250, 600 550, 800 400"
-                  strokeWidth="3"
-                  strokeDasharray="8 8"
+                  d="M 50 100 L 1350 250 L 50 650 L 1350 800"
+                  strokeWidth="6"
+                  strokeDasharray="16 16"
                   initial={{ pathOffset: 0 }}
                   animate={{ pathOffset: [0, 1] }}
                   transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
                 />
 
-                {/* Chapter Doorway portal frame */}
-                <rect x="720" y="260" width="160" height="280" rx="20" strokeWidth="3.5" />
-                <circle cx="750" cy="400" r="6" strokeWidth="3" />
+                {/* Large Note Pad Frame in Center */}
+                <rect x="450" y="200" width="500" height="500" rx="32" strokeWidth="5" fill="none" />
+                <line x1="530" y1="320" x2="870" y2="320" strokeWidth="4" />
+                <line x1="530" y1="400" x2="810" y2="400" strokeWidth="4" strokeDasharray="8 8" />
+                <line x1="530" y1="480" x2="750" y2="480" strokeWidth="4" strokeDasharray="8 8" />
 
-                {/* Sparkle constellation icons leading into doorway */}
-                <path d="M 300 350 L 310 370 L 330 380 L 310 390 L 300 410 L 290 390 L 270 380 L 290 370 Z" strokeWidth="2" />
-                <path d="M 500 420 L 507 435 L 522 442 L 507 449 L 500 464 L 493 449 L 478 442 L 493 435 Z" strokeWidth="2" />
+                {/* Large Checkmark inside Note Frame */}
+                <motion.path
+                  d="M 520 580 L 600 640 L 720 520"
+                  strokeWidth="7"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1.5 }}
+                />
+
+                {/* Large Corner Stopwatch Dials */}
+                <circle cx="200" cy="300" r="110" strokeDasharray="10 10" strokeWidth="4" />
+                <line x1="200" y1="300" x2="200" y2="220" strokeWidth="5" />
+                <line x1="200" y1="300" x2="260" y2="330" strokeWidth="5" />
+
+                <circle cx="1200" cy="650" r="100" strokeDasharray="10 10" strokeWidth="4" />
+              </g>
+            )}
+
+            {/* ────── SLIDE 3: Full-Screen Hardware-Native Blueprint ────── */}
+            {currentSlide === 3 && (
+              <g stroke={strokeColor} strokeWidth="3.5" strokeLinecap="round">
+                {/* Android Phone Device Blueprint Frame on left */}
+                <rect x="80" y="150" width="380" height="650" rx="48" strokeWidth="5" />
+                <line x1="220" y1="200" x2="320" y2="200" strokeWidth="4" />
+                <circle cx="270" cy="740" r="18" strokeWidth="4" />
+
+                {/* Massive SQLite Database Cylinder on right */}
+                <g opacity="0.95">
+                  <ellipse cx="1100" cy="250" rx="180" ry="50" strokeWidth="5" />
+                  <line x1="920" y1="250" x2="920" y2="650" strokeWidth="5" />
+                  <line x1="1280" y1="250" x2="1280" y2="650" strokeWidth="5" />
+                  <ellipse cx="1100" cy="450" rx="180" ry="50" strokeDasharray="10 10" strokeWidth="4" />
+                  <ellipse cx="1100" cy="650" rx="180" ry="50" strokeWidth="5" />
+                </g>
+
+                {/* Connecting WorkManager Circuit Tracks across center */}
+                <path d="M 460 350 C 650 350, 650 300, 920 300" strokeWidth="4" strokeDasharray="10 10" />
+                <path d="M 460 550 C 650 550, 650 500, 920 500" strokeWidth="4" strokeDasharray="10 10" />
+
+                {/* Large Center WorkManager Gear Wheel */}
+                <motion.g
+                  animate={{ rotate: 360 }}
+                  style={{ transformOrigin: "690px 420px" }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                >
+                  <circle cx="690" cy="420" r="80" strokeDasharray="8 8" strokeWidth="4" />
+                  <circle cx="690" cy="420" r="30" strokeWidth="4" />
+                </motion.g>
+              </g>
+            )}
+
+            {/* ────── SLIDE 4: Full-Screen Data Vault Shield ────── */}
+            {currentSlide === 4 && (
+              <g stroke={strokeColor} strokeWidth="4" strokeLinecap="round">
+                {/* Full-width Privacy Shield Frame spanning center */}
+                <path
+                  d="M 700 80 C 1000 80, 1250 160, 1250 420 C 1250 680, 900 820, 700 870 C 500 820, 150 680, 150 420 C 150 160, 400 80, 700 80 Z"
+                  strokeWidth="6"
+                  fill="none"
+                />
+
+                {/* Center Vault Lock Mechanism */}
+                <rect x="580" y="440" width="240" height="200" rx="28" strokeWidth="5" />
+                <path d="M 630 440 V 350 C 630 300, 770 300, 770 350 V 440" strokeWidth="5" fill="none" />
+                <circle cx="700" cy="520" r="20" strokeWidth="4" />
+                <line x1="700" y1="540" x2="700" y2="580" strokeWidth="5" />
+
+                {/* Orbiting Encryption Radar Rings covering all 4 quadrants */}
+                <motion.circle
+                  cx="700" cy="480" r="340"
+                  strokeDasharray="14 14"
+                  strokeWidth="3.5"
+                  animate={{ rotate: -360 }}
+                  style={{ transformOrigin: "700px 480px" }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                />
+              </g>
+            )}
+
+            {/* ────── SLIDE 5: Full-Screen Chapter Portal & Bridge ────── */}
+            {currentSlide === 5 && (
+              <g stroke={strokeColor} strokeWidth="4" strokeLinecap="round">
+                {/* Grand Trajectory Bridge from bottom-left to top-right */}
+                <motion.path
+                  d="M 100 800 C 400 400, 900 700, 1250 350"
+                  strokeWidth="6"
+                  strokeDasharray="14 14"
+                  initial={{ pathOffset: 0 }}
+                  animate={{ pathOffset: [0, 1] }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* Gateway Portal Frame on Right */}
+                <rect x="1050" y="150" width="260" height="480" rx="36" strokeWidth="6" />
+                <circle cx="1100" cy="390" r="12" strokeWidth="4" />
+
+                {/* Constellation Starbursts across left screen */}
+                <path d="M 300 300 L 320 340 L 360 360 L 320 380 L 300 420 L 280 380 L 240 360 L 280 340 Z" strokeWidth="3.5" />
+                <path d="M 650 500 L 665 530 L 695 545 L 665 560 L 650 590 L 635 560 L 605 545 L 635 530 Z" strokeWidth="3.5" />
               </g>
             )}
           </svg>
