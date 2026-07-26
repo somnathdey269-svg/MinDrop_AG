@@ -26,20 +26,55 @@ function AdminSignIn() {
     setBusy(true);
     setErr(null);
     try {
-      // Execute authentication server-side to eliminate client CORS/fetch issues
+      // 1. First attempt server-side sign-in
       const res = await adminSignInFn({ data: { email, password } });
-      if (!res?.session) {
-        throw new Error("Sign in failed: Invalid response");
+
+      if (res && res.success && res.session) {
+        await supabase.auth.setSession({
+          access_token: res.session.access_token,
+          refresh_token: res.session.refresh_token,
+        });
+        navigate({ to: "/ctrl-vx9k2m7fq3z" });
+        return;
       }
-      // Hydrate client Supabase session
-      await supabase.auth.setSession({
-        access_token: res.session.access_token,
-        refresh_token: res.session.refresh_token,
+
+      // If server returned explicit error message
+      if (res && !res.success && res.error) {
+        setErr(res.error);
+        return;
+      }
+
+      // 2. Fallback to client-side direct auth
+      const { data: clientData, error: clientErr } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
+
+      if (clientErr) {
+        setErr(clientErr.message || "Invalid credentials");
+        return;
+      }
+
+      const uid = clientData.user?.id;
+      if (!uid) throw new Error("Sign in failed");
+
+      const { data: roles } = await (supabase as any)
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", uid)
+        .eq("role", "superadmin")
+        .maybeSingle();
+
+      if (!roles) {
+        await supabase.auth.signOut();
+        setErr("Access denied: Superadmin role required");
+        return;
+      }
 
       navigate({ to: "/ctrl-vx9k2m7fq3z" });
     } catch (e: any) {
-      setErr(e?.message || "Sign in failed");
+      const raw = e?.message || e;
+      setErr(typeof raw === "string" ? raw : JSON.stringify(raw));
     } finally {
       setBusy(false);
     }
@@ -77,7 +112,7 @@ function AdminSignIn() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-white/5 border border-white/10 px-4 py-3 rounded-xl text-sm outline-none placeholder:text-canvas/30"
           />
-          {err && <p className="text-xs text-red-400 font-bold">{err}</p>}
+          {err && <p className="text-xs text-red-400 font-bold leading-relaxed">{err}</p>}
           <button
             type="submit"
             disabled={busy}
