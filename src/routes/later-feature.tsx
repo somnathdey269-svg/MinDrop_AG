@@ -57,7 +57,13 @@ function SlideOpening() {
 function SlideConflict() {
   return (
     <div className="w-full h-full bg-[#022C22] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ amount: 0.3 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl"
+      >
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#A7F3D0] mb-4">
             The Notification Graveyard
@@ -70,12 +76,18 @@ function SlideConflict() {
             When a single chime sounds while you are washing dishes, cooking, or driving, it vanishes into a list of 30 unread pings. You tell yourself you'll check it later — but later never happens.
           </p>
         </div>
-        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-[#34D399]/30 bg-white/5 backdrop-blur-md shadow-2xl">
+        <motion.div 
+          initial={{ scale: 0.85, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-[#34D399]/30 bg-white/5 backdrop-blur-md shadow-2xl"
+        >
           <AnimatedIcon animation="pulse">
             <AlarmClock className="size-28 sm:size-36 text-[#34D399]" />
           </AnimatedIcon>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
@@ -85,7 +97,12 @@ function SlideSolution() {
   return (
     <div className="w-full h-full bg-[#E2F5EC] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.3 }}
+          transition={{ duration: 0.4 }}
+        >
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-4">
             How MinDrop Solves This
           </p>
@@ -93,14 +110,21 @@ function SlideSolution() {
             Continuous audio looping.<br className="hidden sm:block"/>
             <span className="text-[#10B981]">Rings like an incoming phone call.</span>
           </h2>
-        </div>
+        </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 w-full">
           {[
             { icon: Volume2, title: "Un-missable Audio", body: "Rings continuously until explicitly dismissed or snoozed — giving critical tasks the urgency of a phone call." },
             { icon: ShieldAlert, title: "Survives App Restarts", body: "Powered by Android Foreground Services so alarms ring even if the app was swiped away or phone restarted." },
             { icon: Sparkles, title: "Smart Snooze Cycles", body: "Snooze for 5, 15, or 30 minutes with a single tap. If you don't act, MinDrop comes back loud and clear." },
-          ].map(({ icon: Icon, title, body }) => (
-            <div key={title} className="bg-white border-3 border-[#10B981] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(16,185,129,0.15)] text-left flex flex-col gap-3">
+          ].map(({ icon: Icon, title, body }, idx) => (
+            <motion.div 
+              key={title} 
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ amount: 0.3 }}
+              transition={{ duration: 0.45, delay: idx * 0.12 }}
+              className="bg-white border-3 border-[#10B981] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(16,185,129,0.15)] text-left flex flex-col gap-3"
+            >
               <div className="size-12 rounded-2xl bg-[#D1FAE5] grid place-items-center text-[#047857]">
                 <AnimatedIcon animation="subtle-bounce">
                   <Icon className="size-6 stroke-[2.5px]" />
@@ -108,7 +132,7 @@ function SlideSolution() {
               </div>
               <h3 className="text-lg sm:text-xl font-black text-[#064E3B]">{title}</h3>
               <p className="text-sm sm:text-base font-semibold text-[#064E3B]/70 leading-relaxed">{body}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -118,8 +142,6 @@ function SlideSolution() {
 
 /* Slide 4: Scenarios Carousel */
 function SlideScenarios() {
-  const [cardIdx, setCardIdx] = useState(0);
-
   const scenarios = [
     {
       icon: Pill,
@@ -141,27 +163,31 @@ function SlideScenarios() {
     },
   ];
 
-  const prev = () => setCardIdx(i => Math.max(0, i - 1));
-  const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
-
-  const touchStartX = useRef<number | null>(null);
-
   return (
     <div className="h-full w-full bg-[#E2F5EC] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.3 }}
+          transition={{ duration: 0.4 }}
+        >
           <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#047857] mb-0.5">
             Critical Use Cases
           </p>
           <h2 className="text-xl sm:text-3xl md:text-5xl font-black text-[#064E3B] leading-tight tracking-tight">
             Tasks that demand 100% completion.
           </h2>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-6 w-full text-left">
-          {scenarios.map(({ title, scene, icon: Icon, color }) => (
-            <div
+          {scenarios.map(({ title, scene, icon: Icon, color }, idx) => (
+            <motion.div
               key={title}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ amount: 0.3 }}
+              transition={{ duration: 0.45, delay: idx * 0.12 }}
               className={`rounded-2xl sm:rounded-[2.5rem] border-2 sm:border-3 border-[#10B981] p-3.5 sm:p-7 shadow-xs sm:shadow-[8px_8px_0px_0px_rgba(16,185,129,0.15)] ${color} flex flex-col gap-2 sm:gap-4`}
             >
               <div className="size-9 sm:size-12 bg-white border-2 border-[#10B981] rounded-xl sm:rounded-2xl grid place-items-center text-[#047857] shrink-0 shadow-xs">
@@ -171,7 +197,7 @@ function SlideScenarios() {
                 <h3 className="text-sm sm:text-xl font-black text-[#064E3B] mb-1">{title}</h3>
                 <p className="text-xs sm:text-base font-semibold text-[#064E3B]/80 leading-relaxed">{scene}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -183,7 +209,13 @@ function SlideScenarios() {
 function SlideCloser() {
   return (
     <div className="w-full h-full bg-[#E2F5EC] flex items-center justify-center px-6 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
+      <motion.div 
+        initial={{ opacity: 0, y: 30, scale: 0.96 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ amount: 0.3 }}
+        transition={{ duration: 0.5 }}
+        className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl"
+      >
         <span className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/30 bg-[#D1FAE5] px-5 py-2 text-xs font-black uppercase tracking-widest text-[#047857] shadow-sm">
           <Sparkles className="size-4" /> UP NEXT · CHAPTER 04
         </span>
@@ -199,7 +231,7 @@ function SlideCloser() {
             Unveil What&apos;s Cooking in R&amp;D <ArrowRight className="size-5" />
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

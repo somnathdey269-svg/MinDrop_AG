@@ -57,7 +57,13 @@ function SlideOpening() {
 function SlideConflict() {
   return (
     <div className="w-full h-full bg-[#451A03] flex items-center justify-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ amount: 0.3 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl"
+      >
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A] mb-4">
             The Problem
@@ -70,20 +76,24 @@ function SlideConflict() {
             A 50% discount offer gets the exact same ping sound as an unauthorized bank debit alert. Your phone cannot distinguish between noise and an emergency — so it treats everything like noise.
           </p>
         </div>
-        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-[#F59E0B]/30 bg-white/5 backdrop-blur-md shadow-2xl">
+        <motion.div 
+          initial={{ scale: 0.85, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-[#F59E0B]/30 bg-white/5 backdrop-blur-md shadow-2xl"
+        >
           <AnimatedIcon animation="pulse">
             <Bell className="size-28 sm:size-36 text-[#F59E0B]" />
           </AnimatedIcon>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
 
 /* Slide 3: The MinDrop Solution */
 function SlideSolution() {
-  const [activeCard, setActiveCard] = useState(0);
-
   const solutionItems = [
     { icon: Filter, title: "You Decide What Matters", body: "Choose which types of messages wake you up. Sales offers stay silent. Your bank alerts ring loudly." },
     { icon: ShieldAlert, title: "Bypasses Silent Mode", body: "When your phone is on silent, important alerts still ring through. Nothing slips past unnoticed." },
@@ -93,7 +103,12 @@ function SlideSolution() {
   return (
     <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-6xl mx-auto flex flex-col items-center text-center gap-4 sm:gap-10">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.3 }}
+          transition={{ duration: 0.4 }}
+        >
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-2">
             How MinDrop Handles This
           </p>
@@ -101,12 +116,19 @@ function SlideSolution() {
             MinDrop watches your alerts.<br className="hidden sm:block"/>
             <span className="text-[#D97706]">The important ones become an alarm.</span>
           </h2>
-        </div>
+        </motion.div>
 
-        {/* All Solution Cards (Single Page View for Mobile & Desktop) */}
+        {/* Staggered Solution Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-8 w-full text-left">
-          {solutionItems.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="bg-white border-2 sm:border-3 border-[#F59E0B] rounded-2xl sm:rounded-[2rem] p-4 sm:p-8 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2 sm:gap-3">
+          {solutionItems.map(({ icon: Icon, title, body }, idx) => (
+            <motion.div 
+              key={title}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ amount: 0.3 }}
+              transition={{ duration: 0.45, delay: idx * 0.12 }}
+              className="bg-white border-2 sm:border-3 border-[#F59E0B] rounded-2xl sm:rounded-[2rem] p-4 sm:p-8 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2 sm:gap-3"
+            >
               <div className="size-9 sm:size-12 rounded-xl sm:rounded-2xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
                 <AnimatedIcon animation="subtle-bounce">
                   <Icon className="size-5 sm:size-6 stroke-[2.5px]" />
@@ -114,7 +136,7 @@ function SlideSolution() {
               </div>
               <h3 className="text-base sm:text-xl font-black text-[#78350F]">{title}</h3>
               <p className="text-xs sm:text-base font-medium text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -137,7 +159,13 @@ function SlideInteractiveBuilder() {
 
   return (
     <div className="h-full w-full bg-[#FEF3C7] flex items-center justify-center px-4 sm:px-6 py-2">
-      <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-4 lg:gap-12">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.97 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ amount: 0.3 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-4 lg:gap-12"
+      >
         <div className="flex-1 text-center lg:text-left">
           <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1 sm:mb-2">
             Interactive Rule Engine
@@ -200,7 +228,7 @@ function SlideInteractiveBuilder() {
             {saved ? <><Check className="size-3.5" /> Rule Saved to Local Device</> : "Test & Save Rule"}
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -237,19 +265,28 @@ function SlideScenarios() {
   return (
     <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.3 }}
+          transition={{ duration: 0.4 }}
+        >
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-1.5">
             Real-World Protection Scenarios
           </p>
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
             How people rely on MinDrop notification rules.
           </h2>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 w-full text-left">
-          {scenarios.map((s) => (
-            <div
+          {scenarios.map((s, idx) => (
+            <motion.div
               key={s.title}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ amount: 0.3 }}
+              transition={{ duration: 0.45, delay: idx * 0.12 }}
               className={`rounded-2xl sm:rounded-[2.2rem] border-2 sm:border-3 ${s.borderColor} p-4 sm:p-7 shadow-xs sm:shadow-md ${s.color} flex flex-col gap-2 sm:gap-4`}
             >
               <div className="flex flex-wrap items-center justify-between gap-1.5">
@@ -264,7 +301,7 @@ function SlideScenarios() {
                 <h3 className="text-base sm:text-xl font-black text-[#78350F] mb-1">{s.title}</h3>
                 <p className="text-xs sm:text-base font-medium text-[#78350F]/85 leading-relaxed">{s.desc}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -284,23 +321,35 @@ function SlideRuleTypes() {
   return (
     <div className="h-full w-full bg-[#FEF3C7] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.3 }}
+          transition={{ duration: 0.4 }}
+        >
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-1.5">
             Engineered For Precision
           </p>
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
             Four powerful matching modes.
           </h2>
-        </div>
+        </motion.div>
 
         {/* Responsive Grid View (Single Page View for Mobile & Desktop) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 w-full text-left">
-          {ruleTypes.map(({ tag, title, body }) => (
-            <div key={title} className="bg-white border-2 sm:border-3 border-[#78350F] rounded-2xl sm:rounded-[2rem] p-4 sm:p-7 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2">
+          {ruleTypes.map(({ tag, title, body }, idx) => (
+            <motion.div 
+              key={title}
+              initial={{ opacity: 0, y: 25, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ amount: 0.3 }}
+              transition={{ duration: 0.45, delay: idx * 0.1 }}
+              className="bg-white border-2 sm:border-3 border-[#78350F] rounded-2xl sm:rounded-[2rem] p-4 sm:p-7 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2"
+            >
               <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full w-fit">{tag}</span>
               <h3 className="text-base sm:text-xl font-black text-[#78350F]">{title}</h3>
               <p className="text-xs sm:text-base font-medium text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -312,7 +361,13 @@ function SlideRuleTypes() {
 function SlideClosing() {
   return (
     <div className="h-full bg-[#FFFBEB] flex flex-col items-center justify-center text-center px-6">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
+      <motion.div 
+        initial={{ opacity: 0, y: 30, scale: 0.96 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ amount: 0.3 }}
+        transition={{ duration: 0.5 }}
+        className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl"
+      >
         <span className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#D97706] shadow-sm">
           <AnimatedIcon animation="pulse">
             <Sparkles className="size-4 text-[#D97706]" />
@@ -337,7 +392,7 @@ function SlideClosing() {
             Trigger Alarms When You Arrive <ArrowRight className="size-5" />
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
