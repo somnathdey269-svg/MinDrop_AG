@@ -48,6 +48,7 @@ const sections: NavSection[] = [
     label: "Content",
     icon: FileText,
     items: [
+      { to: "/ctrl-vx9k2m7fq3z/cms", label: "Page Builder (CMS)", icon: Layout },
       { to: "/ctrl-vx9k2m7fq3z/story", label: "Story CMS", icon: BookOpen },
       { to: "/ctrl-vx9k2m7fq3z/quiz", label: "Onboarding Quiz", icon: HelpCircle },
       { to: "/ctrl-vx9k2m7fq3z/packs", label: "Memory Packs", icon: Package },

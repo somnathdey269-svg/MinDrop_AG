@@ -3,6 +3,8 @@ import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { ShieldCheck, Check, X, ChevronDown, ArrowRight, ShieldAlert, Play, Sparkles, HelpCircle, MapPin, Volume2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCMSPage } from "@/lib/cms/useCMSPage";
+import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
 
 export const Route = createFileRoute("/faq")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -321,11 +323,22 @@ function FaqDetailView() {
   const touchStartY = useRef(0);
   const lastScrollTime = useRef(0);
 
+  const { page, hasBlocks } = useCMSPage("faq");
+
+  const dynamicSlide = hasBlocks && page ? (
+    <div key="cms-dynamic" className="w-full h-full bg-[#E2F5EC] overflow-y-auto p-6 sm:p-12">
+      <div className="max-w-5xl mx-auto py-8">
+        <DynamicBlockRenderer blocks={page.blocks} />
+      </div>
+    </div>
+  ) : null;
+
   const slides = [
-    <SlideOpening />,
-    <SlidePrivacyFAQ />,
-    <SlideBatteryFAQ />,
-    <SlideAlarmsFAQ backHash={backHash} />,
+    <SlideOpening key="1" />,
+    ...(dynamicSlide ? [dynamicSlide] : []),
+    <SlidePrivacyFAQ key="2" />,
+    <SlideBatteryFAQ key="3" />,
+    <SlideAlarmsFAQ key="4" backHash={backHash} />,
   ];
   const TOTAL = slides.length;
 

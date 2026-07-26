@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useCMSPage } from "@/lib/cms/useCMSPage";
+import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
 
 export const Route = createFileRoute("/about")({
   validateSearch: (search: Record<string, unknown>): { from?: string } => {
@@ -228,8 +230,19 @@ function AboutDetailView() {
     };
   }, []);
 
+  const { page, hasBlocks } = useCMSPage("about");
+
+  const dynamicSlide = hasBlocks && page ? (
+    <div key="cms-dynamic" className="w-full h-full bg-[#F0F9FF] overflow-y-auto p-6 sm:p-12">
+      <div className="max-w-5xl mx-auto py-8">
+        <DynamicBlockRenderer blocks={page.blocks} />
+      </div>
+    </div>
+  ) : null;
+
   const slides = [
     <SlideOpening key="1" />,
+    ...(dynamicSlide ? [dynamicSlide] : []),
     <SlideProblem key="2" />,
     <SlideCapture key="3" />,
     <SlideArchitecture key="4" />,

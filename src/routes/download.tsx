@@ -18,6 +18,8 @@ import {
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import { AnimatedIcon } from "@/components/common/AnimatedIcon";
+import { useCMSPage } from "@/lib/cms/useCMSPage";
+import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
 
 export const Route = createFileRoute("/download")({
   validateSearch: (search: Record<string, unknown>): { from?: string } => {
@@ -227,10 +229,21 @@ function DownloadStoryView() {
     };
   }, []);
 
+  const { page, hasBlocks } = useCMSPage("download");
+
+  const dynamicSlide = hasBlocks && page ? (
+    <div key="cms-dynamic" className="w-full h-full bg-[#EFF6FF] overflow-y-auto p-6 sm:p-12">
+      <div className="max-w-5xl mx-auto py-8">
+        <DynamicBlockRenderer blocks={page.blocks} />
+      </div>
+    </div>
+  ) : null;
+
   const slides = [
     <SlideAndroidFirst key="1" />,
     <SlideHardwarePower key="2" />,
     <SlidePrivacySovereignty key="3" />,
+    ...(dynamicSlide ? [dynamicSlide] : []),
     <SlideDownloadAction key="4" />,
   ];
   const TOTAL = slides.length;

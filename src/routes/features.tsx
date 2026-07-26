@@ -3,6 +3,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, BookOpen, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { StoryChrome, BookMenu } from "@/components/marketing/story/StoryChrome";
+import { useCMSPage } from "@/lib/cms/useCMSPage";
+import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
 import drop from "@/assets/marketing/drop.png";
 import shelf from "@/assets/marketing/shelf.png";
 import clockbirds from "@/assets/marketing/clockbirds.png";
@@ -46,6 +48,8 @@ const pillars = [
 function Features() {
   const reduce = useReducedMotion();
   const [book, setBook] = useState(false);
+  const { page, hasBlocks } = useCMSPage("features");
+
   return (
     <div className="min-h-[100dvh] bg-canvas text-ink">
       <StoryChrome onOpenBook={() => setBook(true)} />
@@ -63,6 +67,12 @@ function Features() {
           </Link>
         </div>
       </section>
+
+      {hasBlocks && page && (
+        <section className="mx-auto max-w-6xl px-5 md:px-8 pt-8">
+          <DynamicBlockRenderer blocks={page.blocks} />
+        </section>
+      )}
 
       <section className="mx-auto max-w-6xl px-5 md:px-8 pt-10 md:pt-16 pb-4">
         <p className="t-eyebrow text-brand">Every feature</p>

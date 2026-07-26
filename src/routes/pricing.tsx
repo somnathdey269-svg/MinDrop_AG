@@ -5,6 +5,8 @@ import { Sparkles, Check, X, ArrowRight, ShieldAlert, Play, Layers, ChevronDown 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useLayoutEffect, useRef, useMemo } from "react";
 import { getPublicSettings, type CurrencyPrice } from "@/lib/platformSettings.functions";
+import { useCMSPage } from "@/lib/cms/useCMSPage";
+import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
 
 export const Route = createFileRoute("/pricing")({
   validateSearch: (search: Record<string, unknown>): { from?: string } => {
@@ -343,11 +345,20 @@ function PricingDetailView() {
     return () => { cancelled = true; };
   }, []);
 
-  const availableCurrencies = useMemo(() => Object.keys(prices).sort(), [prices]);
+  const { page, hasBlocks } = useCMSPage("pricing");
+
+  const dynamicSlide = hasBlocks && page ? (
+    <div key="cms-dynamic" className="w-full h-full bg-[#FFF2F7] overflow-y-auto p-6 sm:p-12">
+      <div className="max-w-5xl mx-auto py-8">
+        <DynamicBlockRenderer blocks={page.blocks} />
+      </div>
+    </div>
+  ) : null;
 
   const slides = [
     <SlideOpening key="1" />,
     <SlideTiers key="2" prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} />,
+    ...(dynamicSlide ? [dynamicSlide] : []),
     <SlideFlow key="3" />,
     <SlideCloser key="4" backHash={backHash} />,
   ];
