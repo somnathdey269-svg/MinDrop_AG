@@ -46,3 +46,5 @@ Coordinates platform overview charts, user controls, plan modifications, and dia
   * **Change**: Executed requirements: 'Redesign Super Admin Page Builder UI in ctrl-vx9k2m7fq3z.cms.tsx with sleek modern typography toggles, collapsible block cards, split view, and clean visual aesthetics.'
 - **2026-07-26 23:49:43** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Pre-populate exact authentic page content for all 16 marketing pages in ctrl-vx9k2m7fq3z.cms.tsx so super admin sees exact real content to edit.'
+- **2026-07-27 00:31:51** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Update public route components (pricing.tsx, about.tsx, faq.tsx, download.tsx) so when custom CMS blocks are published (hasBlocks is true), the page renders the published CMS blocks as its primary content view.'

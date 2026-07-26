@@ -94,3 +94,5 @@ Also ensure all my 20 agent should work properly and the MD created for existing
   * **Change**: Executed requirements: 'In pricing last slide, replace the 2 buttons with a single 'About The App' motivated transition button to /about. Sync the pill/eyebrow tag on the first slide of about.tsx to match 'ABOUT THE APP'.'
 - **2026-07-26 23:55:51** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Replace default blocks in ctrl-vx9k2m7fq3z.cms.tsx with 100% exact line-by-line copy from pricing.tsx, about.tsx, faq.tsx, and download.tsx.'
+- **2026-07-27 00:31:51** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Update public route components (pricing.tsx, about.tsx, faq.tsx, download.tsx) so when custom CMS blocks are published (hasBlocks is true), the page renders the published CMS blocks as its primary content view.'
