@@ -151,16 +151,16 @@ function SlideArchitecture() {
 function SlideSovereignty() {
   return (
     <div className="w-full h-full bg-transparent flex items-center justify-center px-6 text-center relative z-20">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#38BDF8]">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl bg-[#0C4A6E]/40 backdrop-blur-xs rounded-[2.5rem] p-8 sm:p-12 border border-white/10 shadow-2xl">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#38BDF8] shadow-sm">
           <AnimatedIcon animation="pulse">
             <Lock className="size-3.5" />
           </AnimatedIcon> 100% LOCAL PRIVACY
         </span>
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight">
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight drop-shadow-md">
           Your thoughts never leave your phone.
         </h2>
-        <p className="text-base sm:text-xl font-semibold text-sky-100 max-w-2xl leading-relaxed">
+        <p className="text-base sm:text-xl font-semibold text-sky-100 max-w-2xl leading-relaxed drop-shadow-sm">
           No ad tracking, no analytics telemetry, no cloud servers. Complete DPDP Act compliance by storing everything strictly on your local SQLite database.
         </p>
       </div>
