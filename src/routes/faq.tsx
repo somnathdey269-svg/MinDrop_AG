@@ -325,17 +325,35 @@ function FaqDetailView() {
 
   const { page, hasBlocks } = useCMSPage("faq");
 
-  const dynamicSlide = hasBlocks && page ? (
-    <div key="cms-dynamic" className="w-full h-full bg-[#E2F5EC] overflow-y-auto p-6 sm:p-12">
-      <div className="max-w-5xl mx-auto py-8">
-        <DynamicBlockRenderer blocks={page.blocks} />
+  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
+    return (
+      <div
+        className="min-h-screen bg-[#E2F5EC] flex flex-col"
+        style={{ viewTransitionName: "card-faq" } as React.CSSProperties}
+      >
+        <header className="shrink-0 border-b-2 border-[#10B981]/10 z-50 bg-[#E2F5EC]/95 backdrop-blur-[12px]">
+          <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
+            <Link to="/" hash={backHash} viewTransition
+              className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#047857]/70 hover:text-[#064E3B]">
+              <X className="size-3.5"/> Close
+            </Link>
+            <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
+            <Link to="/download" viewTransition
+              className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
+              Get App
+            </Link>
+          </div>
+        </header>
+
+        <main className="flex-1 w-full max-w-6xl mx-auto p-6 sm:p-12">
+          <DynamicBlockRenderer blocks={page.blocks} />
+        </main>
       </div>
-    </div>
-  ) : null;
+    );
+  }
 
   const slides = [
     <SlideOpening key="1" />,
-    ...(dynamicSlide ? [dynamicSlide] : []),
     <SlidePrivacyFAQ key="2" />,
     <SlideBatteryFAQ key="3" />,
     <SlideAlarmsFAQ key="4" backHash={backHash} />,

@@ -347,20 +347,43 @@ function PricingDetailView() {
 
   const { page, hasBlocks } = useCMSPage("pricing");
 
-  const dynamicSlide = hasBlocks && page ? (
-    <div key="cms-dynamic" className="w-full h-full bg-[#FFF2F7] overflow-y-auto p-6 sm:p-12">
-      <div className="max-w-5xl mx-auto py-8">
-        <DynamicBlockRenderer blocks={page.blocks} />
-      </div>
-    </div>
-  ) : null;
-
   const availableCurrencies = useMemo(() => Object.keys(prices).sort(), [prices]);
+
+  // When Super Admin publishes custom CMS blocks, render the published CMS blocks as primary content
+  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
+    return (
+      <div
+        className="min-h-screen bg-[#FFF2F7] flex flex-col select-none"
+        style={{ viewTransitionName: "card-pricing" } as React.CSSProperties}
+      >
+        <header className="shrink-0 h-14 border-b-2 border-[#EC4899]/10 z-50 bg-[#FFF2F7]/95 backdrop-blur-md px-4 sm:px-6 flex items-center">
+          <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
+            <Link to="/" hash={backHash} resetScroll={true} viewTransition
+              className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#DB2777]/70 hover:text-[#831843]">
+              <X className="size-3.5"/> Close
+            </Link>
+
+            <Link to="/" hash={backHash} resetScroll={true} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
+              <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
+            </Link>
+
+            <Link to="/download" resetScroll={true} viewTransition
+              className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
+              Get App
+            </Link>
+          </div>
+        </header>
+
+        <main className="flex-1 w-full max-w-6xl mx-auto p-6 sm:p-12">
+          <DynamicBlockRenderer blocks={page.blocks} />
+        </main>
+      </div>
+    );
+  }
 
   const slides = [
     <SlideOpening key="1" />,
     <SlideTiers key="2" prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} />,
-    ...(dynamicSlide ? [dynamicSlide] : []),
     <SlideFlow key="3" />,
     <SlideCloser key="4" backHash={backHash} />,
   ];

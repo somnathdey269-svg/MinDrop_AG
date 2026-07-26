@@ -231,19 +231,41 @@ function DownloadStoryView() {
 
   const { page, hasBlocks } = useCMSPage("download");
 
-  const dynamicSlide = hasBlocks && page ? (
-    <div key="cms-dynamic" className="w-full h-full bg-[#EFF6FF] overflow-y-auto p-6 sm:p-12">
-      <div className="max-w-5xl mx-auto py-8">
-        <DynamicBlockRenderer blocks={page.blocks} />
+  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
+    return (
+      <div
+        className="min-h-screen bg-[#EFF6FF] flex flex-col select-none"
+        style={{ viewTransitionName: "card-download" } as React.CSSProperties}
+      >
+        <header className="shrink-0 h-14 border-b-2 border-[#2563EB]/10 z-50 bg-[#EFF6FF]/96 backdrop-blur-md px-4 sm:px-6 flex items-center">
+          <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
+            <Link to="/" hash={backHash} resetScroll={true} viewTransition
+              className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#2563EB]/70 hover:text-[#1D4ED8]">
+              <X className="size-3.5"/> Close
+            </Link>
+
+            <Link to="/" hash={backHash} resetScroll={true} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
+              <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
+            </Link>
+
+            <Link to="/" resetScroll={true} viewTransition
+              className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-[#2563EB] text-white border-[#2563EB] hover:bg-[#1D4ED8] shadow-md transition-all duration-200 shrink-0 cursor-pointer">
+              Story Book
+            </Link>
+          </div>
+        </header>
+
+        <main className="flex-1 w-full max-w-6xl mx-auto p-6 sm:p-12">
+          <DynamicBlockRenderer blocks={page.blocks} />
+        </main>
       </div>
-    </div>
-  ) : null;
+    );
+  }
 
   const slides = [
     <SlideAndroidFirst key="1" />,
     <SlideHardwarePower key="2" />,
     <SlidePrivacySovereignty key="3" />,
-    ...(dynamicSlide ? [dynamicSlide] : []),
     <SlideDownloadAction key="4" />,
   ];
   const TOTAL = slides.length;
