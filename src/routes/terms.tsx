@@ -266,87 +266,42 @@ function SlideLegalDoc({ company, jur, supportEmail }: SlideLegalDocProps) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   MAIN — Full-Page Fade Scroll Controller
-══════════════════════════════════════════════ */
 function Terms() {
   const { data: s } = useSuspenseQuery(settingsQuery());
   const company = s.companyLegalName || "MinDrop";
   const jur = s.companyJurisdiction || "India";
 
   const [current, setCurrent] = useState(0);
-  const currentRef = useRef(0);
-  currentRef.current = current;
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const touchStartY = useRef(0);
-  const isWheelActive = useRef(false);
-  const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const slides = [
-    <SlideOpening />,
-    <SlideSummary />,
-    <SlideLegalDoc company={company} jur={jur} supportEmail={s.supportEmail} />,
+    <SlideOpening key="1" />,
+    <SlideSummary key="2" />,
+    <SlideLegalDoc key="3" company={company} jur={jur} supportEmail={s.supportEmail} />,
   ];
   const TOTAL = slides.length;
 
-  const goTo = (idx: number) => {
-    if (idx < 0 || idx >= TOTAL) return;
-    setCurrent(idx);
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollTop, clientHeight } = scrollContainerRef.current;
+    if (clientHeight > 0) {
+      const activeIdx = Math.round(scrollTop / clientHeight);
+      if (activeIdx !== current && activeIdx >= 0 && activeIdx < TOTAL) {
+        setCurrent(activeIdx);
+      }
+    }
   };
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const handler = (e: WheelEvent) => {
-      const activeIdx = currentRef.current;
-      if (activeIdx === 2) {
-        const scrollContainer = el.querySelector(".overflow-y-auto");
-        if (scrollContainer) {
-          const scrollTop = scrollContainer.scrollTop;
-          if (e.deltaY < 0 && scrollTop <= 0) {
-            e.preventDefault();
-            goTo(activeIdx - 1);
-          }
-          return;
-        }
-      }
-
-      e.preventDefault();
-      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
-
-      if (!isWheelActive.current) {
-        isWheelActive.current = true;
-        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        if (delta > 0) goTo(activeIdx + 1);
-        else if (delta < 0) goTo(activeIdx - 1);
-      }
-
-      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
-      wheelDebounceTimer.current = setTimeout(() => {
-        isWheelActive.current = false;
-      }, 250);
-    };
-
-    const keyHandler = (e: KeyboardEvent) => {
-      const activeIdx = currentRef.current;
-      if (["ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); goTo(activeIdx + 1); }
-      if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); goTo(activeIdx - 1); }
-    };
-
-    el.addEventListener("wheel", handler, { passive: false });
-    window.addEventListener("keydown", keyHandler);
-    return () => {
-      el.removeEventListener("wheel", handler);
-      window.removeEventListener("keydown", keyHandler);
-      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
-    };
-  }, []);
+  const goTo = (idx: number) => {
+    if (scrollContainerRef.current && idx >= 0 && idx < TOTAL) {
+      const targetY = idx * scrollContainerRef.current.clientHeight;
+      scrollContainerRef.current.scrollTo({ top: targetY, behavior: "smooth" });
+    }
+  };
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-terms" } as React.CSSProperties}
     >
       {/* ── Header ── */}
@@ -364,77 +319,20 @@ function Terms() {
         </div>
       </header>
 
-      {/* ── Slide Stage ── */}
-      <div
-        ref={containerRef}
-        className="flex-1 relative overflow-hidden"
-        onTouchStart={(e) => {
-          if (current === 2) {
-            touchStartY.current = e.touches[0].clientY;
-            return;
-          }
-          touchStartY.current = e.touches[0].clientY;
-        }}
-        onTouchEnd={(e) => {
-          if (current === 2) {
-            const scrollContainer = (e.currentTarget as HTMLElement).querySelector(".overflow-y-auto");
-            if (scrollContainer) {
-              const scrollTop = scrollContainer.scrollTop;
-              const delta = touchStartY.current - e.changedTouches[0].clientY;
-              if (delta < -50 && scrollTop <= 0) {
-                goTo(current - 1);
-              }
-            }
-            return;
-          }
-          const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 50) {
-            if (delta > 0) goTo(current + 1);
-            else goTo(current - 1);
-          }
-        }}
+      {/* ── Main Content Stage with Native CSS Scroll Snap ── */}
+      <main 
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 min-h-0 w-full overflow-y-auto snap-y snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
       >
-        {/* ── Top hint (Scroll Up) ── */}
-        {current > 0 && (
-          <button
-            onClick={() => goTo(current - 1)}
-            className="absolute top-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-slate-400 hover:text-slate-800"
-          >
-            <ChevronDown className="size-3.5 rotate-180 transition group-hover:-translate-y-0.5" />
-            <span className="text-[9px] font-black uppercase tracking-widest">
-              scroll or ↑
-            </span>
-          </button>
-        )}
+        {slides.map((slide, idx) => (
+          <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden">
+            {slide}
+          </section>
+        ))}
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="absolute inset-0"
-          >
-            {slides[current]}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* ── Bottom hint (Scroll Down) ── */}
-        {current < TOTAL - 1 && (
-          <button
-            onClick={() => goTo(current + 1)}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-0.5 z-20 cursor-pointer group text-slate-400 hover:text-slate-800"
-          >
-            <span className="text-[9px] font-black uppercase tracking-widest">
-              scroll or ↓
-            </span>
-            <ChevronDown className="size-3.5 transition group-hover:translate-y-0.5" />
-          </button>
-        )}
-
-        {/* ── Right Dot Navigation ── */}
-        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-30">
+        {/* ── Right Dot Navigation (Desktop) ── */}
+        <div className="fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-40">
           {slides.map((_, i) => (
             <button key={i} onClick={() => goTo(i)}
               className={`rounded-full transition-all duration-300 cursor-pointer ${
@@ -448,7 +346,7 @@ function Terms() {
             {current + 1}/{TOTAL}
           </p>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
