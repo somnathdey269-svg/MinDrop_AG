@@ -210,6 +210,7 @@ function AboutDetailView() {
 
   const touchStartY = useRef<number | null>(null);
   const isAnimating = useRef(false);
+  const lastWheelTime = useRef(0);
 
   const slides = [
     <SlideOpening key="1" />,
@@ -230,13 +231,20 @@ function AboutDetailView() {
 
       setTimeout(() => {
         isAnimating.current = false;
-      }, 600);
+        lastWheelTime.current = 0; // reset so next scroll is always fresh
+      }, 650);
     }
   };
 
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
+
+      // Debounce: ignore rapid-fire events (trackpad inertia)
+      const now = Date.now();
+      if (now - lastWheelTime.current < 80) return;
+      lastWheelTime.current = now;
+
       const deltaY = e.deltaY;
       const deltaX = e.deltaX;
       if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;

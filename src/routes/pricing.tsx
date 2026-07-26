@@ -306,6 +306,7 @@ function PricingDetailView() {
 
   const touchStartY = useRef<number | null>(null);
   const isAnimating = useRef(false);
+  const lastWheelTime = useRef(0);
 
   const [prices, setPrices] = useState<Record<string, CurrencyPrice>>({});
   const [currency, setCurrency] = useState<string>("INR");
@@ -343,13 +344,20 @@ function PricingDetailView() {
 
       setTimeout(() => {
         isAnimating.current = false;
-      }, 600);
+        lastWheelTime.current = 0;
+      }, 650);
     }
   };
 
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
+
+      // Debounce: ignore rapid-fire events (trackpad inertia)
+      const now = Date.now();
+      if (now - lastWheelTime.current < 80) return;
+      lastWheelTime.current = now;
+
       const deltaY = e.deltaY;
       const deltaX = e.deltaX;
       if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
@@ -415,14 +423,15 @@ function PricingDetailView() {
 
       {/* 2. Main Content Stage */}
       <main 
-        ref={containerRef}
-        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0"
+        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
+          if (touchStartY.current === null || isAnimating.current) return;
           const delta = touchStartY.current - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 30) {
-            if (delta > 0) goTo(current + 1);
-            else if (delta < 0) goTo(current - 1);
+          touchStartY.current = null;
+          if (Math.abs(delta) > 40) {
+            if (delta > 0 && currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
+            else if (delta < 0 && currentRef.current > 0) goTo(currentRef.current - 1);
           }
         }}
       >

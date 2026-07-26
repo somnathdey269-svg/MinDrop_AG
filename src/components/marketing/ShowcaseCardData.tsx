@@ -84,16 +84,6 @@ export const DECK_CARDS: DeckCardItem[] = [
     bgClass: "bg-[#FFFBEB]",
     illustrator: HeartHandshake,
   },
-  {
-    id: "pricing",
-    tag: "PRICING",
-    title: "Simple Pricing",
-    description: "Zero subscriptions or hidden tiers. Upgrade to Unlimited Pro for just Rs. 999 / year.",
-    to: "/pricing",
-    bgColor: "#FCE7F3",
-    bgClass: "bg-[#FCE7F3]",
-    illustrator: Sparkles,
-  },
 ];
 
 /**
