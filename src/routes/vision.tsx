@@ -188,52 +188,67 @@ function VisionDetailView() {
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
+      const deltaY = e.deltaY;
+      const deltaX = e.deltaX;
+      if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
+
+      const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+
+      // Strict boundary guards: Prevent wheel lock or rebound jumps when scrolling past ends
+      if (currentRef.current === 0 && mainDelta < 0) return;
+      if (currentRef.current === TOTAL - 1 && mainDelta > 0) return;
 
       if (!isWheelActive.current) {
         isWheelActive.current = true;
-        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        if (delta > 0) goTo(currentRef.current + 1);
-        else if (delta < 0) goTo(currentRef.current - 1);
+        if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
+          goTo(currentRef.current + 1);
+        } else if (mainDelta < 0 && currentRef.current > 0) {
+          goTo(currentRef.current - 1);
+        }
       }
 
       if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
       wheelDebounceTimer.current = setTimeout(() => {
         isWheelActive.current = false;
-      }, 250);
+      }, 350);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
-        goTo(currentRef.current + 1);
-      }
-      if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
+        if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
+      } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
         e.preventDefault();
-        goTo(currentRef.current - 1);
+        if (currentRef.current > 0) goTo(currentRef.current - 1);
       }
     };
 
     window.addEventListener("wheel", wheelHandler, { passive: false });
     window.addEventListener("keydown", keyHandler);
+    const touchMoveHandler = (e: TouchEvent) => {
+      if (e.cancelable) e.preventDefault();
+    };
+    window.addEventListener("touchmove", touchMoveHandler, { passive: false });
+
     return () => {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
+      window.removeEventListener("touchmove", touchMoveHandler);
       if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
-  }, []);
+  }, [TOTAL]);
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden select-none"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none overscroll-none touch-none"
       style={{ viewTransitionName: "card-vision" } as React.CSSProperties}
     >
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
-      <header className="shrink-0 h-12 border-b-2 border-[#D97706]/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
-        style={{ backgroundColor: isDark ? "rgba(69,26,3,0.96)" : "rgba(255,251,235,0.96)", transition: "background-color 0.4s ease" }}>
+      <header className="shrink-0 h-12 border-b-2 border-amber-500/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
+        style={{ backgroundColor: isDark ? "rgba(24,15,6,0.96)" : "rgba(254,243,199,0.96)", transition: "background-color 0.4s ease" }}>
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
+            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-amber-200 hover:text-white" : "text-amber-700/70 hover:text-amber-900"}`}>
             <X className="size-3.5"/> Close
           </Link>
 
@@ -257,8 +272,8 @@ function VisionDetailView() {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           touchStartY.current = null;
           if (Math.abs(delta) > 40) {
-            if (delta > 0) goTo(currentRef.current + 1);
-            else if (delta < 0) goTo(currentRef.current - 1);
+            if (delta > 0 && currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
+            else if (delta < 0 && currentRef.current > 0) goTo(currentRef.current - 1);
           }
         }}
       >
