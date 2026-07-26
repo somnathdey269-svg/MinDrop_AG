@@ -251,6 +251,13 @@ function Privacy() {
   const [current, setCurrent] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+    setCurrent(0);
+  }, []);
+
   const slides = [
     <SlideOpening key="1" />,
     <SlideSummary key="2" />,
@@ -296,15 +303,23 @@ function Privacy() {
         </div>
       </header>
 
-      {/* ── Main Content Stage with Native CSS Scroll Snap ── */}
+      {/* ── Main Content Stage with Native CSS Scroll Snap & 3D Card Stack Overlap ── */}
       <main 
         ref={scrollContainerRef}
         onScroll={handleScroll}
         className="flex-1 min-h-0 w-full overflow-y-auto snap-y snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
       >
         {slides.map((slide, idx) => (
-          <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden">
-            {slide}
+          <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden perspective-[1200px]">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.93, y: 25, rotateX: 5 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+              viewport={{ amount: 0.4 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full h-full flex items-center justify-center"
+            >
+              {slide}
+            </motion.div>
           </section>
         ))}
 
