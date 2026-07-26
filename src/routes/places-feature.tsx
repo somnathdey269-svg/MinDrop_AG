@@ -121,6 +121,8 @@ function SlideRadiusDemo() {
   const [radius, setRadius] = useState(200);
   const [triggerMode, setTriggerMode] = useState<"enter" | "exit">("enter");
 
+  const circleSize = Math.max(60, (radius / 500) * 140);
+
   return (
     <div className="w-full h-full bg-[#EDE9FE] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
@@ -151,7 +153,10 @@ function SlideRadiusDemo() {
           </div>
         </div>
 
-        <div className="w-full lg:w-[440px] bg-white border-3 border-[#4C1D95] rounded-[2.5rem] p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(76,29,149,0.2)] text-left flex flex-col gap-6">
+        <div
+          className="w-full lg:w-[440px] bg-white border-3 border-[#4C1D95] rounded-[2.5rem] p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(76,29,149,0.2)] text-left flex flex-col gap-6"
+          onWheel={(e) => e.stopPropagation()}
+        >
           <div className="flex items-center justify-between border-b-2 border-[#EDE9FE] pb-4">
             <span className="font-black text-sm uppercase tracking-wider text-[#4C1D95]">Geofence Preview</span>
             <span className="text-xs font-black text-[#8B5CF6] bg-[#EDE9FE] px-3 py-1 rounded-full">{radius} METERS</span>
@@ -159,7 +164,7 @@ function SlideRadiusDemo() {
 
           <div className="relative h-44 bg-[#F5F3FF] border-2 border-[#8B5CF6]/30 rounded-2xl flex items-center justify-center overflow-hidden">
             <motion.div
-              animate={{ size: Math.max(60, (radius / 500) * 140) }}
+              animate={{ width: circleSize, height: circleSize }}
               transition={{ type: "spring", stiffness: 150, damping: 20 }}
               className="rounded-full border-2 border-dashed border-[#8B5CF6] bg-[#8B5CF6]/15 flex items-center justify-center"
             >
@@ -175,6 +180,7 @@ function SlideRadiusDemo() {
               <span>500m (Wide Area)</span>
             </div>
             <input type="range" min="100" max="500" step="50" value={radius} onChange={(e) => setRadius(Number(e.target.value))}
+              onWheel={(e) => e.stopPropagation()}
               className="w-full accent-[#8B5CF6] cursor-pointer" />
           </div>
         </div>

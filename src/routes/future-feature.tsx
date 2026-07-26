@@ -3,7 +3,7 @@ import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
-  Compass, PhoneCall, Layers, Mic, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
+  Compass, PhoneCall, Layers, Mic, ArrowRight, X, Sparkles, SlidersHorizontal, ChevronDown, ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
