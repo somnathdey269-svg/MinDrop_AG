@@ -33,3 +33,5 @@ Manages pricing structures, active user limits, stripe/payment gateways, and lim
   * **Change**: Executed requirements: 'Implement complete dynamic CMS system: Supabase SQL migration for marketing_pages, CMS types and server functions, dynamic frontend renderers with dynamic typography (H1-H5, font size, color, bold, italic) and adaptive box/grid layouts, Super Admin CMS portal UI under ctrl-vx9k2m7fq3z.cms, and wire all marketing routes with zero-downtime static fallbacks.'
 - **2026-07-26 23:24:32** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Fix TanStack Start server function error response format in adminAuth.functions.ts and ctrl-vx9k2m7fq3z.signin.tsx so error messages render as readable strings instead of {}.'
+- **2026-07-27 00:29:47** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Remove updated_by property from saveMarketingPageFn payload in cms.functions.ts to match marketing_pages table schema.'
