@@ -167,6 +167,7 @@ function VisionDetailView() {
 
   const touchStartY = useRef<number | null>(null);
   const isAnimating = useRef(false);
+  const cooldownUntil = useRef(0);
   const wheelAccum = useRef(0);
   const wheelResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -181,22 +182,25 @@ function VisionDetailView() {
   const isDark = current === 1 || current === 3;
 
   const goTo = (idx: number) => {
-    if (idx >= 0 && idx < TOTAL && idx !== currentRef.current && !isAnimating.current) {
+    const now = Date.now();
+    if (idx >= 0 && idx < TOTAL && idx !== currentRef.current && !isAnimating.current && now >= cooldownUntil.current) {
       isAnimating.current = true;
+      cooldownUntil.current = now + 850;
       currentRef.current = idx;
       setCurrent(idx);
 
       setTimeout(() => {
         isAnimating.current = false;
         wheelAccum.current = 0;
-      }, 800);
+      }, 750);
     }
   };
 
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (isAnimating.current) {
+      const now = Date.now();
+      if (isAnimating.current || now < cooldownUntil.current) {
         wheelAccum.current = 0;
         return;
       }
@@ -225,7 +229,8 @@ function VisionDetailView() {
     };
 
     const keyHandler = (e: KeyboardEvent) => {
-      if (isAnimating.current) return;
+      const now = Date.now();
+      if (isAnimating.current || now < cooldownUntil.current) return;
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
         if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
@@ -276,12 +281,22 @@ function VisionDetailView() {
 
       {/* 2. Main Content Stage */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0"
-        onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
+        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
+        onTouchStart={(e) => {
+          if (isAnimating.current || Date.now() < cooldownUntil.current) {
+            touchStartY.current = null;
+            return;
+          }
+          touchStartY.current = e.touches[0].clientY;
+        }}
         onTouchEnd={(e) => {
-          if (touchStartY.current === null || isAnimating.current) return;
-          const delta = touchStartY.current - e.changedTouches[0].clientY;
-          touchStartY.current = null;
+          if (touchStartY.current === null) return;
+          const startY = touchStartY.current;
+          touchStartY.current = null; // ALWAYS CLEAR IMMEDIATELY!
+
+          if (isAnimating.current || Date.now() < cooldownUntil.current) return;
+
+          const delta = startY - e.changedTouches[0].clientY;
           if (Math.abs(delta) > 40) {
             if (delta > 0 && currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
             else if (delta < 0 && currentRef.current > 0) goTo(currentRef.current - 1);
