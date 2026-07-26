@@ -87,7 +87,6 @@ export const saveMarketingPageFn = createServerFn({ method: "POST" })
       blocks: data.blocks,
       is_published: data.is_published ?? true,
       updated_at: new Date().toISOString(),
-      updated_by: (context as any).userId,
     };
 
     const { data: upserted, error } = await ((context as any).supabase as any)
