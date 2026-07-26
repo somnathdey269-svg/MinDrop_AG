@@ -355,6 +355,8 @@ function PricingDetailView() {
     </div>
   ) : null;
 
+  const availableCurrencies = useMemo(() => Object.keys(prices).sort(), [prices]);
+
   const slides = [
     <SlideOpening key="1" />,
     <SlideTiers key="2" prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} />,

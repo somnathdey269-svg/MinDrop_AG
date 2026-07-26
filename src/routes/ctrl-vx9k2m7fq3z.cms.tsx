@@ -1,8 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { AdminShell } from "@/components/layout/AdminShell";
 import {
-  listMarketingPagesFn,
   getMarketingPageFn,
   saveMarketingPageFn,
 } from "@/lib/cms/cms.functions";
@@ -14,11 +13,11 @@ import type {
   CtaBandBlock,
   FaqBlock,
   HeadingTag,
+  CardItem,
 } from "@/lib/cms/cms.types";
 import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
 import {
   Save,
-  Plus,
   Trash2,
   MoveUp,
   MoveDown,
@@ -32,7 +31,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-export const Route = createFileRoute("/ctrl-vx9k2m7fq3z/cms" as any)({
+export const Route = createFileRoute("/ctrl-vx9k2m7fq3z/cms")({
   component: SuperAdminCMSView,
 });
 
@@ -351,214 +350,515 @@ function SuperAdminCMSView() {
                 No content blocks on this page yet. Click "Add Block" above to begin.
               </div>
             ) : (
-              blocks.map((block, idx) => (
-                <div
-                  key={block.id}
-                  className="bg-white border-3 border-ink rounded-3xl p-5 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-4 relative"
-                >
-                  <div className="flex items-center justify-between border-b border-ink/10 pb-3">
-                    <span className="text-xs font-black uppercase tracking-widest text-brand inline-flex items-center gap-2">
-                      <span className="size-6 rounded-full bg-brand/10 text-brand grid place-items-center text-xs font-black">
-                        {idx + 1}
-                      </span>
-                      {block.type.toUpperCase().replace("_", " ")} BLOCK
-                    </span>
+              blocks.map((block, idx) => {
+                if (block.type === "heading") {
+                  const hBlock = block as HeadingBlock;
+                  return (
+                    <div
+                      key={hBlock.id}
+                      className="bg-white border-3 border-ink rounded-3xl p-5 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-4 relative"
+                    >
+                      <div className="flex items-center justify-between border-b border-ink/10 pb-3">
+                        <span className="text-xs font-black uppercase tracking-widest text-brand inline-flex items-center gap-2">
+                          <span className="size-6 rounded-full bg-brand/10 text-brand grid place-items-center text-xs font-black">
+                            {idx + 1}
+                          </span>
+                          HEADING BLOCK
+                        </span>
 
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => moveBlock(idx, -1)}
-                        disabled={idx === 0}
-                        className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
-                      >
-                        <MoveUp className="size-3.5" />
-                      </button>
-                      <button
-                        onClick={() => moveBlock(idx, 1)}
-                        disabled={idx === blocks.length - 1}
-                        className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
-                      >
-                        <MoveDown className="size-3.5" />
-                      </button>
-                      <button
-                        onClick={() => deleteBlock(block.id)}
-                        className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer ml-2"
-                      >
-                        <Trash2 className="size-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Heading Block Inspector */}
-                  {block.type === "heading" && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Heading Tag:
-                        </label>
-                        <select
-                          value={block.tag}
-                          onChange={(e) => {
-                            const val = e.target.value as HeadingTag;
-                            setBlocks((prev) =>
-                              prev.map((b) => (b.id === block.id ? { ...b, tag: val } : b))
-                            );
-                          }}
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        >
-                          <option value="h1">H1 (Main Hero Heading)</option>
-                          <option value="h2">H2 (Section Heading)</option>
-                          <option value="h3">H3 (Sub-heading)</option>
-                          <option value="h4">H4</option>
-                          <option value="h5">H5</option>
-                          <option value="p">Paragraph</option>
-                        </select>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => moveBlock(idx, -1)}
+                            disabled={idx === 0}
+                            className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
+                          >
+                            <MoveUp className="size-3.5" />
+                          </button>
+                          <button
+                            onClick={() => moveBlock(idx, 1)}
+                            disabled={idx === blocks.length - 1}
+                            className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
+                          >
+                            <MoveDown className="size-3.5" />
+                          </button>
+                          <button
+                            onClick={() => deleteBlock(hBlock.id)}
+                            className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer ml-2"
+                          >
+                            <Trash2 className="size-3.5" />
+                          </button>
+                        </div>
                       </div>
 
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Eyebrow Tag / Badge:
-                        </label>
-                        <input
-                          type="text"
-                          value={block.eyebrowText || ""}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) => (b.id === block.id ? { ...b, eyebrowText: val } : b))
-                            );
-                          }}
-                          placeholder="e.g. INDEX · ABOUT THE APP"
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Font Size (px):
-                        </label>
-                        <input
-                          type="text"
-                          value={block.style?.fontSize || "36px"}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) =>
-                                b.id === block.id
-                                  ? { ...b, style: { ...b.style, fontSize: val } }
-                                  : b
-                              )
-                            );
-                          }}
-                          placeholder="36px"
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        />
-                      </div>
-
-                      <div className="md:col-span-2 lg:col-span-3">
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Headline Text:
-                        </label>
-                        <textarea
-                          rows={2}
-                          value={block.text}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) => (b.id === block.id ? { ...b, text: val } : b))
-                            );
-                          }}
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-sm"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Font Weight:
-                        </label>
-                        <select
-                          value={block.style?.fontWeight || "bold"}
-                          onChange={(e) => {
-                            const val = e.target.value as any;
-                            setBlocks((prev) =>
-                              prev.map((b) =>
-                                b.id === block.id
-                                  ? { ...b, style: { ...b.style, fontWeight: val } }
-                                  : b
-                              )
-                            );
-                          }}
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        >
-                          <option value="normal">Normal</option>
-                          <option value="medium">Medium</option>
-                          <option value="semibold">Semibold</option>
-                          <option value="bold">Bold</option>
-                          <option value="800">Extra Bold (800)</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Font Style:
-                        </label>
-                        <select
-                          value={block.style?.fontStyle || "normal"}
-                          onChange={(e) => {
-                            const val = e.target.value as any;
-                            setBlocks((prev) =>
-                              prev.map((b) =>
-                                b.id === block.id
-                                  ? { ...b, style: { ...b.style, fontStyle: val } }
-                                  : b
-                              )
-                            );
-                          }}
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        >
-                          <option value="normal">Normal</option>
-                          <option value="italic">Italic</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Text Color:
-                        </label>
-                        <input
-                          type="color"
-                          value={block.style?.color || "#0F172A"}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) =>
-                                b.id === block.id
-                                  ? { ...b, style: { ...b.style, color: val } }
-                                  : b
-                              )
-                            );
-                          }}
-                          className="w-full h-9 rounded-xl border border-ink bg-canvas cursor-pointer"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Card Grid Block Inspector */}
-                  {block.type === "card_grid" && (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div>
                           <label className="text-xs font-bold text-ink/70 block mb-1">
-                            Section Title:
+                            Heading Tag:
+                          </label>
+                          <select
+                            value={hBlock.tag}
+                            onChange={(e) => {
+                              const val = e.target.value as HeadingTag;
+                              setBlocks((prev) =>
+                                prev.map((b) => (b.id === hBlock.id ? { ...b, tag: val } : b))
+                              );
+                            }}
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                          >
+                            <option value="h1">H1 (Main Hero Heading)</option>
+                            <option value="h2">H2 (Section Heading)</option>
+                            <option value="h3">H3 (Sub-heading)</option>
+                            <option value="h4">H4</option>
+                            <option value="h5">H5</option>
+                            <option value="p">Paragraph</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            Eyebrow Tag / Badge:
                           </label>
                           <input
                             type="text"
-                            value={block.sectionTitle || ""}
+                            value={hBlock.eyebrowText || ""}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setBlocks((prev) =>
+                                prev.map((b) => (b.id === hBlock.id ? { ...b, eyebrowText: val } : b))
+                              );
+                            }}
+                            placeholder="e.g. INDEX · ABOUT THE APP"
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            Font Size (px):
+                          </label>
+                          <input
+                            type="text"
+                            value={hBlock.style?.fontSize || "36px"}
                             onChange={(e) => {
                               const val = e.target.value;
                               setBlocks((prev) =>
                                 prev.map((b) =>
-                                  b.id === block.id ? { ...b, sectionTitle: val } : b
+                                  b.id === hBlock.id
+                                    ? { ...b, style: { ...(b as HeadingBlock).style, fontSize: val } }
+                                    : b
+                                )
+                              );
+                            }}
+                            placeholder="36px"
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                          />
+                        </div>
+
+                        <div className="md:col-span-2 lg:col-span-3">
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            Headline Text:
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={hBlock.text}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setBlocks((prev) =>
+                                prev.map((b) => (b.id === hBlock.id ? { ...b, text: val } : b))
+                              );
+                            }}
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-sm"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            Font Weight:
+                          </label>
+                          <select
+                            value={hBlock.style?.fontWeight || "bold"}
+                            onChange={(e) => {
+                              const val = e.target.value as any;
+                              setBlocks((prev) =>
+                                prev.map((b) =>
+                                  b.id === hBlock.id
+                                    ? { ...b, style: { ...(b as HeadingBlock).style, fontWeight: val } }
+                                    : b
+                                )
+                              );
+                            }}
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                          >
+                            <option value="normal">Normal</option>
+                            <option value="medium">Medium</option>
+                            <option value="semibold">Semibold</option>
+                            <option value="bold">Bold</option>
+                            <option value="800">Extra Bold (800)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            Font Style:
+                          </label>
+                          <select
+                            value={hBlock.style?.fontStyle || "normal"}
+                            onChange={(e) => {
+                              const val = e.target.value as any;
+                              setBlocks((prev) =>
+                                prev.map((b) =>
+                                  b.id === hBlock.id
+                                    ? { ...b, style: { ...(b as HeadingBlock).style, fontStyle: val } }
+                                    : b
+                                )
+                              );
+                            }}
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                          >
+                            <option value="normal">Normal</option>
+                            <option value="italic">Italic</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            Text Color:
+                          </label>
+                          <input
+                            type="color"
+                            value={hBlock.style?.color || "#0F172A"}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setBlocks((prev) =>
+                                prev.map((b) =>
+                                  b.id === hBlock.id
+                                    ? { ...b, style: { ...(b as HeadingBlock).style, color: val } }
+                                    : b
+                                )
+                              );
+                            }}
+                            className="w-full h-9 rounded-xl border border-ink bg-canvas cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (block.type === "card_grid") {
+                  const gBlock = block as CardGridBlock;
+                  return (
+                    <div
+                      key={gBlock.id}
+                      className="bg-white border-3 border-ink rounded-3xl p-5 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-4 relative"
+                    >
+                      <div className="flex items-center justify-between border-b border-ink/10 pb-3">
+                        <span className="text-xs font-black uppercase tracking-widest text-brand inline-flex items-center gap-2">
+                          <span className="size-6 rounded-full bg-brand/10 text-brand grid place-items-center text-xs font-black">
+                            {idx + 1}
+                          </span>
+                          CARD GRID BLOCK
+                        </span>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => moveBlock(idx, -1)}
+                            disabled={idx === 0}
+                            className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
+                          >
+                            <MoveUp className="size-3.5" />
+                          </button>
+                          <button
+                            onClick={() => moveBlock(idx, 1)}
+                            disabled={idx === blocks.length - 1}
+                            className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
+                          >
+                            <MoveDown className="size-3.5" />
+                          </button>
+                          <button
+                            onClick={() => deleteBlock(gBlock.id)}
+                            className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer ml-2"
+                          >
+                            <Trash2 className="size-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-xs font-bold text-ink/70 block mb-1">
+                              Section Title:
+                            </label>
+                            <input
+                              type="text"
+                              value={gBlock.sectionTitle || ""}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setBlocks((prev) =>
+                                  prev.map((b) =>
+                                    b.id === gBlock.id ? { ...b, sectionTitle: val } : b
+                                  )
+                                );
+                              }}
+                              className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-xs font-bold text-ink/70 block mb-1">
+                              Grid Columns Rule:
+                            </label>
+                            <select
+                              value={gBlock.layoutConfig.columns}
+                              onChange={(e) => {
+                                const val = e.target.value as any;
+                                setBlocks((prev) =>
+                                  prev.map((b) =>
+                                    b.id === gBlock.id
+                                      ? {
+                                          ...b,
+                                          layoutConfig: {
+                                            ...(b as CardGridBlock).layoutConfig,
+                                            columns: val,
+                                          },
+                                        }
+                                      : b
+                                  )
+                                );
+                              }}
+                              className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                            >
+                              <option value="auto-fit">Auto-Fit (Responsive Auto-Layout)</option>
+                              <option value="1">1 Column</option>
+                              <option value="2">2 Columns</option>
+                              <option value="3">3 Columns</option>
+                              <option value="4">4 Columns</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Cards List */}
+                        <div className="space-y-3 pt-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-ink/70">
+                              Cards ({gBlock.cards.length}):
+                            </span>
+                            <button
+                              onClick={() => {
+                                const newCard: CardItem = {
+                                  id: `c-${Date.now()}`,
+                                  title: "New Card Title",
+                                  description: "Description for this new dynamic box.",
+                                };
+                                setBlocks((prev) =>
+                                  prev.map((b) =>
+                                    b.id === gBlock.id
+                                      ? {
+                                          ...b,
+                                          cards: [...(b as CardGridBlock).cards, newCard],
+                                        }
+                                      : b
+                                  )
+                                );
+                              }}
+                              className="px-3 py-1 rounded-lg bg-canvas border border-ink text-xs font-bold hover:bg-brand hover:text-white transition cursor-pointer"
+                            >
+                              + Add Card
+                            </button>
+                          </div>
+
+                          {gBlock.cards.map((card, cIdx) => (
+                            <div
+                              key={card.id || cIdx}
+                              className="p-3.5 rounded-2xl bg-canvas border border-ink/30 space-y-3"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-bold text-brand">
+                                  Card #{cIdx + 1}
+                                </span>
+                                <button
+                                  onClick={() => {
+                                    setBlocks((prev) =>
+                                      prev.map((b) =>
+                                        b.id === gBlock.id
+                                          ? {
+                                              ...b,
+                                              cards: (b as CardGridBlock).cards.filter(
+                                                (c) => c.id !== card.id
+                                              ),
+                                            }
+                                          : b
+                                      )
+                                    );
+                                  }}
+                                  className="text-xs font-bold text-red-600 hover:underline cursor-pointer"
+                                >
+                                  Delete Card
+                                </button>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <input
+                                  type="text"
+                                  value={card.title}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setBlocks((prev) =>
+                                      prev.map((b) =>
+                                        b.id === gBlock.id
+                                          ? {
+                                              ...b,
+                                              cards: (b as CardGridBlock).cards.map((c) =>
+                                                c.id === card.id ? { ...c, title: val } : c
+                                              ),
+                                            }
+                                          : b
+                                      )
+                                    );
+                                  }}
+                                  placeholder="Card Title"
+                                  className="px-3 py-1.5 rounded-xl border border-ink bg-white font-bold text-xs"
+                                />
+
+                                <input
+                                  type="text"
+                                  value={card.badgeText || ""}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setBlocks((prev) =>
+                                      prev.map((b) =>
+                                        b.id === gBlock.id
+                                          ? {
+                                              ...b,
+                                              cards: (b as CardGridBlock).cards.map((c) =>
+                                                c.id === card.id ? { ...c, badgeText: val } : c
+                                              ),
+                                            }
+                                          : b
+                                      )
+                                    );
+                                  }}
+                                  placeholder="Badge Tag (e.g. NEW)"
+                                  className="px-3 py-1.5 rounded-xl border border-ink bg-white font-bold text-xs"
+                                />
+
+                                <textarea
+                                  rows={2}
+                                  value={card.description}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setBlocks((prev) =>
+                                      prev.map((b) =>
+                                        b.id === gBlock.id
+                                          ? {
+                                              ...b,
+                                              cards: (b as CardGridBlock).cards.map((c) =>
+                                                c.id === card.id ? { ...c, description: val } : c
+                                              ),
+                                            }
+                                          : b
+                                      )
+                                    );
+                                  }}
+                                  placeholder="Card Body Description"
+                                  className="sm:col-span-2 px-3 py-1.5 rounded-xl border border-ink bg-white font-bold text-xs"
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (block.type === "cta_band") {
+                  const cBlock = block as CtaBandBlock;
+                  return (
+                    <div
+                      key={cBlock.id}
+                      className="bg-white border-3 border-ink rounded-3xl p-5 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-4 relative"
+                    >
+                      <div className="flex items-center justify-between border-b border-ink/10 pb-3">
+                        <span className="text-xs font-black uppercase tracking-widest text-brand inline-flex items-center gap-2">
+                          <span className="size-6 rounded-full bg-brand/10 text-brand grid place-items-center text-xs font-black">
+                            {idx + 1}
+                          </span>
+                          CTA BAND BLOCK
+                        </span>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => moveBlock(idx, -1)}
+                            disabled={idx === 0}
+                            className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
+                          >
+                            <MoveUp className="size-3.5" />
+                          </button>
+                          <button
+                            onClick={() => moveBlock(idx, 1)}
+                            disabled={idx === blocks.length - 1}
+                            className="p-1.5 rounded-lg border border-ink/20 hover:bg-canvas disabled:opacity-30 cursor-pointer"
+                          >
+                            <MoveDown className="size-3.5" />
+                          </button>
+                          <button
+                            onClick={() => deleteBlock(cBlock.id)}
+                            className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer ml-2"
+                          >
+                            <Trash2 className="size-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="sm:col-span-2">
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            CTA Title:
+                          </label>
+                          <input
+                            type="text"
+                            value={cBlock.title}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setBlocks((prev) =>
+                                prev.map((b) => (b.id === cBlock.id ? { ...b, title: val } : b))
+                              );
+                            }}
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-sm"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            CTA Subtitle:
+                          </label>
+                          <input
+                            type="text"
+                            value={cBlock.subtitle || ""}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setBlocks((prev) =>
+                                prev.map((b) => (b.id === cBlock.id ? { ...b, subtitle: val } : b))
+                              );
+                            }}
+                            className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-ink/70 block mb-1">
+                            Button Text:
+                          </label>
+                          <input
+                            type="text"
+                            value={cBlock.buttonText}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setBlocks((prev) =>
+                                prev.map((b) =>
+                                  b.id === cBlock.id ? { ...b, buttonText: val } : b
                                 )
                               );
                             }}
@@ -568,231 +868,30 @@ function SuperAdminCMSView() {
 
                         <div>
                           <label className="text-xs font-bold text-ink/70 block mb-1">
-                            Grid Columns Rule:
+                            Button Link URL:
                           </label>
-                          <select
-                            value={block.layoutConfig.columns}
+                          <input
+                            type="text"
+                            value={cBlock.buttonLink}
                             onChange={(e) => {
-                              const val = e.target.value as any;
+                              const val = e.target.value;
                               setBlocks((prev) =>
                                 prev.map((b) =>
-                                  b.id === block.id
-                                    ? { ...b, layoutConfig: { ...b.layoutConfig, columns: val } }
-                                    : b
+                                  b.id === cBlock.id ? { ...b, buttonLink: val } : b
                                 )
                               );
                             }}
+                            placeholder="/download"
                             className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                          >
-                            <option value="auto-fit">Auto-Fit (Responsive Auto-Layout)</option>
-                            <option value="1">1 Column</option>
-                            <option value="2">2 Columns</option>
-                            <option value="3">3 Columns</option>
-                            <option value="4">4 Columns</option>
-                          </select>
+                          />
                         </div>
                       </div>
-
-                      {/* Cards List */}
-                      <div className="space-y-3 pt-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-ink/70">
-                            Cards ({block.cards.length}):
-                          </span>
-                          <button
-                            onClick={() => {
-                              const newCard = {
-                                id: `c-${Date.now()}`,
-                                title: "New Card Title",
-                                description: "Description for this new dynamic box.",
-                              };
-                              setBlocks((prev) =>
-                                prev.map((b) =>
-                                  b.id === block.id
-                                    ? { ...b, cards: [...b.cards, newCard] }
-                                    : b
-                                )
-                              );
-                            }}
-                            className="px-3 py-1 rounded-lg bg-canvas border border-ink text-xs font-bold hover:bg-brand hover:text-white transition cursor-pointer"
-                          >
-                            + Add Card
-                          </button>
-                        </div>
-
-                        {block.cards.map((card, cIdx) => (
-                          <div
-                            key={card.id || cIdx}
-                            className="p-3.5 rounded-2xl bg-canvas border border-ink/30 space-y-3"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold text-brand">
-                                Card #{cIdx + 1}
-                              </span>
-                              <button
-                                onClick={() => {
-                                  setBlocks((prev) =>
-                                    prev.map((b) =>
-                                      b.id === block.id
-                                        ? { ...b, cards: b.cards.filter((c) => c.id !== card.id) }
-                                        : b
-                                    )
-                                  );
-                                }}
-                                className="text-xs font-bold text-red-600 hover:underline cursor-pointer"
-                              >
-                                Delete Card
-                              </button>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                              <input
-                                type="text"
-                                value={card.title}
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  setBlocks((prev) =>
-                                    prev.map((b) =>
-                                      b.id === block.id
-                                        ? {
-                                            ...b,
-                                            cards: b.cards.map((c) =>
-                                              c.id === card.id ? { ...c, title: val } : c
-                                            ),
-                                          }
-                                        : b
-                                    )
-                                  );
-                                }}
-                                placeholder="Card Title"
-                                className="px-3 py-1.5 rounded-xl border border-ink bg-white font-bold text-xs"
-                              />
-
-                              <input
-                                type="text"
-                                value={card.badgeText || ""}
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  setBlocks((prev) =>
-                                    prev.map((b) =>
-                                      b.id === block.id
-                                        ? {
-                                            ...b,
-                                            cards: b.cards.map((c) =>
-                                              c.id === card.id ? { ...c, badgeText: val } : c
-                                            ),
-                                          }
-                                        : b
-                                    )
-                                  );
-                                }}
-                                placeholder="Badge Tag (e.g. NEW)"
-                                className="px-3 py-1.5 rounded-xl border border-ink bg-white font-bold text-xs"
-                              />
-
-                              <textarea
-                                rows={2}
-                                value={card.description}
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  setBlocks((prev) =>
-                                    prev.map((b) =>
-                                      b.id === block.id
-                                        ? {
-                                            ...b,
-                                            cards: b.cards.map((c) =>
-                                              c.id === card.id ? { ...c, description: val } : c
-                                            ),
-                                          }
-                                        : b
-                                    )
-                                  );
-                                }}
-                                placeholder="Card Body Description"
-                                className="sm:col-span-2 px-3 py-1.5 rounded-xl border border-ink bg-white font-bold text-xs"
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
                     </div>
-                  )}
+                  );
+                }
 
-                  {/* CTA Band Block Inspector */}
-                  {block.type === "cta_band" && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="sm:col-span-2">
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          CTA Title:
-                        </label>
-                        <input
-                          type="text"
-                          value={block.title}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) => (b.id === block.id ? { ...b, title: val } : b))
-                            );
-                          }}
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-sm"
-                        />
-                      </div>
-
-                      <div className="sm:col-span-2">
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          CTA Subtitle:
-                        </label>
-                        <input
-                          type="text"
-                          value={block.subtitle || ""}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) => (b.id === block.id ? { ...b, subtitle: val } : b))
-                            );
-                          }}
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Button Text:
-                        </label>
-                        <input
-                          type="text"
-                          value={block.buttonText}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) => (b.id === block.id ? { ...b, buttonText: val } : b))
-                            );
-                          }}
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-bold text-ink/70 block mb-1">
-                          Button Link URL:
-                        </label>
-                        <input
-                          type="text"
-                          value={block.buttonLink}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBlocks((prev) =>
-                              prev.map((b) => (b.id === block.id ? { ...b, buttonLink: val } : b))
-                            );
-                          }}
-                          placeholder="/download"
-                          className="w-full px-3 py-2 rounded-xl border border-ink bg-canvas font-bold text-xs"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))
+                return null;
+              })
             )}
           </div>
         )}

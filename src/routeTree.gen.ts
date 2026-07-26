@@ -53,6 +53,7 @@ import { Route as CtrlVx9k2m7fq3zFlagsRouteImport } from './routes/ctrl-vx9k2m7f
 import { Route as CtrlVx9k2m7fq3zExperimentsRouteImport } from './routes/ctrl-vx9k2m7fq3z.experiments'
 import { Route as CtrlVx9k2m7fq3zCountryThemesRouteImport } from './routes/ctrl-vx9k2m7fq3z.country-themes'
 import { Route as CtrlVx9k2m7fq3zConfigRouteImport } from './routes/ctrl-vx9k2m7fq3z.config'
+import { Route as CtrlVx9k2m7fq3zCmsRouteImport } from './routes/ctrl-vx9k2m7fq3z.cms'
 import { Route as CtrlVx9k2m7fq3zCategoriesRouteImport } from './routes/ctrl-vx9k2m7fq3z.categories'
 import { Route as CtrlVx9k2m7fq3zAuditRouteImport } from './routes/ctrl-vx9k2m7fq3z.audit'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -309,6 +310,11 @@ const CtrlVx9k2m7fq3zConfigRoute = CtrlVx9k2m7fq3zConfigRouteImport.update({
   path: '/config',
   getParentRoute: () => CtrlVx9k2m7fq3zRoute,
 } as any)
+const CtrlVx9k2m7fq3zCmsRoute = CtrlVx9k2m7fq3zCmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
+  getParentRoute: () => CtrlVx9k2m7fq3zRoute,
+} as any)
 const CtrlVx9k2m7fq3zCategoriesRoute =
   CtrlVx9k2m7fq3zCategoriesRouteImport.update({
     id: '/categories',
@@ -530,6 +536,7 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
   '/ctrl-vx9k2m7fq3z/audit': typeof CtrlVx9k2m7fq3zAuditRoute
   '/ctrl-vx9k2m7fq3z/categories': typeof CtrlVx9k2m7fq3zCategoriesRoute
+  '/ctrl-vx9k2m7fq3z/cms': typeof CtrlVx9k2m7fq3zCmsRoute
   '/ctrl-vx9k2m7fq3z/config': typeof CtrlVx9k2m7fq3zConfigRoute
   '/ctrl-vx9k2m7fq3z/country-themes': typeof CtrlVx9k2m7fq3zCountryThemesRoute
   '/ctrl-vx9k2m7fq3z/experiments': typeof CtrlVx9k2m7fq3zExperimentsRoute
@@ -604,6 +611,7 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
   '/ctrl-vx9k2m7fq3z/audit': typeof CtrlVx9k2m7fq3zAuditRoute
   '/ctrl-vx9k2m7fq3z/categories': typeof CtrlVx9k2m7fq3zCategoriesRoute
+  '/ctrl-vx9k2m7fq3z/cms': typeof CtrlVx9k2m7fq3zCmsRoute
   '/ctrl-vx9k2m7fq3z/config': typeof CtrlVx9k2m7fq3zConfigRoute
   '/ctrl-vx9k2m7fq3z/country-themes': typeof CtrlVx9k2m7fq3zCountryThemesRoute
   '/ctrl-vx9k2m7fq3z/experiments': typeof CtrlVx9k2m7fq3zExperimentsRoute
@@ -682,6 +690,7 @@ export interface FileRoutesById {
   '/auth/callback': typeof AuthCallbackRoute
   '/ctrl-vx9k2m7fq3z/audit': typeof CtrlVx9k2m7fq3zAuditRoute
   '/ctrl-vx9k2m7fq3z/categories': typeof CtrlVx9k2m7fq3zCategoriesRoute
+  '/ctrl-vx9k2m7fq3z/cms': typeof CtrlVx9k2m7fq3zCmsRoute
   '/ctrl-vx9k2m7fq3z/config': typeof CtrlVx9k2m7fq3zConfigRoute
   '/ctrl-vx9k2m7fq3z/country-themes': typeof CtrlVx9k2m7fq3zCountryThemesRoute
   '/ctrl-vx9k2m7fq3z/experiments': typeof CtrlVx9k2m7fq3zExperimentsRoute
@@ -761,6 +770,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/ctrl-vx9k2m7fq3z/audit'
     | '/ctrl-vx9k2m7fq3z/categories'
+    | '/ctrl-vx9k2m7fq3z/cms'
     | '/ctrl-vx9k2m7fq3z/config'
     | '/ctrl-vx9k2m7fq3z/country-themes'
     | '/ctrl-vx9k2m7fq3z/experiments'
@@ -835,6 +845,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/ctrl-vx9k2m7fq3z/audit'
     | '/ctrl-vx9k2m7fq3z/categories'
+    | '/ctrl-vx9k2m7fq3z/cms'
     | '/ctrl-vx9k2m7fq3z/config'
     | '/ctrl-vx9k2m7fq3z/country-themes'
     | '/ctrl-vx9k2m7fq3z/experiments'
@@ -912,6 +923,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/ctrl-vx9k2m7fq3z/audit'
     | '/ctrl-vx9k2m7fq3z/categories'
+    | '/ctrl-vx9k2m7fq3z/cms'
     | '/ctrl-vx9k2m7fq3z/config'
     | '/ctrl-vx9k2m7fq3z/country-themes'
     | '/ctrl-vx9k2m7fq3z/experiments'
@@ -1286,6 +1298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CtrlVx9k2m7fq3zConfigRouteImport
       parentRoute: typeof CtrlVx9k2m7fq3zRoute
     }
+    '/ctrl-vx9k2m7fq3z/cms': {
+      id: '/ctrl-vx9k2m7fq3z/cms'
+      path: '/cms'
+      fullPath: '/ctrl-vx9k2m7fq3z/cms'
+      preLoaderRoute: typeof CtrlVx9k2m7fq3zCmsRouteImport
+      parentRoute: typeof CtrlVx9k2m7fq3zRoute
+    }
     '/ctrl-vx9k2m7fq3z/categories': {
       id: '/ctrl-vx9k2m7fq3z/categories'
       path: '/categories'
@@ -1614,6 +1633,7 @@ const CtrlVx9k2m7fq3zPacksRouteWithChildren =
 interface CtrlVx9k2m7fq3zRouteChildren {
   CtrlVx9k2m7fq3zAuditRoute: typeof CtrlVx9k2m7fq3zAuditRoute
   CtrlVx9k2m7fq3zCategoriesRoute: typeof CtrlVx9k2m7fq3zCategoriesRoute
+  CtrlVx9k2m7fq3zCmsRoute: typeof CtrlVx9k2m7fq3zCmsRoute
   CtrlVx9k2m7fq3zConfigRoute: typeof CtrlVx9k2m7fq3zConfigRoute
   CtrlVx9k2m7fq3zCountryThemesRoute: typeof CtrlVx9k2m7fq3zCountryThemesRoute
   CtrlVx9k2m7fq3zExperimentsRoute: typeof CtrlVx9k2m7fq3zExperimentsRoute
@@ -1636,6 +1656,7 @@ interface CtrlVx9k2m7fq3zRouteChildren {
 const CtrlVx9k2m7fq3zRouteChildren: CtrlVx9k2m7fq3zRouteChildren = {
   CtrlVx9k2m7fq3zAuditRoute: CtrlVx9k2m7fq3zAuditRoute,
   CtrlVx9k2m7fq3zCategoriesRoute: CtrlVx9k2m7fq3zCategoriesRoute,
+  CtrlVx9k2m7fq3zCmsRoute: CtrlVx9k2m7fq3zCmsRoute,
   CtrlVx9k2m7fq3zConfigRoute: CtrlVx9k2m7fq3zConfigRoute,
   CtrlVx9k2m7fq3zCountryThemesRoute: CtrlVx9k2m7fq3zCountryThemesRoute,
   CtrlVx9k2m7fq3zExperimentsRoute: CtrlVx9k2m7fq3zExperimentsRoute,

@@ -46,32 +46,25 @@ export const getMarketingPageFn = createServerFn({ method: "GET" })
   });
 
 /** Superadmin list all marketing pages for management dropdown */
-export const listMarketingPagesFn = createServerFn({ method: "GET" }).handler(
-  async (ctx): Promise<{ pages: MarketingPageData[] }> => {
-    const auth = await requireSupabaseAuth(ctx);
-    await ensureSuperadmin(auth.supabase, auth.user.id);
+export const listMarketingPagesFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ pages: MarketingPageData[] }> => {
+    await ensureSuperadmin((context as any).supabase, (context as any).userId);
 
-    const { data, error } = await (auth.supabase as any)
+    const { data, error } = await ((context as any).supabase as any)
       .from("marketing_pages")
       .select("id, slug, page_name, meta_title, meta_description, blocks, is_published, updated_at")
       .order("page_name", { ascending: true });
 
     if (error) return { pages: [] };
     return { pages: (data || []) as MarketingPageData[] };
-  }
-);
+  });
 
 /** Superadmin mutator to save/update marketing page blocks & metadata */
 export const saveMarketingPageFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .validator(
-    (data: {
-      slug: string;
-      page_name: string;
-      meta_title?: string;
-      meta_description?: string;
-      blocks: any[];
-      is_published?: boolean;
-    }) =>
+    (raw: unknown) =>
       z
         .object({
           slug: z.string().min(1),
@@ -81,24 +74,23 @@ export const saveMarketingPageFn = createServerFn({ method: "POST" })
           blocks: z.array(z.any()),
           is_published: z.boolean().optional(),
         })
-        .parse(data)
+        .parse(raw)
   )
-  .handler(async (ctx): Promise<{ success: boolean; id?: string }> => {
-    const auth = await requireSupabaseAuth(ctx);
-    await ensureSuperadmin(auth.supabase, auth.user.id);
+  .handler(async ({ data, context }): Promise<{ success: boolean; id?: string }> => {
+    await ensureSuperadmin((context as any).supabase, (context as any).userId);
 
     const payload = {
-      slug: ctx.data.slug,
-      page_name: ctx.data.page_name,
-      meta_title: ctx.data.meta_title ?? null,
-      meta_description: ctx.data.meta_description ?? null,
-      blocks: ctx.data.blocks,
-      is_published: ctx.data.is_published ?? true,
+      slug: data.slug,
+      page_name: data.page_name,
+      meta_title: data.meta_title ?? null,
+      meta_description: data.meta_description ?? null,
+      blocks: data.blocks,
+      is_published: data.is_published ?? true,
       updated_at: new Date().toISOString(),
-      updated_by: auth.user.id,
+      updated_by: (context as any).userId,
     };
 
-    const { data: upserted, error } = await (auth.supabase as any)
+    const { data: upserted, error } = await ((context as any).supabase as any)
       .from("marketing_pages")
       .upsert(payload, { onConflict: "slug" })
       .select("id")
