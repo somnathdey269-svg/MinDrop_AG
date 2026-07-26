@@ -189,7 +189,7 @@ export function SubTile({ to, icon: Icon, label, hint, accent, stat, disabled }:
 
   if (to && !disabled) {
     return (
-      <Link to={to as any} className="focus:outline-none">
+      <Link to={to as any} resetScroll={true} className="focus:outline-none">
         {body}
       </Link>
     );
@@ -229,7 +229,7 @@ export function Report({
       <Sparkline data={usage.sparkline} color={accent} />
     </div>
   );
-  if (to) return <Link to={to as any}>{inner}</Link>;
+  if (to) return <Link to={to as any} resetScroll={true}>{inner}</Link>;
   return inner;
 }
 
@@ -281,7 +281,7 @@ export function Pitch({
       </div>
     </div>
   );
-  if (to) return <Link to={to as any}>{inner}</Link>;
+  if (to) return <Link to={to as any} resetScroll={true}>{inner}</Link>;
   return inner;
 }
 

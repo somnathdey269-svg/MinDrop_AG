@@ -274,11 +274,25 @@ function Terms() {
   const [current, setCurrent] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
-    }
-    setCurrent(0);
+  useLayoutEffect(() => {
+    const resetScroll = () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = 0;
+      }
+      window.scrollTo(0, 0);
+      setCurrent(0);
+    };
+    resetScroll();
+    const rafId = requestAnimationFrame(resetScroll);
+    const t1 = setTimeout(resetScroll, 0);
+    const t2 = setTimeout(resetScroll, 50);
+    const t3 = setTimeout(resetScroll, 150);
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, []);
 
   const slides = [
@@ -314,12 +328,12 @@ function Terms() {
       {/* ── Header ── */}
       <header className="shrink-0 border-b-2 border-slate-300/40 z-50 bg-[#F8FAFC]/95 backdrop-blur-[12px]">
         <div className="w-[95%] max-w-7xl mx-auto h-14 flex items-center justify-between gap-2 px-2 sm:px-4">
-          <Link to="/" viewTransition
+          <Link to="/" resetScroll={true} viewTransition
             className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-slate-500 hover:text-slate-900">
             <X className="size-3.5"/> Close
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
-          <Link to="/download" viewTransition
+          <Link to="/download" resetScroll={true} viewTransition
             className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
             Get App
           </Link>
@@ -334,12 +348,15 @@ function Terms() {
       >
         {slides.map((slide, idx) => (
           <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden perspective-[1200px]">
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+              <div className="w-[450px] h-[450px] rounded-full blur-3xl opacity-20 animate-pulse bg-slate-400" />
+            </div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.93, y: 25, rotateX: 5 }}
+              initial={{ opacity: 0, scale: 0.90, y: 30, rotateX: 6 }}
               whileInView={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-              viewport={{ amount: 0.4 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full h-full flex items-center justify-center"
+              viewport={{ amount: 0.35 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full flex items-center justify-center relative z-10"
             >
               {slide}
             </motion.div>

@@ -308,14 +308,6 @@ function AboutDetailView() {
             </motion.div>
           </section>
         ))}
-              viewport={{ amount: 0.4 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full h-full flex items-center justify-center"
-            >
-              {slide}
-            </motion.div>
-          </section>
-        ))}
 
         {/* Right Dot Navigation (Desktop) */}
         <div className="fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-40">

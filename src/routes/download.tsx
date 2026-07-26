@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Smartphone, Sparkles, ShieldCheck } from "lucide-react";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
@@ -102,11 +102,25 @@ function DownloadStoryView() {
   const TOTAL = slides.length;
   const backHash = from === "grid" ? "grid" : undefined;
 
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
-    }
-    setCurrent(0);
+  useLayoutEffect(() => {
+    const resetScroll = () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = 0;
+      }
+      window.scrollTo(0, 0);
+      setCurrent(0);
+    };
+    resetScroll();
+    const rafId = requestAnimationFrame(resetScroll);
+    const t1 = setTimeout(resetScroll, 0);
+    const t2 = setTimeout(resetScroll, 50);
+    const t3 = setTimeout(resetScroll, 150);
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, []);
 
   const handleScroll = () => {
@@ -138,6 +152,7 @@ function DownloadStoryView() {
           <Link
             to="/"
             hash={backHash}
+            resetScroll={true}
             viewTransition
             className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-ink/70 hover:text-ink"
           >
@@ -148,6 +163,7 @@ function DownloadStoryView() {
           
           <Link
             to="/terms"
+            resetScroll={true}
             className="text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 border-ink bg-ink text-white hover:bg-[#FF671F] hover:border-[#FF671F] shrink-0 leading-none whitespace-nowrap shadow-sm transition"
           >
             Terms
@@ -163,12 +179,15 @@ function DownloadStoryView() {
       >
         {slides.map((slide, idx) => (
           <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden perspective-[1200px]">
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+              <div className="w-[450px] h-[450px] rounded-full blur-3xl opacity-20 animate-pulse bg-amber-400" />
+            </div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.93, y: 25, rotateX: 5 }}
+              initial={{ opacity: 0, scale: 0.90, y: 30, rotateX: 6 }}
               whileInView={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-              viewport={{ amount: 0.4 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full h-full flex items-center justify-center"
+              viewport={{ amount: 0.35 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full flex items-center justify-center relative z-10"
             >
               {slide}
             </motion.div>
