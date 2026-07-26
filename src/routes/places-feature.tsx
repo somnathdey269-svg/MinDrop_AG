@@ -304,27 +304,6 @@ function PlacesFeatureDetailView() {
     };
   }, []);
 
-  const { page, hasBlocks } = useCMSPage("places-feature");
-
-  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
-    return (
-      <div className="min-h-screen bg-[#F5F3FF] flex flex-col select-none">
-        <header className="shrink-0 h-14 border-b-2 border-[#8B5CF6]/10 z-50 bg-[#F5F3FF]/96 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
-          <Link to="/" resetScroll={true} viewTransition className="flex items-center gap-1 text-xs font-black uppercase text-[#8B5CF6]">
-            <X className="size-3.5"/> Close
-          </Link>
-          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
-          <Link to="/download" resetScroll={true} viewTransition className="px-3.5 py-1.5 rounded-full bg-[#8B5CF6] text-white text-xs font-black uppercase shadow-md">
-            Get App
-          </Link>
-        </header>
-        <main className="flex-1 w-full max-w-6xl mx-auto p-6 sm:p-12">
-          <DynamicBlockRenderer blocks={page.blocks} />
-        </main>
-      </div>
-    );
-  }
-
   const slides = [
     <SlideOpening key="1" />,
     <SlideConflict key="2" />,

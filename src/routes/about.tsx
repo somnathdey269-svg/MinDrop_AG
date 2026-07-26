@@ -232,37 +232,6 @@ function AboutDetailView() {
 
   const { page, hasBlocks } = useCMSPage("about");
 
-  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
-    return (
-      <div
-        className="min-h-screen bg-[#F0F9FF] flex flex-col select-none"
-        style={{ viewTransitionName: "card-about" } as React.CSSProperties}
-      >
-        <header className="shrink-0 h-14 border-b-2 border-[#0284C7]/10 z-50 bg-[#F0F9FF]/96 backdrop-blur-md px-4 sm:px-6 flex items-center">
-          <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
-            <Link to="/" hash={backHash} resetScroll={true} viewTransition
-              className="flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition text-[#0284C7]/70 hover:text-[#0369A1]">
-              <X className="size-3.5"/> Close
-            </Link>
-
-            <Link to="/" hash={backHash} resetScroll={true} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
-              <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
-            </Link>
-
-            <Link to="/download" resetScroll={true} viewTransition
-              className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-[#0284C7] text-white border-[#0284C7] hover:bg-[#0369A1] shadow-md transition-all duration-200 shrink-0 cursor-pointer">
-              Get App
-            </Link>
-          </div>
-        </header>
-
-        <main className="flex-1 w-full max-w-6xl mx-auto p-6 sm:p-12">
-          <DynamicBlockRenderer blocks={page.blocks} />
-        </main>
-      </div>
-    );
-  }
-
   const slides = [
     <SlideOpening key="1" />,
     <SlideProblem key="2" />,
