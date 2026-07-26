@@ -45,7 +45,7 @@ const MARKETING_PAGES_LIST = [
   { slug: "home", name: "Home Page" },
   { slug: "about", name: "About Page" },
   { slug: "pricing", name: "Pricing & Plans" },
-  { slug: "faq", name: "FAQ Page" },
+  { slug: "faq", name: "FAQ & Help Center" },
   { slug: "features", name: "Every Feature (Appendix)" },
   { slug: "vision", name: "Vision Page" },
   { slug: "download", name: "Get App / Download Page" },
@@ -73,8 +73,8 @@ const PRESET_COLORS = [
 const FONT_SIZE_PRESETS = ["18px", "24px", "36px", "48px", "64px"];
 
 function SuperAdminCMSView() {
-  const [selectedSlug, setSelectedSlug] = useState<string>("home");
-  const [pageName, setPageName] = useState<string>("Home Page");
+  const [selectedSlug, setSelectedSlug] = useState<string>("pricing");
+  const [pageName, setPageName] = useState<string>("Pricing & Plans");
   const [metaTitle, setMetaTitle] = useState<string>("");
   const [metaDescription, setMetaDescription] = useState<string>("");
   const [blocks, setBlocks] = useState<CMSBlock[]>([]);
@@ -112,12 +112,292 @@ function SuperAdminCMSView() {
     }
   };
 
+  /**
+   * 100% VERBATIM LINE-BY-LINE APP COPY FROM THE SOURCE ROUTE TEMPLATES
+   */
   const getInitialDefaultBlocks = (slug: string): CMSBlock[] => {
     switch (slug) {
-      case "home":
+      case "pricing":
         return [
           {
-            id: "home-heading",
+            id: "pricing-hero",
+            type: "heading",
+            tag: "h1",
+            eyebrowText: "💎 PREMIUM PLANS",
+            text: "Keep it free, or unlock limits.",
+            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#831843" },
+          },
+          {
+            id: "pricing-plans-grid",
+            type: "card_grid",
+            sectionTitle: "Clear pricing. Simple structure.",
+            layoutConfig: { columns: "2", minCardWidth: "280px", gap: "24px" },
+            cards: [
+              {
+                id: "free-plan-card",
+                title: "Free Tier — Free Forever",
+                description:
+                  "Up to 3 active alarms · Up to 3 notification filter rules · Up to 3 saved places / locations · Voice capture & offline photo storage.",
+                badgeText: "FREE TIER",
+                badgeColor: "#F3F4F6",
+              },
+              {
+                id: "premium-plan-card",
+                title: "Premium Plan — Yearly Plan",
+                description:
+                  "Infinite active alarms · Infinite notification filter rules · Infinite saved places / locations · Private Google Drive cloud backup sync.",
+                badgeText: "PREMIUM",
+                badgeColor: "#FCE7F3",
+              },
+            ],
+          },
+          {
+            id: "pricing-flow-grid",
+            type: "card_grid",
+            sectionTitle: "How your upgrade works",
+            layoutConfig: { columns: "3", minCardWidth: "240px", gap: "20px" },
+            cards: [
+              {
+                id: "step-1",
+                title: "01 / Download — Get Free App",
+                description:
+                  "Runs offline. Set up to 3 alarms, filters, & locations.",
+                badgeText: "STEP 1",
+              },
+              {
+                id: "step-2",
+                title: "02 / Subscribe — Yearly Plan",
+                description:
+                  "Unlock settings securely via in-app dashboard.",
+                badgeText: "STEP 2",
+              },
+              {
+                id: "step-3",
+                title: "03 / Enjoy — Unlimited Slots",
+                description:
+                  "Enjoy geofences and cloud sync instantly.",
+                badgeText: "STEP 3",
+              },
+            ],
+          },
+          {
+            id: "pricing-specs-grid",
+            type: "card_grid",
+            sectionTitle: "An engine built to last.",
+            layoutConfig: { columns: "3", minCardWidth: "240px", gap: "20px" },
+            cards: [
+              {
+                id: "spec-1",
+                title: "Subscription Simplicity",
+                description:
+                  "Clearly visible terms with zero hidden fees. Complete control of plan adjustments.",
+                badgeText: "TRANSPARENT",
+              },
+              {
+                id: "spec-2",
+                title: "Offline Verification",
+                description:
+                  "Settings checks are stored locally on-device. No query delays or server locks.",
+                badgeText: "OFFLINE FIRST",
+              },
+              {
+                id: "spec-3",
+                title: "Privacy Sync",
+                description:
+                  "Backup loops directly through your Google Drive. We never see your data.",
+                badgeText: "DATA SOVEREIGNTY",
+              },
+            ],
+          },
+          {
+            id: "pricing-cta",
+            type: "cta_band",
+            title: "Take MinDrop Home",
+            subtitle: "App subscriptions are tiring. MinDrop is built as a utility. Pay once, use forever.",
+            buttonText: "Take MinDrop Home",
+            buttonLink: "/download",
+          },
+        ];
+
+      case "about":
+        return [
+          {
+            id: "about-hero",
+            type: "heading",
+            tag: "h1",
+            eyebrowText: "📖 INDEX · ABOUT THE APP",
+            text: "Your mind is for having ideas, not holding them. MinDrop is your second brain.",
+            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
+          },
+          {
+            id: "about-problem-heading",
+            type: "heading",
+            tag: "h2",
+            eyebrowText: "THE PROBLEM WITH EVERYDAY MICRO-THOUGHTS",
+            text: "Small tasks create big mental fatigue. MinDrop unburdens your mind.",
+            style: { fontSize: "36px", fontWeight: "bold", textAlign: "left", color: "#0284C7" },
+          },
+          {
+            id: "about-features-grid",
+            type: "card_grid",
+            sectionTitle: "Zero setup friction. Pure execution.",
+            layoutConfig: { columns: "3", minCardWidth: "260px", gap: "20px" },
+            cards: [
+              {
+                id: "af1",
+                title: "Lightning Fast",
+                description:
+                  "No bloated project boards or complex date pickers. Type or drop a note and carry on with your day.",
+                badgeText: "CH. 01",
+              },
+              {
+                id: "af2",
+                title: "Instant Focus",
+                description:
+                  "Keeps your attention anchored on what you are doing right now, knowing MinDrop won't let you forget.",
+                badgeText: "CH. 02",
+              },
+              {
+                id: "af3",
+                title: "Pure Reliability",
+                description:
+                  "Built for instant launch on Android so you can drop micro-tasks the second inspiration strikes.",
+                badgeText: "CH. 03",
+              },
+            ],
+          },
+          {
+            id: "about-arch-heading",
+            type: "heading",
+            tag: "h2",
+            eyebrowText: "HARDWARE-NATIVE ARCHITECTURE",
+            text: "Built directly on Android's native APIs. WorkManager, local SQLite databases, and continuous audio channels.",
+            style: { fontSize: "32px", fontWeight: "bold", textAlign: "left", color: "#0F172A" },
+          },
+          {
+            id: "about-cta-bridge",
+            type: "cta_band",
+            title: "Ready to see how MinDrop silences noise?",
+            subtitle: "Now that you know what MinDrop is, discover how smart keyword rules convert essential notifications into un-missable alarms.",
+            buttonText: "Silence Noise & Catch Emergencies",
+            buttonLink: "/notify-feature",
+          },
+        ];
+
+      case "faq":
+        return [
+          {
+            id: "faq-hero",
+            type: "heading",
+            tag: "h1",
+            eyebrowText: "🛡️ HELP CENTER",
+            text: "Have questions about MinDrop? Get answers instantly.",
+            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#064E3B" },
+          },
+          {
+            id: "faq-accordion-block",
+            type: "faq_list",
+            title: "Frequently Asked Questions",
+            items: [
+              {
+                id: "fq1",
+                question: "Is my task data private and secure?",
+                answer:
+                  "Yes. MinDrop uses a zero-knowledge local model. Your notes, voice recordings, and pictures sit inside a secure SQLite database on your phone. We have no servers, no ads, and zero access to your information.",
+              },
+              {
+                id: "fq2",
+                question: "How does the private Google Drive sync work?",
+                answer:
+                  "If you purchase Premium, backups sync straight to your private Google Drive space. The connection is direct between your phone and Google. We cannot see your files or credentials.",
+              },
+              {
+                id: "fq3",
+                question: "Will background tracking drain my phone battery?",
+                answer:
+                  "No. Standard tracking keeps GPS running continuously, draining battery quickly. MinDrop registers geofences with the operating system, allowing the OS to wake the app up only when cell towers note movement.",
+              },
+              {
+                id: "fq4",
+                question: "How does location geofencing work offline?",
+                answer:
+                  "MinDrop integrates with native OS Geofencing. We register boundaries (e.g., home or market) locally. The phone monitors these boundaries offline without uploading your coordinates to any web services.",
+              },
+              {
+                id: "fq5",
+                question: "How do Notify filters read incoming notifications?",
+                answer:
+                  "MinDrop uses Android's Notification Listener Service. This runs locally on your phone to scan incoming alerts. If it matches your custom word rules, it triggers the alarm. No data is collected.",
+              },
+              {
+                id: "fq6",
+                question: "What happens to my scheduled alarms on phone reboot?",
+                answer:
+                  "MinDrop listens for device startup handshakes. When your phone restarts, a local background sweep automatically schedules your alarms so they remain active.",
+              },
+            ],
+          },
+        ];
+
+      case "download":
+        return [
+          {
+            id: "download-hero",
+            type: "heading",
+            tag: "h1",
+            eyebrowText: "🤖 ANDROID FIRST · CHAPTER 08",
+            text: "Sorry iPhone Friends. Your Notch Isn't Ready.",
+            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#2563EB" },
+          },
+          {
+            id: "download-intro",
+            type: "heading",
+            tag: "p",
+            eyebrowText: "RAW LOCAL POWER",
+            text: "We love sleek glass phones and dynamic islands, but MinDrop needs raw local power without background task throttles. Android gives us background geofence sweeps, continuous looping alarms, and instant local SQLite access.",
+            style: { fontSize: "20px", fontWeight: "normal", textAlign: "center", color: "#0F172A" },
+          },
+          {
+            id: "download-sovereignty-grid",
+            type: "card_grid",
+            sectionTitle: "100% Local Data Sovereignty",
+            layoutConfig: { columns: "3", minCardWidth: "240px", gap: "20px" },
+            cards: [
+              {
+                id: "dl1",
+                title: "No Cloud DB",
+                description: "No database servers collecting your personal drops or notes.",
+                badgeText: "NO TELEMETRY",
+              },
+              {
+                id: "dl2",
+                title: "DPDP Compliant",
+                description: "Built from day one to respect user data sovereignty completely.",
+                badgeText: "PRIVACY SOVEREIGNTY",
+              },
+              {
+                id: "dl3",
+                title: "Instant Access",
+                description: "No login delays or server outage dependencies ever.",
+                badgeText: "ALWAYS AVAILABLE",
+              },
+            ],
+          },
+          {
+            id: "download-cta",
+            type: "cta_band",
+            title: "Your Mind Deserves a Second Brain.",
+            subtitle: "We are fine-tuning the ultimate zero-cloud, instant-action companion. Zero cloud tracking, zero subscription traps—just pure mental peace in your pocket.",
+            buttonText: "Coming Soon to Google Play",
+            buttonLink: "/download",
+          },
+        ];
+
+      case "home":
+      default:
+        return [
+          {
+            id: `${slug}-hero`,
             type: "heading",
             tag: "h1",
             eyebrowText: "🤖 ANDROID FIRST · A KIND SECOND BRAIN",
@@ -125,10 +405,10 @@ function SuperAdminCMSView() {
             style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
           },
           {
-            id: "home-grid",
+            id: `${slug}-grid`,
             type: "card_grid",
             sectionTitle: "Built For Peace Of Mind",
-            layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
+            layoutConfig: { columns: "3", minCardWidth: "260px", gap: "20px" },
             cards: [
               {
                 id: "h1",
@@ -154,246 +434,12 @@ function SuperAdminCMSView() {
             ],
           },
           {
-            id: "home-cta",
+            id: `${slug}-cta`,
             type: "cta_band",
             title: "Build Your Offline Second Brain",
             subtitle: "Download MinDrop today and start capturing thoughts effortlessly.",
             buttonText: "Take MinDrop Home",
             buttonLink: "/download",
-          },
-        ];
-
-      case "about":
-        return [
-          {
-            id: "about-heading",
-            type: "heading",
-            tag: "h1",
-            eyebrowText: "INDEX · ABOUT MINDROP",
-            text: "Built for minds that carry too much.",
-            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
-          },
-          {
-            id: "about-grid",
-            type: "card_grid",
-            sectionTitle: "Core Philosophy",
-            layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
-            cards: [
-              {
-                id: "a1",
-                title: "The Overwhelm",
-                description:
-                  "Modern notifications demand constant attention. MinDrop acts as a calm filter.",
-                badgeText: "CH. 01",
-              },
-              {
-                id: "a2",
-                title: "Instant Capture",
-                description:
-                  "Voice, quick notes, and location-aware triggers logged in under 2 seconds.",
-                badgeText: "CH. 02",
-              },
-              {
-                id: "a3",
-                title: "Privacy Sovereignty",
-                description:
-                  "No user accounts required to run core memory features. Local encrypted storage.",
-                badgeText: "CH. 03",
-              },
-            ],
-          },
-        ];
-
-      case "pricing":
-        return [
-          {
-            id: "pricing-heading",
-            type: "heading",
-            tag: "h1",
-            eyebrowText: "TRANSPARENT PRICING",
-            text: "Pay once. Own forever. Zero subscriptions.",
-            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
-          },
-          {
-            id: "pricing-grid",
-            type: "card_grid",
-            sectionTitle: "Simple Lifetime Plans",
-            layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
-            cards: [
-              {
-                id: "p1",
-                title: "Free Forever",
-                description:
-                  "Full access to offline memory logs, 3 geofences, and core voice notes.",
-                badgeText: "STARTER",
-              },
-              {
-                id: "p2",
-                title: "Pro Lifetime ($19)",
-                description:
-                  "Unlimited geofences, custom packs, advanced notification filters & recall drills.",
-                badgeText: "POPULAR",
-              },
-            ],
-          },
-        ];
-
-      case "faq":
-        return [
-          {
-            id: "faq-heading",
-            type: "heading",
-            tag: "h1",
-            eyebrowText: "HELP & KNOWLEDGE BASE",
-            text: "Everything you need to know about MinDrop.",
-            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
-          },
-          {
-            id: "faq-accordion",
-            type: "faq_list",
-            title: "Frequently Asked Questions",
-            items: [
-              {
-                id: "f1",
-                question: "Is my data stored on the cloud?",
-                answer:
-                  "No. All memory logs, geofences, and rules remain 100% on your local device.",
-              },
-              {
-                id: "f2",
-                question: "Does location tracking drain my battery?",
-                answer:
-                  "MinDrop uses native OS passive geofences, consuming less than 1% battery daily.",
-              },
-              {
-                id: "f3",
-                question: "Can I export my data?",
-                answer: "Yes, you can export local encrypted JSON/SQLite backups anytime.",
-              },
-            ],
-          },
-        ];
-
-      case "download":
-        return [
-          {
-            id: "download-heading",
-            type: "heading",
-            tag: "h1",
-            eyebrowText: "🤖 ANDROID FIRST · CHAPTER 08",
-            text: "Take It Home — Get MinDrop Today.",
-            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
-          },
-          {
-            id: "download-grid",
-            type: "card_grid",
-            sectionTitle: "Download Options",
-            layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
-            cards: [
-              {
-                id: "d1",
-                title: "Google Play Store",
-                description:
-                  "Available now for Android 10+. Built natively with Kotlin and Capacitor.",
-                badgeText: "OFFICIAL RELEASE",
-              },
-              {
-                id: "d2",
-                title: "Direct APK Download",
-                description: "Direct side-load package available for privacy enthusiasts.",
-                badgeText: "STANDALONE APK",
-              },
-            ],
-          },
-        ];
-
-      case "places-feature":
-        return [
-          {
-            id: "places-heading",
-            type: "heading",
-            tag: "h1",
-            eyebrowText: "SMART LOCATION GEOFENCING",
-            text: "Nudges at the door when you arrive.",
-            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
-          },
-          {
-            id: "places-grid",
-            type: "card_grid",
-            sectionTitle: "Geofence Triggers",
-            layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
-            cards: [
-              {
-                id: "pl1",
-                title: "Grocery Arrival",
-                description: "Get your shopping list the moment you walk into the supermarket.",
-                badgeText: "RETAIL ZONE",
-              },
-              {
-                id: "pl2",
-                title: "Office Exit",
-                description: "Remind yourself to grab your laptop charger when leaving your desk.",
-                badgeText: "WORK ZONE",
-              },
-            ],
-          },
-        ];
-
-      case "notify-feature":
-        return [
-          {
-            id: "notify-heading",
-            type: "heading",
-            tag: "h1",
-            eyebrowText: "SMART NOTIFICATION FILTERS",
-            text: "Only the alerts that matter.",
-            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
-          },
-          {
-            id: "notify-grid",
-            type: "card_grid",
-            sectionTitle: "Notification Modes",
-            layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
-            cards: [
-              {
-                id: "n1",
-                title: "Urgent Priority Bypass",
-                description: "Bypass silent mode for critical contacts and rules.",
-                badgeText: "URGENT",
-              },
-              {
-                id: "n2",
-                title: "Batch Evening Summary",
-                description: "Group low-priority notifications for quiet evening review.",
-                badgeText: "BATCHED",
-              },
-            ],
-          },
-        ];
-
-      default:
-        return [
-          {
-            id: `${slug}-heading`,
-            type: "heading",
-            tag: "h1",
-            eyebrowText: `${slug.toUpperCase()} PAGE`,
-            text: `Authentic Content for ${MARKETING_PAGES_LIST.find((p) => p.slug === slug)?.name || slug}`,
-            style: { fontSize: "48px", fontWeight: "bold", textAlign: "center", color: "#0F172A" },
-          },
-          {
-            id: `${slug}-grid`,
-            type: "card_grid",
-            sectionTitle: "Page Highlights",
-            layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
-            cards: [
-              {
-                id: `${slug}-c1`,
-                title: "Feature Highlight 1",
-                description: `Editable dynamic block content for /${slug}.`,
-                badgeText: "ACTIVE",
-              },
-            ],
           },
         ];
     }
@@ -432,7 +478,7 @@ function SuperAdminCMSView() {
       id,
       type: "heading",
       tag: "h2",
-      eyebrowText: "FEATURE HIGHLIGHT",
+      eyebrowText: "SECTION HEADER",
       text: "New Headline Text",
       style: {
         fontSize: "36px",
@@ -450,7 +496,7 @@ function SuperAdminCMSView() {
       id,
       type: "card_grid",
       sectionTitle: "Card Grid Section",
-      layoutConfig: { columns: "auto-fit", minCardWidth: "280px", gap: "24px" },
+      layoutConfig: { columns: "3", minCardWidth: "280px", gap: "24px" },
       cards: [
         {
           id: `c-${Date.now()}`,
@@ -1082,7 +1128,7 @@ function SuperAdminCMSView() {
                                             )
                                           );
                                         }}
-                                        placeholder="Badge Tag (e.g. NEW)"
+                                        placeholder="Badge Tag (e.g. FREE TIER)"
                                         className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold text-xs"
                                       />
 
