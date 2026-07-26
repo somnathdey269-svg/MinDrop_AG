@@ -91,24 +91,24 @@ function SlideSolution() {
     <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-6xl mx-auto flex flex-col items-center text-center gap-4 sm:gap-10">
         <div>
-          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1 sm:mb-3">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-2">
             How MinDrop Handles This
           </p>
-          <h2 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#78350F] leading-tight tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
             MinDrop watches your alerts.<br className="hidden sm:block"/>
             <span className="text-[#D97706]">The important ones become an alarm.</span>
           </h2>
         </div>
 
         {/* All Solution Cards (Single Page View for Mobile & Desktop) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-8 w-full text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-8 w-full text-left">
           {solutionItems.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="bg-white border-2 sm:border-3 border-[#F59E0B] rounded-2xl sm:rounded-[2rem] p-3.5 sm:p-8 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-1.5 sm:gap-3">
-              <div className="size-8 sm:size-12 rounded-xl sm:rounded-2xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
-                <Icon className="size-4 sm:size-6 stroke-[2.5px]" />
+            <div key={title} className="bg-white border-2 sm:border-3 border-[#F59E0B] rounded-2xl sm:rounded-[2rem] p-4 sm:p-8 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2 sm:gap-3">
+              <div className="size-9 sm:size-12 rounded-xl sm:rounded-2xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
+                <Icon className="size-5 sm:size-6 stroke-[2.5px]" />
               </div>
-              <h3 className="text-sm sm:text-xl font-black text-[#78350F]">{title}</h3>
-              <p className="text-xs sm:text-base font-semibold text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
+              <h3 className="text-base sm:text-xl font-black text-[#78350F]">{title}</h3>
+              <p className="text-xs sm:text-base font-medium text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -229,30 +229,30 @@ function SlideScenarios() {
     <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
         <div>
-          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-0.5">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-1.5">
             Real-World Protection Scenarios
           </p>
-          <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-[#78350F] leading-tight tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
             How people rely on MinDrop notification rules.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-6 w-full text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 w-full text-left">
           {scenarios.map((s) => (
             <div
               key={s.title}
-              className={`rounded-2xl sm:rounded-[2.2rem] border-2 sm:border-3 ${s.borderColor} p-3.5 sm:p-7 shadow-xs sm:shadow-md ${s.color} flex flex-col gap-2 sm:gap-4`}
+              className={`rounded-2xl sm:rounded-[2.2rem] border-2 sm:border-3 ${s.borderColor} p-4 sm:p-7 shadow-xs sm:shadow-md ${s.color} flex flex-col gap-2 sm:gap-4`}
             >
               <div className="flex flex-wrap items-center justify-between gap-1.5">
-                <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
                   {s.app}
                 </span>
-                <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-2 sm:px-2.5 py-0.5 rounded-full">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-2 sm:px-2.5 py-0.5 rounded-full">
                   {s.kw}
                 </span>
               </div>
               <div>
-                <h3 className="text-sm sm:text-xl font-black text-[#78350F] mb-1">{s.title}</h3>
+                <h3 className="text-base sm:text-xl font-black text-[#78350F] mb-1">{s.title}</h3>
                 <p className="text-xs sm:text-base font-medium text-[#78350F]/85 leading-relaxed">{s.desc}</p>
               </div>
             </div>
@@ -276,21 +276,21 @@ function SlideRuleTypes() {
     <div className="h-full w-full bg-[#FEF3C7] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
         <div>
-          <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1 sm:mb-2">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#D97706] mb-1.5">
             Engineered For Precision
           </p>
-          <h2 className="text-xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#78350F] leading-tight tracking-tight">
             Four powerful matching modes.
           </h2>
         </div>
 
         {/* Responsive Grid View (Single Page View for Mobile & Desktop) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-6 w-full text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 w-full text-left">
           {ruleTypes.map(({ tag, title, body }) => (
-            <div key={title} className="bg-white border-2 sm:border-3 border-[#78350F] rounded-2xl sm:rounded-[2rem] p-3.5 sm:p-7 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-1.5">
+            <div key={title} className="bg-white border-2 sm:border-3 border-[#78350F] rounded-2xl sm:rounded-[2rem] p-4 sm:p-7 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2">
               <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full w-fit">{tag}</span>
-              <h3 className="text-sm sm:text-xl font-black text-[#78350F]">{title}</h3>
-              <p className="text-xs sm:text-base font-semibold text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
+              <h3 className="text-base sm:text-xl font-black text-[#78350F]">{title}</h3>
+              <p className="text-xs sm:text-base font-medium text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -403,20 +403,20 @@ export function NotifyFeatureDetailView() {
       style={{ viewTransitionName: "card-notify" } as React.CSSProperties}
     >
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
-      <header className="shrink-0 h-10 sm:h-11 border-b border-[#F59E0B]/15 z-50 px-3.5 sm:px-6 flex items-center backdrop-blur-md"
+      <header className="shrink-0 h-12 border-b border-[#F59E0B]/15 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(69,26,3,0.92)" : "rgba(255,251,235,0.92)", transition: "background-color 0.4s ease" }}>
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1 text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
-            <X className="size-3"/> Close
+            className={`flex items-center gap-1 text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
+            <X className="size-4"/> Close
           </Link>
 
           <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
-            <MinDropHeaderLogo className="text-base sm:text-xl shrink-0" isDarkBg={isDark} />
+            <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center h-[18px] sm:h-[20px] text-[8px] sm:text-[9px] font-black uppercase tracking-wider px-2 sm:px-2.5 rounded-full border shrink-0 leading-none shadow-xs transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-[#D97706] text-white border-[#D97706] hover:bg-ink hover:border-ink"}`}>
+            className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
             Get App
           </Link>
         </div>

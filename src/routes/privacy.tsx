@@ -331,8 +331,8 @@ function Privacy() {
             <X className="size-3.5"/> Close
           </Link>
           <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
-          <Link to="/download"
-            className="text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full border-2 bg-ink text-white border-ink hover:bg-slate-700 hover:border-slate-700 shrink-0 leading-none whitespace-nowrap shadow-sm transition">
+          <Link to="/download" viewTransition
+            className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
             Get App
           </Link>
         </div>

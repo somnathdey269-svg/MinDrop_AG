@@ -242,7 +242,7 @@ function VisionDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center h-6 text-[9px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-3.5 rounded-full border-1.5 shrink-0 leading-none shadow-sm transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-[#D97706] text-white border-[#D97706] hover:bg-ink hover:border-ink"}`}>
+            className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
             Get App
           </Link>
         </div>

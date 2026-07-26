@@ -38,7 +38,7 @@ export function MarketingLayout({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-2">
               <Link
                 to="/download"
-                className="hidden sm:inline-flex items-center rounded-xl bg-ink text-canvas border-2 border-ink px-5 py-2 hover:bg-[#FF671F] hover:text-white transition shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-xs uppercase tracking-wider active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+                className="hidden sm:inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 cursor-pointer"
               >
                 Get App
               </Link>

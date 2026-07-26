@@ -431,7 +431,7 @@ function SettingsDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center h-[20px] sm:h-[22px] text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest px-2.5 sm:px-3 rounded-full border shrink-0 leading-none whitespace-nowrap shadow-xs transition ${isDark ? "bg-white text-ink border-white hover:bg-[#EA580C] hover:text-white hover:border-[#EA580C]" : "bg-[#EA580C] text-white border-[#EA580C] hover:bg-ink hover:border-ink"}`}>
+            className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
             Get App
           </Link>
         </div>
