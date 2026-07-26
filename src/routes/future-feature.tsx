@@ -347,6 +347,11 @@ function FutureFeatureDetailView() {
         goTo={goTo}
         backHash={backHash}
         isDark={isDark}
+        activeColorClass={
+          isDark
+            ? "bg-white text-[#0F172A] border-white hover:bg-[#60A5FA] hover:text-white"
+            : "bg-[#2563EB] text-white border-[#2563EB] hover:bg-[#1D4ED8]"
+        }
       />
     </div>
   );

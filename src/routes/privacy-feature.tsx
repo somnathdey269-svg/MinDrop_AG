@@ -313,6 +313,11 @@ function PrivacyFeatureDetailView() {
         goTo={goTo}
         backHash={backHash}
         isDark={isDark}
+        activeColorClass={
+          isDark
+            ? "bg-white text-[#064E3B] border-white hover:bg-[#059669] hover:text-white"
+            : "bg-[#059669] text-white border-[#059669] hover:bg-[#047857]"
+        }
       />
     </div>
   );

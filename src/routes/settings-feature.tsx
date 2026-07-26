@@ -490,6 +490,11 @@ function SettingsDetailView() {
         goTo={goTo}
         backHash={backHash}
         isDark={isDark}
+        activeColorClass={
+          isDark
+            ? "bg-white text-[#431407] border-white hover:bg-[#EA580C] hover:text-white"
+            : "bg-[#EA580C] text-white border-[#EA580C] hover:bg-[#C2410C]"
+        }
       />
     </div>
   );

@@ -333,6 +333,11 @@ function AboutDetailView() {
         goTo={goTo}
         backHash={backHash}
         isDark={isDark}
+        activeColorClass={
+          isDark
+            ? "bg-white text-[#0F172A] border-white hover:bg-[#818CF8] hover:text-white"
+            : "bg-[#4F46E5] text-white border-[#4F46E5] hover:bg-[#3730A3]"
+        }
       />
     </div>
   );

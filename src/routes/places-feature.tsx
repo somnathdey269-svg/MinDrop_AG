@@ -411,6 +411,11 @@ function PlacesFeatureDetailView() {
         goTo={goTo}
         backHash={backHash}
         isDark={isDark}
+        activeColorClass={
+          isDark
+            ? "bg-white text-[#2E1065] border-white hover:bg-[#8B5CF6] hover:text-white"
+            : "bg-[#8B5CF6] text-white border-[#8B5CF6] hover:bg-[#6D28D9]"
+        }
       />
     </div>
   );

@@ -470,6 +470,11 @@ export function NotifyFeatureDetailView() {
         goTo={goTo}
         backHash={backHash}
         isDark={isDark}
+        activeColorClass={
+          isDark
+            ? "bg-white text-[#451A03] border-white hover:bg-[#F59E0B] hover:text-white"
+            : "bg-[#D97706] text-white border-[#D97706] hover:bg-[#78350F]"
+        }
       />
     </div>
   );

@@ -343,6 +343,11 @@ function LaterFeatureDetailView() {
         goTo={goTo}
         backHash={backHash}
         isDark={isDark}
+        activeColorClass={
+          isDark
+            ? "bg-white text-[#064E3B] border-white hover:bg-[#10B981] hover:text-white"
+            : "bg-[#047857] text-white border-[#047857] hover:bg-[#065F46]"
+        }
       />
     </div>
   );

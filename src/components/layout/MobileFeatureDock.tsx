@@ -7,6 +7,7 @@ interface MobileFeatureDockProps {
   goTo: (index: number) => void;
   backHash?: string;
   isDark?: boolean;
+  activeColorClass?: string;
 }
 
 export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
@@ -14,13 +15,20 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
   total,
   goTo,
   isDark = false,
+  activeColorClass,
 }) => {
+  const buttonTheme = activeColorClass
+    ? activeColorClass
+    : isDark
+    ? "bg-white text-ink border-white hover:bg-amber-400"
+    : "bg-[#D97706] text-white border-[#D97706] hover:bg-[#78350F]";
+
   return (
     <div className="md:hidden fixed bottom-5 right-4 z-50 pointer-events-none select-none">
       <div
-        className={`pointer-events-auto flex flex-col gap-1.5 p-1 rounded-full backdrop-blur-2xl border transition-all duration-300 ${
+        className={`pointer-events-auto flex flex-col gap-2 p-1.5 rounded-full backdrop-blur-2xl border transition-all duration-300 ${
           isDark
-            ? "bg-black/85 border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.8)]"
+            ? "bg-black/80 border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.8)]"
             : "bg-white/90 border-slate-900/15 shadow-[0_8px_25px_rgba(0,0,0,0.15)]"
         }`}
       >
@@ -29,12 +37,10 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
           type="button"
           onClick={() => goTo(current - 1)}
           disabled={current === 0}
-          className={`grid place-items-center size-9 rounded-full transition-all duration-200 cursor-pointer ${
+          className={`grid place-items-center size-9 rounded-full transition-all duration-200 cursor-pointer shadow-sm ${
             current === 0
-              ? "opacity-20 cursor-not-allowed"
-              : isDark
-              ? "bg-white/15 hover:bg-white/30 text-white active:scale-75 border border-white/20"
-              : "bg-slate-900/10 hover:bg-slate-900/20 text-slate-900 active:scale-75 border border-slate-900/10"
+              ? "opacity-20 cursor-not-allowed bg-gray-400/20 text-gray-400 border border-transparent"
+              : `${buttonTheme} active:scale-75`
           }`}
           aria-label="Previous Slide"
         >
@@ -46,12 +52,10 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
           type="button"
           onClick={() => goTo(current + 1)}
           disabled={current === total - 1}
-          className={`grid place-items-center size-9 rounded-full transition-all duration-200 cursor-pointer ${
+          className={`grid place-items-center size-9 rounded-full transition-all duration-200 cursor-pointer shadow-sm ${
             current === total - 1
-              ? "opacity-20 cursor-not-allowed"
-              : isDark
-              ? "bg-white/15 hover:bg-white/30 text-white active:scale-75 border border-white/20"
-              : "bg-slate-900/10 hover:bg-slate-900/20 text-slate-900 active:scale-75 border border-slate-900/10"
+              ? "opacity-20 cursor-not-allowed bg-gray-400/20 text-gray-400 border border-transparent"
+              : `${buttonTheme} active:scale-75`
           }`}
           aria-label="Next Slide"
         >
