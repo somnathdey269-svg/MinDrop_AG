@@ -302,29 +302,38 @@ function PlacesFeatureDetailView() {
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
+      const deltaY = e.deltaY;
+      const deltaX = e.deltaX;
+      if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
+
+      const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+
+      // Strict boundary guards: Prevent wheel lock or rebound jumps when scrolling past ends
+      if (currentRef.current === 0 && mainDelta < 0) return;
+      if (currentRef.current === TOTAL - 1 && mainDelta > 0) return;
 
       if (!isWheelActive.current) {
         isWheelActive.current = true;
-        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        if (delta > 0) goTo(currentRef.current + 1);
-        else if (delta < 0) goTo(currentRef.current - 1);
+        if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
+          goTo(currentRef.current + 1);
+        } else if (mainDelta < 0 && currentRef.current > 0) {
+          goTo(currentRef.current - 1);
+        }
       }
 
       if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
       wheelDebounceTimer.current = setTimeout(() => {
         isWheelActive.current = false;
-      }, 250);
+      }, 350);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
-        goTo(currentRef.current + 1);
-      }
-      if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
+        if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
+      } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
         e.preventDefault();
-        goTo(currentRef.current - 1);
+        if (currentRef.current > 0) goTo(currentRef.current - 1);
       }
     };
 
@@ -341,7 +350,7 @@ function PlacesFeatureDetailView() {
       window.removeEventListener("touchmove", touchMoveHandler);
       if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
-  }, []);
+  }, [TOTAL]);
 
   return (
     <div
@@ -381,8 +390,8 @@ function PlacesFeatureDetailView() {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           touchStartY.current = null;
           if (Math.abs(delta) > 40) {
-            if (delta > 0) goTo(currentRef.current + 1);
-            else if (delta < 0) goTo(currentRef.current - 1);
+            if (delta > 0 && currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
+            else if (delta < 0 && currentRef.current > 0) goTo(currentRef.current - 1);
           }
         }}
       >

@@ -377,12 +377,17 @@ export function NotifyFeatureDetailView() {
       const deltaX = e.deltaX;
       if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
 
+      const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+
+      // Strict boundary guards: Prevent wheel lock or rebound jumps when scrolling past ends
+      if (currentRef.current === 0 && mainDelta < 0) return;
+      if (currentRef.current === TOTAL - 1 && mainDelta > 0) return;
+
       if (!isWheelActive.current) {
         isWheelActive.current = true;
-        const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
-        if (mainDelta > 0) {
+        if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
           goTo(currentRef.current + 1);
-        } else if (mainDelta < 0) {
+        } else if (mainDelta < 0 && currentRef.current > 0) {
           goTo(currentRef.current - 1);
         }
       }
@@ -390,16 +395,16 @@ export function NotifyFeatureDetailView() {
       if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
       wheelDebounceTimer.current = setTimeout(() => {
         isWheelActive.current = false;
-      }, 300);
+      }, 350);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
-        goTo(currentRef.current + 1);
+        if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
       } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
         e.preventDefault();
-        goTo(currentRef.current - 1);
+        if (currentRef.current > 0) goTo(currentRef.current - 1);
       }
     };
 
@@ -416,7 +421,7 @@ export function NotifyFeatureDetailView() {
       window.removeEventListener("touchmove", touchMoveHandler);
       if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
-  }, []);
+  }, [TOTAL]);
 
   return (
     <div
@@ -440,7 +445,7 @@ export function NotifyFeatureDetailView() {
             className={`inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-md border shrink-0 transition-all duration-200 cursor-pointer ${
               isDark
                 ? "bg-white text-[#451A03] border-white hover:bg-[#F59E0B] hover:text-white"
-                : "bg-[#D97706] text-white border-[#D97706] hover:bg-[#78350F]"
+                : "bg-[#D97706] text-[#FFFBEB] border-[#D97706] hover:bg-[#78350F]"
             }`}>
             Get App
           </Link>
@@ -456,8 +461,8 @@ export function NotifyFeatureDetailView() {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           touchStartY.current = null;
           if (Math.abs(delta) > 40) {
-            if (delta > 0) goTo(currentRef.current + 1);
-            else if (delta < 0) goTo(currentRef.current - 1);
+            if (delta > 0 && currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
+            else if (delta < 0 && currentRef.current > 0) goTo(currentRef.current - 1);
           }
         }}
       >
