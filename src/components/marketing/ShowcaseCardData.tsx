@@ -20,8 +20,8 @@ export const DECK_CARDS: DeckCardItem[] = [
     title: "About the App",
     description: "Built for immediate micro-actions. An offline second brain that captures urgent thoughts and protects your mental bandwidth.",
     to: "/about",
-    bgColor: "#F8FAFC",
-    bgClass: "bg-[#F8FAFC]",
+    bgColor: "#E0F2FE",
+    bgClass: "bg-[#E0F2FE]",
     illustrator: BookOpen,
   },
   {

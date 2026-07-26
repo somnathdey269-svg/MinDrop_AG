@@ -23,10 +23,10 @@ export const Route = createFileRoute("/about")({
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="w-full h-full bg-[#F8FAFC] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-[#F0F9FF] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-        className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#4F46E5] mb-8 sm:mb-12 shadow-sm">
+        className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-8 sm:mb-12 shadow-sm">
         📖 INDEX · ABOUT THE APP
       </motion.span>
 
@@ -37,7 +37,7 @@ function SlideOpening() {
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#4F46E5]/60 leading-tight tracking-tight">
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#0284C7]/70 leading-tight tracking-tight">
             {line}
           </motion.p>
         ))}
@@ -55,22 +55,22 @@ function SlideOpening() {
 /* Slide 2: Mental Overload (Dark Theme) */
 function SlideProblem() {
   return (
-    <div className="w-full h-full bg-[#0F172A] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#818CF8] mb-4">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#38BDF8] mb-4">
             The problem with everyday micro-thoughts
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 sm:mb-8 tracking-tight">
             Small tasks create big mental fatigue.<br />
-            <span className="text-[#818CF8]">MinDrop unburdens your mind.</span>
+            <span className="text-[#38BDF8]">MinDrop unburdens your mind.</span>
           </h2>
-          <p className="text-sm sm:text-base md:text-lg font-semibold text-slate-300 leading-relaxed max-w-lg">
+          <p className="text-sm sm:text-base md:text-lg font-semibold text-sky-100 leading-relaxed max-w-lg">
             Remembering to pick up milk, reply to an urgent message, or check an alert at a specific place consumes active brain power. MinDrop takes those micro-actions off your shoulders instantly.
           </p>
         </div>
-        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-white/20 bg-white/5 backdrop-blur-md shadow-2xl">
-          <Brain className="size-28 sm:size-36 text-[#818CF8]" />
+        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-white/20 bg-white/10 backdrop-blur-md shadow-2xl">
+          <Brain className="size-28 sm:size-36 text-[#38BDF8]" />
         </div>
       </div>
     </div>
@@ -80,10 +80,10 @@ function SlideProblem() {
 /* Slide 3: Speed & Frictionless Capture */
 function SlideCapture() {
   return (
-    <div className="w-full h-full bg-[#F8FAFC] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#F0F9FF] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4F46E5] mb-4">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
             Capture in under 2 seconds
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-ink leading-tight tracking-tight">
@@ -97,7 +97,7 @@ function SlideCapture() {
             { icon: Cpu, title: "Pure Reliability", body: "Built for instant launch on Android so you can drop micro-tasks the second inspiration strikes." },
           ].map(({ icon: Icon, title, body }) => (
             <div key={title} className="bg-white border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-3">
-              <div className="size-12 rounded-2xl bg-[#EEF2FF] grid place-items-center text-[#4F46E5]">
+              <div className="size-12 rounded-2xl bg-[#E0F2FE] grid place-items-center text-[#0284C7]">
                 <Icon className="size-6 stroke-[2.5px]" />
               </div>
               <h3 className="text-lg sm:text-xl font-black text-ink">{title}</h3>
@@ -113,10 +113,10 @@ function SlideCapture() {
 /* Slide 4: Native Android Power */
 function SlideArchitecture() {
   return (
-    <div className="w-full h-full bg-[#EEF2FF] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#4F46E5] mb-4">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
             Hardware-native architecture
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink leading-tight mb-6 tracking-tight">
@@ -126,11 +126,11 @@ function SlideArchitecture() {
             Unlike web-wrapped wrappers, MinDrop taps into Android WorkManager, local SQLite databases, and continuous audio channels so alarms survive battery savers and device restarts.
           </p>
           <div className="inline-flex items-center gap-2 bg-white border-2 border-ink px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-ink shadow-sm">
-            <Cpu className="size-4 text-[#4F46E5]" /> 100% Android Native Engine
+            <Cpu className="size-4 text-[#0284C7]" /> 100% Android Native Engine
           </div>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-ink bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <BookOpen className="size-28 sm:size-36 text-[#4F46E5]" />
+          <BookOpen className="size-28 sm:size-36 text-[#0284C7]" />
         </div>
       </div>
     </div>
@@ -140,15 +140,15 @@ function SlideArchitecture() {
 /* Slide 5: Data Sovereignty */
 function SlideSovereignty() {
   return (
-    <div className="w-full h-full bg-[#0F172A] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#818CF8]">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#38BDF8]">
           <Lock className="size-3.5" /> 100% LOCAL PRIVACY
         </span>
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight">
           Your thoughts never leave your phone.
         </h2>
-        <p className="text-base sm:text-xl font-semibold text-slate-300 max-w-2xl leading-relaxed">
+        <p className="text-base sm:text-xl font-semibold text-sky-100 max-w-2xl leading-relaxed">
           No ad tracking, no analytics telemetry, no cloud servers. Complete DPDP Act compliance by storing everything strictly on your local SQLite database.
         </p>
       </div>
@@ -266,11 +266,11 @@ function AboutDetailView() {
       style={{ viewTransitionName: "card-[#about]" } as React.CSSProperties}
     >
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
-      <header className="shrink-0 h-12 border-b-2 border-slate-200 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
-        style={{ backgroundColor: isDark ? "rgba(15,23,42,0.96)" : "rgba(248,250,252,0.96)", transition: "background-color 0.4s ease" }}>
+      <header className="shrink-0 h-12 border-b-2 border-[#0284C7]/20 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
+        style={{ backgroundColor: isDark ? "rgba(12,74,110,0.96)" : "rgba(240,249,255,0.96)", transition: "background-color 0.4s ease" }}>
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-slate-300 hover:text-white" : "text-slate-500 hover:text-slate-900"}`}>
+            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-sky-200 hover:text-white" : "text-[#0284C7]/70 hover:text-[#0369A1]"}`}>
             <X className="size-3.5"/> Close
           </Link>
 
@@ -281,8 +281,8 @@ function AboutDetailView() {
           <Link to="/download" viewTransition
             className={`inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-md border shrink-0 transition-all duration-200 cursor-pointer ${
               isDark
-                ? "bg-white text-[#0F172A] border-white hover:bg-[#818CF8] hover:text-white"
-                : "bg-[#4F46E5] text-white border-[#4F46E5] hover:bg-[#3730A3]"
+                ? "bg-white text-[#0C4A6E] border-white hover:bg-[#38BDF8] hover:text-white"
+                : "bg-[#0284C7] text-white border-[#0284C7] hover:bg-[#0369A1]"
             }`}>
             Get App
           </Link>
@@ -319,7 +319,7 @@ function AboutDetailView() {
           {slides.map((_, i) => (
             <button key={i} onClick={() => goTo(i)}
               className={`rounded-full transition-all duration-300 cursor-pointer ${
-                i === current ? "w-1.5 h-7 bg-[#4F46E5]" : isDark ? "size-1.5 bg-white/30 hover:bg-white/60" : "size-1.5 bg-ink/20 hover:bg-ink/50"
+                i === current ? "w-1.5 h-7 bg-[#0284C7]" : isDark ? "size-1.5 bg-white/30 hover:bg-white/60" : "size-1.5 bg-ink/20 hover:bg-ink/50"
               }`}
             />
           ))}
@@ -335,8 +335,8 @@ function AboutDetailView() {
         isDark={isDark}
         activeColorClass={
           isDark
-            ? "bg-white text-[#0F172A] border-white hover:bg-[#818CF8] hover:text-white"
-            : "bg-[#4F46E5] text-white border-[#4F46E5] hover:bg-[#3730A3]"
+            ? "bg-white text-[#0C4A6E] border-white hover:bg-[#38BDF8] hover:text-white"
+            : "bg-[#0284C7] text-white border-[#0284C7] hover:bg-[#0369A1]"
         }
       />
     </div>
