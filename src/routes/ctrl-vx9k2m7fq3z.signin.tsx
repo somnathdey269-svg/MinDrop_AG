@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Shield, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { adminSignInFn } from "@/lib/adminAuth.functions";
 
 export const Route = createFileRoute("/ctrl-vx9k2m7fq3z/signin")({
   head: () => ({
@@ -26,55 +25,36 @@ function AdminSignIn() {
     setBusy(true);
     setErr(null);
     try {
-      // 1. First attempt server-side sign-in
-      const res = await adminSignInFn({ data: { email, password } });
-
-      if (res && res.success && res.session) {
-        await supabase.auth.setSession({
-          access_token: res.session.access_token,
-          refresh_token: res.session.refresh_token,
-        });
-        navigate({ to: "/ctrl-vx9k2m7fq3z" });
-        return;
-      }
-
-      // If server returned explicit error message
-      if (res && !res.success && res.error) {
-        setErr(res.error);
-        return;
-      }
-
-      // 2. Fallback to client-side direct auth
-      const { data: clientData, error: clientErr } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      // Direct client-side Supabase sign-in
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim(),
       });
 
-      if (clientErr) {
-        setErr(clientErr.message || "Invalid credentials");
-        return;
+      if (error) {
+        throw new Error(error.message || "Invalid email or password");
       }
 
-      const uid = clientData.user?.id;
+      const uid = data.user?.id;
       if (!uid) throw new Error("Sign in failed");
 
-      const { data: roles } = await (supabase as any)
+      // Verify superadmin role BEFORE navigating in; otherwise sign back out.
+      const { data: roles, error: roleErr } = await (supabase as any)
         .from("user_roles")
         .select("role")
         .eq("user_id", uid)
         .eq("role", "superadmin")
         .maybeSingle();
 
-      if (!roles) {
+      if (roleErr || !roles) {
         await supabase.auth.signOut();
-        setErr("Access denied: Superadmin role required");
-        return;
+        throw new Error("Access denied: Account does not have Super Admin permissions");
       }
 
       navigate({ to: "/ctrl-vx9k2m7fq3z" });
     } catch (e: any) {
-      const raw = e?.message || e;
-      setErr(typeof raw === "string" ? raw : JSON.stringify(raw));
+      const msg = e?.message || e?.error_description || (typeof e === "string" ? e : "Sign in failed");
+      setErr(typeof msg === "string" ? msg : JSON.stringify(msg));
     } finally {
       setBusy(false);
     }
