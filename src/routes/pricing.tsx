@@ -7,7 +7,7 @@ import { useState, useEffect, useLayoutEffect, useRef, useMemo } from "react";
 import { getPublicSettings, type CurrencyPrice } from "@/lib/platformSettings.functions";
 
 export const Route = createFileRoute("/pricing")({
-  validateSearch: (search: Record<string, unknown>) => {
+  validateSearch: (search: Record<string, unknown>): { from?: string } => {
     return { from: (search.from as string) || undefined };
   },
   head: () => ({

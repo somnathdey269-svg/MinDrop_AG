@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/settings-feature")({
-  validateSearch: (search: Record<string, unknown>) => {
+  validateSearch: (search: Record<string, unknown>): { from?: string } => {
     return { from: (search.from as string) || undefined };
   },
   head: () => ({
@@ -450,8 +450,8 @@ function SettingsDetailView() {
         onTouchEnd={(e) => {
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           if (Math.abs(delta) > 30) {
-            if (delta > 0) goTo(currentRef.current + 1);
-            else if (delta < 0) goTo(currentRef.current - 1);
+            if (delta > 0) goTo(current + 1);
+            else if (delta < 0) goTo(current - 1);
           }
         }}
       >

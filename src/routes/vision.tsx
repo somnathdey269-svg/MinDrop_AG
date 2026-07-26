@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 export const Route = createFileRoute("/vision")({
-  validateSearch: (search: Record<string, unknown>) => {
+  validateSearch: (search: Record<string, unknown>): { from?: string } => {
     return { from: (search.from as string) || undefined };
   },
   head: () => ({

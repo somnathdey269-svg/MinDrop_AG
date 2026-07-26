@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 export const Route = createFileRoute("/notify-feature")({
-  validateSearch: (search: Record<string, unknown>) => {
+  validateSearch: (search: Record<string, unknown>): { from?: string } => {
     return { from: (search.from as string) || undefined };
   },
   head: () => ({
