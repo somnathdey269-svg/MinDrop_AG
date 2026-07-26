@@ -7,204 +7,221 @@ interface AboutSketchBackgroundProps {
 }
 
 export function AboutMascotBackground({ currentSlide, isDark }: AboutSketchBackgroundProps) {
-  // Ultra-refined stroke colors
+  // Theme contrast colors
   const strokeColor = isDark ? "#FFFFFF" : "#0284C7";
+  const accentColor = isDark ? "#38BDF8" : "#0369A1";
+  const textColor = isDark ? "rgba(255,255,255,0.7)" : "rgba(2,132,199,0.7)";
 
   return (
-    <div
-      className="absolute inset-0 pointer-events-none overflow-hidden z-10 select-none w-full h-full"
-      style={{
-        // Radial mask clearing the center 35% radius so no lines interfere with text
-        WebkitMaskImage: "radial-gradient(circle at 50% 48%, transparent 28%, black 72%)",
-        maskImage: "radial-gradient(circle at 50% 48%, transparent 28%, black 72%)",
-      }}
-    >
-      {/* 1. Very Soft Ambient Corner Dot Grid */}
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none w-full h-full">
+      {/* Soft Background Grid */}
       <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <pattern id="clean-sketch-grid" width="80" height="80" patternUnits="userSpaceOnUse">
-            <circle cx="40" cy="40" r="1.2" fill={strokeColor} />
+          <pattern id="meaningful-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <circle cx="30" cy="30" r="1.5" fill={strokeColor} />
+            <line x1="0" y1="30" x2="60" y2="30" stroke={strokeColor} strokeWidth="0.5" opacity="0.2" strokeDasharray="4 4" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#clean-sketch-grid)" />
+        <rect width="100%" height="100%" fill="url(#meaningful-grid)" />
       </svg>
 
-      {/* 2. Elegant Peripheral Animated Sketches (Framing the outer screen margins) */}
+      {/* Slide-Specific Content-Relevant Animated Vector Sketches */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={`clean-sketch-slide-${currentSlide}`}
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: isDark ? 0.24 : 0.16, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.02 }}
+          key={`meaningful-slide-${currentSlide}`}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: isDark ? 0.28 : 0.20, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.04 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0 w-full h-full"
         >
           <svg
             viewBox="0 0 1400 900"
-            preserveAspectRatio="xMidYMid slice"
+            preserveAspectRatio="xMidYMid meet"
             className="w-full h-full absolute inset-0 transition-all duration-500"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* ────── SLIDE 0: Outer Peripheral Thought Nodes (Clear Center) ────── */}
+            {/* ────── SLIDE 0: "Your mind is for having ideas, not holding them" ────── */}
             {currentSlide === 0 && (
-              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-                {/* Outer sweeping arc on top-left corner */}
-                <motion.path
-                  d="M -50 120 Q 200 20 400 120 T 700 30"
+              <g stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round">
+                {/* Profile Mind Silhouette on Left */}
+                <path
+                  d="M 120 480 C 100 380, 160 250, 280 250 C 380 250, 440 320, 420 420 C 460 440, 480 480, 460 530 C 440 580, 390 600, 360 620 L 360 700 L 220 700 L 220 620 C 180 600, 140 540, 120 480 Z"
+                  strokeWidth="3"
                   strokeDasharray="6 6"
-                  initial={{ pathOffset: 0 }}
-                  animate={{ pathOffset: [0, 1] }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                 />
 
-                {/* Outer sweeping arc on bottom-right corner */}
-                <motion.path
-                  d="M 700 870 C 1000 870, 1200 780, 1450 820"
-                  strokeDasharray="6 6"
-                  initial={{ pathOffset: 0 }}
-                  animate={{ pathOffset: [1, 0] }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                />
-
-                {/* Top-Left Corner Node */}
-                <circle cx="120" cy="180" r="45" strokeWidth="2.5" />
-                <circle cx="120" cy="180" r="85" strokeDasharray="6 6" opacity="0.6" />
-
-                {/* Top-Right Corner Node */}
-                <circle cx="1280" cy="180" r="55" strokeWidth="2.5" />
-                <circle cx="1280" cy="180" r="95" strokeDasharray="6 6" opacity="0.6" />
-
-                {/* Bottom-Left Corner Node */}
-                <circle cx="150" cy="750" r="50" strokeWidth="2.5" />
-
-                {/* Bottom-Right Corner Second Brain Cluster */}
-                <circle cx="1250" cy="720" r="60" strokeWidth="3" />
-                <circle cx="1250" cy="720" r="120" strokeDasharray="8 8" opacity="0.5">
-                  <animateTransform attributeName="transform" type="rotate" from="0 1250 720" to="360 1250 720" dur="30s" repeatCount="indefinite" />
-                </circle>
-              </g>
-            )}
-
-            {/* ────── SLIDE 1: Peripheral Unburdening Waves (Clear Center) ────── */}
-            {currentSlide === 1 && (
-              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-                {/* Left Margin Stack */}
-                <g opacity="0.8">
-                  <rect x="50" y="250" width="140" height="90" rx="12" strokeDasharray="5 5" />
-                  <rect x="70" y="160" width="100" height="70" rx="12" />
-                </g>
-
-                {/* Right Margin Floating Note */}
+                {/* Floating ideas releasing from mind */}
                 <motion.g
-                  animate={{ y: [-10, 10, -10] }}
+                  animate={{ y: [-8, 8, -8] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <rect x="1200" y="200" width="150" height="110" rx="16" strokeWidth="2.5" />
-                  <line x1="1230" y1="240" x2="1320" y2="240" strokeWidth="2" />
-                  <line x1="1230" y1="270" x2="1290" y2="270" strokeWidth="2" strokeDasharray="4 4" />
+                  <circle cx="280" cy="350" r="28" strokeWidth="2.5" />
+                  <path d="M 280 338 V 362 M 268 350 H 292" strokeWidth="2.5" />
+                  <text x="280" y="398" fill={textColor} fontSize="12" fontWeight="900" textAnchor="middle">HAVING IDEAS</text>
                 </motion.g>
 
-                {/* Bottom Edge Ripple Waves */}
-                <path d="M 0 860 Q 350 820 700 860 T 1400 860" strokeDasharray="8 8" strokeWidth="2" />
-                <path d="M 0 880 Q 350 840 700 880 T 1400 880" strokeDasharray="6 6" strokeWidth="1.5" opacity="0.6" />
+                {/* Flow trajectory arrow from Mind -> Second Brain */}
+                <motion.path
+                  d="M 440 360 Q 700 180 1000 360"
+                  strokeWidth="3.5"
+                  strokeDasharray="10 10"
+                  initial={{ pathOffset: 0 }}
+                  animate={{ pathOffset: [0, 1] }}
+                  transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                />
+                <path d="M 980 345 L 1000 360 L 985 375" strokeWidth="3.5" />
+
+                {/* Second Brain Storage Vault Node on Right */}
+                <rect x="1000" y="280" width="260" height="340" rx="28" strokeWidth="3.5" />
+                <rect x="1040" y="340" width="180" height="50" rx="12" strokeDasharray="4 4" />
+                <rect x="1040" y="415" width="180" height="50" rx="12" strokeDasharray="4 4" />
+                <rect x="1040" y="490" width="180" height="50" rx="12" strokeDasharray="4 4" />
+                <text x="1130" y="655" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">SECOND BRAIN (HOLDING THEM)</text>
               </g>
             )}
 
-            {/* ────── SLIDE 2: Peripheral Speed Tracks (Clear Center) ────── */}
-            {currentSlide === 2 && (
+            {/* ────── SLIDE 1: "Small tasks create big mental fatigue (Milk, Reply, Alert)" ────── */}
+            {currentSlide === 1 && (
               <g stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round">
-                {/* Top Edge Speed Line */}
-                <motion.path
-                  d="M -50 80 L 1450 80"
-                  strokeDasharray="12 12"
-                  initial={{ pathOffset: 0 }}
-                  animate={{ pathOffset: [0, 1] }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                />
+                {/* 3 Everyday Micro-Thought Badges floating on left */}
+                <g>
+                  {/* Badge 1: Pick up milk */}
+                  <rect x="80" y="220" width="220" height="60" rx="18" strokeWidth="2.5" />
+                  <text x="130" y="256" fill={textColor} fontSize="14" fontWeight="900">🥛 Pick up milk</text>
 
-                {/* Bottom Edge Speed Line */}
-                <motion.path
-                  d="M 1450 840 L -50 840"
-                  strokeDasharray="12 12"
-                  initial={{ pathOffset: 0 }}
-                  animate={{ pathOffset: [0, 1] }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                />
+                  {/* Badge 2: Urgent reply */}
+                  <rect x="120" y="320" width="240" height="60" rx="18" strokeWidth="2.5" />
+                  <text x="170" y="356" fill={textColor} fontSize="14" fontWeight="900">✉️ Reply to message</text>
 
-                {/* Top-Right Corner Stopwatch */}
-                <circle cx="1280" cy="160" r="70" strokeDasharray="6 6" strokeWidth="2.5" />
-                <line x1="1280" y1="160" x2="1280" y2="110" strokeWidth="3" />
-
-                {/* Bottom-Left Corner Stopwatch */}
-                <circle cx="120" cy="740" r="60" strokeDasharray="6 6" strokeWidth="2.5" />
-              </g>
-            )}
-
-            {/* ────── SLIDE 3: Peripheral Hardware Blueprint (Clear Center) ────── */}
-            {currentSlide === 3 && (
-              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-                {/* Left Edge Phone Frame Segment */}
-                <rect x="-40" y="200" width="180" height="500" rx="36" strokeWidth="3" />
-
-                {/* Right Edge SQLite Cylinder Segment */}
-                <g opacity="0.85">
-                  <ellipse cx="1320" cy="300" rx="110" ry="35" strokeWidth="3" />
-                  <line x1="1210" y1="300" x2="1210" y2="600" strokeWidth="3" />
-                  <line x1="1430" y1="300" x2="1430" y2="600" strokeWidth="3" />
-                  <ellipse cx="1320" cy="450" rx="110" ry="35" strokeDasharray="6 6" />
-                  <ellipse cx="1320" cy="600" rx="110" ry="35" strokeWidth="3" />
+                  {/* Badge 3: Check alert at place */}
+                  <rect x="90" y="420" width="230" height="60" rx="18" strokeWidth="2.5" />
+                  <text x="140" y="456" fill={textColor} fontSize="14" fontWeight="900">📍 Location alert</text>
                 </g>
 
-                {/* Top Outer Circuit Lines */}
-                <path d="M 0 100 H 1400" strokeDasharray="8 8" opacity="0.4" />
+                {/* Funnel unburdening path converting micro-thoughts to peace */}
+                <path d="M 380 350 Q 550 350 700 500 T 1100 500" strokeWidth="3.5" strokeDasharray="8 8" />
+
+                {/* MinDrop Unburdened Peace Waves on right */}
+                <motion.g
+                  animate={{ y: [-6, 6, -6] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <rect x="1080" y="380" width="240" height="240" rx="32" strokeWidth="3.5" />
+                  <path d="M 1120 500 Q 1200 460 1280 500" strokeWidth="3" />
+                  <path d="M 1120 530 Q 1200 490 1280 530" strokeWidth="3" opacity="0.6" />
+                  <text x="1200" y="655" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">MINDFUL UNBURDENED PEACE</text>
+                </motion.g>
               </g>
             )}
 
-            {/* ────── SLIDE 4: Peripheral Privacy Orbit Rings (Clear Center) ────── */}
-            {currentSlide === 4 && (
-              <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-                {/* Top-Left Corner Shield Arc */}
-                <path d="M -50 300 C 150 100, 300 50, 450 -50" strokeWidth="3" strokeDasharray="6 6" />
+            {/* ────── SLIDE 2: "Capture in under 2 seconds. Zero setup friction" ────── */}
+            {currentSlide === 2 && (
+              <g stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round">
+                {/* Stopwatch timer drawing 1.8s */}
+                <circle cx="200" cy="380" r="90" strokeWidth="3.5" />
+                <line x1="200" y1="380" x2="200" y2="310" strokeWidth="4" />
+                <line x1="200" y1="380" x2="240" y2="400" strokeWidth="4" />
+                <text x="200" y="510" fill={textColor} fontSize="18" fontWeight="900" textAnchor="middle">&lt; 2 SECONDS</text>
 
-                {/* Bottom-Right Corner Shield Arc */}
-                <path d="M 950 950 C 1100 850, 1250 800, 1450 600" strokeWidth="3" strokeDasharray="6 6" />
-
-                {/* Large Outer Radial Orbit Ring framing center */}
-                <motion.circle
-                  cx="700" cy="450" r="420"
-                  strokeDasharray="10 10"
-                  strokeWidth="2"
-                  animate={{ rotate: 360 }}
-                  style={{ transformOrigin: "700px 450px" }}
-                  transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                {/* Lightning Bolt Fast Capture Track */}
+                <motion.path
+                  d="M 320 380 L 480 380 L 440 430 L 600 430"
+                  strokeWidth="4"
+                  strokeDasharray="8 8"
+                  initial={{ pathOffset: 0 }}
+                  animate={{ pathOffset: [0, 1] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 />
+
+                {/* Instant Dropped Note Card on Right */}
+                <rect x="1050" y="260" width="260" height="320" rx="24" strokeWidth="3.5" />
+                <line x1="1090" y1="340" x2="1270" y2="340" strokeWidth="3" />
+                <line x1="1090" y1="400" x2="1230" y2="400" strokeWidth="2.5" strokeDasharray="4 4" />
+
+                {/* Instant Checkmark */}
+                <motion.path
+                  d="M 1090 480 L 1130 520 L 1230 430"
+                  strokeWidth="5"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+                />
+                <text x="1180" y="620" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">ZERO FORM FRICTION</text>
               </g>
             )}
 
-            {/* ────── SLIDE 5: Peripheral Chapter Trajectory (Clear Center) ────── */}
+            {/* ────── SLIDE 3: "Built directly on Android WorkManager & SQLite" ────── */}
+            {currentSlide === 3 && (
+              <g stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round">
+                {/* Left: Android Hardware WorkManager Gear */}
+                <g>
+                  <circle cx="200" cy="380" r="75" strokeWidth="3.5" strokeDasharray="6 6" />
+                  <circle cx="200" cy="380" r="25" strokeWidth="3.5" />
+                  <text x="200" y="490" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">ANDROID WORKMANAGER</text>
+                </g>
+
+                {/* Interconnecting Circuit Bus */}
+                <path d="M 280 380 H 1080" strokeWidth="3.5" strokeDasharray="10 10" />
+
+                {/* Right: Local SQLite Database Cylinder */}
+                <g>
+                  <ellipse cx="1180" cy="280" rx="100" ry="32" strokeWidth="3.5" />
+                  <line x1="1080" y1="280" x2="1080" y2="480" strokeWidth="3.5" />
+                  <line x1="1280" y1="280" x2="1280" y2="480" strokeWidth="3.5" />
+                  <ellipse cx="1180" cy="380" rx="100" ry="32" strokeDasharray="6 6" />
+                  <ellipse cx="1180" cy="480" rx="100" ry="32" strokeWidth="3.5" />
+                  <text x="1180" y="540" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">LOCAL SQLITE DB</text>
+                </g>
+              </g>
+            )}
+
+            {/* ────── SLIDE 4: "100% Local Privacy. Your thoughts never leave your phone" ────── */}
+            {currentSlide === 4 && (
+              <g stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round">
+                {/* On-Device Phone Vault Schematic on left */}
+                <rect x="120" y="240" width="240" height="420" rx="36" strokeWidth="3.5" />
+                <circle cx="240" cy="420" r="45" strokeWidth="3" />
+                <rect x="220" y="405" width="40" height="35" rx="8" fill={strokeColor} />
+                <text x="240" y="695" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">100% ON-DEVICE SQLITE</text>
+
+                {/* Red/Blocked Cloud Connection Symbol on right */}
+                <g>
+                  {/* Cloud shape with strikethrough NO symbol */}
+                  <path d="M 1100 380 C 1080 340, 1140 300, 1200 320 C 1240 290, 1300 330, 1290 380 C 1330 400, 1310 460, 1260 460 H 1100 C 1050 460, 1060 400, 1100 380 Z" strokeWidth="3" strokeDasharray="4 4" />
+                  <line x1="1060" y1="460" x2="1320" y2="300" strokeWidth="4" strokeLinecap="round" />
+                  <text x="1190" y="500" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">NO CLOUD / ZERO TELEMETRY</text>
+                </g>
+              </g>
+            )}
+
+            {/* ────── SLIDE 5: "Up Next · Chapter 01 Smart Notifications" ────── */}
             {currentSlide === 5 && (
               <g stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round">
-                {/* Top Outer Arc */}
+                {/* Notification Bell on Left */}
+                <g>
+                  <path d="M 200 340 C 200 300, 280 300, 280 340 V 420 L 300 440 H 180 L 200 420 Z" strokeWidth="3.5" />
+                  <circle cx="240" cy="460" r="12" strokeWidth="3" />
+                  <text x="240" y="505" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">SMART NOTIFICATIONS</text>
+                </g>
+
+                {/* Trajectory Arrow leading to Chapter 01 Gateway */}
                 <motion.path
-                  d="M -50 100 Q 700 -20 1450 100"
+                  d="M 340 400 Q 700 250, 1050 400"
+                  strokeWidth="3.5"
                   strokeDasharray="10 10"
                   initial={{ pathOffset: 0 }}
                   animate={{ pathOffset: [0, 1] }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                 />
 
-                {/* Bottom Outer Arc */}
-                <motion.path
-                  d="M -50 820 Q 700 920 1450 820"
-                  strokeDasharray="10 10"
-                  initial={{ pathOffset: 0 }}
-                  animate={{ pathOffset: [0, 1] }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                />
-
-                {/* Right Edge Gateway Portal Segment */}
-                <rect x="1300" y="300" width="140" height="300" rx="24" strokeWidth="3" />
+                {/* Chapter 01 Gateway Doorway on Right */}
+                <g>
+                  <rect x="1080" y="260" width="200" height="340" rx="20" strokeWidth="4" />
+                  <circle cx="1120" cy="430" r="8" strokeWidth="3" />
+                  <text x="1180" y="630" fill={textColor} fontSize="13" fontWeight="900" textAnchor="middle">CHAPTER 01 ALARMS</text>
+                </g>
               </g>
             )}
           </svg>
