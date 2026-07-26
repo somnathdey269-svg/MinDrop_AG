@@ -100,63 +100,15 @@ function SlideSolution() {
           </h2>
         </div>
 
-        {/* Mobile Horizontal Carousel (< sm) */}
-        <div className="w-full block sm:hidden">
-          <div 
-            onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
-            onTouchEnd={(e) => {
-              if (touchStartX.current === null) return;
-              const diff = touchStartX.current - e.changedTouches[0].clientX;
-              if (Math.abs(diff) > 35) {
-                if (diff > 0) setActiveCard((prev) => (prev + 1) % solutionItems.length);
-                else setActiveCard((prev) => (prev - 1 + solutionItems.length) % solutionItems.length);
-              }
-              touchStartX.current = null;
-            }}
-            className="w-full max-w-sm mx-auto bg-white border-3 border-[#F59E0B] rounded-[1.8rem] p-4 shadow-md text-left flex flex-col gap-2 cursor-pointer select-none"
-          >
-            {(() => {
-              const { icon: Icon, title, body } = solutionItems[activeCard];
-              return (
-                <>
-                  <div className="flex items-center justify-between">
-                    <div className="size-9 rounded-xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
-                      <Icon className="size-5 stroke-[2.5px]" />
-                    </div>
-                    <span className="text-[10px] font-black text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full">
-                      {activeCard + 1} / {solutionItems.length}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-black text-[#78350F]">{title}</h3>
-                  <p className="text-xs font-medium text-[#78350F]/80 leading-relaxed">{body}</p>
-                </>
-              );
-            })()}
-          </div>
-          {/* Subtle Mobile Navigation Dots */}
-          <div className="flex justify-center items-center gap-1.5 mt-3">
-            {solutionItems.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveCard(i)}
-                className={`shrink-0 rounded-full transition-all duration-300 cursor-pointer ${
-                  i === activeCard ? "w-5 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/30 hover:bg-[#D97706]/60"
-                }`}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Desktop 3-Column Grid (>= sm) */}
-        <div className="hidden sm:grid grid-cols-3 gap-6 sm:gap-8 w-full">
+        {/* All Solution Cards (Single Page View for Mobile & Desktop) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-8 w-full text-left">
           {solutionItems.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="bg-white border-3 border-[#F59E0B] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] text-left flex flex-col gap-3">
-              <div className="size-12 rounded-2xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
-                <Icon className="size-6 stroke-[2.5px]" />
+            <div key={title} className="bg-white border-2 sm:border-3 border-[#F59E0B] rounded-2xl sm:rounded-[2rem] p-3.5 sm:p-8 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-1.5 sm:gap-3">
+              <div className="size-8 sm:size-12 rounded-xl sm:rounded-2xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
+                <Icon className="size-4 sm:size-6 stroke-[2.5px]" />
               </div>
-              <h3 className="text-lg sm:text-xl font-black text-[#78350F]">{title}</h3>
-              <p className="text-sm sm:text-base font-semibold text-[#78350F]/70 leading-relaxed">{body}</p>
+              <h3 className="text-sm sm:text-xl font-black text-[#78350F]">{title}</h3>
+              <p className="text-xs sm:text-base font-semibold text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -240,14 +192,8 @@ function SlideInteractiveBuilder() {
           </button>
         </div>
       </div>
-    </div>
-  );
-}
-
-/* Slide 5: Real-World Use Cases Carousel */
+    </div/* Slide 5: Real-World Use Cases */
 function SlideScenarios() {
-  const [cardIdx, setCardIdx] = useState(0);
-
   const scenarios = [
     {
       title: "Bank & Transaction Debits",
@@ -275,12 +221,9 @@ function SlideScenarios() {
     },
   ];
 
-  const prev = () => setCardIdx(i => Math.max(0, i - 1));
-  const next = () => setCardIdx(i => Math.min(scenarios.length - 1, i + 1));
-
   return (
     <div className="h-full w-full bg-[#FFFBEB] flex items-center justify-center px-4 sm:px-6 py-2">
-      <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
+      <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
         <div>
           <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-0.5">
             Real-World Protection Scenarios
@@ -290,66 +233,26 @@ function SlideScenarios() {
           </h2>
         </div>
 
-        <div 
-          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
-          onTouchEnd={(e) => {
-            if (touchStartX.current === null) return;
-            const diff = touchStartX.current - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 35) {
-              if (diff > 0) next();
-              else prev();
-            }
-            touchStartX.current = null;
-          }}
-          className="w-full relative overflow-hidden flex items-center justify-center cursor-pointer select-none"
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={cardIdx}
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -30 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`w-full max-w-sm sm:max-w-none rounded-[1.6rem] sm:rounded-[2.2rem] border-3 ${scenarios[cardIdx].borderColor} p-4 sm:p-8 shadow-md ${scenarios[cardIdx].color} text-left flex flex-col gap-2.5 sm:gap-5`}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-6 w-full text-left">
+          {scenarios.map((s) => (
+            <div
+              key={s.title}
+              className={`rounded-2xl sm:rounded-[2.2rem] border-2 sm:border-3 ${s.borderColor} p-3.5 sm:p-7 shadow-xs sm:shadow-md ${s.color} flex flex-col gap-2 sm:gap-4`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-2.5 py-0.5 rounded-full shadow-xs">
-                  {scenarios[cardIdx].app}
+              <div className="flex flex-wrap items-center justify-between gap-1.5">
+                <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] bg-white border border-[#D97706]/30 px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
+                  {s.app}
                 </span>
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-2.5 py-0.5 rounded-full">
-                  KEYWORD: {scenarios[cardIdx].kw}
+                <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-[#78350F] bg-[#FEF3C7] border border-[#78350F]/20 px-2 sm:px-2.5 py-0.5 rounded-full">
+                  {s.kw}
                 </span>
               </div>
               <div>
-                <h3 className="text-base sm:text-2xl md:text-3xl font-black text-[#78350F] mb-1 sm:mb-2">{scenarios[cardIdx].title}</h3>
-                <p className="text-xs sm:text-base font-medium text-[#78350F]/85 leading-relaxed">{scenarios[cardIdx].desc}</p>
+                <h3 className="text-sm sm:text-xl font-black text-[#78350F] mb-1">{s.title}</h3>
+                <p className="text-xs sm:text-base font-medium text-[#78350F]/85 leading-relaxed">{s.desc}</p>
               </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Ultra-subtle Mini Controls */}
-        <div className="flex items-center gap-3">
-          <button onClick={prev} disabled={cardIdx === 0}
-            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs"
-            aria-label="Previous scenario"
-          >
-            <ChevronLeft className="size-4" />
-          </button>
-          <div className="flex items-center gap-1.5">
-            {scenarios.map((_, i) => (
-              <button key={i} onClick={() => setCardIdx(i)}
-                className={`shrink-0 rounded-full transition-all duration-300 cursor-pointer ${i === cardIdx ? "w-5 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/25 hover:bg-[#D97706]/50"}`}
-                aria-label={`Go to scenario ${i + 1}`}
-              />
-            ))}
-          </div>
-          <button onClick={next} disabled={cardIdx === scenarios.length - 1}
-            className="size-8 sm:size-10 rounded-full border border-[#78350F]/30 bg-white text-[#78350F] grid place-items-center disabled:opacity-20 hover:bg-[#FEF3C7] transition cursor-pointer shadow-xs"
-            aria-label="Next scenario"
-          >
-            <ChevronRight className="size-4" />
-          </button>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -358,8 +261,6 @@ function SlideScenarios() {
 
 /* Slide 6: Rule Types Grid */
 function SlideRuleTypes() {
-  const [activeIdx, setActiveIdx] = useState(0);
-
   const ruleTypes = [
     { tag: "Exact Match", title: "Literal Keyword Match", body: "Triggers when exact text strings appear in title or message body (e.g. 'DEBITED')." },
     { tag: "Contact Filter", title: "Sender Identification", body: "Restricts notification alerts to specific contacts or sender names while ignoring general broadcasts." },
@@ -369,7 +270,7 @@ function SlideRuleTypes() {
 
   return (
     <div className="h-full w-full bg-[#FEF3C7] flex items-center justify-center px-4 sm:px-6 py-2">
-      <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-8">
+      <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
         <div>
           <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#D97706] mb-1 sm:mb-2">
             Engineered For Precision
@@ -379,67 +280,20 @@ function SlideRuleTypes() {
           </h2>
         </div>
 
-        {/* Mobile Horizontal Carousel (< sm) */}
-        <div className="w-full block sm:hidden">
-          <div 
-            onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
-            onTouchEnd={(e) => {
-              if (touchStartX.current === null) return;
-              const diff = touchStartX.current - e.changedTouches[0].clientX;
-              if (Math.abs(diff) > 35) {
-                if (diff > 0) setActiveIdx((prev) => (prev + 1) % ruleTypes.length);
-                else setActiveIdx((prev) => (prev - 1 + ruleTypes.length) % ruleTypes.length);
-              }
-              touchStartX.current = null;
-            }}
-            className="w-full max-w-sm mx-auto bg-white border-3 border-[#78350F] rounded-[1.6rem] p-4 shadow-md text-left flex flex-col gap-2 cursor-pointer select-none"
-          >
-            {(() => {
-              const { tag, title, body } = ruleTypes[activeIdx];
-              return (
-                <>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full">
-                      {tag}
-                    </span>
-                    <span className="text-[10px] font-bold text-[#78350F]/60">
-                      {activeIdx + 1} / {ruleTypes.length}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-black text-[#78350F]">{title}</h3>
-                  <p className="text-xs font-medium text-[#78350F]/80 leading-relaxed">{body}</p>
-                </>
-              );
-            })()}
-          </div>
-
-          {/* Ultra-subtle Mini Dots */}
-          <div className="flex justify-center items-center gap-1.5 mt-3">
-            {ruleTypes.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIdx(i)}
-                className={`shrink-0 rounded-full transition-all duration-300 cursor-pointer ${
-                  i === activeIdx ? "w-5 h-2 bg-[#D97706]" : "size-2 bg-[#D97706]/25 hover:bg-[#D97706]/50"
-                }`}
-                aria-label={`Go to rule type ${i + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Desktop 2-Column Grid (>= sm) */}
-        <div className="hidden sm:grid grid-cols-2 gap-6 w-full text-left">
+        {/* Responsive Grid View (Single Page View for Mobile & Desktop) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-6 w-full text-left">
           {ruleTypes.map(({ tag, title, body }) => (
-            <div key={title} className="bg-white border-3 border-[#78350F] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2">
-              <span className="text-[11px] font-black uppercase tracking-widest text-[#D97706] bg-[#FEF3C7] px-3 py-1 rounded-full w-fit">{tag}</span>
-              <h3 className="text-lg sm:text-xl font-black text-[#78350F]">{title}</h3>
-              <p className="text-sm sm:text-base font-semibold text-[#78350F]/70 leading-relaxed">{body}</p>
+            <div key={title} className="bg-white border-2 sm:border-3 border-[#78350F] rounded-2xl sm:rounded-[2rem] p-3.5 sm:p-7 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-1.5">
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#D97706] bg-[#FEF3C7] px-2.5 py-0.5 rounded-full w-fit">{tag}</span>
+              <h3 className="text-sm sm:text-xl font-black text-[#78350F]">{title}</h3>
+              <p className="text-xs sm:text-base font-semibold text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
       </div>
     </div>
+  );
+}iv>
   );
 }
 
@@ -547,20 +401,20 @@ export function NotifyFeatureDetailView() {
       style={{ viewTransitionName: "card-notify" } as React.CSSProperties}
     >
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
-      <header className="shrink-0 h-12 border-b border-[#F59E0B]/15 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
+      <header className="shrink-0 h-10 sm:h-11 border-b border-[#F59E0B]/15 z-50 px-3.5 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(69,26,3,0.92)" : "rgba(255,251,235,0.92)", transition: "background-color 0.4s ease" }}>
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 h-full">
           <Link to="/" hash={backHash} viewTransition
-            className={`flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
-            <X className="size-3.5"/> Close
+            className={`flex items-center gap-1 text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 transition ${isDark ? "text-[#FEF3C7]/70 hover:text-white" : "text-[#D97706]/70 hover:text-[#78350F]"}`}>
+            <X className="size-3"/> Close
           </Link>
 
           <Link to="/" hash={backHash} viewTransition aria-label="MinDrop — Home" className="flex items-center justify-center shrink-0 h-full leading-none">
-            <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" isDarkBg={isDark} />
+            <MinDropHeaderLogo className="text-base sm:text-xl shrink-0" isDarkBg={isDark} />
           </Link>
 
           <Link to="/download" viewTransition
-            className={`inline-flex items-center justify-center h-[20px] sm:h-[22px] text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest px-2.5 sm:px-3 rounded-full border shrink-0 leading-none shadow-xs transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-[#D97706] text-white border-[#D97706] hover:bg-ink hover:border-ink"}`}>
+            className={`inline-flex items-center justify-center h-[18px] sm:h-[20px] text-[8px] sm:text-[9px] font-black uppercase tracking-wider px-2 sm:px-2.5 rounded-full border shrink-0 leading-none shadow-xs transition ${isDark ? "bg-white text-ink border-white hover:bg-[#D97706] hover:text-white hover:border-[#D97706]" : "bg-[#D97706] text-white border-[#D97706] hover:bg-ink hover:border-ink"}`}>
             Get App
           </Link>
         </div>
