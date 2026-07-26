@@ -295,10 +295,6 @@ function Terms() {
     };
   }, []);
 
-      </div>
-    );
-  }
-
   const slides = [
     <SlideOpening key="1" />,
     <SlideSummary key="2" />,
