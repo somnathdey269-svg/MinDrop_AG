@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Shield, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { adminSignInFn } from "@/lib/adminAuth.functions";
 
 export const Route = createFileRoute("/ctrl-vx9k2m7fq3z/signin")({
   head: () => ({
@@ -25,24 +26,20 @@ function AdminSignIn() {
     setBusy(true);
     setErr(null);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      // Verify superadmin role BEFORE navigating in; otherwise sign back out.
-      const uid = data.user?.id;
-      if (!uid) throw new Error("Sign in failed");
-      const { data: roles } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", uid)
-        .eq("role", "superadmin")
-        .maybeSingle();
-      if (!roles) {
-        await supabase.auth.signOut();
-        throw new Error("Access denied");
+      // Execute authentication server-side to eliminate client CORS/fetch issues
+      const res = await adminSignInFn({ data: { email, password } });
+      if (!res?.session) {
+        throw new Error("Sign in failed: Invalid response");
       }
+      // Hydrate client Supabase session
+      await supabase.auth.setSession({
+        access_token: res.session.access_token,
+        refresh_token: res.session.refresh_token,
+      });
+
       navigate({ to: "/ctrl-vx9k2m7fq3z" });
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : "Sign in failed");
+    } catch (e: any) {
+      setErr(e?.message || "Sign in failed");
     } finally {
       setBusy(false);
     }
@@ -58,9 +55,7 @@ function AdminSignIn() {
         <h1 className="font-serif text-4xl mb-2">
           MinDrop<span className="text-brand">.</span>
         </h1>
-        <p className="text-sm text-canvas/60 mb-6">
-          Restricted access.
-        </p>
+        <p className="text-sm text-canvas/60 mb-6">Restricted access.</p>
 
         <form onSubmit={submit} className="space-y-3">
           <input
@@ -82,11 +77,11 @@ function AdminSignIn() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-white/5 border border-white/10 px-4 py-3 rounded-xl text-sm outline-none placeholder:text-canvas/30"
           />
-          {err && <p className="text-xs text-red-400">{err}</p>}
+          {err && <p className="text-xs text-red-400 font-bold">{err}</p>}
           <button
             type="submit"
             disabled={busy}
-            className="w-full bg-canvas text-ink py-3 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-40 flex items-center justify-center gap-2"
+            className="w-full bg-canvas text-ink py-3 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-40 flex items-center justify-center gap-2 cursor-pointer"
           >
             {busy && <Loader2 className="size-3 animate-spin" />}
             Sign in

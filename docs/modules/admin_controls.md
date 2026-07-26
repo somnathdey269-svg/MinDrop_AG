@@ -38,3 +38,5 @@ Coordinates platform overview charts, user controls, plan modifications, and dia
   * **Change**: Executed requirements: 'Develop the Get App / Download page in the exact same interactive story/presentation pattern as all other marketing feature pages (like about, places-feature, settings-feature), complete with full header navigation, slide dots, prev/next controls, keyboard navigation, animated icons, interactive Android download status, and MobileFeatureDock integration.'
 - **2026-07-26 23:06:35** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Implement complete dynamic CMS system: Supabase SQL migration for marketing_pages, CMS types and server functions, dynamic frontend renderers with dynamic typography (H1-H5, font size, color, bold, italic) and adaptive box/grid layouts, Super Admin CMS portal UI under ctrl-vx9k2m7fq3z.cms, and wire all marketing routes with zero-downtime static fallbacks.'
+- **2026-07-26 23:20:16** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Implement server-side adminSignInFn server function to bypass browser CORS network errors for super admin sign-in.'
