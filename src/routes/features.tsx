@@ -50,6 +50,18 @@ function Features() {
   const [book, setBook] = useState(false);
   const { page, hasBlocks } = useCMSPage("features");
 
+  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
+    return (
+      <div className="min-h-[100dvh] bg-canvas text-ink">
+        <StoryChrome onOpenBook={() => setBook(true)} />
+        <BookMenu open={book} onClose={() => setBook(false)} />
+        <main className="mx-auto max-w-6xl px-5 md:px-8 pt-8 pb-16">
+          <DynamicBlockRenderer blocks={page.blocks} />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-[100dvh] bg-canvas text-ink">
       <StoryChrome onOpenBook={() => setBook(true)} />
@@ -67,12 +79,6 @@ function Features() {
           </Link>
         </div>
       </section>
-
-      {hasBlocks && page && (
-        <section className="mx-auto max-w-6xl px-5 md:px-8 pt-8">
-          <DynamicBlockRenderer blocks={page.blocks} />
-        </section>
-      )}
 
       <section className="mx-auto max-w-6xl px-5 md:px-8 pt-10 md:pt-16 pb-4">
         <p className="t-eyebrow text-brand">Every feature</p>

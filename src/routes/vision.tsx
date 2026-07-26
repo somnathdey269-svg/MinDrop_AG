@@ -185,6 +185,27 @@ function VisionDetailView() {
     };
   }, []);
 
+  const { page, hasBlocks } = useCMSPage("vision");
+
+  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
+    return (
+      <div className="min-h-screen bg-[#FEF3C7] flex flex-col select-none">
+        <header className="shrink-0 h-14 border-b-2 border-amber-500/10 z-50 bg-[#FEF3C7]/96 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+          <Link to="/" resetScroll={true} viewTransition className="flex items-center gap-1 text-xs font-black uppercase text-amber-700">
+            <X className="size-3.5"/> Close
+          </Link>
+          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
+          <Link to="/download" resetScroll={true} viewTransition className="px-3.5 py-1.5 rounded-full bg-amber-600 text-white text-xs font-black uppercase shadow-md">
+            Get App
+          </Link>
+        </header>
+        <main className="flex-1 w-full max-w-6xl mx-auto p-6 sm:p-12">
+          <DynamicBlockRenderer blocks={page.blocks} />
+        </main>
+      </div>
+    );
+  }
+
   const slides = [
     <SlideOpening key="1" />,
     <SlideProblem key="2" />,

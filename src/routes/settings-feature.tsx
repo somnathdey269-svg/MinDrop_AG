@@ -413,6 +413,27 @@ function SettingsDetailView() {
     };
   }, [current]);
 
+  const { page, hasBlocks } = useCMSPage("settings-feature");
+
+  if (hasBlocks && page && page.blocks && page.blocks.length > 0) {
+    return (
+      <div className="min-h-screen bg-[#FFF7ED] flex flex-col select-none">
+        <header className="shrink-0 h-14 border-b-2 border-[#EA580C]/10 z-50 bg-[#FFF7ED]/96 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+          <Link to="/" resetScroll={true} viewTransition className="flex items-center gap-1 text-xs font-black uppercase text-[#EA580C]">
+            <X className="size-3.5"/> Close
+          </Link>
+          <MinDropHeaderLogo className="text-lg sm:text-2xl shrink-0" />
+          <Link to="/download" resetScroll={true} viewTransition className="px-3.5 py-1.5 rounded-full bg-[#EA580C] text-white text-xs font-black uppercase shadow-md">
+            Get App
+          </Link>
+        </header>
+        <main className="flex-1 w-full max-w-6xl mx-auto p-6 sm:p-12">
+          <DynamicBlockRenderer blocks={page.blocks} />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div
       className="h-[100dvh] flex flex-col overflow-hidden select-none overscroll-none touch-none"
