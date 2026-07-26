@@ -26,5 +26,9 @@ export function useCMSPage(slug: string) {
     };
   }, [slug]);
 
-  return { page, loading, hasBlocks: !!page?.blocks?.length };
+  // Extract structured fields if available
+  const structuredBlock = page?.blocks?.find((b: any) => b.type === "structured_fields") as any;
+  const fields: Record<string, string> = structuredBlock?.fields || {};
+
+  return { page, loading, fields, hasBlocks: !!page?.blocks?.length };
 }

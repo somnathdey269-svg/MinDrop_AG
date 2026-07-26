@@ -60,7 +60,7 @@ export const listMarketingPagesFn = createServerFn({ method: "GET" })
     return { pages: (data || []) as MarketingPageData[] };
   });
 
-/** Superadmin mutator to save/update marketing page blocks & metadata */
+/** Superadmin mutator to save/update marketing page blocks, fields & metadata */
 export const saveMarketingPageFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator(
@@ -71,7 +71,8 @@ export const saveMarketingPageFn = createServerFn({ method: "POST" })
           page_name: z.string().min(1),
           meta_title: z.string().optional(),
           meta_description: z.string().optional(),
-          blocks: z.array(z.any()),
+          blocks: z.array(z.any()).optional().default([]),
+          fields: z.record(z.string()).optional(),
           is_published: z.boolean().optional(),
         })
         .parse(raw)
@@ -79,12 +80,17 @@ export const saveMarketingPageFn = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<{ success: boolean; id?: string }> => {
     await ensureSuperadmin((context as any).supabase, (context as any).userId);
 
+    // If fields are passed, embed them inside the first block or as structured JSON metadata in blocks
+    const finalBlocks = data.fields
+      ? [{ type: "structured_fields", fields: data.fields }, ...(data.blocks || [])]
+      : data.blocks || [];
+
     const payload = {
       slug: data.slug,
       page_name: data.page_name,
       meta_title: data.meta_title ?? null,
       meta_description: data.meta_description ?? null,
-      blocks: data.blocks,
+      blocks: finalBlocks,
       is_published: data.is_published ?? true,
       updated_at: new Date().toISOString(),
     };

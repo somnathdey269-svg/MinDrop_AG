@@ -59,7 +59,13 @@ function FloatingGem() {
 ══════════════════════════════════════════════ */
 
 /* Slide 1: Opening Hero */
-function SlideOpening() {
+function SlideOpening({ fields = {} }: { fields?: Record<string, string> }) {
+  const eyebrow = fields.openingEyebrow || "💎 Premium Plans";
+  const line1 = fields.openingLine1 || "App subscriptions are tiring.";
+  const line2 = fields.openingLine2 || "MinDrop is built as a utility.";
+  const line3 = fields.openingLine3 || "Pay once, use forever.";
+  const headline = fields.openingHeadline || "Keep it free, or unlock limits.";
+
   return (
     <div className="w-full h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10 lg:px-16">
       <div className="w-[95%] mx-auto max-w-7xl relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
@@ -68,15 +74,11 @@ function SlideOpening() {
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="inline-flex items-center gap-2 rounded-full border border-[#EC4899]/20 bg-[#FCE7F3] px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-6 sm:mb-8">
-            💎 Premium Plans
+            {eyebrow}
           </motion.span>
 
           <div className="flex flex-col gap-3 sm:gap-5 mb-6 sm:mb-8">
-            {[
-              "App subscriptions are tiring.",
-              "MinDrop is built as a utility.",
-              "Pay once, use forever.",
-            ].map((line, i) => (
+            {[line1, line2, line3].map((line, i) => (
               <motion.p key={i}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
                 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-[#DB2777]/45 leading-tight tracking-tight">
@@ -88,7 +90,7 @@ function SlideOpening() {
           <motion.p
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.65 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#831843] leading-none tracking-tighter">
-            Keep it free, or unlock limits.
+            {headline}
           </motion.p>
         </div>
 
@@ -106,20 +108,37 @@ interface SlideTiersProps {
   currency: string;
   setCurrency: (c: string) => void;
   availableCurrencies: string[];
+  fields?: Record<string, string>;
 }
-function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: SlideTiersProps) {
+function SlideTiers({ prices, currency, setCurrency, availableCurrencies, fields = {} }: SlideTiersProps) {
   const selected = prices[currency];
   const priceDisplay = selected ? `${selected.symbol}${selected.displayed}` : "₹999";
+
+  const eyebrow = fields.tiersEyebrow || "💎 UNLOCK LIFETIME PEACE & TRANSPARENT PLANS";
+  const title = fields.tiersTitle || "Clear pricing. Simple structure.";
+  const freeTitle = fields.freeTierTitle || "Free Forever";
+  const freeF1 = fields.freeTierFeature1 || "Up to 3 active alarms";
+  const freeF2 = fields.freeTierFeature2 || "Up to 3 notification filter rules";
+  const freeF3 = fields.freeTierFeature3 || "Up to 3 saved places / locations";
+  const freeF4 = fields.freeTierFeature4 || "Voice capture & offline photo storage";
+  const freeFooter = fields.freeTierFooter || "Default setup ready offline";
+
+  const premiumTitle = fields.premiumTierTitle || "Premium Plan";
+  const premF1 = fields.premiumTierFeature1 || "Infinite active alarms";
+  const premF2 = fields.premiumTierFeature2 || "Infinite notification filter rules";
+  const premF3 = fields.premiumTierFeature3 || "Infinite saved places / locations";
+  const premF4 = fields.premiumTierFeature4 || "Private Google Drive cloud backup sync";
+  const premFooter = fields.premiumTierFooter || "Linked to superadmin configs";
 
   return (
     <div className="w-full h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-10 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2 sm:mb-3">
-            💎 UNLOCK LIFETIME PEACE & TRANSPARENT PLANS
+            {eyebrow}
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-tight tracking-tight">
-            Clear pricing. Simple structure.
+            {title}
           </h2>
 
           {/* Currency Switcher */}
@@ -148,27 +167,27 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
                 <span className="text-2xl sm:text-3xl">🌱</span>
                 <p className="text-xs sm:text-sm uppercase font-black text-ink/50 tracking-wider">Free Tier</p>
               </div>
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">Free Forever</p>
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">{freeTitle}</p>
               <ul className="text-sm sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
-                  <span>Up to 3 active alarms</span>
+                  <span>{freeF1}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
-                  <span>Up to 3 notification filter rules</span>
+                  <span>{freeF2}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
-                  <span>Up to 3 saved places / locations</span>
+                  <span>{freeF3}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#10B981] stroke-[3px] shrink-0" />
-                  <span>Voice capture & offline photo storage</span>
+                  <span>{freeF4}</span>
                 </li>
               </ul>
             </div>
-            <p className="text-xs sm:text-xs text-ink/40 font-black uppercase tracking-wider">Default setup ready offline</p>
+            <p className="text-xs sm:text-xs text-ink/40 font-black uppercase tracking-wider">{freeFooter}</p>
           </div>
 
           {/* Premium Tier */}
@@ -176,29 +195,29 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-2xl sm:text-3xl">💎</span>
-                <p className="text-xs sm:text-sm uppercase font-black text-[#DB2777] tracking-wider">Premium Plan</p>
+                <p className="text-xs sm:text-sm uppercase font-black text-[#DB2777] tracking-wider">{premiumTitle}</p>
               </div>
               <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">{priceDisplay} / Year</p>
               <ul className="text-sm sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
-                  <span className="text-[#831843]">Infinite active alarms</span>
+                  <span className="text-[#831843]">{premF1}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
-                  <span className="text-[#831843]">Infinite notification filter rules</span>
+                  <span className="text-[#831843]">{premF2}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
-                  <span className="text-[#831843]">Infinite saved places / locations</span>
+                  <span className="text-[#831843]">{premF3}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
-                  <span className="text-[#831843]">Private Google Drive cloud backup sync</span>
+                  <span className="text-[#831843]">{premF4}</span>
                 </li>
               </ul>
             </div>
-            <p className="text-xs sm:text-xs text-[#DB2777]/50 font-black uppercase tracking-wider">Linked to superadmin configs</p>
+            <p className="text-xs sm:text-xs text-[#DB2777]/50 font-black uppercase tracking-wider">{premFooter}</p>
           </div>
         </div>
       </div>
@@ -207,16 +226,28 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
 }
 
 /* Slide 3: Flow diagram */
-function SlideFlow() {
+function SlideFlow({ fields = {} }: { fields?: Record<string, string> }) {
+  const eyebrow = fields.flowEyebrow || "Upgrade flow";
+  const title = fields.flowTitle || "How your upgrade works";
+  const step1Badge = fields.step1Badge || "01 / Download";
+  const step1Title = fields.step1Title || "Get Free App";
+  const step1Desc = fields.step1Desc || "Runs offline. Set up to 3 alarms, filters, & locations.";
+  const step2Badge = fields.step2Badge || "02 / Subscribe";
+  const step2Title = fields.step2Title || "Yearly Plan";
+  const step2Desc = fields.step2Desc || "Unlock settings securely via in-app dashboard.";
+  const step3Badge = fields.step3Badge || "03 / Enjoy";
+  const step3Title = fields.step3Title || "Unlimited Slots";
+  const step3Desc = fields.step3Desc || "Enjoy geofences and cloud sync instantly.";
+
   return (
     <div className="w-full h-full bg-[#FCE7F3] flex items-center justify-center px-6 sm:px-10">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2 sm:mb-3">
-            Upgrade flow
+            {eyebrow}
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-tight tracking-tight">
-            How your upgrade works
+            {title}
           </h2>
         </div>
 
@@ -224,27 +255,27 @@ function SlideFlow() {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 w-full max-w-6xl">
           {/* Step 1 */}
           <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
-            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">01 / Download</span>
-            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Get Free App</h4>
-            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">Runs offline. Set up to 3 alarms, filters, & locations.</p>
+            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">{step1Badge}</span>
+            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">{step1Title}</h4>
+            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">{step1Desc}</p>
           </div>
 
           <ArrowRight className="size-8 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
 
           {/* Step 2 */}
           <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
-            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">02 / Subscribe</span>
-            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Yearly Plan</h4>
-            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">Unlock settings securely via in-app dashboard.</p>
+            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">{step2Badge}</span>
+            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">{step2Title}</h4>
+            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">{step2Desc}</p>
           </div>
 
           <ArrowRight className="size-8 text-ink/30 rotate-90 lg:rotate-0 shrink-0" />
 
           {/* Step 3 */}
           <div className="border-3 border-ink bg-white p-8 sm:p-10 lg:p-12 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center flex-1 w-full">
-            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">03 / Enjoy</span>
-            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">Unlimited Slots</h4>
-            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">Enjoy geofences and cloud sync instantly.</p>
+            <span className="text-xs sm:text-sm font-black text-[#DB2777] uppercase tracking-wider">{step3Badge}</span>
+            <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-ink mt-3 leading-snug">{step3Title}</h4>
+            <p className="text-sm sm:text-base md:text-lg text-ink/60 font-bold mt-2 leading-relaxed">{step3Desc}</p>
           </div>
         </div>
       </div>
@@ -253,24 +284,34 @@ function SlideFlow() {
 }
 
 /* Slide 4: Specs closer */
-function SlideCloser({ backHash }: { backHash?: string }) {
+function SlideCloser({ backHash, fields = {} }: { backHash?: string; fields?: Record<string, string> }) {
+  const eyebrow = fields.closerEyebrow || "Under the hood specs";
+  const title = fields.closerTitle || "An engine built to last.";
+  const spec1Title = fields.spec1Title || "Subscription Simplicity";
+  const spec1Desc = fields.spec1Desc || "Clearly visible terms with zero hidden fees. Complete control of plan adjustments.";
+  const spec2Title = fields.spec2Title || "Offline Verification";
+  const spec2Desc = fields.spec2Desc || "Settings checks are stored locally on-device. No query delays or server locks.";
+  const spec3Title = fields.spec3Title || "Privacy Sync";
+  const spec3Desc = fields.spec3Desc || "Backup loops directly through your Google Drive. We never see your data.";
+  const ctaText = fields.closerCtaText || "Take MinDrop Home";
+
   return (
     <div className="w-full h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-10 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-3">
-            Under the hood specs
+            {eyebrow}
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-none tracking-tighter">
-            An engine built to last.
+            {title}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 w-full text-left">
           {[
-            { icon: ShieldAlert, color: "text-[#EF4444]", title: "Subscription Simplicity", desc: "Clearly visible terms with zero hidden fees. Complete control of plan adjustments." },
-            { icon: Play, color: "text-[#EC4899]", title: "Offline Verification", desc: "Settings checks are stored locally on-device. No query delays or server locks." },
-            { icon: Layers, color: "text-[#10B981]", title: "Privacy Sync", desc: "Backup loops directly through your Google Drive. We never see your data." },
+            { icon: ShieldAlert, color: "text-[#EF4444]", title: spec1Title, desc: spec1Desc },
+            { icon: Play, color: "text-[#EC4899]", title: spec2Title, desc: spec2Desc },
+            { icon: Layers, color: "text-[#10B981]", title: spec3Title, desc: spec3Desc },
           ].map(({ icon: Icon, color, title, desc }) => (
             <div key={title} className="bg-white border-3 border-[#EC4899] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(131,24,67,0.15)] flex flex-col gap-3">
               <Icon className={`size-8 ${color} shrink-0`} />
@@ -288,7 +329,7 @@ function SlideCloser({ backHash }: { backHash?: string }) {
             style={{ viewTransitionName: 'card-download' } as React.CSSProperties}
             className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#EC4899] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#BE185D] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap"
           >
-            Take MinDrop Home <ArrowRight className="size-5" />
+            {ctaText} <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>
@@ -345,15 +386,15 @@ function PricingDetailView() {
     return () => { cancelled = true; };
   }, []);
 
-  const { page, hasBlocks } = useCMSPage("pricing");
+  const { fields } = useCMSPage("pricing");
 
   const availableCurrencies = useMemo(() => Object.keys(prices).sort(), [prices]);
 
   const slides = [
-    <SlideOpening key="1" />,
-    <SlideTiers key="2" prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} />,
-    <SlideFlow key="3" />,
-    <SlideCloser key="4" backHash={backHash} />,
+    <SlideOpening key="1" fields={fields} />,
+    <SlideTiers key="2" prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} fields={fields} />,
+    <SlideFlow key="3" fields={fields} />,
+    <SlideCloser key="4" backHash={backHash} fields={fields} />,
   ];
   const TOTAL = slides.length;
 
@@ -442,6 +483,22 @@ function PricingDetailView() {
         backHash={backHash}
         isDark={false}
       />
+    </div>
+  );
+}
+
+export function PricingDeckPreview({ fields = {} }: { fields?: Record<string, string> }) {
+  const [currency, setCurrency] = useState("INR");
+  const prices = {
+    INR: { symbol: "₹", displayed: "999" },
+    USD: { symbol: "$", displayed: "19" },
+  };
+  return (
+    <div className="w-full bg-[#FFF2F7] border border-pink-200 rounded-3xl overflow-hidden shadow-sm space-y-12 p-6 sm:p-10 select-none">
+      <SlideOpening fields={fields} />
+      <SlideTiers prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={["INR", "USD"]} fields={fields} />
+      <SlideFlow fields={fields} />
+      <SlideCloser fields={fields} />
     </div>
   );
 }

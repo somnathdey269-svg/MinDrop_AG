@@ -102,6 +102,52 @@ export type CMSBlock =
   | FaqBlock
   | MediaBoxBlock;
 
+export interface PricingPageFields {
+  openingEyebrow?: string;
+  openingLine1?: string;
+  openingLine2?: string;
+  openingLine3?: string;
+  openingHeadline?: string;
+
+  tiersEyebrow?: string;
+  tiersTitle?: string;
+  freeTierTitle?: string;
+  freeTierFeature1?: string;
+  freeTierFeature2?: string;
+  freeTierFeature3?: string;
+  freeTierFeature4?: string;
+  freeTierFooter?: string;
+
+  premiumTierTitle?: string;
+  premiumTierFeature1?: string;
+  premiumTierFeature2?: string;
+  premiumTierFeature3?: string;
+  premiumTierFeature4?: string;
+  premiumTierFooter?: string;
+
+  flowEyebrow?: string;
+  flowTitle?: string;
+  step1Badge?: string;
+  step1Title?: string;
+  step1Desc?: string;
+  step2Badge?: string;
+  step2Title?: string;
+  step2Desc?: string;
+  step3Badge?: string;
+  step3Title?: string;
+  step3Desc?: string;
+
+  closerEyebrow?: string;
+  closerTitle?: string;
+  spec1Title?: string;
+  spec1Desc?: string;
+  spec2Title?: string;
+  spec2Desc?: string;
+  spec3Title?: string;
+  spec3Desc?: string;
+  closerCtaText?: string;
+}
+
 export interface MarketingPageData {
   id?: string;
   slug: string;
@@ -109,6 +155,7 @@ export interface MarketingPageData {
   meta_title?: string;
   meta_description?: string;
   blocks: CMSBlock[];
+  fields?: Record<string, string>;
   is_published?: boolean;
   updated_at?: string;
 }

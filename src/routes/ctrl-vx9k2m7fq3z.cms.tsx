@@ -16,6 +16,7 @@ import type {
   CardItem,
 } from "@/lib/cms/cms.types";
 import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
+import { PricingDeckPreview } from "@/routes/pricing";
 import {
   Save,
   Trash2,
@@ -78,6 +79,7 @@ function SuperAdminCMSView() {
   const [metaTitle, setMetaTitle] = useState<string>("");
   const [metaDescription, setMetaDescription] = useState<string>("");
   const [blocks, setBlocks] = useState<CMSBlock[]>([]);
+  const [fields, setFields] = useState<Record<string, string>>({});
   const [collapsedBlocks, setCollapsedBlocks] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
@@ -94,15 +96,22 @@ function SuperAdminCMSView() {
     try {
       const res = await getMarketingPageFn({ data: { slug } });
       const meta = MARKETING_PAGES_LIST.find((p) => p.slug === slug);
-      if (res.page && res.page.blocks && res.page.blocks.length > 0) {
+      if (res.page) {
         setPageName(res.page.page_name || meta?.name || slug);
         setMetaTitle(res.page.meta_title || "");
         setMetaDescription(res.page.meta_description || "");
-        setBlocks(res.page.blocks);
+        const structBlock = res.page.blocks?.find((b: any) => b.type === "structured_fields") as any;
+        if (structBlock?.fields) {
+          setFields(structBlock.fields);
+        } else {
+          setFields(getInitialDefaultFields(slug));
+        }
+        setBlocks(res.page.blocks?.filter((b: any) => b.type !== "structured_fields") || []);
       } else {
         setPageName(meta?.name || slug);
         setMetaTitle("");
         setMetaDescription("");
+        setFields(getInitialDefaultFields(slug));
         setBlocks(getInitialDefaultBlocks(slug));
       }
     } catch (e) {
@@ -445,6 +454,57 @@ function SuperAdminCMSView() {
     }
   };
 
+  const getInitialDefaultFields = (slug: string): Record<string, string> => {
+    if (slug === "pricing") {
+      return {
+        openingEyebrow: "💎 Premium Plans",
+        openingLine1: "App subscriptions are tiring.",
+        openingLine2: "MinDrop is built as a utility.",
+        openingLine3: "Pay once, use forever.",
+        openingHeadline: "Keep it free, or unlock limits.",
+
+        tiersEyebrow: "💎 UNLOCK LIFETIME PEACE & TRANSPARENT PLANS",
+        tiersTitle: "Clear pricing. Simple structure.",
+        freeTierTitle: "Free Forever",
+        freeTierFeature1: "Up to 3 active alarms",
+        freeTierFeature2: "Up to 3 notification filter rules",
+        freeTierFeature3: "Up to 3 saved places / locations",
+        freeTierFeature4: "Voice capture & offline photo storage",
+        freeTierFooter: "Default setup ready offline",
+
+        premiumTierTitle: "Premium Plan",
+        premiumTierFeature1: "Infinite active alarms",
+        premiumTierFeature2: "Infinite notification filter rules",
+        premiumTierFeature3: "Infinite saved places / locations",
+        premiumTierFeature4: "Private Google Drive cloud backup sync",
+        premiumTierFooter: "Linked to superadmin configs",
+
+        flowEyebrow: "Upgrade flow",
+        flowTitle: "How your upgrade works",
+        step1Badge: "01 / Download",
+        step1Title: "Get Free App",
+        step1Desc: "Runs offline. Set up to 3 alarms, filters, & locations.",
+        step2Badge: "02 / Subscribe",
+        step2Title: "Yearly Plan",
+        step2Desc: "Unlock settings securely via in-app dashboard.",
+        step3Badge: "03 / Enjoy",
+        step3Title: "Unlimited Slots",
+        step3Desc: "Enjoy geofences and cloud sync instantly.",
+
+        closerEyebrow: "Under the hood specs",
+        closerTitle: "An engine built to last.",
+        spec1Title: "Subscription Simplicity",
+        spec1Desc: "Clearly visible terms with zero hidden fees. Complete control of plan adjustments.",
+        spec2Title: "Offline Verification",
+        spec2Desc: "Settings checks are stored locally on-device. No query delays or server locks.",
+        spec3Title: "Privacy Sync",
+        spec3Desc: "Backup loops directly through your Google Drive. We never see your data.",
+        closerCtaText: "Take MinDrop Home",
+      };
+    }
+    return {};
+  };
+
   const handleSave = async () => {
     setSaving(true);
     setSavedMsg(null);
@@ -456,6 +516,7 @@ function SuperAdminCMSView() {
           meta_title: metaTitle,
           meta_description: metaDescription,
           blocks,
+          fields,
           is_published: true,
         },
       });
@@ -641,6 +702,106 @@ function SuperAdminCMSView() {
             {/* Editor Workspace */}
             {(viewMode === "editor" || viewMode === "split") && (
               <div className="space-y-6">
+                {selectedSlug === "pricing" && (
+                  <div className="space-y-6">
+                    {/* Slide 1: Hero Headlines */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+                      <div className="flex items-center gap-2 text-[#DB2777]">
+                        <Sparkles className="size-5" />
+                        <h3 className="font-bold text-base text-slate-900">Slide 1: Hero Headlines & Copy</h3>
+                      </div>
+
+                      <div className="space-y-3 text-left">
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Eyebrow Badge Text</label>
+                          <input type="text" value={fields.openingEyebrow || ""} onChange={(e) => setFields((prev) => ({ ...prev, openingEyebrow: e.target.value }))} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-pink-500" />
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Hero Line 1</label>
+                          <input type="text" value={fields.openingLine1 || ""} onChange={(e) => setFields((prev) => ({ ...prev, openingLine1: e.target.value }))} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-pink-500" />
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Hero Line 2</label>
+                          <input type="text" value={fields.openingLine2 || ""} onChange={(e) => setFields((prev) => ({ ...prev, openingLine2: e.target.value }))} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-pink-500" />
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Hero Line 3</label>
+                          <input type="text" value={fields.openingLine3 || ""} onChange={(e) => setFields((prev) => ({ ...prev, openingLine3: e.target.value }))} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-pink-500" />
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Main Punchline Headline</label>
+                          <input type="text" value={fields.openingHeadline || ""} onChange={(e) => setFields((prev) => ({ ...prev, openingHeadline: e.target.value }))} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-pink-500" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Slide 2: Pricing Tiers */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+                      <div className="flex items-center gap-2 text-indigo-600">
+                        <Grid className="size-5" />
+                        <h3 className="font-bold text-base text-slate-900">Slide 2: Pricing Tiers Copy</h3>
+                      </div>
+
+                      <div className="space-y-3 text-left">
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Section Title</label>
+                          <input type="text" value={fields.tiersTitle || ""} onChange={(e) => setFields((prev) => ({ ...prev, tiersTitle: e.target.value }))} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-indigo-500" />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                          {/* Free Tier */}
+                          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                            <h4 className="font-bold text-xs uppercase text-slate-500">Free Tier Copy</h4>
+                            <input type="text" value={fields.freeTierTitle || ""} onChange={(e) => setFields((prev) => ({ ...prev, freeTierTitle: e.target.value }))} placeholder="Title" className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold" />
+                            <input type="text" value={fields.freeTierFeature1 || ""} onChange={(e) => setFields((prev) => ({ ...prev, freeTierFeature1: e.target.value }))} placeholder="Feature 1" className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                            <input type="text" value={fields.freeTierFeature2 || ""} onChange={(e) => setFields((prev) => ({ ...prev, freeTierFeature2: e.target.value }))} placeholder="Feature 2" className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                            <input type="text" value={fields.freeTierFeature3 || ""} onChange={(e) => setFields((prev) => ({ ...prev, freeTierFeature3: e.target.value }))} placeholder="Feature 3" className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                            <input type="text" value={fields.freeTierFeature4 || ""} onChange={(e) => setFields((prev) => ({ ...prev, freeTierFeature4: e.target.value }))} placeholder="Feature 4" className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                          </div>
+
+                          {/* Premium Tier */}
+                          <div className="p-4 rounded-xl bg-pink-50 border border-pink-200 space-y-2">
+                            <h4 className="font-bold text-xs uppercase text-pink-600">Premium Tier Copy</h4>
+                            <input type="text" value={fields.premiumTierTitle || ""} onChange={(e) => setFields((prev) => ({ ...prev, premiumTierTitle: e.target.value }))} placeholder="Title" className="w-full px-3 py-1.5 rounded-lg border border-pink-200 text-xs font-semibold" />
+                            <input type="text" value={fields.premiumTierFeature1 || ""} onChange={(e) => setFields((prev) => ({ ...prev, premiumTierFeature1: e.target.value }))} placeholder="Feature 1" className="w-full px-3 py-1.5 rounded-lg border border-pink-200 text-xs" />
+                            <input type="text" value={fields.premiumTierFeature2 || ""} onChange={(e) => setFields((prev) => ({ ...prev, premiumTierFeature2: e.target.value }))} placeholder="Feature 2" className="w-full px-3 py-1.5 rounded-lg border border-pink-200 text-xs" />
+                            <input type="text" value={fields.premiumTierFeature3 || ""} onChange={(e) => setFields((prev) => ({ ...prev, premiumTierFeature3: e.target.value }))} placeholder="Feature 3" className="w-full px-3 py-1.5 rounded-lg border border-pink-200 text-xs" />
+                            <input type="text" value={fields.premiumTierFeature4 || ""} onChange={(e) => setFields((prev) => ({ ...prev, premiumTierFeature4: e.target.value }))} placeholder="Feature 4" className="w-full px-3 py-1.5 rounded-lg border border-pink-200 text-xs" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Slide 3: Upgrade Flow */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+                      <div className="flex items-center gap-2 text-amber-600">
+                        <Sliders className="size-5" />
+                        <h3 className="font-bold text-base text-slate-900">Slide 3: Upgrade Flow Steps</h3>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+                        {/* Step 1 */}
+                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                          <label className="text-[10px] font-bold uppercase text-slate-400">Step 1</label>
+                          <input type="text" value={fields.step1Title || ""} onChange={(e) => setFields((prev) => ({ ...prev, step1Title: e.target.value }))} placeholder="Title" className="w-full px-2.5 py-1 rounded border border-slate-200 text-xs font-bold" />
+                          <textarea value={fields.step1Desc || ""} onChange={(e) => setFields((prev) => ({ ...prev, step1Desc: e.target.value }))} placeholder="Description" rows={2} className="w-full px-2.5 py-1 rounded border border-slate-200 text-xs" />
+                        </div>
+                        {/* Step 2 */}
+                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                          <label className="text-[10px] font-bold uppercase text-slate-400">Step 2</label>
+                          <input type="text" value={fields.step2Title || ""} onChange={(e) => setFields((prev) => ({ ...prev, step2Title: e.target.value }))} placeholder="Title" className="w-full px-2.5 py-1 rounded border border-slate-200 text-xs font-bold" />
+                          <textarea value={fields.step2Desc || ""} onChange={(e) => setFields((prev) => ({ ...prev, step2Desc: e.target.value }))} placeholder="Description" rows={2} className="w-full px-2.5 py-1 rounded border border-slate-200 text-xs" />
+                        </div>
+                        {/* Step 3 */}
+                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                          <label className="text-[10px] font-bold uppercase text-slate-400">Step 3</label>
+                          <input type="text" value={fields.step3Title || ""} onChange={(e) => setFields((prev) => ({ ...prev, step3Title: e.target.value }))} placeholder="Title" className="w-full px-2.5 py-1 rounded border border-slate-200 text-xs font-bold" />
+                          <textarea value={fields.step3Desc || ""} onChange={(e) => setFields((prev) => ({ ...prev, step3Desc: e.target.value }))} placeholder="Description" rows={2} className="w-full px-2.5 py-1 rounded border border-slate-200 text-xs" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
                     Add Content Block:
@@ -1432,11 +1593,15 @@ function SuperAdminCMSView() {
                     <Eye className="size-4" /> Live Preview · /{selectedSlug}
                   </span>
                   <span className="text-xs font-semibold text-slate-400">
-                    {blocks.length} Active Block(s)
+                    {selectedSlug === "pricing" ? "100% Authentic Design Preview" : `${blocks.length} Active Block(s)`}
                   </span>
                 </div>
-                <div className="flex-1 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
-                  <DynamicBlockRenderer blocks={blocks} />
+                <div className="flex-1 bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/80 shadow-xs overflow-y-auto max-h-[800px]">
+                  {selectedSlug === "pricing" ? (
+                    <PricingDeckPreview fields={fields} />
+                  ) : (
+                    <DynamicBlockRenderer blocks={blocks} />
+                  )}
                 </div>
               </div>
             )}
