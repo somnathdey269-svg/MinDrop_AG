@@ -7,10 +7,10 @@ interface ArtisticSketchBackgroundProps {
 }
 
 export function ArtisticSketchBackground({ currentSlide, isDark }: ArtisticSketchBackgroundProps) {
-  // Auto-adjusting stroke colors for Light vs Dark theme slides
-  const mainStroke = isDark ? "#38BDF8" : "#0284C7";
-  const softStroke = isDark ? "#7DD3FC" : "#0369A1";
-  const cloudFill = isDark ? "rgba(56, 189, 248, 0.08)" : "rgba(2, 132, 199, 0.05)";
+  // High-contrast auto-adjusting graphite/cyan pencil stroke colors
+  const mainStroke = isDark ? "#7DD3FC" : "#334155";
+  const softStroke = isDark ? "#38BDF8" : "#0284C7";
+  const cloudFill = isDark ? "rgba(56, 189, 248, 0.12)" : "rgba(2, 132, 199, 0.08)";
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none w-full h-full">
@@ -18,10 +18,10 @@ export function ArtisticSketchBackground({ currentSlide, isDark }: ArtisticSketc
       <AnimatePresence mode="wait">
         <motion.div
           key={`artistic-sketch-slide-${currentSlide}`}
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: isDark ? 0.32 : 0.22, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.03 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: isDark ? 0.65 : 0.55, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.04 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0 w-full h-full flex items-center justify-center"
         >
           <svg

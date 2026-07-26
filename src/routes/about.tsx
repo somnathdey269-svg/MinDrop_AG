@@ -25,10 +25,10 @@ export const Route = createFileRoute("/about")({
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="w-full h-full bg-[#F0F9FF] flex flex-col items-center justify-center text-center px-5">
+    <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-5 relative z-20">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-        className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-8 sm:mb-12 shadow-sm">
+        className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white/90 backdrop-blur-sm px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-8 sm:mb-12 shadow-sm">
         📖 INDEX · ABOUT THE APP
       </motion.span>
 
@@ -39,7 +39,7 @@ function SlideOpening() {
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#0284C7]/70 leading-tight tracking-tight">
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#0284C7]/90 leading-tight tracking-tight">
             {line}
           </motion.p>
         ))}
@@ -57,7 +57,7 @@ function SlideOpening() {
 /* Slide 2: Mental Overload (Dark Theme) */
 function SlideProblem() {
   return (
-    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-transparent flex items-center justify-center px-6 relative z-20">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#38BDF8] mb-4">
@@ -84,7 +84,7 @@ function SlideProblem() {
 /* Slide 3: Speed & Frictionless Capture */
 function SlideCapture() {
   return (
-    <div className="w-full h-full bg-[#F0F9FF] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-transparent flex items-center justify-center px-6 relative z-20">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
@@ -100,7 +100,7 @@ function SlideCapture() {
             { icon: Shield, title: "Instant Focus", body: "Keeps your attention anchored on what you are doing right now, knowing MinDrop won't let you forget." },
             { icon: Cpu, title: "Pure Reliability", body: "Built for instant launch on Android so you can drop micro-tasks the second inspiration strikes." },
           ].map(({ icon: Icon, title, body }) => (
-            <div key={title} className="bg-white border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-3">
+            <div key={title} className="bg-white/90 backdrop-blur-sm border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-3">
               <div className="size-12 rounded-2xl bg-[#E0F2FE] grid place-items-center text-[#0284C7]">
                 <AnimatedIcon animation="subtle-bounce">
                   <Icon className="size-6 stroke-[2.5px]" />
@@ -119,7 +119,7 @@ function SlideCapture() {
 /* Slide 4: Native Android Power */
 function SlideArchitecture() {
   return (
-    <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6">
+    <div className="w-full h-full bg-transparent flex items-center justify-center px-6 relative z-20">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
@@ -131,13 +131,13 @@ function SlideArchitecture() {
           <p className="text-base sm:text-lg font-semibold text-ink/80 leading-relaxed mb-6">
             Unlike web-wrapped wrappers, MinDrop taps into Android WorkManager, local SQLite databases, and continuous audio channels so alarms survive battery savers and device restarts.
           </p>
-          <div className="inline-flex items-center gap-2 bg-white border-2 border-ink px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-ink shadow-sm">
+          <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm border-2 border-ink px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-ink shadow-sm">
             <AnimatedIcon animation="pulse">
               <Cpu className="size-4 text-[#0284C7]" />
             </AnimatedIcon> 100% Android Native Engine
           </div>
         </div>
-        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-ink bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-ink bg-white/90 backdrop-blur-sm shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <AnimatedIcon animation="float">
             <BookOpen className="size-28 sm:size-36 text-[#0284C7]" />
           </AnimatedIcon>
@@ -150,7 +150,7 @@ function SlideArchitecture() {
 /* Slide 5: Data Sovereignty */
 function SlideSovereignty() {
   return (
-    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-transparent flex items-center justify-center px-6 text-center relative z-20">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#38BDF8]">
           <AnimatedIcon animation="pulse">
@@ -171,9 +171,9 @@ function SlideSovereignty() {
 /* Slide 6: Motivated Transition Bridge to Chapter 01 (Smart Notification) */
 function SlideNextBridge() {
   return (
-    <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6 text-center">
+    <div className="w-full h-full bg-transparent flex items-center justify-center px-6 text-center relative z-20">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
-        <span className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#0284C7] shadow-sm">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white/90 backdrop-blur-sm px-5 py-2 text-xs font-black uppercase tracking-widest text-[#0284C7] shadow-sm">
           <AnimatedIcon animation="pulse">
             <Sparkles className="size-4 text-[#0284C7]" />
           </AnimatedIcon> UP NEXT · CHAPTER 01
@@ -260,8 +260,11 @@ function AboutDetailView() {
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden select-none relative"
-      style={{ viewTransitionName: "card-about" } as React.CSSProperties}
+      className="h-[100dvh] flex flex-col overflow-hidden select-none relative transition-colors duration-700"
+      style={{
+        backgroundColor: isDark ? "#0C4A6E" : "#F0F9FF",
+        viewTransitionName: "card-about"
+      } as React.CSSProperties}
     >
       {/* High-Art Fine Pencil Sketch Background with Auto-Adjusting Colors */}
       <ArtisticSketchBackground currentSlide={current} isDark={isDark} />
