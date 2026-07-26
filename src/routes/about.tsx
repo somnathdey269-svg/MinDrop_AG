@@ -210,7 +210,8 @@ function AboutDetailView() {
 
   const touchStartY = useRef<number | null>(null);
   const isAnimating = useRef(false);
-  const lastWheelTime = useRef(0);
+  const wheelAccum = useRef(0);
+  const wheelResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const slides = [
     <SlideOpening key="1" />,
@@ -231,30 +232,32 @@ function AboutDetailView() {
 
       setTimeout(() => {
         isAnimating.current = false;
-        lastWheelTime.current = 0; // reset so next scroll is always fresh
-      }, 650);
+        wheelAccum.current = 0;
+      }, 800);
     }
   };
 
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
+      if (isAnimating.current) {
+        wheelAccum.current = 0;
+        return;
+      }
 
-      // Debounce: ignore rapid-fire events (trackpad inertia)
-      const now = Date.now();
-      if (now - lastWheelTime.current < 80) return;
-      lastWheelTime.current = now;
+      // Accumulate deltas — only fire when threshold crossed (handles trackpad inertia)
+      const primary = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      wheelAccum.current += primary;
 
-      const deltaY = e.deltaY;
-      const deltaX = e.deltaX;
-      if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
-      if (isAnimating.current) return;
+      // Reset accumulator if idle (stops residual inertia after gesture ends)
+      if (wheelResetTimer.current) clearTimeout(wheelResetTimer.current);
+      wheelResetTimer.current = setTimeout(() => { wheelAccum.current = 0; }, 200);
 
-      const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
-
-      if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
+      if (wheelAccum.current > 150 && currentRef.current < TOTAL - 1) {
+        wheelAccum.current = 0;
         goTo(currentRef.current + 1);
-      } else if (mainDelta < 0 && currentRef.current > 0) {
+      } else if (wheelAccum.current < -150 && currentRef.current > 0) {
+        wheelAccum.current = 0;
         goTo(currentRef.current - 1);
       }
     };

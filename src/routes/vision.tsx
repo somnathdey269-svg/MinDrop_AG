@@ -129,43 +129,7 @@ function SlideCommitment() {
   );
 }
 
-/* Slide 5: Transparent Value — Pricing (Motivational, Not Sales-y) */
-function SlideValuePricing() {
-  return (
-    <div className="w-full h-full bg-[#FEF9EC] flex items-center justify-center px-6 text-center">
-      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
-        <span className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/20 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#D97706] shadow-sm">
-          <Sparkles className="size-4" /> YOUR INVESTMENT IN PEACE
-        </span>
-
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-[#78350F] leading-tight tracking-tight">
-          Because real peace of mind is priceless.<br />
-          <span className="text-[#D97706]">We made it affordable anyway.</span>
-        </h2>
-
-        <p className="text-base sm:text-xl font-semibold text-[#78350F]/70 max-w-2xl leading-relaxed">
-          MinDrop starts free — no sign-up, no credit card. When you're ready to go unlimited, 
-          our yearly plan is built as a one-time utility fee, not a subscription trap.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-2xl text-left">
-          {[
-            { emoji: "🌱", tier: "Free Forever", note: "Up to 3 alarms, 3 filter rules, 3 locations. Start now, no strings." },
-            { emoji: "💎", tier: "Unlimited Plan", note: "Infinite slots, cloud backup to your own Drive. Pay once per year." },
-          ].map(({ emoji, tier, note }) => (
-            <div key={tier} className="bg-white border-3 border-[#F59E0B] rounded-[2rem] p-6 shadow-[5px_5px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2">
-              <span className="text-2xl">{emoji}</span>
-              <h3 className="text-lg font-black text-[#78350F]">{tier}</h3>
-              <p className="text-sm font-semibold text-[#78350F]/65 leading-relaxed">{note}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* Slide 6: Grand Finale & Download CTA */
+/* Slide 5: Grand Finale — Bridge to Pricing */
 function SlideCloser() {
   return (
     <div className="w-full h-full bg-[#FEF3C7] flex items-center justify-center px-6 text-center">
@@ -177,15 +141,16 @@ function SlideCloser() {
           Experience zero clutter & ultimate mental peace.
         </h2>
         <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#78350F]/70 leading-relaxed max-w-2xl">
-          MinDrop is engineered for crowded minds who value focus and immediate micro-actions.
+          MinDrop is engineered for crowded minds who value focus and immediate micro-actions. No subscriptions. No cloud traps. Just peace.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
           <Link
-            to="/download"
+            to="/pricing"
             viewTransition
+            style={{ viewTransitionName: 'card-pricing' } as React.CSSProperties}
             className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#78350F] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap"
           >
-            Get MinDrop — Start Free <ArrowRight className="size-5" />
+            See Transparent Pricing <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>
@@ -209,8 +174,7 @@ function VisionDetailView() {
     <SlideProblem key="2" />,
     <SlideParadigm key="3" />,
     <SlideCommitment key="4" />,
-    <SlideValuePricing key="5" />,
-    <SlideCloser key="6" />,
+    <SlideCloser key="5" />,
   ];
   const TOTAL = slides.length;
   const isDark = current === 1 || current === 3;
