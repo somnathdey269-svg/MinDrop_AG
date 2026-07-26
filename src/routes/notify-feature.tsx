@@ -192,7 +192,11 @@ function SlideInteractiveBuilder() {
           </button>
         </div>
       </div>
-    </div/* Slide 5: Real-World Use Cases */
+    </div>
+  );
+}
+
+/* Slide 5: Real-World Use Cases */
 function SlideScenarios() {
   const scenarios = [
     {
@@ -292,8 +296,6 @@ function SlideRuleTypes() {
         </div>
       </div>
     </div>
-  );
-}iv>
   );
 }
 

@@ -142,7 +142,6 @@ function SlideScenarios() {
   const touchStartX = useRef<number | null>(null);
 
   return (
-  return (
     <div className="h-full w-full bg-[#E2F5EC] flex items-center justify-center px-4 sm:px-6 py-2">
       <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-6">
         <div>
