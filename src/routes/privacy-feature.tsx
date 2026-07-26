@@ -185,6 +185,8 @@ function PrivacyFeatureDetailView() {
 
   const touchStartY = useRef<number | null>(null);
   const isAnimating = useRef(false);
+  const wheelAccum = useRef(0);
+  const wheelResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const slides = [
     <SlideOpening key="1" />,
@@ -204,23 +206,41 @@ function PrivacyFeatureDetailView() {
 
       setTimeout(() => {
         isAnimating.current = false;
-      }, 600);
+        wheelAccum.current = 0;
+      }, 700);
     }
   };
 
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      const deltaY = e.deltaY;
-      const deltaX = e.deltaX;
-      if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
-      if (isAnimating.current) return;
+      if (isAnimating.current) {
+        wheelAccum.current = 0;
+        return;
+      }
 
-      const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+      const primary = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
 
-      if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
+      // Clamp boundary accumulation
+      if (currentRef.current === 0 && primary < 0) {
+        wheelAccum.current = 0;
+        return;
+      }
+      if (currentRef.current === TOTAL - 1 && primary > 0) {
+        wheelAccum.current = 0;
+        return;
+      }
+
+      wheelAccum.current += primary;
+
+      if (wheelResetTimer.current) clearTimeout(wheelResetTimer.current);
+      wheelResetTimer.current = setTimeout(() => { wheelAccum.current = 0; }, 150);
+
+      if (wheelAccum.current > 120 && currentRef.current < TOTAL - 1) {
+        wheelAccum.current = 0;
         goTo(currentRef.current + 1);
-      } else if (mainDelta < 0 && currentRef.current > 0) {
+      } else if (wheelAccum.current < -120 && currentRef.current > 0) {
+        wheelAccum.current = 0;
         goTo(currentRef.current - 1);
       }
     };

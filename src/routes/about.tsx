@@ -247,16 +247,27 @@ function AboutDetailView() {
 
       // Accumulate deltas — only fire when threshold crossed (handles trackpad inertia)
       const primary = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+
+      // Clamp boundary accumulation
+      if (currentRef.current === 0 && primary < 0) {
+        wheelAccum.current = 0;
+        return;
+      }
+      if (currentRef.current === TOTAL - 1 && primary > 0) {
+        wheelAccum.current = 0;
+        return;
+      }
+
       wheelAccum.current += primary;
 
       // Reset accumulator if idle (stops residual inertia after gesture ends)
       if (wheelResetTimer.current) clearTimeout(wheelResetTimer.current);
-      wheelResetTimer.current = setTimeout(() => { wheelAccum.current = 0; }, 200);
+      wheelResetTimer.current = setTimeout(() => { wheelAccum.current = 0; }, 150);
 
-      if (wheelAccum.current > 150 && currentRef.current < TOTAL - 1) {
+      if (wheelAccum.current > 120 && currentRef.current < TOTAL - 1) {
         wheelAccum.current = 0;
         goTo(currentRef.current + 1);
-      } else if (wheelAccum.current < -150 && currentRef.current > 0) {
+      } else if (wheelAccum.current < -120 && currentRef.current > 0) {
         wheelAccum.current = 0;
         goTo(currentRef.current - 1);
       }
