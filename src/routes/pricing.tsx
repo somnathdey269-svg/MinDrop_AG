@@ -301,14 +301,7 @@ function PricingDetailView() {
   const backHash = from === "grid" ? "grid" : undefined;
 
   const [current, setCurrent] = useState(0);
-  const currentRef = useRef(0);
-  currentRef.current = current; // Synchronous ref sync!
-
-  const touchStartY = useRef<number | null>(null);
-  const isAnimating = useRef(false);
-  const cooldownUntil = useRef(0);
-  const wheelAccum = useRef(0);
-  const wheelResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [prices, setPrices] = useState<Record<string, CurrencyPrice>>({});
   const [currency, setCurrency] = useState<string>("INR");
@@ -338,82 +331,27 @@ function PricingDetailView() {
   ];
   const TOTAL = slides.length;
 
-  const goTo = (idx: number) => {
-    const now = Date.now();
-    if (idx >= 0 && idx < TOTAL && idx !== currentRef.current && !isAnimating.current && now >= cooldownUntil.current) {
-      isAnimating.current = true;
-      cooldownUntil.current = now + 850;
-      currentRef.current = idx;
-      setCurrent(idx);
-
-      setTimeout(() => {
-        isAnimating.current = false;
-        wheelAccum.current = 0;
-      }, 750);
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollTop, clientHeight } = scrollContainerRef.current;
+    if (clientHeight > 0) {
+      const activeIdx = Math.round(scrollTop / clientHeight);
+      if (activeIdx !== current && activeIdx >= 0 && activeIdx < TOTAL) {
+        setCurrent(activeIdx);
+      }
     }
   };
 
-  useEffect(() => {
-    const wheelHandler = (e: WheelEvent) => {
-      e.preventDefault();
-      const now = Date.now();
-      if (isAnimating.current || now < cooldownUntil.current) {
-        wheelAccum.current = 0;
-        return;
-      }
-      const primary = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-
-      // Clamp boundary accumulation
-      if (currentRef.current === 0 && primary < 0) {
-        wheelAccum.current = 0;
-        return;
-      }
-      if (currentRef.current === TOTAL - 1 && primary > 0) {
-        wheelAccum.current = 0;
-        return;
-      }
-
-      wheelAccum.current += primary;
-      if (wheelResetTimer.current) clearTimeout(wheelResetTimer.current);
-      wheelResetTimer.current = setTimeout(() => { wheelAccum.current = 0; }, 150);
-      if (wheelAccum.current > 120 && currentRef.current < TOTAL - 1) {
-        wheelAccum.current = 0;
-        goTo(currentRef.current + 1);
-      } else if (wheelAccum.current < -120 && currentRef.current > 0) {
-        wheelAccum.current = 0;
-        goTo(currentRef.current - 1);
-      }
-    };
-
-    const keyHandler = (e: KeyboardEvent) => {
-      const now = Date.now();
-      if (isAnimating.current || now < cooldownUntil.current) return;
-      if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
-        e.preventDefault();
-        if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
-      } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
-        e.preventDefault();
-        if (currentRef.current > 0) goTo(currentRef.current - 1);
-      }
-    };
-
-    window.addEventListener("wheel", wheelHandler, { passive: false });
-    window.addEventListener("keydown", keyHandler);
-    const touchMoveHandler = (e: TouchEvent) => {
-      if (e.cancelable) e.preventDefault();
-    };
-    window.addEventListener("touchmove", touchMoveHandler, { passive: false });
-
-    return () => {
-      window.removeEventListener("wheel", wheelHandler);
-      window.removeEventListener("keydown", keyHandler);
-      window.removeEventListener("touchmove", touchMoveHandler);
-    };
-  }, [TOTAL]);
+  const goTo = (idx: number) => {
+    if (scrollContainerRef.current && idx >= 0 && idx < TOTAL) {
+      const targetY = idx * scrollContainerRef.current.clientHeight;
+      scrollContainerRef.current.scrollTo({ top: targetY, behavior: "smooth" });
+    }
+  };
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-pricing" } as React.CSSProperties}
     >
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
@@ -435,51 +373,24 @@ function PricingDetailView() {
         </div>
       </header>
 
-      {/* 2. Main Content Stage */}
+      {/* 2. Main Content Stage with Native CSS Scroll Snap */}
       <main 
-        className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
-        onTouchStart={(e) => {
-          if (isAnimating.current || Date.now() < cooldownUntil.current) {
-            touchStartY.current = null;
-            return;
-          }
-          touchStartY.current = e.touches[0].clientY;
-        }}
-        onTouchEnd={(e) => {
-          if (touchStartY.current === null) return;
-          const startY = touchStartY.current;
-          touchStartY.current = null; // ALWAYS CLEAR IMMEDIATELY!
-
-          if (isAnimating.current || Date.now() < cooldownUntil.current) return;
-
-          const delta = startY - e.changedTouches[0].clientY;
-          if (Math.abs(delta) > 40) {
-            if (delta > 0 && currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
-            else if (delta < 0 && currentRef.current > 0) goTo(currentRef.current - 1);
-          }
-        }}
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 min-h-0 w-full overflow-y-auto snap-y snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="w-full h-full flex items-center justify-center"
-          >
-            {slides[current]}
-          </motion.div>
-        </AnimatePresence>
+        {slides.map((slide, idx) => (
+          <section key={idx} className="w-full h-full shrink-0 snap-start snap-always flex items-center justify-center relative overflow-hidden">
+            {slide}
+          </section>
+        ))}
 
         {/* Right Dot Navigation (Desktop) */}
-        <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-40">
+        <div className="fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 z-40">
           {slides.map((_, i) => (
             <button key={i} onClick={() => goTo(i)}
               className={`rounded-full transition-all duration-300 cursor-pointer ${
-                i === current
-                  ? "w-1.5 h-7 bg-[#EC4899]"
-                  : "size-1.5 bg-[#DB2777]/25 hover:bg-[#DB2777]/50"
+                i === current ? "w-1.5 h-7 bg-[#EC4899]" : "size-1.5 bg-[#BE185D]/25 hover:bg-[#BE185D]/50"
               }`}
             />
           ))}
