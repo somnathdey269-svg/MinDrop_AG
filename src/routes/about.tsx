@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
 import { AnimatedIcon } from "@/components/common/AnimatedIcon";
-import { UniversalSketchStory } from "@/components/about/UniversalSketchStory";
 import {
   BookOpen, Brain, Zap, Shield, Cpu, Lock, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
 } from "lucide-react";
@@ -25,33 +24,31 @@ export const Route = createFileRoute("/about")({
 /* Slide 1: Opening */
 function SlideOpening() {
   return (
-    <div className="w-full h-full bg-[#F0F9FF]/60 flex flex-col items-center justify-center text-center px-5 relative z-20">
-      <div className="bg-white/85 backdrop-blur-md rounded-[2.5rem] border-3 border-ink p-8 sm:p-12 md:p-16 max-w-4xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col items-center">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-8 sm:mb-10 shadow-sm">
-          📖 INDEX · ABOUT THE APP
-        </motion.span>
+    <div className="w-full h-full bg-[#F0F9FF] flex flex-col items-center justify-center text-center px-5">
+      <motion.span
+        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+        className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-8 sm:mb-12 shadow-sm">
+        📖 INDEX · ABOUT THE APP
+      </motion.span>
 
-        <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-8">
-          {[
-            "Your mind is for having ideas,",
-            "not holding them.",
-          ].map((line, i) => (
-            <motion.p key={i}
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#0284C7]/80 leading-tight tracking-tight">
-              {line}
-            </motion.p>
-          ))}
-        </div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tighter">
-          MinDrop is your second brain.
-        </motion.p>
+      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
+        {[
+          "Your mind is for having ideas,",
+          "not holding them.",
+        ].map((line, i) => (
+          <motion.p key={i}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#0284C7]/70 leading-tight tracking-tight">
+            {line}
+          </motion.p>
+        ))}
       </div>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-ink leading-none tracking-tighter">
+        MinDrop is your second brain.
+      </motion.p>
     </div>
   );
 }
@@ -59,7 +56,7 @@ function SlideOpening() {
 /* Slide 2: Mental Overload (Dark Theme) */
 function SlideProblem() {
   return (
-    <div className="w-full h-full bg-[#0C4A6E]/85 backdrop-blur-[2px] flex items-center justify-center px-6 relative z-20">
+    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#38BDF8] mb-4">
@@ -86,7 +83,7 @@ function SlideProblem() {
 /* Slide 3: Speed & Frictionless Capture */
 function SlideCapture() {
   return (
-    <div className="w-full h-full bg-[#F0F9FF]/80 backdrop-blur-[2px] flex items-center justify-center px-6 relative z-20">
+    <div className="w-full h-full bg-[#F0F9FF] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-8 sm:gap-12 max-w-6xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
@@ -121,7 +118,7 @@ function SlideCapture() {
 /* Slide 4: Native Android Power */
 function SlideArchitecture() {
   return (
-    <div className="w-full h-full bg-[#E0F2FE]/80 backdrop-blur-[2px] flex items-center justify-center px-6 relative z-20">
+    <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6">
       <div className="w-[95%] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl">
         <div className="flex-1 text-left">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#0284C7] mb-4">
@@ -152,7 +149,7 @@ function SlideArchitecture() {
 /* Slide 5: Data Sovereignty */
 function SlideSovereignty() {
   return (
-    <div className="w-full h-full bg-[#0C4A6E]/85 backdrop-blur-[2px] flex items-center justify-center px-6 text-center relative z-20">
+    <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#38BDF8]">
           <AnimatedIcon animation="pulse">
@@ -173,7 +170,7 @@ function SlideSovereignty() {
 /* Slide 6: Motivated Transition Bridge to Chapter 01 (Smart Notification) */
 function SlideNextBridge() {
   return (
-    <div className="w-full h-full bg-[#E0F2FE]/80 backdrop-blur-[2px] flex items-center justify-center px-6 text-center relative z-20">
+    <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#0284C7] shadow-sm">
           <AnimatedIcon animation="pulse">
@@ -262,13 +259,9 @@ function AboutDetailView() {
 
   return (
     <div
-      className="h-[100dvh] flex flex-col overflow-hidden select-none relative"
+      className="h-[100dvh] flex flex-col overflow-hidden select-none"
       style={{ viewTransitionName: "card-about" } as React.CSSProperties}
     >
-      {/* Previous background image component commented out per user directive */}
-      {/* <AboutMascotBackground currentSlide={current} isDark={isDark} /> */}
-      {/* Universal Content-Relevant Story Sketch Background */}
-      <UniversalSketchStory currentSlide={current} isDark={isDark} />
       {/* 1. Header (Desktop & Mobile: Close + Logo + Get App) */}
       <header className="shrink-0 h-12 border-b-2 border-[#0284C7]/10 z-50 px-4 sm:px-6 flex items-center backdrop-blur-md"
         style={{ backgroundColor: isDark ? "rgba(12,74,110,0.96)" : "rgba(240,249,255,0.96)", transition: "background-color 0.4s ease" }}>
