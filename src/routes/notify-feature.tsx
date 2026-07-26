@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
+import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
   Bell, ShieldAlert, Sparkles, Filter, ChevronLeft, ChevronRight, Check, X, SlidersHorizontal, ChevronDown, ChevronUp
 } from "lucide-react";
@@ -70,7 +71,9 @@ function SlideConflict() {
           </p>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-[#F59E0B]/30 bg-white/5 backdrop-blur-md shadow-2xl">
-          <Bell className="size-28 sm:size-36 text-[#F59E0B]" />
+          <AnimatedIcon animation="pulse">
+            <Bell className="size-28 sm:size-36 text-[#F59E0B]" />
+          </AnimatedIcon>
         </div>
       </div>
     </div>
@@ -105,7 +108,9 @@ function SlideSolution() {
           {solutionItems.map(({ icon: Icon, title, body }) => (
             <div key={title} className="bg-white border-2 sm:border-3 border-[#F59E0B] rounded-2xl sm:rounded-[2rem] p-4 sm:p-8 shadow-xs sm:shadow-[6px_6px_0px_0px_rgba(120,53,15,0.15)] flex flex-col gap-2 sm:gap-3">
               <div className="size-9 sm:size-12 rounded-xl sm:rounded-2xl bg-[#FEF3C7] grid place-items-center text-[#D97706]">
-                <Icon className="size-5 sm:size-6 stroke-[2.5px]" />
+                <AnimatedIcon animation="subtle-bounce">
+                  <Icon className="size-5 sm:size-6 stroke-[2.5px]" />
+                </AnimatedIcon>
               </div>
               <h3 className="text-base sm:text-xl font-black text-[#78350F]">{title}</h3>
               <p className="text-xs sm:text-base font-medium text-[#78350F]/80 sm:text-[#78350F]/70 leading-relaxed">{body}</p>

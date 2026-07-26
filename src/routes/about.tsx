@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
+import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
   BookOpen, Brain, Zap, Shield, Cpu, Lock, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
 } from "lucide-react";
@@ -70,7 +71,9 @@ function SlideProblem() {
           </p>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-white/20 bg-white/10 backdrop-blur-md shadow-2xl">
-          <Brain className="size-28 sm:size-36 text-[#38BDF8]" />
+          <AnimatedIcon animation="pulse">
+            <Brain className="size-28 sm:size-36 text-[#38BDF8]" />
+          </AnimatedIcon>
         </div>
       </div>
     </div>
@@ -98,7 +101,9 @@ function SlideCapture() {
           ].map(({ icon: Icon, title, body }) => (
             <div key={title} className="bg-white border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-3">
               <div className="size-12 rounded-2xl bg-[#E0F2FE] grid place-items-center text-[#0284C7]">
-                <Icon className="size-6 stroke-[2.5px]" />
+                <AnimatedIcon animation="subtle-bounce">
+                  <Icon className="size-6 stroke-[2.5px]" />
+                </AnimatedIcon>
               </div>
               <h3 className="text-lg sm:text-xl font-black text-ink">{title}</h3>
               <p className="text-sm sm:text-base font-semibold text-ink/70 leading-relaxed">{body}</p>
@@ -126,11 +131,15 @@ function SlideArchitecture() {
             Unlike web-wrapped wrappers, MinDrop taps into Android WorkManager, local SQLite databases, and continuous audio channels so alarms survive battery savers and device restarts.
           </p>
           <div className="inline-flex items-center gap-2 bg-white border-2 border-ink px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-ink shadow-sm">
-            <Cpu className="size-4 text-[#0284C7]" /> 100% Android Native Engine
+            <AnimatedIcon animation="pulse">
+              <Cpu className="size-4 text-[#0284C7]" />
+            </AnimatedIcon> 100% Android Native Engine
           </div>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-ink bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <BookOpen className="size-28 sm:size-36 text-[#0284C7]" />
+          <AnimatedIcon animation="float">
+            <BookOpen className="size-28 sm:size-36 text-[#0284C7]" />
+          </AnimatedIcon>
         </div>
       </div>
     </div>
@@ -143,7 +152,9 @@ function SlideSovereignty() {
     <div className="w-full h-full bg-[#0C4A6E] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#38BDF8]">
-          <Lock className="size-3.5" /> 100% LOCAL PRIVACY
+          <AnimatedIcon animation="pulse">
+            <Lock className="size-3.5" />
+          </AnimatedIcon> 100% LOCAL PRIVACY
         </span>
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight">
           Your thoughts never leave your phone.
@@ -162,7 +173,9 @@ function SlideNextBridge() {
     <div className="w-full h-full bg-[#E0F2FE] flex items-center justify-center px-6 text-center">
       <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#0284C7]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#0284C7] shadow-sm">
-          <Sparkles className="size-4 text-[#0284C7]" /> UP NEXT · CHAPTER 01
+          <AnimatedIcon animation="pulse">
+            <Sparkles className="size-4 text-[#0284C7]" />
+          </AnimatedIcon> UP NEXT · CHAPTER 01
         </span>
         
         <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-ink leading-none tracking-tighter max-w-3xl">

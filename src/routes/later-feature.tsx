@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
+import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
-  AlarmClock, ShieldAlert, Sparkles, Volume2, ChevronLeft, ChevronRight, X, ArrowRight, Pill, Phone, Flame, ChevronDown, ChevronUp
+  AlarmClock, ShieldAlert, Sparkles, Volume2, ChevronLeft, ChevronRight, X, ArrowRight, Pill, MessageSquare, Utensils, ChevronDown, ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -13,8 +14,8 @@ export const Route = createFileRoute("/later-feature")({
   },
   head: () => ({
     meta: [
-      { title: "Looping Alarm — MinDrop Feature" },
-      { name: "description", content: "Discover MinDrop's persistent looping alarms: non-ignorable alerts that ring continuously like an incoming call until acknowledged." },
+      { title: "Critical Task Alarm — MinDrop Feature" },
+      { name: "description", content: "Discover MinDrop's full-screen critical alarms: continuous looping audio, snooze cycles, and foreground service reliability." },
     ],
   }),
   component: LaterFeatureDetailView,
@@ -27,13 +28,13 @@ function SlideOpening() {
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#047857] mb-8 sm:mb-12 shadow-sm">
-        🔔 CHAPTER 03/05 · LOOPING ALARM
+        ⏰ CHAPTER 03/05 · CRITICAL TASKS
       </motion.span>
 
       <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
         {[
-          "A single ping is easy to ignore.",
-          "Critical tasks shouldn't be optional.",
+          "You set a reminder for 8:00 PM.",
+          "It made a 1-second ping sound.",
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
@@ -46,7 +47,7 @@ function SlideOpening() {
       <motion.p
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#064E3B] leading-none tracking-tighter">
-        MinDrop rings until you check it.
+        You forgot to take your pills.
       </motion.p>
     </div>
   );
@@ -70,7 +71,9 @@ function SlideConflict() {
           </p>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-[#34D399]/30 bg-white/5 backdrop-blur-md shadow-2xl">
-          <AlarmClock className="size-28 sm:size-36 text-[#34D399]" />
+          <AnimatedIcon animation="pulse">
+            <AlarmClock className="size-28 sm:size-36 text-[#34D399]" />
+          </AnimatedIcon>
         </div>
       </div>
     </div>
@@ -99,7 +102,9 @@ function SlideSolution() {
           ].map(({ icon: Icon, title, body }) => (
             <div key={title} className="bg-white border-3 border-[#10B981] rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(16,185,129,0.15)] text-left flex flex-col gap-3">
               <div className="size-12 rounded-2xl bg-[#D1FAE5] grid place-items-center text-[#047857]">
-                <Icon className="size-6 stroke-[2.5px]" />
+                <AnimatedIcon animation="subtle-bounce">
+                  <Icon className="size-6 stroke-[2.5px]" />
+                </AnimatedIcon>
               </div>
               <h3 className="text-lg sm:text-xl font-black text-[#064E3B]">{title}</h3>
               <p className="text-sm sm:text-base font-semibold text-[#064E3B]/70 leading-relaxed">{body}</p>

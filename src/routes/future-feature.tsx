@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
+import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
-  Compass, PhoneCall, Layers, Mic, SlidersHorizontal, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
+  Compass, PhoneCall, Layers, Mic, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -13,27 +14,27 @@ export const Route = createFileRoute("/future-feature")({
   },
   head: () => ({
     meta: [
-      { title: "Chapter 04/05: Future Actions — MinDrop Roadmap" },
-      { name: "description", content: "Explore MinDrop's upcoming R&D: person-based reminders, cross-app bridges, voice micro-drops, and context sweeps." },
+      { title: "Future R&D Roadmap — MinDrop Feature" },
+      { name: "description", content: "Explore MinDrop's upcoming R&D features: contact triggers, cross-app floating overlays, and offline voice action drops." },
     ],
   }),
   component: FutureFeatureDetailView,
 });
 
-/* Slide 1: Opening */
+/* Slide 1: Opening Statement */
 function SlideOpening() {
   return (
     <div className="w-full h-full bg-[#EFF6FF] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#2563EB]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#2563EB] mb-8 sm:mb-12 shadow-sm">
-        🔮 CHAPTER 04/05 · FUTURE ACTIONS
+        🚀 CHAPTER 04/05 · FUTURE VISION
       </motion.span>
 
       <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
         {[
-          "Smart triggers beyond simple timers.",
-          "Features on the Android horizon.",
+          "We're just getting started.",
+          "Here is what's cooking in MinDrop R&D.",
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
@@ -46,7 +47,7 @@ function SlideOpening() {
       <motion.p
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-ink leading-none tracking-tighter">
-        Coming Soon to MinDrop.
+        Smart features for your everyday life.
       </motion.p>
     </div>
   );
@@ -70,7 +71,9 @@ function SlideProblem() {
           </p>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-white/20 bg-white/5 backdrop-blur-md shadow-2xl">
-          <Compass className="size-28 sm:size-36 text-[#60A5FA]" />
+          <AnimatedIcon animation="pulse">
+            <Compass className="size-28 sm:size-36 text-[#60A5FA]" />
+          </AnimatedIcon>
         </div>
       </div>
     </div>
@@ -94,7 +97,9 @@ function SlideContactTriggers() {
           </p>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-ink bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <PhoneCall className="size-28 sm:size-36 text-[#2563EB]" />
+          <AnimatedIcon animation="float">
+            <PhoneCall className="size-28 sm:size-36 text-[#2563EB]" />
+          </AnimatedIcon>
         </div>
       </div>
     </div>

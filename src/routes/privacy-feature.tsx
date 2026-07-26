@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MinDropHeaderLogo } from "@/components/marketing/MinDropHeaderLogo";
 import { MobileFeatureDock } from "@/components/layout/MobileFeatureDock";
+import { AnimatedIcon } from "@/components/common/AnimatedIcon";
 import {
-  ShieldCheck, Lock, Database, EyeOff, ServerOff, ArrowRight, X, Sparkles, ChevronDown, ChevronUp
+  ShieldCheck, EyeOff, Database, ServerOff, FileCheck, ArrowRight, X, Sparkles, ChevronDown, ChevronUp, Lock
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -13,27 +14,27 @@ export const Route = createFileRoute("/privacy-feature")({
   },
   head: () => ({
     meta: [
-      { title: "Chapter 05/05: Absolute Privacy — MinDrop Manifesto" },
-      { name: "description", content: "Discover MinDrop's Absolute Privacy manifesto: zero cloud tracking, local SQLite persistence, and zero telemetry." },
+      { title: "Privacy Manifesto — MinDrop Feature" },
+      { name: "description", content: "Discover MinDrop's privacy guarantee: zero telemetry, 100% local SQLite storage, zero cloud tracking, and DPDP Act compliance." },
     ],
   }),
   component: PrivacyFeatureDetailView,
 });
 
-/* Slide 1: Opening */
+/* Slide 1: Opening Statement */
 function SlideOpening() {
   return (
     <div className="w-full h-full bg-[#F0FDF4] flex flex-col items-center justify-center text-center px-5">
       <motion.span
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="inline-flex items-center gap-2 rounded-full border border-[#059669]/20 bg-white px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#059669] mb-8 sm:mb-12 shadow-sm">
-        🔒 CHAPTER 05/05 · ABSOLUTE PRIVACY
+        🛡️ CHAPTER 05/05 · PRIVACY MANIFESTO
       </motion.span>
 
       <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-10">
         {[
-          "Your thoughts are private property.",
-          "Not telemetry data.",
+          "Your thoughts are personal.",
+          "They shouldn't sit on someone else's server.",
         ].map((line, i) => (
           <motion.p key={i}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 + i * 0.45 }}
@@ -45,8 +46,8 @@ function SlideOpening() {
 
       <motion.p
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25 }}
-        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-ink leading-none tracking-tighter">
-        100% Local. Zero Cloud.
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-[#064E3B] leading-none tracking-tighter">
+        100% Offline. 100% Private.
       </motion.p>
     </div>
   );
@@ -70,7 +71,9 @@ function SlideProblem() {
           </p>
         </div>
         <div className="shrink-0 flex items-center justify-center size-56 sm:size-72 rounded-[2.5rem] border-3 border-white/20 bg-white/5 backdrop-blur-md shadow-2xl">
-          <ShieldCheck className="size-28 sm:size-36 text-[#34D399]" />
+          <AnimatedIcon animation="pulse">
+            <ShieldCheck className="size-28 sm:size-36 text-[#34D399]" />
+          </AnimatedIcon>
         </div>
       </div>
     </div>
@@ -98,7 +101,9 @@ function SlidePillars() {
           ].map(({ icon: Icon, title, body }) => (
             <div key={title} className="bg-[#DCFCE7]/50 border-3 border-ink rounded-[2rem] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-3">
               <div className="size-12 rounded-2xl bg-[#DCFCE7] grid place-items-center text-[#059669]">
-                <Icon className="size-6 stroke-[2.5px]" />
+                <AnimatedIcon animation="subtle-bounce">
+                  <Icon className="size-6 stroke-[2.5px]" />
+                </AnimatedIcon>
               </div>
               <h3 className="text-lg sm:text-xl font-black text-ink">{title}</h3>
               <p className="text-sm sm:text-base font-semibold text-ink/70 leading-relaxed">{body}</p>
