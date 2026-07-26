@@ -67,3 +67,5 @@ Coordinates platform compiles, package manifests, podfiles, and build automation
   * **Change**: Executed requirements: 'Refactor terms.tsx (Terms), privacy.tsx (Privacy Policy), and download.tsx (Get App / Download) to Native CSS Scroll Snap (scroll-snap-type: y mandatory, scroll-snap-align: start) to match all other marketing pages.'
 - **2026-07-26 16:39:48** | Changed by: 20-Agent Pipeline
   * **Change**: Executed requirements: 'Fix runtime error 'Something went wrong!' in Chapter 1 (notify-feature.tsx) and Chapter 3 (later-feature.tsx) while strictly keeping the Native CSS Scroll Snap approach.'
+- **2026-07-26 16:47:55** | Changed by: 20-Agent Pipeline
+  * **Change**: Executed requirements: 'Enhance all marketing detail pages with attractive staggered motion entrance animations (Framer Motion whileInView / active index state triggers) on headlines, feature cards, badge pills, and floating icons across both desktop and mobile viewports, while strictly keeping Native CSS Scroll Snap (scroll-snap-type: y mandatory).'
