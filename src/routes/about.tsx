@@ -191,9 +191,9 @@ function SlideNextBridge() {
             to="/notify-feature"
             viewTransition
             style={{ viewTransitionName: 'card-notify' } as React.CSSProperties}
-            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#0284C7] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#0369A1] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center"
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#0284C7] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#0369A1] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap"
           >
-            Continue to Chapter 01: Smart Notification <ArrowRight className="size-5" />
+            Silence Noise & Catch Emergencies <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>

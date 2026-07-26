@@ -328,9 +328,9 @@ function SlideClosing() {
             to="/places-feature"
             viewTransition
             style={{ viewTransitionName: 'card-places' } as React.CSSProperties}
-            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#D97706] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#78350F] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center"
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#D97706] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#78350F] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap"
           >
-            Explore Chapter 02: Location Reminders <ArrowRight className="size-5" />
+            Trigger Alarms When You Arrive <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>

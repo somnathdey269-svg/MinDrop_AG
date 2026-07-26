@@ -262,8 +262,8 @@ function SlideCloser() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
           <Link to="/later-feature" viewTransition style={{ viewTransitionName: 'card-later' } as React.CSSProperties}
-            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4.5 sm:py-5 bg-[#4C1D95] text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-2xl border-3 border-[#4C1D95] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#8B5CF6] hover:border-[#8B5CF6] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            Explore Chapter 03: Critical Task Alarms <ArrowRight className="size-5" />
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4.5 sm:py-5 bg-[#4C1D95] text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-2xl border-3 border-[#4C1D95] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#8B5CF6] hover:border-[#8B5CF6] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap">
+            Never Miss a Critical Task <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>
