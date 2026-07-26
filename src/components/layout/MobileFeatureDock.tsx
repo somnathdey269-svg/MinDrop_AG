@@ -13,10 +13,17 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
   current,
   total,
   goTo,
+  isDark = false,
 }) => {
   return (
     <div className="md:hidden fixed bottom-5 right-4 z-50 pointer-events-none select-none">
-      <div className="pointer-events-auto flex flex-col gap-1.5 p-1 rounded-full bg-black/80 backdrop-blur-2xl border border-amber-500/40 shadow-[0_8px_30px_rgba(0,0,0,0.65),0_0_20px_rgba(245,158,11,0.2)]">
+      <div
+        className={`pointer-events-auto flex flex-col gap-1.5 p-1 rounded-full backdrop-blur-2xl border transition-all duration-300 ${
+          isDark
+            ? "bg-black/85 border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.8)]"
+            : "bg-white/90 border-slate-900/15 shadow-[0_8px_25px_rgba(0,0,0,0.15)]"
+        }`}
+      >
         {/* UP BUTTON */}
         <button
           type="button"
@@ -24,8 +31,10 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
           disabled={current === 0}
           className={`grid place-items-center size-9 rounded-full transition-all duration-200 cursor-pointer ${
             current === 0
-              ? "opacity-20 cursor-not-allowed text-amber-200/40"
-              : "bg-amber-500/15 hover:bg-amber-500/30 active:scale-75 text-amber-400 border border-amber-500/30 shadow-xs"
+              ? "opacity-20 cursor-not-allowed"
+              : isDark
+              ? "bg-white/15 hover:bg-white/30 text-white active:scale-75 border border-white/20"
+              : "bg-slate-900/10 hover:bg-slate-900/20 text-slate-900 active:scale-75 border border-slate-900/10"
           }`}
           aria-label="Previous Slide"
         >
@@ -39,8 +48,10 @@ export const MobileFeatureDock: React.FC<MobileFeatureDockProps> = ({
           disabled={current === total - 1}
           className={`grid place-items-center size-9 rounded-full transition-all duration-200 cursor-pointer ${
             current === total - 1
-              ? "opacity-20 cursor-not-allowed text-amber-200/40"
-              : "bg-amber-500/15 hover:bg-amber-500/30 active:scale-75 text-amber-400 border border-amber-500/30 shadow-xs"
+              ? "opacity-20 cursor-not-allowed"
+              : isDark
+              ? "bg-white/15 hover:bg-white/30 text-white active:scale-75 border border-white/20"
+              : "bg-slate-900/10 hover:bg-slate-900/20 text-slate-900 active:scale-75 border border-slate-900/10"
           }`}
           aria-label="Next Slide"
         >

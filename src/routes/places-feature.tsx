@@ -357,7 +357,11 @@ function PlacesFeatureDetailView() {
           </Link>
 
           <Link to="/download" viewTransition
-            className="inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md border border-amber-400/40 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg transition-all duration-200 shrink-0 cursor-pointer">
+            className={`inline-flex items-center justify-center whitespace-nowrap text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-md border shrink-0 transition-all duration-200 cursor-pointer ${
+              isDark
+                ? "bg-white text-[#2E1065] border-white hover:bg-[#8B5CF6] hover:text-white"
+                : "bg-[#8B5CF6] text-white border-[#8B5CF6] hover:bg-[#6D28D9]"
+            }`}>
             Get App
           </Link>
         </div>
