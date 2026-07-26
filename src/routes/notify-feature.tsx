@@ -307,26 +307,36 @@ function SlideRuleTypes() {
 /* Slide 7: Closing Statement & Action */
 function SlideClosing() {
   return (
-    <div className="h-full bg-[#451A03] flex flex-col items-center justify-center text-center px-6">
-      <motion.span
-        initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-        className="inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/30 bg-white/5 backdrop-blur-md px-5 py-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[#FDE68A] mb-8 shadow-sm">
-        🔒 PRIVACY FIRST · ZERO TELEMETRY
-      </motion.span>
+/* Slide 7: Motivated Transition Bridge to Chapter 02 (Location Reminder) */
+function SlideClosing() {
+  return (
+    <div className="h-full bg-[#FFFBEB] flex flex-col items-center justify-center text-center px-6">
+      <div className="w-[95%] mx-auto flex flex-col items-center gap-8 max-w-4xl">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[#D97706]/30 bg-white px-5 py-2 text-xs font-black uppercase tracking-widest text-[#D97706] shadow-sm">
+          <AnimatedIcon animation="pulse">
+            <Sparkles className="size-4 text-[#D97706]" />
+          </AnimatedIcon> UP NEXT · CHAPTER 02
+        </span>
 
-      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 max-w-4xl tracking-tight">
-        Never miss an emergency.<br />
-        <span className="text-[#F59E0B]">Never get distracted by noise.</span>
-      </h2>
+        <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#78350F] leading-none tracking-tighter max-w-3xl">
+          What happens when tasks belong to places?
+        </h2>
 
-      <p className="text-sm sm:text-base md:text-lg font-semibold text-[#FEF3C7]/80 leading-relaxed max-w-xl mb-8 sm:mb-12">
-        MinDrop notification rules execute 100% offline on your device using Android&apos;s native notification listener service. No servers, no tracking.
-      </p>
+        <p className="text-base sm:text-xl md:text-2xl font-semibold text-[#78350F]/80 leading-relaxed max-w-2xl">
+          Now that you know how smart notifications silence noise, step into Chapter 02 to discover how geofence location triggers alert you the moment you arrive.
+        </p>
 
-      <Link to="/download"
-        className="px-8 py-4 bg-[#F59E0B] text-ink font-black text-base uppercase tracking-wider rounded-2xl border-3 border-white hover:bg-white transition flex items-center gap-3 shadow-[6px_6px_0px_0px_rgba(255,255,255,0.2)] cursor-pointer">
-        Get MinDrop For Android
-      </Link>
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
+          <Link
+            to="/places-feature"
+            viewTransition
+            style={{ viewTransitionName: 'card-places' } as React.CSSProperties}
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#D97706] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#78350F] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center"
+          >
+            Explore Chapter 02: Location Reminders <ArrowRight className="size-5" />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
@@ -349,7 +359,7 @@ export function NotifyFeatureDetailView() {
   ];
 
   const TOTAL = slides.length;
-  const isDark = current === 1 || current === 6;
+  const isDark = current === 1;
 
   const currentRef = useRef(current);
   useEffect(() => {
