@@ -144,13 +144,13 @@ function SlideCloser() {
           MinDrop is engineered for crowded minds who value focus and immediate micro-actions.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
-          <Link to="/download"
-            className="inline-flex items-center justify-center gap-2 px-10 sm:px-12 py-4.5 sm:py-5 bg-[#78350F] text-white font-black text-sm sm:text-base uppercase tracking-wider rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            <Rocket className="size-5" /> Get MinDrop Android App
-          </Link>
-          <Link to="/about" viewTransition style={{ viewTransitionName: 'card-[#about]' } as React.CSSProperties}
-            className="inline-flex items-center justify-center gap-2 px-10 sm:px-12 py-4.5 sm:py-5 bg-white text-ink font-black text-sm sm:text-base uppercase tracking-wider rounded-2xl border-3 border-ink shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFFBEB] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center">
-            <RotateCcw className="size-5" /> Replay from Index (About)
+          <Link
+            to="/pricing"
+            viewTransition
+            style={{ viewTransitionName: 'card-pricing' } as React.CSSProperties}
+            className="inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 rounded-2xl bg-[#78350F] text-white font-black text-sm sm:text-base uppercase tracking-wider border-3 border-ink shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#D97706] hover:border-[#D97706] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer text-center whitespace-nowrap"
+          >
+            Unlock Lifetime Peace & Transparent Plans <ArrowRight className="size-5" />
           </Link>
         </div>
       </div>
@@ -163,57 +163,52 @@ function VisionDetailView() {
   const backHash = from === "grid" ? "grid" : undefined;
   const [current, setCurrent] = useState(0);
   const currentRef = useRef(0);
-  currentRef.current = current;
+  currentRef.current = current; // Synchronous ref sync!
 
   const touchStartY = useRef<number | null>(null);
-  const isWheelActive = useRef(false);
-  const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const isAnimating = useRef(false);
 
   const slides = [
-    <SlideOpening />,
-    <SlideProblem />,
-    <SlideParadigm />,
-    <SlideCommitment />,
-    <SlideCloser />,
+    <SlideOpening key="1" />,
+    <SlideProblem key="2" />,
+    <SlideParadigm key="3" />,
+    <SlideCommitment key="4" />,
+    <SlideCloser key="5" />,
   ];
   const TOTAL = slides.length;
   const isDark = current === 1 || current === 3;
 
   const goTo = (idx: number) => {
-    if (idx < 0 || idx >= TOTAL) return;
-    setCurrent(idx);
+    if (idx >= 0 && idx < TOTAL && idx !== currentRef.current && !isAnimating.current) {
+      isAnimating.current = true;
+      currentRef.current = idx;
+      setCurrent(idx);
+
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 600);
+    }
   };
 
-  // Debounced Gesture Engine: Exactly 1 page per continuous scroll gesture
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
       const deltaY = e.deltaY;
       const deltaX = e.deltaX;
       if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
+      if (isAnimating.current) return;
 
       const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
 
-      // Strict boundary guards: Prevent wheel lock or rebound jumps when scrolling past ends
-      if (currentRef.current === 0 && mainDelta < 0) return;
-      if (currentRef.current === TOTAL - 1 && mainDelta > 0) return;
-
-      if (!isWheelActive.current) {
-        isWheelActive.current = true;
-        if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
-          goTo(currentRef.current + 1);
-        } else if (mainDelta < 0 && currentRef.current > 0) {
-          goTo(currentRef.current - 1);
-        }
+      if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
+        goTo(currentRef.current + 1);
+      } else if (mainDelta < 0 && currentRef.current > 0) {
+        goTo(currentRef.current - 1);
       }
-
-      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
-      wheelDebounceTimer.current = setTimeout(() => {
-        isWheelActive.current = false;
-      }, 350);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
+      if (isAnimating.current) return;
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
         if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
@@ -234,7 +229,6 @@ function VisionDetailView() {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
       window.removeEventListener("touchmove", touchMoveHandler);
-      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
   }, [TOTAL]);
 
@@ -268,7 +262,7 @@ function VisionDetailView() {
         className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
-          if (touchStartY.current === null) return;
+          if (touchStartY.current === null || isAnimating.current) return;
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           touchStartY.current = null;
           if (Math.abs(delta) > 40) {

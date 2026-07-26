@@ -114,7 +114,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies }: Slid
       <div className="w-[95%] mx-auto flex flex-col items-center text-center gap-6 sm:gap-10 max-w-7xl">
         <div>
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-[#DB2777] mb-2 sm:mb-3">
-            Specs & plans
+            💎 UNLOCK LIFETIME PEACE & TRANSPARENT PLANS
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#831843] leading-tight tracking-tight">
             Clear pricing. Simple structure.
@@ -301,9 +301,11 @@ function PricingDetailView() {
   const backHash = from === "grid" ? "grid" : undefined;
 
   const [current, setCurrent] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const touchStartY = useRef(0);
-  const lastScrollTime = useRef(0);
+  const currentRef = useRef(0);
+  currentRef.current = current; // Synchronous ref sync!
+
+  const touchStartY = useRef<number | null>(null);
+  const isAnimating = useRef(false);
 
   const [prices, setPrices] = useState<Record<string, CurrencyPrice>>({});
   const [currency, setCurrency] = useState<string>("INR");
@@ -326,42 +328,66 @@ function PricingDetailView() {
   const availableCurrencies = useMemo(() => Object.keys(prices).sort(), [prices]);
 
   const slides = [
-    <SlideOpening />,
-    <SlideTiers prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} />,
-    <SlideFlow />,
-    <SlideCloser backHash={backHash} />,
+    <SlideOpening key="1" />,
+    <SlideTiers key="2" prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} />,
+    <SlideFlow key="3" />,
+    <SlideCloser key="4" backHash={backHash} />,
   ];
   const TOTAL = slides.length;
 
   const goTo = (idx: number) => {
-    if (idx < 0 || idx >= TOTAL) return;
-    const now = Date.now();
-    if (now - lastScrollTime.current < 850) return;
-    lastScrollTime.current = now;
-    setCurrent(idx);
+    if (idx >= 0 && idx < TOTAL && idx !== currentRef.current && !isAnimating.current) {
+      isAnimating.current = true;
+      currentRef.current = idx;
+      setCurrent(idx);
+
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 600);
+    }
   };
 
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const handler = (e: WheelEvent) => {
+    const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 12) return;
-      if (e.deltaY > 0) goTo(current + 1);
-      else if (e.deltaY < 0) goTo(current - 1);
-    };
-    el.addEventListener("wheel", handler, { passive: false });
-    return () => el.removeEventListener("wheel", handler);
-  }, [current]);
+      const deltaY = e.deltaY;
+      const deltaX = e.deltaX;
+      if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
+      if (isAnimating.current) return;
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (["ArrowDown","PageDown"].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
-      if (["ArrowUp","PageUp"].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+      const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+
+      if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
+        goTo(currentRef.current + 1);
+      } else if (mainDelta < 0 && currentRef.current > 0) {
+        goTo(currentRef.current - 1);
+      }
     };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [current]);
+
+    const keyHandler = (e: KeyboardEvent) => {
+      if (isAnimating.current) return;
+      if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
+        e.preventDefault();
+        if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
+      } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
+        e.preventDefault();
+        if (currentRef.current > 0) goTo(currentRef.current - 1);
+      }
+    };
+
+    window.addEventListener("wheel", wheelHandler, { passive: false });
+    window.addEventListener("keydown", keyHandler);
+    const touchMoveHandler = (e: TouchEvent) => {
+      if (e.cancelable) e.preventDefault();
+    };
+    window.addEventListener("touchmove", touchMoveHandler, { passive: false });
+
+    return () => {
+      window.removeEventListener("wheel", wheelHandler);
+      window.removeEventListener("keydown", keyHandler);
+      window.removeEventListener("touchmove", touchMoveHandler);
+    };
+  }, [TOTAL]);
 
   return (
     <div

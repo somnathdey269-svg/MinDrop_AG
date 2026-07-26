@@ -340,11 +340,13 @@ function SlideClosing() {
 
 export function NotifyFeatureDetailView() {
   const [current, setCurrent] = useState(0);
+  const currentRef = useRef(0);
+  currentRef.current = current; // Synchronous ref sync!
+
   const search = Route.useSearch();
   const backHash = search.from === "grid" ? "grid" : "";
   const touchStartY = useRef<number | null>(null);
-  const isWheelActive = useRef(false);
-  const wheelDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const isAnimating = useRef(false);
 
   const slides = [
     <SlideOpening key="1" />,
@@ -359,14 +361,15 @@ export function NotifyFeatureDetailView() {
   const TOTAL = slides.length;
   const isDark = current === 1;
 
-  const currentRef = useRef(current);
-  useEffect(() => {
-    currentRef.current = current;
-  }, [current]);
-
   const goTo = (idx: number) => {
-    if (idx >= 0 && idx < TOTAL) {
+    if (idx >= 0 && idx < TOTAL && idx !== currentRef.current && !isAnimating.current) {
+      isAnimating.current = true;
+      currentRef.current = idx;
       setCurrent(idx);
+
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 600);
     }
   };
 
@@ -376,29 +379,19 @@ export function NotifyFeatureDetailView() {
       const deltaY = e.deltaY;
       const deltaX = e.deltaX;
       if (Math.abs(deltaY) < 15 && Math.abs(deltaX) < 15) return;
+      if (isAnimating.current) return;
 
       const mainDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
 
-      // Strict boundary guards: Prevent wheel lock or rebound jumps when scrolling past ends
-      if (currentRef.current === 0 && mainDelta < 0) return;
-      if (currentRef.current === TOTAL - 1 && mainDelta > 0) return;
-
-      if (!isWheelActive.current) {
-        isWheelActive.current = true;
-        if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
-          goTo(currentRef.current + 1);
-        } else if (mainDelta < 0 && currentRef.current > 0) {
-          goTo(currentRef.current - 1);
-        }
+      if (mainDelta > 0 && currentRef.current < TOTAL - 1) {
+        goTo(currentRef.current + 1);
+      } else if (mainDelta < 0 && currentRef.current > 0) {
+        goTo(currentRef.current - 1);
       }
-
-      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
-      wheelDebounceTimer.current = setTimeout(() => {
-        isWheelActive.current = false;
-      }, 350);
     };
 
     const keyHandler = (e: KeyboardEvent) => {
+      if (isAnimating.current) return;
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
         if (currentRef.current < TOTAL - 1) goTo(currentRef.current + 1);
@@ -419,7 +412,6 @@ export function NotifyFeatureDetailView() {
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
       window.removeEventListener("touchmove", touchMoveHandler);
-      if (wheelDebounceTimer.current) clearTimeout(wheelDebounceTimer.current);
     };
   }, [TOTAL]);
 
@@ -457,7 +449,7 @@ export function NotifyFeatureDetailView() {
         className="flex-1 min-h-0 w-full relative overflow-hidden flex items-center justify-center p-0 touch-none overscroll-none"
         onTouchStart={(e) => { touchStartY.current = e.touches[0].clientY; }}
         onTouchEnd={(e) => {
-          if (touchStartY.current === null) return;
+          if (touchStartY.current === null || isAnimating.current) return;
           const delta = touchStartY.current - e.changedTouches[0].clientY;
           touchStartY.current = null;
           if (Math.abs(delta) > 40) {
