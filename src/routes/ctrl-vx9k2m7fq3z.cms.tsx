@@ -17,6 +17,7 @@ import type {
 } from "@/lib/cms/cms.types";
 import { DynamicBlockRenderer } from "@/components/cms/DynamicBlockRenderer";
 import { PricingDeckPreview } from "@/routes/pricing";
+import { DesktopShowcase } from "@/components/marketing/desktop/DesktopShowcase";
 import {
   Save,
   Trash2,
@@ -1758,12 +1759,16 @@ function SuperAdminCMSView() {
                     <Eye className="size-4" /> Live Preview · /{selectedSlug}
                   </span>
                   <span className="text-xs font-semibold text-slate-400">
-                    {selectedSlug === "pricing" ? "100% Authentic Design Preview" : `${blocks.length} Active Block(s)`}
+                    {selectedSlug === "pricing" || selectedSlug === "home" ? "100% Authentic Design Preview" : `${blocks.length} Active Block(s)`}
                   </span>
                 </div>
                 <div className="flex-1 bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/80 shadow-xs overflow-y-auto max-h-[800px]">
                   {selectedSlug === "pricing" ? (
                     <PricingDeckPreview fields={fields} />
+                  ) : selectedSlug === "home" ? (
+                    <div className="relative w-full h-[650px] overflow-hidden rounded-xl border border-slate-200">
+                      <DesktopShowcase />
+                    </div>
                   ) : (
                     <DynamicBlockRenderer blocks={blocks} />
                   )}

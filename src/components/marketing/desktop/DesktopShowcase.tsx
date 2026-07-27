@@ -228,11 +228,6 @@ export function DesktopShowcase() {
           <div className="w-full h-full flex items-center justify-center relative">
             
             {/* Left Hover Trigger */}
-            <div 
-              onClick={handleNext} 
-              className="absolute left-4 lg:left-12 z-30 flex cursor-pointer group"
-            >
-              <div className="flex flex-col items-center text-center">
             <div className="absolute left-4 lg:left-12 z-30 flex">
               <button 
                 onClick={handlePrev} 
