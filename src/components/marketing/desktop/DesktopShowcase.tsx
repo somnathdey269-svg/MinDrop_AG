@@ -125,9 +125,9 @@ export function DesktopShowcase() {
     }
   };
 
-  const currentCard = DECK_CARDS[activeIdx];
-  const nextCard = DECK_CARDS[(activeIdx + 1) % DECK_CARDS.length];
-  const prevCard = DECK_CARDS[(activeIdx - 1 + DECK_CARDS.length) % DECK_CARDS.length];
+  const currentCard = cards[activeIdx] || cards[0];
+  const nextCard = cards[(activeIdx + 1) % cards.length] || cards[0];
+  const prevCard = cards[(activeIdx - 1 + cards.length) % cards.length] || cards[0];
 
   const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFC935";
   const bgColorPrev = prevCard.bgColor;
