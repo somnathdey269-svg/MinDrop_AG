@@ -743,10 +743,10 @@ function SuperAdminCMSView() {
                     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
                       <div className="flex items-center gap-2 text-brand">
                         <Grid className="size-5" />
-                        <h3 className="font-bold text-base text-slate-900">Homepage 8-Card Bento Grid Copy</h3>
+                        <h3 className="font-bold text-base text-slate-900">Homepage 8 Cards (Deck & Grid View Copy & Styling)</h3>
                       </div>
                       <p className="text-xs text-slate-500 font-medium">
-                        Customize the titles, badges, and descriptions for all 8 cards displayed on the homepage showcase grid.
+                        Customize the copy and individual font sizes for both Grid View and Card/Deck View across all 8 homepage cards.
                       </p>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left pt-2">
@@ -760,7 +760,7 @@ function SuperAdminCMSView() {
                           { key: "vision", label: "Card 7: The Closure", defaultTag: "THE CLOSURE", defaultTitle: "The Closure" },
                           { key: "pricing", label: "Card 8: Simple Pricing", defaultTag: "PRICING", defaultTitle: "Simple Pricing" },
                         ].map((c) => (
-                          <div key={c.key} className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                          <div key={c.key} className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                             <h4 className="font-bold text-xs uppercase text-slate-700">{c.label}</h4>
                             <div>
                               <label className="text-[10px] font-bold uppercase text-slate-400 block mb-0.5">Badge Tag</label>
@@ -792,36 +792,82 @@ function SuperAdminCMSView() {
                                 className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700"
                               />
                             </div>
-                            <div className="grid grid-cols-3 gap-2 pt-1.5 border-t border-slate-200/80">
-                              <div>
-                                <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Tag Size (px)</label>
-                                <input
-                                  type="text"
-                                  value={fields[`card_${c.key}_tag_size`] || ""}
-                                  onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_tag_size`]: e.target.value }))}
-                                  placeholder="11"
-                                  className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
-                                />
+
+                            {/* GRID VIEW FONT SIZES */}
+                            <div className="pt-2 border-t border-slate-200">
+                              <span className="text-[10px] font-extrabold uppercase tracking-wider text-brand block mb-1.5">
+                                📐 Grid View Font Sizes (px)
+                              </span>
+                              <div className="grid grid-cols-3 gap-2">
+                                <div>
+                                  <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Tag Size</label>
+                                  <input
+                                    type="text"
+                                    value={fields[`card_${c.key}_grid_tag_size`] || ""}
+                                    onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_grid_tag_size`]: e.target.value }))}
+                                    placeholder="11"
+                                    className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Title Size</label>
+                                  <input
+                                    type="text"
+                                    value={fields[`card_${c.key}_grid_title_size`] || ""}
+                                    onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_grid_title_size`]: e.target.value }))}
+                                    placeholder="20"
+                                    className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Desc Size</label>
+                                  <input
+                                    type="text"
+                                    value={fields[`card_${c.key}_grid_desc_size`] || ""}
+                                    onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_grid_desc_size`]: e.target.value }))}
+                                    placeholder="14"
+                                    className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                  />
+                                </div>
                               </div>
-                              <div>
-                                <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Title Size (px)</label>
-                                <input
-                                  type="text"
-                                  value={fields[`card_${c.key}_title_size`] || ""}
-                                  onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_title_size`]: e.target.value }))}
-                                  placeholder="20"
-                                  className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
-                                />
-                              </div>
-                              <div>
-                                <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Desc Size (px)</label>
-                                <input
-                                  type="text"
-                                  value={fields[`card_${c.key}_desc_size`] || ""}
-                                  onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_desc_size`]: e.target.value }))}
-                                  placeholder="14"
-                                  className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
-                                />
+                            </div>
+
+                            {/* DECK / CARD VIEW FONT SIZES */}
+                            <div className="pt-2 border-t border-slate-200/70">
+                              <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-600 block mb-1.5">
+                                🎴 Deck / Card View Font Sizes (px)
+                              </span>
+                              <div className="grid grid-cols-3 gap-2">
+                                <div>
+                                  <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Tag Size</label>
+                                  <input
+                                    type="text"
+                                    value={fields[`card_${c.key}_deck_tag_size`] || ""}
+                                    onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_deck_tag_size`]: e.target.value }))}
+                                    placeholder="13"
+                                    className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Title Size</label>
+                                  <input
+                                    type="text"
+                                    value={fields[`card_${c.key}_deck_title_size`] || ""}
+                                    onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_deck_title_size`]: e.target.value }))}
+                                    placeholder="28"
+                                    className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Desc Size</label>
+                                  <input
+                                    type="text"
+                                    value={fields[`card_${c.key}_deck_desc_size`] || ""}
+                                    onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_deck_desc_size`]: e.target.value }))}
+                                    placeholder="18"
+                                    className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>

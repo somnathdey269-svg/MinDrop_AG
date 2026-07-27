@@ -293,7 +293,7 @@ export function DesktopShowcase() {
                     className="cursor-pointer active:scale-[0.99] transition-transform duration-100"
                     headerSlot={
                       <span 
-                        style={currentCard.tagSizePx ? { fontSize: `${currentCard.tagSizePx}px` } : undefined}
+                        style={currentCard.deckTagSizePx ? { fontSize: `${currentCard.deckTagSizePx}px` } : undefined}
                         className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm"
                       >
                         {currentCard.tag}
@@ -302,7 +302,7 @@ export function DesktopShowcase() {
                     illustrationSlot={renderIllustration(currentCard.id)}
                     titleSlot={
                       <h3 
-                        style={currentCard.titleSizePx ? { fontSize: `${currentCard.titleSizePx}px` } : undefined}
+                        style={currentCard.deckTitleSizePx ? { fontSize: `${currentCard.deckTitleSizePx}px` } : undefined}
                         className={CARD_TOKENS.typography.deck.title}
                       >
                         {currentCard.title}
@@ -310,7 +310,7 @@ export function DesktopShowcase() {
                     }
                     descriptionSlot={
                       <p 
-                        style={currentCard.descSizePx ? { fontSize: `${currentCard.descSizePx}px` } : undefined}
+                        style={currentCard.deckDescSizePx ? { fontSize: `${currentCard.deckDescSizePx}px` } : undefined}
                         className={CARD_TOKENS.typography.deck.description}
                       >
                         {currentCard.description}
@@ -363,7 +363,7 @@ export function DesktopShowcase() {
                       className="hover:-translate-y-1 transition-all cursor-pointer"
                       headerSlot={
                         <span 
-                          style={card.tagSizePx ? { fontSize: `${card.tagSizePx}px` } : undefined}
+                          style={card.gridTagSizePx ? { fontSize: `${card.gridTagSizePx}px` } : undefined}
                           className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm"
                         >
                           {card.tag}
@@ -372,7 +372,7 @@ export function DesktopShowcase() {
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
                         <h3 
-                          style={card.titleSizePx ? { fontSize: `${card.titleSizePx}px` } : undefined}
+                          style={card.gridTitleSizePx ? { fontSize: `${card.gridTitleSizePx}px` } : undefined}
                           className={CARD_TOKENS.typography.grid.title}
                         >
                           {card.title}
@@ -380,7 +380,7 @@ export function DesktopShowcase() {
                       }
                       descriptionSlot={
                         <p 
-                          style={card.descSizePx ? { fontSize: `${card.descSizePx}px` } : undefined}
+                          style={card.gridDescSizePx ? { fontSize: `${card.gridDescSizePx}px` } : undefined}
                           className={CARD_TOKENS.typography.grid.description}
                         >
                           {card.description}

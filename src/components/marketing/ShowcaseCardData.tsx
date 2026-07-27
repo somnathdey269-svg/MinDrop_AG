@@ -104,6 +104,12 @@ export interface DeckCardItem {
   tagSizePx?: string;
   titleSizePx?: string;
   descSizePx?: string;
+  gridTagSizePx?: string;
+  gridTitleSizePx?: string;
+  gridDescSizePx?: string;
+  deckTagSizePx?: string;
+  deckTitleSizePx?: string;
+  deckDescSizePx?: string;
   to: string;
   bgColor: string;
   bgClass: string;
@@ -113,6 +119,14 @@ export interface DeckCardItem {
 export function getDeckCards(fields: Record<string, string> = {}): DeckCardItem[] {
   return DECK_CARDS.map((card) => {
     const key = card.id === "privacy-manifesto" ? "privacy" : card.id;
+    const gridTag = fields[`card_${key}_grid_tag_size`] || fields[`card_${key}_tag_size`] || "";
+    const gridTitle = fields[`card_${key}_grid_title_size`] || fields[`card_${key}_title_size`] || "";
+    const gridDesc = fields[`card_${key}_grid_desc_size`] || fields[`card_${key}_desc_size`] || "";
+
+    const deckTag = fields[`card_${key}_deck_tag_size`] || fields[`card_${key}_tag_size`] || "";
+    const deckTitle = fields[`card_${key}_deck_title_size`] || fields[`card_${key}_title_size`] || "";
+    const deckDesc = fields[`card_${key}_deck_desc_size`] || fields[`card_${key}_desc_size`] || "";
+
     return {
       ...card,
       tag: fields[`card_${key}_tag`] || card.tag,
@@ -121,6 +135,12 @@ export function getDeckCards(fields: Record<string, string> = {}): DeckCardItem[
       tagSizePx: fields[`card_${key}_tag_size`] || "",
       titleSizePx: fields[`card_${key}_title_size`] || "",
       descSizePx: fields[`card_${key}_desc_size`] || "",
+      gridTagSizePx: gridTag,
+      gridTitleSizePx: gridTitle,
+      gridDescSizePx: gridDesc,
+      deckTagSizePx: deckTag,
+      deckTitleSizePx: deckTitle,
+      deckDescSizePx: deckDesc,
     };
   });
 }
