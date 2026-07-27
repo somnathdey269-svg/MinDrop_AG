@@ -228,17 +228,18 @@ export function DesktopShowcase() {
           <div className="w-full h-full flex items-center justify-center relative">
             
             {/* Left Hover Trigger */}
-            <div className="absolute left-4 lg:left-12 z-30 flex">
-              <button 
-                onClick={handlePrev} 
-                style={{ transform: leftBubbleTransform, transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)" }}
-                className="size-20 lg:size-24 rounded-full border-3 border-ink bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center cursor-pointer hover:bg-slate-50 active:scale-95 transition"
-              >
-                <div className="text-center">
-                  <span className="text-[10px] font-black text-ink/40 uppercase tracking-widest block leading-none">PREV</span>
-                  <span className="text-xs font-black text-ink uppercase tracking-wider block mt-0.5">SLIDE</span>
-                </div>
-              </button>
+            <div 
+              onClick={handleNext} 
+              className="absolute left-4 lg:left-12 z-30 flex cursor-pointer group"
+            >
+              <div className="flex flex-col items-center text-center">
+                <span className="text-[11px] lg:text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-0.5 group-hover:text-ink transition">
+                  Cycle Deck
+                </span>
+                <span className="text-xl lg:text-3xl font-black text-ink group-hover:text-[#FF671F] transition">
+                  Next card
+                </span>
+              </div>
             </div>
 
             {/* Center Overlapping Stack Cards */}
