@@ -502,6 +502,41 @@ function SuperAdminCMSView() {
         closerCtaText: "Take MinDrop Home",
       };
     }
+    if (slug === "home") {
+      return {
+        card_about_tag: "INDEX",
+        card_about_title: "About the App",
+        card_about_description: "Built for immediate micro-actions. An offline second brain that captures urgent thoughts and protects your mental bandwidth.",
+
+        card_notify_tag: "Chapter 01/05",
+        card_notify_title: "Smart Notification",
+        card_notify_description: "Silence low-priority chatter. Create keyword rules that convert essential notification streams into actionable tasks.",
+
+        card_places_tag: "Chapter 02/05",
+        card_places_title: "Location Reminder",
+        card_places_description: "Drop pins where items or tasks are bound. MinDrop runs background sweeps and triggers reminders as you enter or leave radii.",
+
+        card_later_tag: "Chapter 03/05",
+        card_later_title: "Looping Alarm",
+        card_later_description: "Ordinary alerts are easy to ignore. MinDrop alarms ring continuously like a phone call until checked, surviving system restarts.",
+
+        card_future_tag: "Chapter 04/05",
+        card_future_title: "Future Actions",
+        card_future_description: "Person-based alerts, cross-app trigger bridges, and local voice drops. Features we are striving to bring natively to Android.",
+
+        card_privacy_tag: "Chapter 05/05",
+        card_privacy_title: "Absolute Privacy",
+        card_privacy_description: "Zero cloud telemetry, zero subscription traps, and zero ad tracking. Local SQLite persistence engineered for pure peace of mind.",
+
+        card_vision_tag: "THE CLOSURE",
+        card_vision_title: "The Closure",
+        card_vision_description: "Revolutionizing micro-tasks. Moving from ignored todo lists to an offline second brain that protects your mental bandwidth.",
+
+        card_pricing_tag: "PRICING",
+        card_pricing_title: "Simple Pricing",
+        card_pricing_description: "Zero subscriptions or hidden tiers. Upgrade to Unlimited Pro for just Rs. 999 / year.",
+      };
+    }
     return {};
   };
 
@@ -702,6 +737,66 @@ function SuperAdminCMSView() {
             {/* Editor Workspace */}
             {(viewMode === "editor" || viewMode === "split") && (
               <div className="space-y-6">
+                {selectedSlug === "home" && (
+                  <div className="space-y-6">
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+                      <div className="flex items-center gap-2 text-brand">
+                        <Grid className="size-5" />
+                        <h3 className="font-bold text-base text-slate-900">Homepage 8-Card Bento Grid Copy</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 font-medium">
+                        Customize the titles, badges, and descriptions for all 8 cards displayed on the homepage showcase grid.
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left pt-2">
+                        {[
+                          { key: "about", label: "Card 1: About the App", defaultTag: "INDEX", defaultTitle: "About the App" },
+                          { key: "notify", label: "Card 2: Smart Notification", defaultTag: "Chapter 01/05", defaultTitle: "Smart Notification" },
+                          { key: "places", label: "Card 3: Location Reminder", defaultTag: "Chapter 02/05", defaultTitle: "Location Reminder" },
+                          { key: "later", label: "Card 4: Looping Alarm", defaultTag: "Chapter 03/05", defaultTitle: "Looping Alarm" },
+                          { key: "future", label: "Card 5: Future Actions", defaultTag: "Chapter 04/05", defaultTitle: "Future Actions" },
+                          { key: "privacy", label: "Card 6: Absolute Privacy", defaultTag: "Chapter 05/05", defaultTitle: "Absolute Privacy" },
+                          { key: "vision", label: "Card 7: The Closure", defaultTag: "THE CLOSURE", defaultTitle: "The Closure" },
+                          { key: "pricing", label: "Card 8: Simple Pricing", defaultTag: "PRICING", defaultTitle: "Simple Pricing" },
+                        ].map((c) => (
+                          <div key={c.key} className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                            <h4 className="font-bold text-xs uppercase text-slate-700">{c.label}</h4>
+                            <div>
+                              <label className="text-[10px] font-bold uppercase text-slate-400 block mb-0.5">Badge Tag</label>
+                              <input
+                                type="text"
+                                value={fields[`card_${c.key}_tag`] || ""}
+                                onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_tag`]: e.target.value }))}
+                                placeholder={c.defaultTag}
+                                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold uppercase text-slate-400 block mb-0.5">Card Title</label>
+                              <input
+                                type="text"
+                                value={fields[`card_${c.key}_title`] || ""}
+                                onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_title`]: e.target.value }))}
+                                placeholder={c.defaultTitle}
+                                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-800"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold uppercase text-slate-400 block mb-0.5">Description Text</label>
+                              <textarea
+                                rows={2}
+                                value={fields[`card_${c.key}_description`] || ""}
+                                onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_description`]: e.target.value }))}
+                                placeholder="Description text..."
+                                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
                 {selectedSlug === "pricing" && (
                   <div className="space-y-6">
                     {/* Slide 1: Hero Headlines */}

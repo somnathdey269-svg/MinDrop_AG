@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
+  getDeckCards,
   ShowcaseCardLayoutPrimitive,
   CARD_TOKENS,
   AboutAppIllustration,
@@ -16,8 +17,12 @@ import {
   PricingTierIllustration, 
   ClosureVisionIllustration
 } from "../ShowcaseCardData";
+import { useCMSPage } from "@/lib/cms/useCMSPage";
 
 export function MobileShowcase() {
+  const { fields } = useCMSPage("home");
+  const cards = getDeckCards(fields);
+
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<"next" | "prev">("next");
@@ -64,12 +69,12 @@ export function MobileShowcase() {
 
   const handleNext = () => {
     setSwipeDirection("next");
-    setActiveIdx((prev) => (prev + 1) % DECK_CARDS.length);
+    setActiveIdx((prev) => (prev + 1) % cards.length);
   };
 
   const handlePrev = () => {
     setSwipeDirection("prev");
-    setActiveIdx((prev) => (prev - 1 + DECK_CARDS.length) % DECK_CARDS.length);
+    setActiveIdx((prev) => (prev - 1 + cards.length) % cards.length);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -105,7 +110,7 @@ export function MobileShowcase() {
     }
   };
 
-  const currentCard = DECK_CARDS[activeIdx];
+  const currentCard = cards[activeIdx] || cards[0];
   const activeBgColor = viewMode === "deck" ? currentCard.bgColor : "#FFC935";
 
   const handleShowMe = () => {
@@ -202,7 +207,7 @@ export function MobileShowcase() {
           /* GRID VIEW MODE */
           <div className="w-full h-full overflow-y-auto px-2 pt-2 pb-28 z-20 no-scrollbar">
             <div className="flex flex-col gap-4 max-w-md mx-auto">
-              {DECK_CARDS.map((card) => {
+              {cards.map((card) => {
                 return (
                   <Link
                     key={card.id}

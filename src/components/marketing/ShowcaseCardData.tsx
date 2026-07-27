@@ -96,6 +96,18 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
 ];
 
+export function getDeckCards(fields: Record<string, string> = {}): DeckCardItem[] {
+  return DECK_CARDS.map((card) => {
+    const key = card.id === "privacy-manifesto" ? "privacy" : card.id;
+    return {
+      ...card,
+      tag: fields[`card_${key}_tag`] || card.tag,
+      title: fields[`card_${key}_title`] || card.title,
+      description: fields[`card_${key}_description`] || card.description,
+    };
+  });
+}
+
 /**
  * Clean accent icon — centered, no border or background box.
  */

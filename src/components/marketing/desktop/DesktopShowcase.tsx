@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
+  getDeckCards,
   ShowcaseCardLayoutPrimitive,
   CARD_TOKENS,
   AboutAppIllustration,
@@ -16,8 +17,12 @@ import {
   PricingTierIllustration, 
   ClosureVisionIllustration
 } from "../ShowcaseCardData";
+import { useCMSPage } from "@/lib/cms/useCMSPage";
 
 export function DesktopShowcase() {
+  const { fields } = useCMSPage("home");
+  const cards = getDeckCards(fields);
+
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
   const [hoverZone, setHoverZone] = useState<"left" | "right" | "none">("none");
@@ -228,19 +233,23 @@ export function DesktopShowcase() {
               className="absolute left-4 lg:left-12 z-30 flex cursor-pointer group"
             >
               <div className="flex flex-col items-center text-center">
-                <span className="text-[11px] lg:text-xs uppercase font-extrabold tracking-wider text-ink/40 mb-0.5 group-hover:text-ink transition">
-                  Cycle Deck
-                </span>
-                <span className="text-xl lg:text-3xl font-black text-ink group-hover:text-[#FF671F] transition">
-                  Next card
-                </span>
-              </div>
+            <div className="absolute left-4 lg:left-12 z-30 flex">
+              <button 
+                onClick={handlePrev} 
+                style={{ transform: leftBubbleTransform, transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)" }}
+                className="size-20 lg:size-24 rounded-full border-3 border-ink bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] grid place-items-center cursor-pointer hover:bg-slate-50 active:scale-95 transition"
+              >
+                <div className="text-center">
+                  <span className="text-[10px] font-black text-ink/40 uppercase tracking-widest block leading-none">PREV</span>
+                  <span className="text-xs font-black text-ink uppercase tracking-wider block mt-0.5">SLIDE</span>
+                </div>
+              </button>
             </div>
 
-            {/* Web Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(380px,32vw,470px)] min-h-[clamp(420px,65vh,570px)] flex items-center justify-center">
+            {/* Center Overlapping Stack Cards */}
+            <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] aspect-[3/3.6] max-h-[85vh]">
               <AnimatePresence mode="popLayout">
-                {/* Behind Stacked Preview Card */}
+                {/* Behind Card */}
                 <motion.div
                   key={`next-${nextCard.id}`}
                   animate={{
@@ -331,7 +340,7 @@ export function DesktopShowcase() {
               animate={{ opacity: 1, y: 0 }} 
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 xl:gap-6 items-stretch pb-24"
             >
-              {DECK_CARDS.map((card) => {
+              {cards.map((card) => {
                 return (
                   <Link
                     key={card.id}
