@@ -170,8 +170,8 @@ export const CARD_TOKENS = {
       description: "text-ink/85 font-normal leading-relaxed text-[1.02em] lg:text-[1.12em]",
     },
     grid: {
-      title: "font-black text-ink leading-tight tracking-tight text-[1.35em]",
-      description: "text-ink/80 font-normal leading-relaxed text-[0.85em]",
+      title: "font-black text-ink leading-tight tracking-tight text-[1.25em]",
+      description: "text-ink/80 font-normal leading-relaxed text-[0.88em]",
     },
   },
 } as const;
@@ -218,26 +218,26 @@ export function ShowcaseCardLayoutPrimitive({
       style={{
         containerType: 'inline-size',
         fontSize: isFluid ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.85rem, 2.5cqi + 0.1rem, 1.12rem)',
-        paddingTop: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '1.25rem',
-        paddingBottom: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '1.25rem',
-        paddingLeft: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.25rem',
-        paddingRight: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.25rem',
+        paddingTop: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '1.15rem',
+        paddingBottom: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '1.15rem',
+        paddingLeft: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.15rem',
+        paddingRight: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.15rem',
         ...style,
       }}
-      className={`relative w-full ${isMobileGrid ? 'h-auto' : 'h-full'} flex flex-col justify-between select-none ${
+      className={`relative w-full ${isMobileGrid ? 'h-auto' : 'h-full'} flex flex-col select-none ${
         isFluid ? CARD_TOKENS.radius.deck : CARD_TOKENS.radius.grid
       } ${CARD_TOKENS.border} ${
         isFluid ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
       {/* 1. Header Slot */}
-      <div className={`shrink-0 flex items-center w-full ${isFluid ? 'min-h-[1.8em] text-[0.75em]' : 'min-h-[1.8em] pb-1 text-[0.75em]'}`}>
+      <div className={`shrink-0 flex items-center w-full ${isFluid ? 'min-h-[1.8em] text-[0.75em]' : 'min-h-[1.5em] pb-1 text-[0.75em]'}`}>
         {headerSlot}
       </div>
 
       {/* 2. Illustration Zone */}
       <div className={`shrink-0 w-full flex items-center justify-center ${
-        isMobileGrid ? 'h-24 my-2.5' : isDeck ? 'flex-1 min-h-[100px] py-2' : 'h-20 my-2.5'
+        isMobileGrid ? 'h-24 my-2.5' : isDeck ? 'flex-1 min-h-[100px] py-2' : 'h-16 my-2'
       }`}>
         <div className={`h-full aspect-square flex items-center justify-center ${
           isMobileGrid ? 'max-h-full' : isDeck ? 'max-h-[min(38%,8.5em)]' : 'max-h-full'
@@ -246,10 +246,10 @@ export function ShowcaseCardLayoutPrimitive({
         </div>
       </div>
 
-      {/* 3. Content Zone (Dynamic Height & Flex Flow) */}
-      <div className={`shrink-0 w-full flex flex-col ${isFluid ? 'gap-2.5 mt-auto' : 'flex-1 justify-end gap-1.5 pt-2'}`}>
+      {/* 3. Content Zone (Dynamic Height & Proportional Flow) */}
+      <div className={`w-full flex flex-col ${isFluid ? 'gap-2.5 mt-auto' : 'gap-1 mt-auto'}`}>
         {/* Title Slot */}
-        <div className="w-full flex items-end min-h-[2.2em]">
+        <div className="w-full flex items-end">
           {titleSlot}
         </div>
         {/* Description Slot */}

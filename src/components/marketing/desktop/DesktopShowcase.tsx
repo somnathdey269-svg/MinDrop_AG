@@ -346,7 +346,7 @@ export function DesktopShowcase() {
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
                     } as React.CSSProperties}
-                    className="h-full min-h-[330px] flex flex-col block"
+                    className="h-full min-h-[290px] flex flex-col block"
                   >
                     <ShowcaseCardLayoutPrimitive
                       mode="grid"
