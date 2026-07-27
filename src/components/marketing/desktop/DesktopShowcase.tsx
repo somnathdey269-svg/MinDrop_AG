@@ -329,12 +329,12 @@ export function DesktopShowcase() {
 
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (Fluid auto-fit cards) */
-          <div className="w-full max-w-7xl mx-auto px-3 py-2 z-20 h-full overflow-y-auto no-scrollbar">
+          /* RESPONSIVE GRID VIEW MODE (Vertically Centered, Zero Scroll) */
+          <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-1 z-20 h-full flex flex-col justify-center items-center overflow-hidden">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 xl:gap-6 items-stretch pb-24"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 xl:gap-5 items-stretch w-full h-full max-h-[min(82vh,700px)] py-1.5 min-h-0"
             >
               {cards.map((card) => {
                 return (
@@ -346,7 +346,7 @@ export function DesktopShowcase() {
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
                     } as React.CSSProperties}
-                    className="h-full min-h-[290px] flex flex-col block"
+                    className="h-full flex flex-col block min-h-0"
                   >
                     <ShowcaseCardLayoutPrimitive
                       mode="grid"
