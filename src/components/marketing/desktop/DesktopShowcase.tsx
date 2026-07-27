@@ -329,12 +329,12 @@ export function DesktopShowcase() {
 
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (Vertically Centered, Zero Scroll) */
+          /* RESPONSIVE GRID VIEW MODE (Vertically Centered, Equal 8-Card Uniform Heights) */
           <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-1 z-20 h-full flex flex-col justify-center items-center overflow-hidden">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 xl:gap-5 items-stretch w-full h-full max-h-[min(82vh,700px)] py-1.5 min-h-0"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 auto-rows-fr gap-3 lg:gap-4 xl:gap-5 items-stretch w-full h-full max-h-[min(82vh,700px)] py-1.5 min-h-0"
             >
               {cards.map((card) => {
                 return (
