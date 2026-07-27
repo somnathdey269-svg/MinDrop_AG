@@ -292,18 +292,27 @@ export function DesktopShowcase() {
                     onClick={handleShowMe}
                     className="cursor-pointer active:scale-[0.99] transition-transform duration-100"
                     headerSlot={
-                      <span className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm">
+                      <span 
+                        style={currentCard.tagSizePx ? { fontSize: `${currentCard.tagSizePx}px` } : undefined}
+                        className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm"
+                      >
                         {currentCard.tag}
                       </span>
                     }
                     illustrationSlot={renderIllustration(currentCard.id)}
                     titleSlot={
-                      <h3 className={CARD_TOKENS.typography.deck.title}>
+                      <h3 
+                        style={currentCard.titleSizePx ? { fontSize: `${currentCard.titleSizePx}px` } : undefined}
+                        className={CARD_TOKENS.typography.deck.title}
+                      >
                         {currentCard.title}
                       </h3>
                     }
                     descriptionSlot={
-                      <p className={CARD_TOKENS.typography.deck.description}>
+                      <p 
+                        style={currentCard.descSizePx ? { fontSize: `${currentCard.descSizePx}px` } : undefined}
+                        className={CARD_TOKENS.typography.deck.description}
+                      >
                         {currentCard.description}
                       </p>
                     }
@@ -353,18 +362,27 @@ export function DesktopShowcase() {
                       bgClass={card.bgClass}
                       className="hover:-translate-y-1 transition-all cursor-pointer"
                       headerSlot={
-                        <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
+                        <span 
+                          style={card.tagSizePx ? { fontSize: `${card.tagSizePx}px` } : undefined}
+                          className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm"
+                        >
                           {card.tag}
                         </span>
                       }
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
-                        <h3 className={CARD_TOKENS.typography.grid.title}>
+                        <h3 
+                          style={card.titleSizePx ? { fontSize: `${card.titleSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.grid.title}
+                        >
                           {card.title}
                         </h3>
                       }
                       descriptionSlot={
-                        <p className={CARD_TOKENS.typography.grid.description}>
+                        <p 
+                          style={card.descSizePx ? { fontSize: `${card.descSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.grid.description}
+                        >
                           {card.description}
                         </p>
                       }

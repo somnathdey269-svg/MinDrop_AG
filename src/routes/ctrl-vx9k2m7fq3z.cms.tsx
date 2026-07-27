@@ -792,6 +792,38 @@ function SuperAdminCMSView() {
                                 className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700"
                               />
                             </div>
+                            <div className="grid grid-cols-3 gap-2 pt-1.5 border-t border-slate-200/80">
+                              <div>
+                                <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Tag Size (px)</label>
+                                <input
+                                  type="text"
+                                  value={fields[`card_${c.key}_tag_size`] || ""}
+                                  onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_tag_size`]: e.target.value }))}
+                                  placeholder="11"
+                                  className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Title Size (px)</label>
+                                <input
+                                  type="text"
+                                  value={fields[`card_${c.key}_title_size`] || ""}
+                                  onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_title_size`]: e.target.value }))}
+                                  placeholder="20"
+                                  className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Desc Size (px)</label>
+                                <input
+                                  type="text"
+                                  value={fields[`card_${c.key}_desc_size`] || ""}
+                                  onChange={(e) => setFields((prev) => ({ ...prev, [`card_${c.key}_desc_size`]: e.target.value }))}
+                                  placeholder="14"
+                                  className="w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs font-bold"
+                                />
+                              </div>
+                            </div>
                           </div>
                         ))}
                       </div>

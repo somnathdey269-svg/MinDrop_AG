@@ -96,6 +96,20 @@ export const DECK_CARDS: DeckCardItem[] = [
   },
 ];
 
+export interface DeckCardItem {
+  id: string;
+  tag: string;
+  title: string;
+  description: string;
+  tagSizePx?: string;
+  titleSizePx?: string;
+  descSizePx?: string;
+  to: string;
+  bgColor: string;
+  bgClass: string;
+  illustrator: ElementType;
+}
+
 export function getDeckCards(fields: Record<string, string> = {}): DeckCardItem[] {
   return DECK_CARDS.map((card) => {
     const key = card.id === "privacy-manifesto" ? "privacy" : card.id;
@@ -104,6 +118,9 @@ export function getDeckCards(fields: Record<string, string> = {}): DeckCardItem[
       tag: fields[`card_${key}_tag`] || card.tag,
       title: fields[`card_${key}_title`] || card.title,
       description: fields[`card_${key}_description`] || card.description,
+      tagSizePx: fields[`card_${key}_tag_size`] || "",
+      titleSizePx: fields[`card_${key}_title_size`] || "",
+      descSizePx: fields[`card_${key}_desc_size`] || "",
     };
   });
 }
