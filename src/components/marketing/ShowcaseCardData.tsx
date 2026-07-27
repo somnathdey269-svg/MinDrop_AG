@@ -231,13 +231,13 @@ export function ShowcaseCardLayoutPrimitive({
       } ${bgClass} ${className}`}
     >
       {/* 1. Header Slot */}
-      <div className={`shrink-0 flex items-center w-full ${isFluid ? 'min-h-[1.8em] text-[0.75em]' : 'h-7 text-[0.75em]'}`}>
+      <div className={`shrink-0 flex items-center w-full ${isFluid ? 'min-h-[1.8em] text-[0.75em]' : 'min-h-[1.8em] pb-1 text-[0.75em]'}`}>
         {headerSlot}
       </div>
 
       {/* 2. Illustration Zone */}
       <div className={`shrink-0 w-full flex items-center justify-center ${
-        isMobileGrid ? 'h-24 my-2.5' : isDeck ? 'flex-1 min-h-0 py-2' : 'h-20 my-2'
+        isMobileGrid ? 'h-24 my-2.5' : isDeck ? 'flex-1 min-h-[100px] py-2' : 'h-20 my-2.5'
       }`}>
         <div className={`h-full aspect-square flex items-center justify-center ${
           isMobileGrid ? 'max-h-full' : isDeck ? 'max-h-[min(38%,8.5em)]' : 'max-h-full'
@@ -246,14 +246,14 @@ export function ShowcaseCardLayoutPrimitive({
         </div>
       </div>
 
-      {/* 3. Content Zone */}
-      <div className={`shrink-0 w-full flex flex-col ${isFluid ? 'gap-2.5 mt-auto' : 'flex-1 justify-start gap-1.5'}`}>
+      {/* 3. Content Zone (Dynamic Height & Flex Flow) */}
+      <div className={`shrink-0 w-full flex flex-col ${isFluid ? 'gap-2.5 mt-auto' : 'flex-1 justify-end gap-1.5 pt-2'}`}>
         {/* Title Slot */}
-        <div className={`w-full flex items-end ${isFluid ? '' : 'h-10'}`}>
+        <div className="w-full flex items-end min-h-[2.2em]">
           {titleSlot}
         </div>
         {/* Description Slot */}
-        <div className={`w-full flex flex-col justify-start overflow-hidden ${isFluid ? '' : 'flex-1 pt-0.5'}`}>
+        <div className="w-full flex flex-col justify-start">
           {descriptionSlot}
         </div>
         {footerActionSlot && (

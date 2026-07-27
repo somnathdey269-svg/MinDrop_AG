@@ -243,7 +243,7 @@ export function DesktopShowcase() {
             </div>
 
             {/* Center Overlapping Stack Cards */}
-            <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] aspect-[3/3.6] max-h-[85vh]">
+            <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] min-h-[420px] max-h-[85vh] h-auto flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Card */}
                 <motion.div
@@ -346,7 +346,7 @@ export function DesktopShowcase() {
                     style={{ 
                       viewTransitionName: `card-${card.id}`,
                     } as React.CSSProperties}
-                    className="aspect-[3/3.6] min-h-[300px] block"
+                    className="h-full min-h-[330px] flex flex-col block"
                   >
                     <ShowcaseCardLayoutPrimitive
                       mode="grid"
