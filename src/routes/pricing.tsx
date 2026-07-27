@@ -22,8 +22,22 @@ export const Route = createFileRoute("/pricing")({
 });
 
 function detectPreferredCurrency(available: string[]): string {
-  if (typeof navigator === "undefined") return "INR";
+  if (typeof navigator === "undefined" || !available || available.length === 0) return "INR";
   try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    if (tz.includes("Kolkata") || tz.includes("Calcutta") || tz.includes("Asia/Colombo")) {
+      if (available.includes("INR")) return "INR";
+    }
+    if (tz.startsWith("America/")) {
+      if (available.includes("USD")) return "USD";
+    }
+    if (tz.startsWith("Europe/London")) {
+      if (available.includes("GBP")) return "GBP";
+    }
+    if (tz.startsWith("Europe/")) {
+      if (available.includes("EUR")) return "EUR";
+    }
+
     const locale = navigator.language || "en-IN";
     const region = new Intl.Locale(locale).maximize().region || "IN";
     const map: Record<string, string> = {
@@ -31,10 +45,10 @@ function detectPreferredCurrency(available: string[]): string {
       SG: "SGD", AE: "AED", JP: "JPY",
     };
     const euroCountries = ["DE","FR","IT","ES","NL","BE","AT","IE","PT","FI","GR","LU","SK","SI","EE","LV","LT","MT","CY"];
-    if (euroCountries.includes(region)) return available.includes("EUR") ? "EUR" : "INR";
-    const guess = map[region] || "INR";
+    if (euroCountries.includes(region) && available.includes("EUR")) return "EUR";
+    const guess = map[region] || "USD";
     return available.includes(guess) ? guess : (available.includes("INR") ? "INR" : available[0] || "INR");
-  } catch { return "INR"; }
+  } catch { return available.includes("INR") ? "INR" : available[0] || "INR"; }
 }
 
 /* ──────────────────────────────────────────────
@@ -128,7 +142,11 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies, fields
   const premF2 = fields.premiumTierFeature2 || "Infinite notification filter rules";
   const premF3 = fields.premiumTierFeature3 || "Infinite saved places / locations";
   const premF4 = fields.premiumTierFeature4 || "Private Google Drive cloud backup sync";
-  const premFooter = fields.premiumTierFooter || "Linked to superadmin configs";
+
+  const cadence = fields.planCadence || "yearly";
+  const cadenceSuffix = fields.cadenceSuffixOverride || (
+    cadence === "lifetime" ? "Lifetime" : cadence === "monthly" ? "/ Month" : "/ Year"
+  );
 
   return (
     <div className="w-full h-full bg-[#FFF2F7] flex items-center justify-center px-6 sm:px-10">
@@ -187,7 +205,6 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies, fields
                 </li>
               </ul>
             </div>
-            <p className="text-xs sm:text-xs text-ink/40 font-black uppercase tracking-wider">{freeFooter}</p>
           </div>
 
           {/* Premium Tier */}
@@ -197,7 +214,7 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies, fields
                 <span className="text-2xl sm:text-3xl">💎</span>
                 <p className="text-xs sm:text-sm uppercase font-black text-[#DB2777] tracking-wider">{premiumTitle}</p>
               </div>
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">{priceDisplay} / Year</p>
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink mt-3">{priceDisplay} {cadenceSuffix}</p>
               <ul className="text-sm sm:text-sm md:text-base lg:text-lg text-ink/80 font-bold mt-6 space-y-3.5 border-t border-dashed border-ink/20 pt-5">
                 <li className="flex items-center gap-2.5">
                   <Check className="size-5 text-[#EC4899] stroke-[3px] shrink-0" />
@@ -217,7 +234,6 @@ function SlideTiers({ prices, currency, setCurrency, availableCurrencies, fields
                 </li>
               </ul>
             </div>
-            <p className="text-xs sm:text-xs text-[#DB2777]/50 font-black uppercase tracking-wider">{premFooter}</p>
           </div>
         </div>
       </div>
@@ -388,11 +404,32 @@ function PricingDetailView() {
 
   const { fields } = useCMSPage("pricing");
 
-  const availableCurrencies = useMemo(() => Object.keys(prices).sort(), [prices]);
+  const effectivePrices = useMemo(() => {
+    const base: Record<string, CurrencyPrice> = {
+      INR: { symbol: "₹", displayed: "999" },
+      USD: { symbol: "$", displayed: "19" },
+      EUR: { symbol: "€", displayed: "17" },
+      GBP: { symbol: "£", displayed: "15" },
+      ...prices,
+    };
+    if (fields.price_INR) base.INR = { symbol: "₹", displayed: fields.price_INR };
+    if (fields.price_USD) base.USD = { symbol: "$", displayed: fields.price_USD };
+    if (fields.price_EUR) base.EUR = { symbol: "€", displayed: fields.price_EUR };
+    if (fields.price_GBP) base.GBP = { symbol: "£", displayed: fields.price_GBP };
+    return base;
+  }, [prices, fields]);
+
+  const availableCurrencies = useMemo(() => Object.keys(effectivePrices).sort(), [effectivePrices]);
+
+  useEffect(() => {
+    if (availableCurrencies.length > 0) {
+      setCurrency(detectPreferredCurrency(availableCurrencies));
+    }
+  }, [availableCurrencies]);
 
   const slides = [
     <SlideOpening key="1" fields={fields} />,
-    <SlideTiers key="2" prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} fields={fields} />,
+    <SlideTiers key="2" prices={effectivePrices} currency={currency} setCurrency={setCurrency} availableCurrencies={availableCurrencies} fields={fields} />,
     <SlideFlow key="3" fields={fields} />,
     <SlideCloser key="4" backHash={backHash} fields={fields} />,
   ];
@@ -489,14 +526,19 @@ function PricingDetailView() {
 
 export function PricingDeckPreview({ fields = {} }: { fields?: Record<string, string> }) {
   const [currency, setCurrency] = useState("INR");
-  const prices = {
-    INR: { symbol: "₹", displayed: "999" },
-    USD: { symbol: "$", displayed: "19" },
-  };
+  const prices = useMemo(() => {
+    return {
+      INR: { symbol: "₹", displayed: fields.price_INR || "999" },
+      USD: { symbol: "$", displayed: fields.price_USD || "19" },
+      EUR: { symbol: "€", displayed: fields.price_EUR || "17" },
+      GBP: { symbol: "£", displayed: fields.price_GBP || "15" },
+    };
+  }, [fields]);
+
   return (
     <div className="w-full bg-[#FFF2F7] border border-pink-200 rounded-3xl overflow-hidden shadow-sm space-y-12 p-6 sm:p-10 select-none">
       <SlideOpening fields={fields} />
-      <SlideTiers prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={["INR", "USD"]} fields={fields} />
+      <SlideTiers prices={prices} currency={currency} setCurrency={setCurrency} availableCurrencies={Object.keys(prices)} fields={fields} />
       <SlideFlow fields={fields} />
       <SlideCloser fields={fields} />
     </div>

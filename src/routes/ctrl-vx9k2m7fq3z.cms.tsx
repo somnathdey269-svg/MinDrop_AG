@@ -735,6 +735,76 @@ function SuperAdminCMSView() {
                       </div>
                     </div>
 
+                    {/* Plan Cadence & Multi-Country Pricing Settings */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+                      <div className="flex items-center gap-2 text-emerald-600">
+                        <Palette className="size-5" />
+                        <h3 className="font-bold text-base text-slate-900">Plan Cadence & Multi-Country Pricing</h3>
+                      </div>
+
+                      <div className="space-y-4 text-left">
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Billing Cadence Option</label>
+                          <div className="flex flex-wrap gap-3">
+                            {[
+                              { id: "yearly", label: "🗓️ Per Year (/ Year)" },
+                              { id: "lifetime", label: "♾️ Lifetime / Unlimited (One-Time)" },
+                              { id: "monthly", label: "📅 Per Month (/ Month)" },
+                            ].map((opt) => (
+                              <label key={opt.id} className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-bold cursor-pointer transition ${
+                                (fields.planCadence || "yearly") === opt.id
+                                  ? "bg-emerald-50 border-emerald-500 text-emerald-700 shadow-2xs"
+                                  : "bg-slate-50 border-slate-200 text-slate-600"
+                              }`}>
+                                <input
+                                  type="radio"
+                                  name="planCadence"
+                                  value={opt.id}
+                                  checked={(fields.planCadence || "yearly") === opt.id}
+                                  onChange={(e) => setFields((prev) => ({ ...prev, planCadence: e.target.value }))}
+                                  className="accent-emerald-600"
+                                />
+                                {opt.label}
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Custom Suffix Override (Optional)</label>
+                          <input
+                            type="text"
+                            value={fields.cadenceSuffixOverride || ""}
+                            onChange={(e) => setFields((prev) => ({ ...prev, cadenceSuffixOverride: e.target.value }))}
+                            placeholder="e.g. / Year, One-time, / Month"
+                            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-emerald-500"
+                          />
+                        </div>
+
+                        <div className="pt-2 border-t border-slate-100">
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Per-Country Pricing (Set by Super Admin)</label>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                              <span className="text-xs font-bold text-slate-700 block">🇮🇳 India (INR - ₹)</span>
+                              <input type="text" value={fields.price_INR || "999"} onChange={(e) => setFields((prev) => ({ ...prev, price_INR: e.target.value }))} placeholder="999" className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold" />
+                            </div>
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                              <span className="text-xs font-bold text-slate-700 block">🇺🇸 USA & Global (USD - $)</span>
+                              <input type="text" value={fields.price_USD || "19"} onChange={(e) => setFields((prev) => ({ ...prev, price_USD: e.target.value }))} placeholder="19" className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold" />
+                            </div>
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                              <span className="text-xs font-bold text-slate-700 block">🇪🇺 Europe (EUR - €)</span>
+                              <input type="text" value={fields.price_EUR || "17"} onChange={(e) => setFields((prev) => ({ ...prev, price_EUR: e.target.value }))} placeholder="17" className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold" />
+                            </div>
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                              <span className="text-xs font-bold text-slate-700 block">🇬🇧 UK (GBP - £)</span>
+                              <input type="text" value={fields.price_GBP || "15"} onChange={(e) => setFields((prev) => ({ ...prev, price_GBP: e.target.value }))} placeholder="15" className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Slide 2: Pricing Tiers */}
                     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
                       <div className="flex items-center gap-2 text-indigo-600">
