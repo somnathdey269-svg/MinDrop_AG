@@ -34,12 +34,12 @@ export function DesktopShowcase() {
   useLayoutEffect(() => {
     if (!measureContainerRef.current) return;
     const cardElems = measureContainerRef.current.querySelectorAll(".measure-card");
-    let maxH = 360;
+    let maxH = 410;
     cardElems.forEach((el) => {
       const h = el.getBoundingClientRect().height;
       if (h > maxH) maxH = h;
     });
-    setDeckHeight(Math.ceil(maxH));
+    setDeckHeight(Math.ceil(maxH + 12));
   }, [fields]);
 
   // Sync View Mode with Hash/URL State
