@@ -242,8 +242,8 @@ export function DesktopShowcase() {
               </div>
             </div>
 
-            {/* Center Overlapping Stack Cards */}
-            <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] min-h-[420px] max-h-[85vh] h-auto flex items-center justify-center">
+            {/* Center Overlapping Stack Cards (Content-Driven Dynamic Equal Height) */}
+            <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] h-auto flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {/* Behind Card */}
                 <motion.div
