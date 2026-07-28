@@ -27,19 +27,31 @@ export function DesktopShowcase() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [hoverZone, setHoverZone] = useState<"left" | "right" | "none">("none");
   const [deckHeight, setDeckHeight] = useState<number>(380);
+  const [gridCardHeight, setGridCardHeight] = useState<number>(320);
   const measureContainerRef = useRef<HTMLDivElement>(null);
   const wheelLock = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (!measureContainerRef.current) return;
-    const cardElems = measureContainerRef.current.querySelectorAll(".measure-card");
-    let maxH = 410;
-    cardElems.forEach((el) => {
+    
+    // Measure Deck View Cards
+    const deckElems = measureContainerRef.current.querySelectorAll(".measure-deck-card");
+    let maxDeckH = 380;
+    deckElems.forEach((el) => {
       const h = el.getBoundingClientRect().height;
-      if (h > maxH) maxH = h;
+      if (h > maxDeckH) maxDeckH = h;
     });
-    setDeckHeight(Math.ceil(maxH + 12));
+    setDeckHeight(Math.ceil(maxDeckH + 16));
+
+    // Measure Grid View Cards
+    const gridElems = measureContainerRef.current.querySelectorAll(".measure-grid-card");
+    let maxGridH = 290;
+    gridElems.forEach((el) => {
+      const h = el.getBoundingClientRect().height;
+      if (h > maxGridH) maxGridH = h;
+    });
+    setGridCardHeight(Math.ceil(maxGridH + 16));
   }, [fields]);
 
   // Sync View Mode with Hash/URL State
@@ -240,46 +252,85 @@ export function DesktopShowcase() {
           /* HERO STACKED DECK VIEW MODE */
           <div className="w-full h-full flex items-center justify-center relative">
             
-            {/* Off-screen measurement container for dynamic Deck View max content height */}
+            {/* Off-screen measurement container for dynamic Deck & Grid View max content height */}
             <div 
               ref={measureContainerRef} 
               aria-hidden="true" 
-              className="fixed -top-[9999px] -left-[9999px] opacity-0 pointer-events-none z-0 w-[340px] sm:w-[400px] md:w-[460px] lg:w-[500px] xl:w-[540px]"
+              className="fixed -top-[9999px] -left-[9999px] opacity-0 pointer-events-none z-0 flex flex-col"
             >
-              {cards.map((c) => (
-                <div key={c.id} className="measure-card w-full h-auto mb-4">
-                  <ShowcaseCardLayoutPrimitive
-                    mode="deck"
-                    bgClass={c.bgClass}
-                    style={{ height: "auto" }}
-                    headerSlot={
-                      <span 
-                        style={c.deckTagSizePx ? { fontSize: `${c.deckTagSizePx}px` } : undefined}
-                        className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm"
-                      >
-                        {c.tag}
-                      </span>
-                    }
-                    illustrationSlot={renderIllustration(c.id)}
-                    titleSlot={
-                      <h3 
-                        style={c.deckTitleSizePx ? { fontSize: `${c.deckTitleSizePx}px` } : undefined}
-                        className={CARD_TOKENS.typography.deck.title}
-                      >
-                        {c.title}
-                      </h3>
-                    }
-                    descriptionSlot={
-                      <p 
-                        style={c.deckDescSizePx ? { fontSize: `${c.deckDescSizePx}px` } : undefined}
-                        className={CARD_TOKENS.typography.deck.description}
-                      >
-                        {c.description}
-                      </p>
-                    }
-                  />
-                </div>
-              ))}
+              <div className="w-[340px] sm:w-[400px] md:w-[460px] lg:w-[500px] xl:w-[540px]">
+                {cards.map((c) => (
+                  <div key={`deck-${c.id}`} className="measure-deck-card w-full h-auto mb-4">
+                    <ShowcaseCardLayoutPrimitive
+                      mode="deck"
+                      bgClass={c.bgClass}
+                      style={{ height: "auto" }}
+                      headerSlot={
+                        <span 
+                          style={c.deckTagSizePx ? { fontSize: `${c.deckTagSizePx}px` } : undefined}
+                          className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm"
+                        >
+                          {c.tag}
+                        </span>
+                      }
+                      illustrationSlot={renderIllustration(c.id)}
+                      titleSlot={
+                        <h3 
+                          style={c.deckTitleSizePx ? { fontSize: `${c.deckTitleSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.deck.title}
+                        >
+                          {c.title}
+                        </h3>
+                      }
+                      descriptionSlot={
+                        <p 
+                          style={c.deckDescSizePx ? { fontSize: `${c.deckDescSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.deck.description}
+                        >
+                          {c.description}
+                        </p>
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="w-[280px] lg:w-[300px]">
+                {cards.map((c) => (
+                  <div key={`grid-${c.id}`} className="measure-grid-card w-full h-auto mb-4">
+                    <ShowcaseCardLayoutPrimitive
+                      mode="grid"
+                      bgClass={c.bgClass}
+                      style={{ height: "auto" }}
+                      headerSlot={
+                        <span 
+                          style={c.gridTagSizePx ? { fontSize: `${c.gridTagSizePx}px` } : undefined}
+                          className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm"
+                        >
+                          {c.tag}
+                        </span>
+                      }
+                      illustrationSlot={renderIllustration(c.id)}
+                      titleSlot={
+                        <h3 
+                          style={c.gridTitleSizePx ? { fontSize: `${c.gridTitleSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.grid.title}
+                        >
+                          {c.title}
+                        </h3>
+                      }
+                      descriptionSlot={
+                        <p 
+                          style={c.gridDescSizePx ? { fontSize: `${c.gridDescSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.grid.description}
+                        >
+                          {c.description}
+                        </p>
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Left Hover Trigger */}
@@ -396,12 +447,13 @@ export function DesktopShowcase() {
 
           </div>
         ) : (
-          /* RESPONSIVE GRID VIEW MODE (Vertically Centered, Content-Driven Snug 8-Card Heights) */
-          <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-1 z-20 h-full flex flex-col justify-center items-center overflow-hidden">
+          /* RESPONSIVE GRID VIEW MODE (Dynamic Max-Content Measured Card Heights) */
+          <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2 z-20 flex-1 flex flex-col justify-center items-center overflow-y-auto min-h-0">
             <motion.div 
               initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 auto-rows-fr gap-3 lg:gap-4 xl:gap-5 items-stretch w-full py-1 shrink-0"
+              style={{ gridAutoRows: `${gridCardHeight}px` }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 xl:gap-5 items-stretch w-full py-1 shrink-0"
             >
               {cards.map((card) => {
                 return (
