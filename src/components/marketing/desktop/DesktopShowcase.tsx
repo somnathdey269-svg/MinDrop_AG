@@ -39,19 +39,36 @@ export function DesktopShowcase() {
     const deckElems = measureContainerRef.current.querySelectorAll(".measure-deck-card");
     let maxDeckH = 390;
     deckElems.forEach((el) => {
-      const h = el.getBoundingClientRect().height;
-      if (h > maxDeckH) maxDeckH = h;
+      const titleEl = el.querySelector("h3");
+      const descEl = el.querySelector("p");
+      const titleH = titleEl ? titleEl.getBoundingClientRect().height : 0;
+      const descH = descEl ? descEl.getBoundingClientRect().height : 0;
+      
+      // Calculate required total card height so title (12.375%) and desc (42.625%) fit perfectly
+      const reqFromDesc = descH > 0 ? descH / 0.42625 : 0;
+      const reqFromTitle = titleH > 0 ? titleH / 0.12375 : 0;
+      const cardTotalH = el.getBoundingClientRect().height;
+      const reqH = Math.max(reqFromDesc, reqFromTitle, cardTotalH);
+      if (reqH > maxDeckH) maxDeckH = reqH;
     });
-    setDeckHeight(Math.ceil(maxDeckH + 12));
+    setDeckHeight(Math.ceil(maxDeckH + 16));
 
-    // Measure Grid View Cards (Snug & Compact 230px-250px cards)
+    // Measure Grid View Cards (Compact 240px-260px cards)
     const gridElems = measureContainerRef.current.querySelectorAll(".measure-grid-card");
-    let maxGridH = 210;
+    let maxGridH = 220;
     gridElems.forEach((el) => {
-      const h = el.getBoundingClientRect().height;
-      if (h > maxGridH) maxGridH = h;
+      const titleEl = el.querySelector("h3");
+      const descEl = el.querySelector("p");
+      const titleH = titleEl ? titleEl.getBoundingClientRect().height : 0;
+      const descH = descEl ? descEl.getBoundingClientRect().height : 0;
+      
+      const reqFromDesc = descH > 0 ? descH / 0.42625 : 0;
+      const reqFromTitle = titleH > 0 ? titleH / 0.12375 : 0;
+      const cardTotalH = el.getBoundingClientRect().height;
+      const reqH = Math.max(reqFromDesc, reqFromTitle, cardTotalH);
+      if (reqH > maxGridH) maxGridH = reqH;
     });
-    setGridCardHeight(Math.ceil(maxGridH + 4));
+    setGridCardHeight(Math.ceil(maxGridH + 10));
   }, [fields]);
 
   // Sync View Mode with Hash/URL State
