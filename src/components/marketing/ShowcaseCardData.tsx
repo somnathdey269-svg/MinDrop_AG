@@ -255,10 +255,10 @@ export function ShowcaseCardLayoutPrimitive({
       style={{
         containerType: 'inline-size',
         fontSize: isFluid ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.82rem, 2.2cqi + 0.1rem, 1.05rem)',
-        paddingTop: isMobileGrid ? '1.25rem' : isDeck ? '1.5rem' : '0.95rem',
-        paddingBottom: isMobileGrid ? '1.25rem' : isDeck ? '1.5rem' : '0.95rem',
-        paddingLeft: isMobileGrid ? '1.5rem' : isDeck ? '1.75rem' : '1.05rem',
-        paddingRight: isMobileGrid ? '1.5rem' : isDeck ? '1.75rem' : '1.05rem',
+        paddingTop: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '0.95rem',
+        paddingBottom: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '0.95rem',
+        paddingLeft: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.05rem',
+        paddingRight: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.05rem',
         ...style,
       }}
       className={`relative w-full ${isMobileGrid ? 'h-auto' : 'h-full'} flex flex-col select-none ${
@@ -274,15 +274,17 @@ export function ShowcaseCardLayoutPrimitive({
 
       {/* 2. Illustration Zone */}
       <div className={`shrink-0 w-full flex items-center justify-center ${
-        isMobileGrid ? 'h-24 my-2.5' : isDeck ? 'h-16 lg:h-20 my-2' : 'h-12 lg:h-14 my-0.5'
+        isMobileGrid ? 'h-24 my-2.5' : isDeck ? 'flex-1 min-h-[90px] py-2' : 'h-12 lg:h-14 my-0.5'
       }`}>
-        <div className={`h-full aspect-square flex items-center justify-center max-h-full`}>
+        <div className={`h-full aspect-square flex items-center justify-center ${
+          isMobileGrid ? 'max-h-full' : isDeck ? 'max-h-[min(38%,8.5em)]' : 'max-h-full'
+        }`}>
           {illustrationSlot}
         </div>
       </div>
 
       {/* 3. Content Zone (Snug Aligned Baselines across Row Cards) */}
-      <div className={`w-full flex flex-col ${isFluid ? 'gap-2 mt-2' : 'gap-1 mt-1 justify-start'}`}>
+      <div className={`w-full flex flex-col ${isFluid ? 'gap-2.5 mt-auto' : 'gap-1 mt-1 justify-start'}`}>
         {/* Title Slot (Fixed height baseline so descriptions align horizontally) */}
         <div className={`w-full flex items-start ${isFluid ? '' : 'h-9 lg:h-10 shrink-0'}`}>
           {titleSlot}
