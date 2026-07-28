@@ -255,10 +255,10 @@ export function ShowcaseCardLayoutPrimitive({
       style={{
         containerType: 'inline-size',
         fontSize: isFluid ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.82rem, 2.2cqi + 0.1rem, 1.05rem)',
-        paddingTop: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '0.95rem',
-        paddingBottom: isMobileGrid ? '1.25rem' : isDeck ? '3.5%' : '0.95rem',
-        paddingLeft: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.05rem',
-        paddingRight: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.05rem',
+        paddingTop: isMobileGrid ? '1.25rem' : '2.5%',
+        paddingBottom: isMobileGrid ? '1.25rem' : '2.5%',
+        paddingLeft: isMobileGrid ? '1.5rem' : '5.5%',
+        paddingRight: isMobileGrid ? '1.5rem' : '5.5%',
         ...style,
       }}
       className={`relative w-full ${isMobileGrid || style?.height === 'auto' ? 'h-auto' : 'h-full'} flex flex-col select-none ${
@@ -267,30 +267,30 @@ export function ShowcaseCardLayoutPrimitive({
         isFluid ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
-      {/* 1. Header Slot */}
-      <div className={`shrink-0 flex items-center w-full ${isFluid ? 'min-h-[1.8em] text-[0.75em]' : 'h-[1.5em] text-[0.75em]'}`}>
+      {/* 1. Header Slot (15% Height for Pill Badge Tag) */}
+      <div className={`shrink-0 flex items-center w-full ${style?.height === 'auto' ? 'min-h-[1.6em]' : 'h-[15%]'}`}>
         {headerSlot}
       </div>
 
-      {/* 2. Illustration Zone */}
+      {/* 2. Illustration Zone (25% Height for Accent Icon) */}
       <div className={`shrink-0 w-full flex items-center justify-center ${
-        isMobileGrid ? 'h-24 my-2.5' : isDeck ? 'flex-1 min-h-[90px] py-2' : 'h-12 lg:h-14 my-0.5'
+        style?.height === 'auto' ? (isMobileGrid ? 'h-24 my-2' : 'h-16 my-2') : 'h-[25%]'
       }`}>
-        <div className={`h-full aspect-square flex items-center justify-center ${
-          isMobileGrid ? 'max-h-full' : isDeck ? 'max-h-[min(38%,8.5em)]' : 'max-h-full'
-        }`}>
+        <div className="h-full aspect-square flex items-center justify-center max-h-full">
           {illustrationSlot}
         </div>
       </div>
 
-      {/* 3. Content Zone (Snug Aligned Baselines across Row Cards) */}
-      <div className={`w-full flex flex-col ${isFluid ? 'gap-2.5 mt-auto' : 'gap-1 mt-1 justify-start'}`}>
-        {/* Title Slot (Fixed height baseline so descriptions align horizontally) */}
-        <div className={`w-full flex items-start ${isFluid ? '' : 'h-9 lg:h-10 shrink-0'}`}>
+      {/* 3. Content Zone (55% Height for Title & Description) */}
+      <div className={`w-full flex flex-col ${
+        style?.height === 'auto' ? 'gap-2 mt-2' : 'h-[55%] shrink-0 justify-start pt-1'
+      }`}>
+        {/* Title / Header Slot (20% of Content Zone = 11% Total Card Height) */}
+        <div className={`w-full flex items-start ${style?.height === 'auto' ? 'h-auto' : 'h-[22%] shrink-0'}`}>
           {titleSlot}
         </div>
-        {/* Description Slot */}
-        <div className={`w-full flex flex-col justify-start ${isFluid ? '' : 'overflow-hidden'}`}>
+        {/* Description Slot (80% of Content Zone = 44% Total Card Height) */}
+        <div className={`w-full flex flex-col justify-start ${style?.height === 'auto' ? 'h-auto' : 'h-[78%] shrink-0 overflow-hidden'}`}>
           {descriptionSlot}
         </div>
         {footerActionSlot && (
