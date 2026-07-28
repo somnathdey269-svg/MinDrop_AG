@@ -37,21 +37,21 @@ export function DesktopShowcase() {
     
     // Measure Deck View Cards
     const deckElems = measureContainerRef.current.querySelectorAll(".measure-deck-card");
-    let maxDeckH = 380;
+    let maxDeckH = 430;
     deckElems.forEach((el) => {
       const h = el.getBoundingClientRect().height;
       if (h > maxDeckH) maxDeckH = h;
     });
-    setDeckHeight(Math.ceil(maxDeckH + 16));
+    setDeckHeight(Math.ceil(maxDeckH + 30));
 
     // Measure Grid View Cards
     const gridElems = measureContainerRef.current.querySelectorAll(".measure-grid-card");
-    let maxGridH = 290;
+    let maxGridH = 340;
     gridElems.forEach((el) => {
       const h = el.getBoundingClientRect().height;
       if (h > maxGridH) maxGridH = h;
     });
-    setGridCardHeight(Math.ceil(maxGridH + 16));
+    setGridCardHeight(Math.ceil(maxGridH + 30));
   }, [fields]);
 
   // Sync View Mode with Hash/URL State

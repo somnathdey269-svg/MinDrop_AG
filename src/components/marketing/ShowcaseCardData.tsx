@@ -255,8 +255,8 @@ export function ShowcaseCardLayoutPrimitive({
       style={{
         containerType: 'inline-size',
         fontSize: isFluid ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.82rem, 2.2cqi + 0.1rem, 1.05rem)',
-        paddingTop: isMobileGrid ? '1.25rem' : '2.5%',
-        paddingBottom: isMobileGrid ? '1.25rem' : '2.5%',
+        paddingTop: isMobileGrid ? '1rem' : '0px',
+        paddingBottom: isMobileGrid ? '1rem' : '0px',
         paddingLeft: isMobileGrid ? '1.5rem' : '5.5%',
         paddingRight: isMobileGrid ? '1.5rem' : '5.5%',
         ...style,
@@ -267,15 +267,18 @@ export function ShowcaseCardLayoutPrimitive({
         isFluid ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
-      {/* 1. Header Slot (15% Height for Pill Badge Tag) */}
+      {/* SLOT 1: 2.5% Top Padding Slot */}
+      <div className={`w-full ${style?.height === 'auto' ? 'h-2' : 'h-[2.5%] shrink-0'}`} />
+
+      {/* SLOT 2: Header Slot (15% Height for Pill Badge Tag) */}
       <div className={`shrink-0 flex items-center w-full ${style?.height === 'auto' ? 'min-h-[1.6em]' : 'h-[15%]'}`}>
         {headerSlot}
       </div>
 
-      {/* 2.5% Space Gap 1 (Pill to Icon) */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-0.5' : 'h-[2.5%] shrink-0'}`} />
+      {/* SLOT 3: 2.5% Space Gap 1 (Pill to Icon) */}
+      <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* 2. Illustration Zone (20% Height for Accent Icon) */}
+      {/* SLOT 4: Illustration Zone (20% Height for Accent Icon) */}
       <div className={`shrink-0 w-full flex items-center justify-center ${
         style?.height === 'auto' ? (isMobileGrid ? 'h-20 my-1' : 'h-14 my-1') : 'h-[20%]'
       }`}>
@@ -284,10 +287,10 @@ export function ShowcaseCardLayoutPrimitive({
         </div>
       </div>
 
-      {/* 2.5% Space Gap 2 (Icon to Content) */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-0.5' : 'h-[2.5%] shrink-0'}`} />
+      {/* SLOT 5: 2.5% Space Gap 2 (Icon to Content) */}
+      <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* 3. Content Zone (55% Height for Title, 5% Gap, Description) */}
+      {/* SLOT 6: Content Zone (55% Height for Title, 5% Gap, Description) */}
       <div className={`w-full flex flex-col ${
         style?.height === 'auto' ? 'gap-1' : 'h-[55%] shrink-0 justify-start'
       }`}>
@@ -296,7 +299,7 @@ export function ShowcaseCardLayoutPrimitive({
           {titleSlot}
         </div>
         {/* 5% Space Gap 3 (between Title and Description) */}
-        <div className={`w-full ${style?.height === 'auto' ? 'h-0.5' : 'h-[5%] shrink-0'}`} />
+        <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[5%] shrink-0'}`} />
         {/* Description Slot (75% of Content Zone = 41.25% Total Card Height) */}
         <div className={`w-full flex flex-col justify-start ${style?.height === 'auto' ? 'h-auto' : 'h-[75%] shrink-0'}`}>
           {descriptionSlot}
@@ -307,6 +310,9 @@ export function ShowcaseCardLayoutPrimitive({
           </div>
         )}
       </div>
+
+      {/* SLOT 7: 2.5% Bottom Padding Slot */}
+      <div className={`w-full ${style?.height === 'auto' ? 'h-2' : 'h-[2.5%] shrink-0'}`} />
     </div>
   );
 }
