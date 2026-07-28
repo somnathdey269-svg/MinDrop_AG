@@ -44,14 +44,14 @@ export function DesktopShowcase() {
     });
     setDeckHeight(Math.ceil(maxDeckH + 12));
 
-    // Measure Grid View Cards (Snug 280px-300px cards)
+    // Measure Grid View Cards (Snug & Compact 230px-250px cards)
     const gridElems = measureContainerRef.current.querySelectorAll(".measure-grid-card");
-    let maxGridH = 270;
+    let maxGridH = 210;
     gridElems.forEach((el) => {
       const h = el.getBoundingClientRect().height;
       if (h > maxGridH) maxGridH = h;
     });
-    setGridCardHeight(Math.ceil(maxGridH + 8));
+    setGridCardHeight(Math.ceil(maxGridH + 4));
   }, [fields]);
 
   // Sync View Mode with Hash/URL State
