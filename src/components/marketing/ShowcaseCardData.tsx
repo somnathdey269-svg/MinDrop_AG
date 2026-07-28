@@ -281,16 +281,18 @@ export function ShowcaseCardLayoutPrimitive({
         </div>
       </div>
 
-      {/* 3. Content Zone (55% Height for Title & Description) */}
+      {/* 3. Content Zone (55% Height for Title, 5% Gap, Description) */}
       <div className={`w-full flex flex-col ${
-        style?.height === 'auto' ? 'gap-2 mt-2' : 'h-[55%] shrink-0 justify-start pt-1'
+        style?.height === 'auto' ? 'gap-1.5 mt-2' : 'h-[55%] shrink-0 justify-start pt-1'
       }`}>
         {/* Title / Header Slot (20% of Content Zone = 11% Total Card Height) */}
-        <div className={`w-full flex items-start ${style?.height === 'auto' ? 'h-auto' : 'h-[22%] shrink-0'}`}>
+        <div className={`w-full flex items-start ${style?.height === 'auto' ? 'h-auto' : 'h-[20%] shrink-0'}`}>
           {titleSlot}
         </div>
-        {/* Description Slot (80% of Content Zone = 44% Total Card Height) */}
-        <div className={`w-full flex flex-col justify-start ${style?.height === 'auto' ? 'h-auto' : 'h-[78%] shrink-0 overflow-hidden'}`}>
+        {/* 5% Space Gap between Header and Description */}
+        <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[5%] shrink-0'}`} />
+        {/* Description Slot (75% of Content Zone = 41.25% Total Card Height) */}
+        <div className={`w-full flex flex-col justify-start ${style?.height === 'auto' ? 'h-auto' : 'h-[75%] shrink-0'}`}>
           {descriptionSlot}
         </div>
         {footerActionSlot && (
