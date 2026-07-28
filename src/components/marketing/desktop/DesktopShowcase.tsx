@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layers, LayoutGrid } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
@@ -26,8 +26,21 @@ export function DesktopShowcase() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
   const [hoverZone, setHoverZone] = useState<"left" | "right" | "none">("none");
+  const [deckHeight, setDeckHeight] = useState<number>(380);
+  const measureContainerRef = useRef<HTMLDivElement>(null);
   const wheelLock = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!measureContainerRef.current) return;
+    const cardElems = measureContainerRef.current.querySelectorAll(".measure-card");
+    let maxH = 360;
+    cardElems.forEach((el) => {
+      const h = el.getBoundingClientRect().height;
+      if (h > maxH) maxH = h;
+    });
+    setDeckHeight(Math.ceil(maxH));
+  }, [fields]);
 
   // Sync View Mode with Hash/URL State
   const [viewMode, setViewMode] = useState<"deck" | "grid">(
@@ -227,6 +240,48 @@ export function DesktopShowcase() {
           /* HERO STACKED DECK VIEW MODE */
           <div className="w-full h-full flex items-center justify-center relative">
             
+            {/* Off-screen measurement container for dynamic Deck View max content height */}
+            <div 
+              ref={measureContainerRef} 
+              aria-hidden="true" 
+              className="fixed -top-[9999px] -left-[9999px] opacity-0 pointer-events-none z-0 w-[340px] sm:w-[400px] md:w-[460px] lg:w-[500px] xl:w-[540px]"
+            >
+              {cards.map((c) => (
+                <div key={c.id} className="measure-card w-full h-auto mb-4">
+                  <ShowcaseCardLayoutPrimitive
+                    mode="deck"
+                    bgClass={c.bgClass}
+                    style={{ height: "auto" }}
+                    headerSlot={
+                      <span 
+                        style={c.deckTagSizePx ? { fontSize: `${c.deckTagSizePx}px` } : undefined}
+                        className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm"
+                      >
+                        {c.tag}
+                      </span>
+                    }
+                    illustrationSlot={renderIllustration(c.id)}
+                    titleSlot={
+                      <h3 
+                        style={c.deckTitleSizePx ? { fontSize: `${c.deckTitleSizePx}px` } : undefined}
+                        className={CARD_TOKENS.typography.deck.title}
+                      >
+                        {c.title}
+                      </h3>
+                    }
+                    descriptionSlot={
+                      <p 
+                        style={c.deckDescSizePx ? { fontSize: `${c.deckDescSizePx}px` } : undefined}
+                        className={CARD_TOKENS.typography.deck.description}
+                      >
+                        {c.description}
+                      </p>
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+
             {/* Left Hover Trigger */}
             <div 
               onClick={handleNext} 
@@ -242,8 +297,11 @@ export function DesktopShowcase() {
               </div>
             </div>
 
-            {/* Center Overlapping Stack Cards */}
-            <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] aspect-[4/3.15] min-h-[380px] max-h-[82vh] flex items-center justify-center">
+            {/* Center Overlapping Stack Cards (Dynamic Measured Height Driven by Tallest Content) */}
+            <div 
+              style={{ height: `${deckHeight}px` }}
+              className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] max-h-[82vh] flex items-center justify-center transition-[height] duration-200"
+            >
               <AnimatePresence mode="popLayout">
                 {/* Behind Card */}
                 <motion.div

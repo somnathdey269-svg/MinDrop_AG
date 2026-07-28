@@ -261,7 +261,7 @@ export function ShowcaseCardLayoutPrimitive({
         paddingRight: isMobileGrid ? '1.5rem' : isDeck ? '6.5%' : '1.05rem',
         ...style,
       }}
-      className={`relative w-full ${isMobileGrid ? 'h-auto' : 'h-full'} flex flex-col select-none ${
+      className={`relative w-full ${isMobileGrid || style?.height === 'auto' ? 'h-auto' : 'h-full'} flex flex-col select-none ${
         isFluid ? CARD_TOKENS.radius.deck : CARD_TOKENS.radius.grid
       } ${CARD_TOKENS.border} ${
         isFluid ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
