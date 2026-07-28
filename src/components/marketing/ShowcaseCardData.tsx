@@ -272,8 +272,8 @@ export function ShowcaseCardLayoutPrimitive({
         {headerSlot}
       </div>
 
-      {/* 5% Space Gap 1 */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[5%] shrink-0'}`} />
+      {/* 2.5% Space Gap 1 (Pill to Icon) */}
+      <div className={`w-full ${style?.height === 'auto' ? 'h-0.5' : 'h-[2.5%] shrink-0'}`} />
 
       {/* 2. Illustration Zone (20% Height for Accent Icon) */}
       <div className={`shrink-0 w-full flex items-center justify-center ${
@@ -284,21 +284,21 @@ export function ShowcaseCardLayoutPrimitive({
         </div>
       </div>
 
-      {/* 5% Space Gap 2 */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[5%] shrink-0'}`} />
+      {/* 2.5% Space Gap 2 (Icon to Content) */}
+      <div className={`w-full ${style?.height === 'auto' ? 'h-0.5' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* 3. Content Zone (50% Height for Title, 10% Gap, Description) */}
+      {/* 3. Content Zone (55% Height for Title, 5% Gap, Description) */}
       <div className={`w-full flex flex-col ${
-        style?.height === 'auto' ? 'gap-1' : 'h-[50%] shrink-0 justify-start'
+        style?.height === 'auto' ? 'gap-1' : 'h-[55%] shrink-0 justify-start'
       }`}>
-        {/* Title / Header Slot (20% of Content Zone = 10% Total Card Height) */}
+        {/* Title / Header Slot (20% of Content Zone = 11% Total Card Height) */}
         <div className={`w-full flex items-start ${style?.height === 'auto' ? 'h-auto' : 'h-[20%] shrink-0'}`}>
           {titleSlot}
         </div>
-        {/* 10% Space Gap 3 (between Title and Description) */}
-        <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[10%] shrink-0'}`} />
-        {/* Description Slot (70% of Content Zone = 35% Total Card Height) */}
-        <div className={`w-full flex flex-col justify-start ${style?.height === 'auto' ? 'h-auto' : 'h-[70%] shrink-0'}`}>
+        {/* 5% Space Gap 3 (between Title and Description) */}
+        <div className={`w-full ${style?.height === 'auto' ? 'h-0.5' : 'h-[5%] shrink-0'}`} />
+        {/* Description Slot (75% of Content Zone = 41.25% Total Card Height) */}
+        <div className={`w-full flex flex-col justify-start ${style?.height === 'auto' ? 'h-auto' : 'h-[75%] shrink-0'}`}>
           {descriptionSlot}
         </div>
         {footerActionSlot && (
