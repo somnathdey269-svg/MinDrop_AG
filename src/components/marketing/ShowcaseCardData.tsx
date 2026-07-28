@@ -282,7 +282,9 @@ export function ShowcaseCardLayoutPrimitive({
       <div className={`shrink-0 w-full flex items-center justify-center ${
         style?.height === 'auto' ? (isMobileGrid ? 'h-20 my-1' : 'h-14 my-1') : 'h-[20%]'
       }`}>
-        <div className="h-full aspect-square flex items-center justify-center max-h-full">
+        <div className={`h-full aspect-square flex items-center justify-center ${
+          mode === 'grid' ? 'max-h-12 lg:max-h-14' : 'max-h-full'
+        }`}>
           {illustrationSlot}
         </div>
       </div>
