@@ -257,14 +257,11 @@ export interface ShowcaseCardLayoutPrimitiveProps {
  *
  * Slot breakdown (total = 100% of parent-driven height):
  *   2.5%  — Top padding
- *  15.0%  — Pill / tag badge
- *   2.5%  — Gap: pill → icon
- *  20.0%  — Illustration / icon
- *   2.5%  — Gap: icon → content
- *  55.0%  — Content zone
- *             └ 22.5% of 55% = Title  (12.375% total)
- *             └  2.5% of 55% = Gap
- *             └ 77.5% of 55% = Description (42.625% total)
+ *  15.0%  — Pill / tag badge (Left-aligned)
+ *   2.5%  — Gap: pill → header row
+ *  20.0%  — Side-by-Side Header Row: Icon (20% w) + Gap (3% w) + Title/Header (75% w)
+ *   2.5%  — Gap: header row → description content
+ *  55.0%  — Description Content Slot (Full 55% height zone)
  *   2.5%  — Bottom padding
  */
 export function ShowcaseCardLayoutPrimitive({
@@ -307,41 +304,41 @@ export function ShowcaseCardLayoutPrimitive({
       <div className={`w-full ${isMeasuring ? 'h-2' : 'h-[2.5%] shrink-0'}`} />
 
       {/* SLOT 2: 15% — Pill Badge / Tag */}
-      <div className={`shrink-0 flex items-center w-full ${isMeasuring ? 'min-h-[1.6em]' : 'h-[15%]'}`}>
+      <div className={`shrink-0 flex items-center justify-start w-full ${isMeasuring ? 'min-h-[1.6em]' : 'h-[15%]'}`}>
         {headerSlot}
       </div>
 
-      {/* SLOT 3: 2.5% Gap — Pill to Icon */}
+      {/* SLOT 3: 2.5% Gap — Pill to Header Row */}
       <div className={`w-full ${isMeasuring ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* SLOT 4: 20% — Illustration / Icon */}
-      <div className={`shrink-0 w-full flex items-center justify-start ${
-        isMeasuring ? 'h-14 my-1' : 'h-[20%]'
+      {/* SLOT 4: 20% — Side-by-Side Header Row: Icon (20% w) + Gap (3% w) + Title (75% w) */}
+      <div className={`shrink-0 w-full flex flex-row items-center ${
+        isMeasuring ? 'min-h-[2.5em] my-1' : 'h-[20%]'
       }`}>
-        <div className={`h-full aspect-square flex items-center justify-start ${
-          !isDeck ? 'max-h-12 lg:max-h-14' : 'max-h-full'
-        }`}>
-          {illustrationSlot}
+        {/* Icon: 20% width container */}
+        <div className="w-[20%] h-full flex items-center justify-start shrink-0">
+          <div className={`h-full aspect-square flex items-center justify-start ${
+            !isDeck ? 'max-h-10 lg:max-h-12' : 'max-h-full'
+          }`}>
+            {illustrationSlot}
+          </div>
+        </div>
+        {/* Gap: 2.5% width */}
+        <div className="w-[2.5%] shrink-0" />
+        {/* Title / Header: 72.5% width */}
+        <div className="w-[72.5%] h-full flex items-center justify-start overflow-hidden text-left">
+          {titleSlot}
         </div>
       </div>
 
-      {/* SLOT 5: 2.5% Gap — Icon to Content */}
+      {/* SLOT 5: 2.5% Gap — Header Row to Description */}
       <div className={`w-full ${isMeasuring ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* SLOT 6: 55% — Content Zone (Title + Gap + Description) */}
-      <div className={`w-full flex flex-col ${
-        isMeasuring ? 'gap-1' : 'h-[55%] shrink-0 justify-start'
+      {/* SLOT 6: 55% — Description Content Zone */}
+      <div className={`w-full flex flex-col justify-start text-left ${
+        isMeasuring ? 'h-auto' : 'h-[55%] shrink-0 overflow-hidden'
       }`}>
-        {/* Title: 22.5% of content zone = 12.375% of total card */}
-        <div className={`w-full flex items-start ${isMeasuring ? 'h-auto' : 'h-[22.5%] shrink-0'}`}>
-          {titleSlot}
-        </div>
-        {/* Gap: 2.5% of content zone */}
-        <div className={`w-full ${isMeasuring ? 'h-0.5' : 'h-[2.5%] shrink-0'}`} />
-        {/* Description: 77.5% of content zone = 42.625% of total card */}
-        <div className={`w-full flex flex-col justify-start ${isMeasuring ? 'h-auto' : 'h-[77.5%] shrink-0'}`}>
-          {descriptionSlot}
-        </div>
+        {descriptionSlot}
         {footerActionSlot && (
           <div className="w-full mt-1">
             {footerActionSlot}

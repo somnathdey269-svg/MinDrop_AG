@@ -37,25 +37,22 @@ export function DesktopShowcase() {
     if (!measureContainerRef.current) return;
 
     /**
-     * Correct back-calculation for the fixed-% slot system.
-     * Content zone = 55% of total card height.
-     * Within content zone: title slot = 22.5%, desc slot = 77.5%.
-     * We find the minimum content zone height that fits BOTH title and desc,
-     * then derive total card height from that.
+     * Back-calculation for the fixed-% slot system.
+     * Header/Title slot = 20% of total card height.
+     * Description content slot = 55% of total card height.
      */
     const calcRequiredHeight = (el: Element): number => {
       const titleEl = el.querySelector("h3");
       const descEl = el.querySelector("p");
       const titleH = titleEl ? titleEl.getBoundingClientRect().height : 0;
       const descH = descEl ? descEl.getBoundingClientRect().height : 0;
-      // Minimum content zone so both slots fit at their % allocations
-      const contentZone = Math.max(
-        titleH > 0 ? titleH / 0.225 : 0,  // title = 22.5% of content zone
-        descH > 0 ? descH / 0.775 : 0     // desc  = 77.5% of content zone
-      );
-      // Content zone is 55% of total card; also floor at natural card height
+
+      const reqFromTitle = titleH > 0 ? titleH / 0.20 : 0;
+      const reqFromDesc = descH > 0 ? descH / 0.55 : 0;
+
       return Math.max(
-        contentZone > 0 ? contentZone / 0.55 : 0,
+        reqFromTitle,
+        reqFromDesc,
         el.getBoundingClientRect().height
       );
     };

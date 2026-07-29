@@ -42,18 +42,17 @@ export function MobileShowcase() {
   useLayoutEffect(() => {
     if (!measureContainerRef.current) return;
 
-    // Correct back-calculation: content zone = 55% of total; title = 22.5%, desc = 77.5% of content zone
+    // Back-calculation for fixed-% slot system: title in 20% slot, desc in 55% slot
     const calcRequiredHeight = (el: Element): number => {
       const titleEl = el.querySelector("h3");
       const descEl = el.querySelector("p");
       const titleH = titleEl ? titleEl.getBoundingClientRect().height : 0;
       const descH = descEl ? descEl.getBoundingClientRect().height : 0;
-      const contentZone = Math.max(
-        titleH > 0 ? titleH / 0.225 : 0,
-        descH > 0 ? descH / 0.775 : 0
-      );
+      const reqFromTitle = titleH > 0 ? titleH / 0.20 : 0;
+      const reqFromDesc = descH > 0 ? descH / 0.55 : 0;
       return Math.max(
-        contentZone > 0 ? contentZone / 0.55 : 0,
+        reqFromTitle,
+        reqFromDesc,
         el.getBoundingClientRect().height
       );
     };
