@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layers, LayoutGrid } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
@@ -26,6 +26,8 @@ export function MobileShowcase() {
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<"next" | "prev">("next");
+  const [mobileGridCardHeight, setMobileGridCardHeight] = useState<number>(280);
+  const measureContainerRef = useRef<HTMLDivElement>(null);
 
   const touchStartX = useRef<number | null>(null);
 
@@ -33,6 +35,26 @@ export function MobileShowcase() {
   const [viewMode, setViewMode] = useState<"deck" | "grid">(
     () => typeof window !== "undefined" && (window.location.hash.includes("grid") || window.location.search.includes("grid")) ? "grid" : "deck"
   );
+
+  // Measure Mobile Grid Card Height (tallest content wins, drives all cards)
+  useLayoutEffect(() => {
+    if (!measureContainerRef.current) return;
+    const gridElems = measureContainerRef.current.querySelectorAll(".measure-mobile-grid-card");
+    let maxH = 240;
+    gridElems.forEach((el) => {
+      const titleEl = el.querySelector("h3");
+      const descEl = el.querySelector("p");
+      const titleH = titleEl ? titleEl.getBoundingClientRect().height : 0;
+      const descH = descEl ? descEl.getBoundingClientRect().height : 0;
+      // Back-calculate total card height so desc (42.625%) and title (12.375%) both fit
+      const reqFromDesc = descH > 0 ? descH / 0.42625 : 0;
+      const reqFromTitle = titleH > 0 ? titleH / 0.12375 : 0;
+      const cardTotalH = el.getBoundingClientRect().height;
+      const reqH = Math.max(reqFromDesc, reqFromTitle, cardTotalH);
+      if (reqH > maxH) maxH = reqH;
+    });
+    setMobileGridCardHeight(Math.ceil(maxH + 12));
+  }, [fields]);
 
   useEffect(() => {
     const syncViewMode = () => {
@@ -204,8 +226,36 @@ export function MobileShowcase() {
             </div>
           </div>
         ) : (
-          /* GRID VIEW MODE */
-          <div className="w-full h-full overflow-y-auto px-2 pt-2 pb-28 z-20 no-scrollbar">
+          /* GRID VIEW MODE — Fixed-% slot layout, height driven by measurement */
+          <div className="w-full h-full overflow-y-auto px-4 pt-2 pb-28 z-20 no-scrollbar">
+
+            {/* Off-screen measurement container for mobile grid card height */}
+            <div
+              ref={measureContainerRef}
+              aria-hidden="true"
+              className="fixed -top-[9999px] -left-[9999px] opacity-0 pointer-events-none z-0 flex flex-col"
+            >
+              <div className="w-[clamp(275px,80vw,400px)]">
+                {cards.map((c) => (
+                  <div key={`mgrid-${c.id}`} className="measure-mobile-grid-card w-full h-auto mb-4">
+                    <ShowcaseCardLayoutPrimitive
+                      mode="grid"
+                      bgClass={c.bgClass}
+                      style={{ height: 'auto' }}
+                      headerSlot={
+                        <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
+                          {c.tag}
+                        </span>
+                      }
+                      illustrationSlot={renderIllustration(c.id)}
+                      titleSlot={<h3 className={CARD_TOKENS.typography.grid.title}>{c.title}</h3>}
+                      descriptionSlot={<p className={CARD_TOKENS.typography.grid.description}>{c.description}</p>}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="flex flex-col gap-4 max-w-md mx-auto">
               {cards.map((card) => {
                 return (
@@ -214,28 +264,29 @@ export function MobileShowcase() {
                     to={card.to}
                     search={{ from: "grid" }}
                     viewTransition
-                    style={{ 
+                    style={{
                       viewTransitionName: `card-${card.id}`,
+                      height: `${mobileGridCardHeight}px`,
                     } as React.CSSProperties}
-                    className="w-full h-auto block"
+                    className="w-full block"
                   >
                     <ShowcaseCardLayoutPrimitive
-                      mode="mobile-grid"
+                      mode="grid"
                       bgClass={card.bgClass}
                       className="active:scale-[0.98] transition-transform cursor-pointer"
                       headerSlot={
-                        <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
+                        <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
                           {card.tag}
                         </span>
                       }
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
-                        <h3 className={CARD_TOKENS.typography.deck.title}>
+                        <h3 className={CARD_TOKENS.typography.grid.title}>
                           {card.title}
                         </h3>
                       }
                       descriptionSlot={
-                        <p className={CARD_TOKENS.typography.deck.description}>
+                        <p className={CARD_TOKENS.typography.grid.description}>
                           {card.description}
                         </p>
                       }

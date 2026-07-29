@@ -214,7 +214,7 @@ export const CARD_TOKENS = {
 } as const;
 
 export interface ShowcaseCardLayoutPrimitiveProps {
-  mode?: "deck" | "grid" | "mobile-grid";
+  mode?: "deck" | "grid";
   bgClass?: string;
   headerSlot: React.ReactNode;
   illustrationSlot: React.ReactNode;
@@ -233,6 +233,24 @@ export interface ShowcaseCardLayoutPrimitiveProps {
  * Grid Mode: Fixed structural baselines for perfect horizontal alignment across grid rows.
  * Mobile-Grid Mode: Dynamic fluid height with Deck-level typography scale.
  */
+/**
+ * Universal Fixed-% Slot Card Layout Primitive.
+ * All 3 modes (deck, grid, mobile-grid) use the same percentage-based slot system.
+ * Parent component MUST drive height via a measured fixed px value.
+ * Measurement pass: pass style={{ height: 'auto' }} to measure natural content height.
+ *
+ * Slot breakdown (total = 100% of parent-driven height):
+ *   2.5%  — Top padding
+ *  15.0%  — Pill / tag badge
+ *   2.5%  — Gap: pill → icon
+ *  20.0%  — Illustration / icon
+ *   2.5%  — Gap: icon → content
+ *  55.0%  — Content zone
+ *             └ 22.5% of 55% = Title  (12.375% total)
+ *             └  2.5% of 55% = Gap
+ *             └ 77.5% of 55% = Description (42.625% total)
+ *   2.5%  — Bottom padding
+ */
 export function ShowcaseCardLayoutPrimitive({
   mode = "deck",
   bgClass = "bg-white",
@@ -246,64 +264,66 @@ export function ShowcaseCardLayoutPrimitive({
   onClick,
 }: ShowcaseCardLayoutPrimitiveProps) {
   const isDeck = mode === "deck";
-  const isMobileGrid = mode === "mobile-grid";
-  const isFluid = isDeck || isMobileGrid;
+  // Measurement pass: parent passes style={{ height: 'auto' }} for off-screen measuring.
+  // In all other cases the card fills its parent's fixed px height via h-full.
+  const isMeasuring = style?.height === 'auto';
 
   return (
     <div
       onClick={onClick}
       style={{
         containerType: 'inline-size',
-        fontSize: isFluid ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)' : 'clamp(0.82rem, 2.2cqi + 0.1rem, 1.05rem)',
-        paddingTop: isMobileGrid ? '1rem' : '0px',
-        paddingBottom: isMobileGrid ? '1rem' : '0px',
-        paddingLeft: isMobileGrid ? '1.5rem' : '5.5%',
-        paddingRight: isMobileGrid ? '1.5rem' : '5.5%',
+        // Deck → large fluid font; Grid → compact fluid font
+        fontSize: isDeck
+          ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)'
+          : 'clamp(0.82rem, 2.2cqi + 0.1rem, 1.05rem)',
+        paddingLeft: '5.5%',
+        paddingRight: '5.5%',
         ...style,
       }}
-      className={`relative w-full ${isMobileGrid || style?.height === 'auto' ? 'h-auto' : 'h-full'} flex flex-col select-none ${
-        isFluid ? CARD_TOKENS.radius.deck : CARD_TOKENS.radius.grid
+      className={`relative w-full ${isMeasuring ? 'h-auto' : 'h-full'} flex flex-col select-none ${
+        isDeck ? CARD_TOKENS.radius.deck : CARD_TOKENS.radius.grid
       } ${CARD_TOKENS.border} ${
-        isFluid ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
+        isDeck ? CARD_TOKENS.shadow.deck : CARD_TOKENS.shadow.grid
       } ${bgClass} ${className}`}
     >
-      {/* SLOT 1: 2.5% Top Padding Slot */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-2' : 'h-[2.5%] shrink-0'}`} />
+      {/* SLOT 1: 2.5% Top Padding */}
+      <div className={`w-full ${isMeasuring ? 'h-2' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* SLOT 2: Header Slot (15% Height for Pill Badge Tag) */}
-      <div className={`shrink-0 flex items-center w-full ${style?.height === 'auto' ? 'min-h-[1.6em]' : 'h-[15%]'}`}>
+      {/* SLOT 2: 15% — Pill Badge / Tag */}
+      <div className={`shrink-0 flex items-center w-full ${isMeasuring ? 'min-h-[1.6em]' : 'h-[15%]'}`}>
         {headerSlot}
       </div>
 
-      {/* SLOT 3: 2.5% Space Gap 1 (Pill to Icon) */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
+      {/* SLOT 3: 2.5% Gap — Pill to Icon */}
+      <div className={`w-full ${isMeasuring ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* SLOT 4: Illustration Zone (20% Height for Accent Icon) */}
+      {/* SLOT 4: 20% — Illustration / Icon */}
       <div className={`shrink-0 w-full flex items-center justify-center ${
-        style?.height === 'auto' ? (isMobileGrid ? 'h-20 my-1' : 'h-14 my-1') : 'h-[20%]'
+        isMeasuring ? 'h-14 my-1' : 'h-[20%]'
       }`}>
         <div className={`h-full aspect-square flex items-center justify-center ${
-          mode === 'grid' ? 'max-h-12 lg:max-h-14' : 'max-h-full'
+          !isDeck ? 'max-h-12 lg:max-h-14' : 'max-h-full'
         }`}>
           {illustrationSlot}
         </div>
       </div>
 
-      {/* SLOT 5: 2.5% Space Gap 2 (Icon to Content) */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
+      {/* SLOT 5: 2.5% Gap — Icon to Content */}
+      <div className={`w-full ${isMeasuring ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
 
-      {/* SLOT 6: Content Zone (55% Height for Title, 2.5% Gap, Description) */}
+      {/* SLOT 6: 55% — Content Zone (Title + Gap + Description) */}
       <div className={`w-full flex flex-col ${
-        style?.height === 'auto' ? 'gap-1' : 'h-[55%] shrink-0 justify-start'
+        isMeasuring ? 'gap-1' : 'h-[55%] shrink-0 justify-start'
       }`}>
-        {/* Title / Header Slot (22.5% of Content Zone = 12.375% Total Card Height) */}
-        <div className={`w-full flex items-start ${style?.height === 'auto' ? 'h-auto' : 'h-[22.5%] shrink-0'}`}>
+        {/* Title: 22.5% of content zone = 12.375% of total card */}
+        <div className={`w-full flex items-start ${isMeasuring ? 'h-auto' : 'h-[22.5%] shrink-0'}`}>
           {titleSlot}
         </div>
-        {/* 2.5% Space Gap 3 (between Title and Description) */}
-        <div className={`w-full ${style?.height === 'auto' ? 'h-0.5' : 'h-[2.5%] shrink-0'}`} />
-        {/* Description Slot (77.5% of Content Zone = 42.625% Total Card Height) */}
-        <div className={`w-full flex flex-col justify-start ${style?.height === 'auto' ? 'h-auto' : 'h-[77.5%] shrink-0'}`}>
+        {/* Gap: 2.5% of content zone */}
+        <div className={`w-full ${isMeasuring ? 'h-0.5' : 'h-[2.5%] shrink-0'}`} />
+        {/* Description: 77.5% of content zone = 42.625% of total card */}
+        <div className={`w-full flex flex-col justify-start ${isMeasuring ? 'h-auto' : 'h-[77.5%] shrink-0'}`}>
           {descriptionSlot}
         </div>
         {footerActionSlot && (
@@ -313,8 +333,8 @@ export function ShowcaseCardLayoutPrimitive({
         )}
       </div>
 
-      {/* SLOT 7: 2.5% Bottom Padding Slot */}
-      <div className={`w-full ${style?.height === 'auto' ? 'h-2' : 'h-[2.5%] shrink-0'}`} />
+      {/* SLOT 7: 2.5% Bottom Padding */}
+      <div className={`w-full ${isMeasuring ? 'h-2' : 'h-[2.5%] shrink-0'}`} />
     </div>
   );
 }
