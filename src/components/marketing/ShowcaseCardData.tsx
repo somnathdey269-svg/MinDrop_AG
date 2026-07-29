@@ -166,11 +166,11 @@ export function formatCMSFontSize(pxVal: string | undefined, isMobile: boolean =
  */
 function AccentIcon({ color, Icon }: { color: string; Icon: ElementType }) {
   return (
-    <div className="w-full h-full flex items-center justify-center select-none">
+    <div className="w-full h-full flex items-center justify-start select-none">
       <motion.div
         animate={{ scale: [1, 1.05, 1], rotate: [0, -1, 1, 0] }}
         transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-        className="w-full h-full flex items-center justify-center"
+        className="w-full h-full flex items-center justify-start"
       >
         <Icon className="w-full h-full object-contain" style={{ color }} />
       </motion.div>
@@ -315,10 +315,10 @@ export function ShowcaseCardLayoutPrimitive({
       <div className={`w-full ${isMeasuring ? 'h-1' : 'h-[2.5%] shrink-0'}`} />
 
       {/* SLOT 4: 20% — Illustration / Icon */}
-      <div className={`shrink-0 w-full flex items-center justify-center ${
+      <div className={`shrink-0 w-full flex items-center justify-start ${
         isMeasuring ? 'h-14 my-1' : 'h-[20%]'
       }`}>
-        <div className={`h-full aspect-square flex items-center justify-center ${
+        <div className={`h-full aspect-square flex items-center justify-start ${
           !isDeck ? 'max-h-12 lg:max-h-14' : 'max-h-full'
         }`}>
           {illustrationSlot}
