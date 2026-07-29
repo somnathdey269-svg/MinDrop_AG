@@ -27,6 +27,7 @@ export function MobileShowcase() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<"next" | "prev">("next");
   const [mobileGridCardHeight, setMobileGridCardHeight] = useState<number>(280);
+  const [mobileDeckCardHeight, setMobileDeckCardHeight] = useState<number>(380);
   const measureContainerRef = useRef<HTMLDivElement>(null);
 
   const touchStartX = useRef<number | null>(null);
@@ -36,24 +37,43 @@ export function MobileShowcase() {
     () => typeof window !== "undefined" && (window.location.hash.includes("grid") || window.location.search.includes("grid")) ? "grid" : "deck"
   );
 
-  // Measure Mobile Grid Card Height (tallest content wins, drives all cards)
+  // Measure Mobile Deck & Grid Card Heights — same calcRequiredHeight as DesktopShowcase
   useLayoutEffect(() => {
     if (!measureContainerRef.current) return;
-    const gridElems = measureContainerRef.current.querySelectorAll(".measure-mobile-grid-card");
-    let maxH = 240;
-    gridElems.forEach((el) => {
+
+    // Correct back-calculation: content zone = 55% of total; title = 22.5%, desc = 77.5% of content zone
+    const calcRequiredHeight = (el: Element): number => {
       const titleEl = el.querySelector("h3");
       const descEl = el.querySelector("p");
       const titleH = titleEl ? titleEl.getBoundingClientRect().height : 0;
       const descH = descEl ? descEl.getBoundingClientRect().height : 0;
-      // Back-calculate total card height so desc (42.625%) and title (12.375%) both fit
-      const reqFromDesc = descH > 0 ? descH / 0.42625 : 0;
-      const reqFromTitle = titleH > 0 ? titleH / 0.12375 : 0;
-      const cardTotalH = el.getBoundingClientRect().height;
-      const reqH = Math.max(reqFromDesc, reqFromTitle, cardTotalH);
-      if (reqH > maxH) maxH = reqH;
+      const contentZone = Math.max(
+        titleH > 0 ? titleH / 0.225 : 0,
+        descH > 0 ? descH / 0.775 : 0
+      );
+      return Math.max(
+        contentZone > 0 ? contentZone / 0.55 : 0,
+        el.getBoundingClientRect().height
+      );
+    };
+
+    // Measure mobile deck cards
+    const deckElems = measureContainerRef.current.querySelectorAll(".measure-mobile-deck-card");
+    let maxDeckH = 360;
+    deckElems.forEach((el) => {
+      const reqH = calcRequiredHeight(el);
+      if (reqH > maxDeckH) maxDeckH = reqH;
     });
-    setMobileGridCardHeight(Math.ceil(maxH + 12));
+    setMobileDeckCardHeight(Math.ceil(maxDeckH + 16));
+
+    // Measure mobile grid cards
+    const gridElems = measureContainerRef.current.querySelectorAll(".measure-mobile-grid-card");
+    let maxGridH = 240;
+    gridElems.forEach((el) => {
+      const reqH = calcRequiredHeight(el);
+      if (reqH > maxGridH) maxGridH = reqH;
+    });
+    setMobileGridCardHeight(Math.ceil(maxGridH + 12));
   }, [fields]);
 
   useEffect(() => {
@@ -168,6 +188,92 @@ export function MobileShowcase() {
 
       {/* 2. MAIN SHOWCASE AREA */}
       <main className="relative flex-1 w-full flex items-center justify-center overflow-hidden px-3 my-1">
+
+        {/* ── ALWAYS-MOUNTED OFF-SCREEN MEASUREMENT CONTAINER ──
+            Outside the viewMode conditional — measures both deck and grid heights
+            on any initial load path. Applies CMS font overrides for accurate measurement. */}
+        <div
+          ref={measureContainerRef}
+          aria-hidden="true"
+          className="fixed -top-[9999px] -left-[9999px] opacity-0 pointer-events-none z-0 flex flex-col"
+        >
+          {/* Deck measurement — matches actual mobile deck card width */}
+          <div className="w-[clamp(275px,80vw,340px)]">
+            {cards.map((c) => (
+              <div key={`mdeck-${c.id}`} className="measure-mobile-deck-card w-full h-auto mb-4">
+                <ShowcaseCardLayoutPrimitive
+                  mode="deck"
+                  bgClass={c.bgClass}
+                  style={{ height: 'auto' }}
+                  headerSlot={
+                    <span
+                      style={c.deckTagSizePx ? { fontSize: `${c.deckTagSizePx}px` } : undefined}
+                      className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm"
+                    >
+                      {c.tag}
+                    </span>
+                  }
+                  illustrationSlot={renderIllustration(c.id)}
+                  titleSlot={
+                    <h3
+                      style={c.deckTitleSizePx ? { fontSize: `${c.deckTitleSizePx}px` } : undefined}
+                      className={CARD_TOKENS.typography.deck.title}
+                    >
+                      {c.title}
+                    </h3>
+                  }
+                  descriptionSlot={
+                    <p
+                      style={c.deckDescSizePx ? { fontSize: `${c.deckDescSizePx}px` } : undefined}
+                      className={CARD_TOKENS.typography.deck.description}
+                    >
+                      {c.description}
+                    </p>
+                  }
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Grid measurement — matches actual full-width mobile grid card */}
+          <div className="w-[clamp(275px,80vw,400px)]">
+            {cards.map((c) => (
+              <div key={`mgrid-${c.id}`} className="measure-mobile-grid-card w-full h-auto mb-4">
+                <ShowcaseCardLayoutPrimitive
+                  mode="grid"
+                  bgClass={c.bgClass}
+                  style={{ height: 'auto' }}
+                  headerSlot={
+                    <span
+                      style={c.gridTagSizePx ? { fontSize: `${c.gridTagSizePx}px` } : undefined}
+                      className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm"
+                    >
+                      {c.tag}
+                    </span>
+                  }
+                  illustrationSlot={renderIllustration(c.id)}
+                  titleSlot={
+                    <h3
+                      style={c.gridTitleSizePx ? { fontSize: `${c.gridTitleSizePx}px` } : undefined}
+                      className={CARD_TOKENS.typography.grid.title}
+                    >
+                      {c.title}
+                    </h3>
+                  }
+                  descriptionSlot={
+                    <p
+                      style={c.gridDescSizePx ? { fontSize: `${c.gridDescSizePx}px` } : undefined}
+                      className={CARD_TOKENS.typography.grid.description}
+                    >
+                      {c.description}
+                    </p>
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
         {viewMode === "deck" ? (
           /* DECK VIEW MODE (Fluid Mobile Viewport Math) */
           <div 
@@ -175,8 +281,11 @@ export function MobileShowcase() {
             onTouchEnd={handleTouchEnd}
             className="w-full h-full flex flex-col items-center justify-center relative"
           >
-            {/* Mobile Card Container (Prominent Hero Proportions) */}
-            <div className="relative w-[clamp(275px,80vw,340px)] min-h-[clamp(300px,50vh,400px)] flex items-center justify-center">
+            {/* Mobile Card Container — height driven by content measurement, same principle as web */}
+            <div
+              className="relative w-[clamp(275px,80vw,340px)] flex items-center justify-center"
+              style={{ height: `${mobileDeckCardHeight}px` }}
+            >
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
                   key={currentCard.id}
@@ -205,18 +314,27 @@ export function MobileShowcase() {
                     onClick={handleShowMe}
                     className="active:scale-[0.98] transition-transform cursor-pointer"
                     headerSlot={
-                      <span className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm">
+                      <span
+                        style={currentCard.deckTagSizePx ? { fontSize: `${currentCard.deckTagSizePx}px` } : undefined}
+                        className="text-xs font-black uppercase tracking-wider text-ink bg-white/95 border border-ink/20 px-3.5 py-1 rounded-full shadow-sm"
+                      >
                         {currentCard.tag}
                       </span>
                     }
                     illustrationSlot={renderIllustration(currentCard.id)}
                     titleSlot={
-                      <h3 className={CARD_TOKENS.typography.deck.title}>
+                      <h3
+                        style={currentCard.deckTitleSizePx ? { fontSize: `${currentCard.deckTitleSizePx}px` } : undefined}
+                        className={CARD_TOKENS.typography.deck.title}
+                      >
                         {currentCard.title}
                       </h3>
                     }
                     descriptionSlot={
-                      <p className={CARD_TOKENS.typography.deck.description}>
+                      <p
+                        style={currentCard.deckDescSizePx ? { fontSize: `${currentCard.deckDescSizePx}px` } : undefined}
+                        className={CARD_TOKENS.typography.deck.description}
+                      >
                         {currentCard.description}
                       </p>
                     }
@@ -228,34 +346,6 @@ export function MobileShowcase() {
         ) : (
           /* GRID VIEW MODE — Fixed-% slot layout, height driven by measurement */
           <div className="w-full h-full overflow-y-auto px-4 pt-2 pb-28 z-20 no-scrollbar">
-
-            {/* Off-screen measurement container for mobile grid card height */}
-            <div
-              ref={measureContainerRef}
-              aria-hidden="true"
-              className="fixed -top-[9999px] -left-[9999px] opacity-0 pointer-events-none z-0 flex flex-col"
-            >
-              <div className="w-[clamp(275px,80vw,400px)]">
-                {cards.map((c) => (
-                  <div key={`mgrid-${c.id}`} className="measure-mobile-grid-card w-full h-auto mb-4">
-                    <ShowcaseCardLayoutPrimitive
-                      mode="grid"
-                      bgClass={c.bgClass}
-                      style={{ height: 'auto' }}
-                      headerSlot={
-                        <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
-                          {c.tag}
-                        </span>
-                      }
-                      illustrationSlot={renderIllustration(c.id)}
-                      titleSlot={<h3 className={CARD_TOKENS.typography.grid.title}>{c.title}</h3>}
-                      descriptionSlot={<p className={CARD_TOKENS.typography.grid.description}>{c.description}</p>}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <div className="flex flex-col gap-4 max-w-md mx-auto">
               {cards.map((card) => {
                 return (
@@ -275,18 +365,27 @@ export function MobileShowcase() {
                       bgClass={card.bgClass}
                       className="active:scale-[0.98] transition-transform cursor-pointer"
                       headerSlot={
-                        <span className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm">
+                        <span
+                          style={card.gridTagSizePx ? { fontSize: `${card.gridTagSizePx}px` } : undefined}
+                          className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm"
+                        >
                           {card.tag}
                         </span>
                       }
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
-                        <h3 className={CARD_TOKENS.typography.grid.title}>
+                        <h3
+                          style={card.gridTitleSizePx ? { fontSize: `${card.gridTitleSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.grid.title}
+                        >
                           {card.title}
                         </h3>
                       }
                       descriptionSlot={
-                        <p className={CARD_TOKENS.typography.grid.description}>
+                        <p
+                          style={card.gridDescSizePx ? { fontSize: `${card.gridDescSizePx}px` } : undefined}
+                          className={CARD_TOKENS.typography.grid.description}
+                        >
                           {card.description}
                         </p>
                       }
