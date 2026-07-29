@@ -59,7 +59,7 @@ export function DesktopShowcase() {
 
     // Measure Deck View Cards
     const deckElems = measureContainerRef.current.querySelectorAll(".measure-deck-card");
-    let maxDeckH = 390;
+    let maxDeckH = 0;
     deckElems.forEach((el) => {
       const reqH = calcRequiredHeight(el);
       if (reqH > maxDeckH) maxDeckH = reqH;
@@ -68,7 +68,7 @@ export function DesktopShowcase() {
 
     // Measure Grid View Cards
     const gridElems = measureContainerRef.current.querySelectorAll(".measure-grid-card");
-    let maxGridH = 220;
+    let maxGridH = 0;
     gridElems.forEach((el) => {
       const reqH = calcRequiredHeight(el);
       if (reqH > maxGridH) maxGridH = reqH;

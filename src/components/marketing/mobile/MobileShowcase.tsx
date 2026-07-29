@@ -59,7 +59,7 @@ export function MobileShowcase() {
 
     // Measure mobile deck cards
     const deckElems = measureContainerRef.current.querySelectorAll(".measure-mobile-deck-card");
-    let maxDeckH = 360;
+    let maxDeckH = 0;
     deckElems.forEach((el) => {
       const reqH = calcRequiredHeight(el);
       if (reqH > maxDeckH) maxDeckH = reqH;
@@ -68,7 +68,7 @@ export function MobileShowcase() {
 
     // Measure mobile grid cards
     const gridElems = measureContainerRef.current.querySelectorAll(".measure-mobile-grid-card");
-    let maxGridH = 240;
+    let maxGridH = 0;
     gridElems.forEach((el) => {
       const reqH = calcRequiredHeight(el);
       if (reqH > maxGridH) maxGridH = reqH;
