@@ -6,6 +6,7 @@ import { MinDropHeaderLogo } from "../MinDropHeaderLogo";
 import { 
   DECK_CARDS, 
   getDeckCards,
+  formatCMSFontSize,
   ShowcaseCardLayoutPrimitive,
   CARD_TOKENS,
   AboutAppIllustration,
@@ -291,7 +292,7 @@ export function DesktopShowcase() {
                   style={{ height: "auto" }}
                   headerSlot={
                     <span 
-                      style={c.deckTagSizePx ? { fontSize: `${c.deckTagSizePx}px` } : undefined}
+                      style={formatCMSFontSize(c.deckTagSizePx, false) ? { fontSize: formatCMSFontSize(c.deckTagSizePx, false) } : undefined}
                       className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm"
                     >
                       {c.tag}
@@ -300,7 +301,7 @@ export function DesktopShowcase() {
                   illustrationSlot={renderIllustration(c.id)}
                   titleSlot={
                     <h3 
-                      style={c.deckTitleSizePx ? { fontSize: `${c.deckTitleSizePx}px` } : undefined}
+                      style={formatCMSFontSize(c.deckTitleSizePx, false) ? { fontSize: formatCMSFontSize(c.deckTitleSizePx, false) } : undefined}
                       className={CARD_TOKENS.typography.deck.title}
                     >
                       {c.title}
@@ -308,7 +309,7 @@ export function DesktopShowcase() {
                   }
                   descriptionSlot={
                     <p 
-                      style={c.deckDescSizePx ? { fontSize: `${c.deckDescSizePx}px` } : undefined}
+                      style={formatCMSFontSize(c.deckDescSizePx, false) ? { fontSize: formatCMSFontSize(c.deckDescSizePx, false) } : undefined}
                       className={CARD_TOKENS.typography.deck.description}
                     >
                       {c.description}
@@ -331,7 +332,7 @@ export function DesktopShowcase() {
                   style={{ height: "auto" }}
                   headerSlot={
                     <span 
-                      style={c.gridTagSizePx ? { fontSize: `${c.gridTagSizePx}px` } : undefined}
+                      style={formatCMSFontSize(c.gridTagSizePx, false) ? { fontSize: formatCMSFontSize(c.gridTagSizePx, false) } : undefined}
                       className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm"
                     >
                       {c.tag}
@@ -340,7 +341,7 @@ export function DesktopShowcase() {
                   illustrationSlot={renderIllustration(c.id)}
                   titleSlot={
                     <h3 
-                      style={c.gridTitleSizePx ? { fontSize: `${c.gridTitleSizePx}px` } : undefined}
+                      style={formatCMSFontSize(c.gridTitleSizePx, false) ? { fontSize: formatCMSFontSize(c.gridTitleSizePx, false) } : undefined}
                       className={CARD_TOKENS.typography.grid.title}
                     >
                       {c.title}
@@ -348,7 +349,7 @@ export function DesktopShowcase() {
                   }
                   descriptionSlot={
                     <p 
-                      style={c.gridDescSizePx ? { fontSize: `${c.gridDescSizePx}px` } : undefined}
+                      style={formatCMSFontSize(c.gridDescSizePx, false) ? { fontSize: formatCMSFontSize(c.gridDescSizePx, false) } : undefined}
                       className={CARD_TOKENS.typography.grid.description}
                     >
                       {c.description}
@@ -433,7 +434,7 @@ export function DesktopShowcase() {
                     className="cursor-pointer active:scale-[0.99] transition-transform duration-100"
                     headerSlot={
                       <span 
-                        style={currentCard.deckTagSizePx ? { fontSize: `${currentCard.deckTagSizePx}px` } : undefined}
+                        style={formatCMSFontSize(currentCard.deckTagSizePx, false) ? { fontSize: formatCMSFontSize(currentCard.deckTagSizePx, false) } : undefined}
                         className="text-xs lg:text-sm font-black uppercase tracking-wider text-ink bg-white/95 border-2 border-ink/20 px-4 py-1.5 rounded-full shadow-sm"
                       >
                         {currentCard.tag}
@@ -442,7 +443,7 @@ export function DesktopShowcase() {
                     illustrationSlot={renderIllustration(currentCard.id)}
                     titleSlot={
                       <h3 
-                        style={currentCard.deckTitleSizePx ? { fontSize: `${currentCard.deckTitleSizePx}px` } : undefined}
+                        style={formatCMSFontSize(currentCard.deckTitleSizePx, false) ? { fontSize: formatCMSFontSize(currentCard.deckTitleSizePx, false) } : undefined}
                         className={CARD_TOKENS.typography.deck.title}
                       >
                         {currentCard.title}
@@ -450,7 +451,7 @@ export function DesktopShowcase() {
                     }
                     descriptionSlot={
                       <p 
-                        style={currentCard.deckDescSizePx ? { fontSize: `${currentCard.deckDescSizePx}px` } : undefined}
+                        style={formatCMSFontSize(currentCard.deckDescSizePx, false) ? { fontSize: formatCMSFontSize(currentCard.deckDescSizePx, false) } : undefined}
                         className={CARD_TOKENS.typography.deck.description}
                       >
                         {currentCard.description}
@@ -504,7 +505,7 @@ export function DesktopShowcase() {
                       className="hover:-translate-y-1 transition-all cursor-pointer"
                       headerSlot={
                         <span 
-                          style={card.gridTagSizePx ? { fontSize: `${card.gridTagSizePx}px` } : undefined}
+                          style={formatCMSFontSize(card.gridTagSizePx, false) ? { fontSize: formatCMSFontSize(card.gridTagSizePx, false) } : undefined}
                           className="text-[11px] uppercase font-black tracking-wider text-ink bg-white/90 border border-ink/20 px-3 py-0.5 rounded-full shadow-sm"
                         >
                           {card.tag}
@@ -513,7 +514,7 @@ export function DesktopShowcase() {
                       illustrationSlot={renderIllustration(card.id)}
                       titleSlot={
                         <h3 
-                          style={card.gridTitleSizePx ? { fontSize: `${card.gridTitleSizePx}px` } : undefined}
+                          style={formatCMSFontSize(card.gridTitleSizePx, false) ? { fontSize: formatCMSFontSize(card.gridTitleSizePx, false) } : undefined}
                           className={CARD_TOKENS.typography.grid.title}
                         >
                           {card.title}
@@ -521,7 +522,7 @@ export function DesktopShowcase() {
                       }
                       descriptionSlot={
                         <p 
-                          style={card.gridDescSizePx ? { fontSize: `${card.gridDescSizePx}px` } : undefined}
+                          style={formatCMSFontSize(card.gridDescSizePx, false) ? { fontSize: formatCMSFontSize(card.gridDescSizePx, false) } : undefined}
                           className={CARD_TOKENS.typography.grid.description}
                         >
                           {card.description}

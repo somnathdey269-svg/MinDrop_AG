@@ -146,6 +146,22 @@ export function getDeckCards(fields: Record<string, string> = {}): DeckCardItem[
 }
 
 /**
+ * Format CMS font size input into valid CSS fontSize string.
+ * Supports raw numbers ("28"), px strings ("28px"), and optional mobile scaling (~84%).
+ */
+export function formatCMSFontSize(pxVal: string | undefined, isMobile: boolean = false): string | undefined {
+  if (!pxVal || pxVal.trim() === "") return undefined;
+  const num = parseFloat(pxVal);
+  if (isNaN(num)) return pxVal; // Return raw string if complex CSS expression
+  if (isMobile) {
+    // Scale down by 16% on mobile while keeping a floor of 10px
+    const scaled = Math.max(10, Math.round(num * 0.84));
+    return `${scaled}px`;
+  }
+  return `${num}px`;
+}
+
+/**
  * Clean accent icon — centered, no border or background box.
  */
 function AccentIcon({ color, Icon }: { color: string; Icon: ElementType }) {
@@ -273,10 +289,10 @@ export function ShowcaseCardLayoutPrimitive({
       onClick={onClick}
       style={{
         containerType: 'inline-size',
-        // Deck → large fluid font; Grid → compact fluid font
+        // Deck → refined fluid font baseline; Grid → compact fluid font baseline
         fontSize: isDeck
-          ? 'clamp(1.05rem, 3.8cqi + 0.15rem, 1.7rem)'
-          : 'clamp(0.82rem, 2.2cqi + 0.1rem, 1.05rem)',
+          ? 'clamp(0.95rem, 3.4cqi + 0.1rem, 1.6rem)'
+          : 'clamp(0.78rem, 2.0cqi + 0.08rem, 1.0rem)',
         paddingLeft: '5.5%',
         paddingRight: '5.5%',
         ...style,
